@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Hello Word Page
+{% endblock %}
+
+{% block body %}
+    <h1>{{hello_text}}</h1>
+        <a href="{{ path('blog_show', {slug:hello_text}) }}">Hello World</a>
+{% endblock %}
