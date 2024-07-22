@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\GroupeUtilisateur;
+use App\Entity\Voiture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<GroupeUtilisateur>
+ * @extends ServiceEntityRepository<Voiture>
  */
-class GroupeUtilisateurRepository extends ServiceEntityRepository
+class VoitureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, GroupeUtilisateur::class);
+        parent::__construct($registry, Voiture::class);
     }
 
     //    /**
-    //     * @return GroupeUtilisateur[] Returns an array of GroupeUtilisateur objects
+    //     * @return Voiture[] Returns an array of Voiture objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
+    //        return $this->createQueryBuilder('v')
+    //            ->andWhere('v.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('g.id', 'ASC')
+    //            ->orderBy('v.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?GroupeUtilisateur
+    //    public function findOneBySomeField($value): ?Voiture
     //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
+    //        return $this->createQueryBuilder('v')
+    //            ->andWhere('v.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()
