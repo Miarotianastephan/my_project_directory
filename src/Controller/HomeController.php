@@ -19,7 +19,7 @@ class HomeController extends AbstractController
         ]);
     }
     
-    #[Route(path: '/login', name: 'user_login', methods: ['GET'])]
+    #[Route(path: '/login', name: 'user_login', methods: ['POST'])]
     public function loginUser(UtilisateurService $userService): Response{
 
         $user_matricule = "12345";

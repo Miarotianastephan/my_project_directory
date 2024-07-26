@@ -1,20 +1,61 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFM Application de comptabilité en intranet</title>
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"/>
+</head>
+<body>
+    <!-- Section: Design Block -->
+    <section class="">
+    <!-- Jumbotron -->
+        <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="height: 100vh;width: 100%;background-color: hsl(0, 0%, 96%)">
+            <div class="container">
+            <div class="row gx-lg-5 align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                <h1 class="my-5 display-3 fw-bold ls-tight">
+                    Connectez-vous <br />
+                    <span class="text-primary">Accéder à votre application de comptabilité</span>
+                </h1>
+                <p style="color: hsl(217, 10%, 50.8%)">
+                    ProCompta votre application de gestion des traitements pour la comptabilité
+                </p>
+                </div>
 
-{% block title %}Hello HomeController!{% endblock %}
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="card">
+                        <div class="card-body py-5 px-md-5">
+                        <form action="{{ path('user_login') }}" method="post">
+                            <!-- 2 column grid layout with text inputs for the first and last names -->
+                            <div class="row">
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+                            <!-- Email input -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                            <input name="matricule" type="text" id="form3Example3" class="form-control" />
+                            <label class="form-label" for="form3Example3">Numéro matricule</label>
+                            </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+                            <!-- Password input -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                            <input name="motpass" type="password" id="form3Example4" class="form-control" />
+                            <label class="form-label" for="form3Example4">Mot de passe</label>
+                            </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/IT_WORK/work_ITU/work_stage/my_project_directory/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/IT_WORK/work_ITU/work_stage/my_project_directory/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
-{% endblock %}
+                            <!-- Submit button -->
+                            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                            Se connecter
+                            </button>
+
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- Jumbotron -->
+    </section>
+    <!-- Section: Design Block -->
+</body>
+</html>
