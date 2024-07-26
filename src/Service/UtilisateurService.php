@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Utilisateur;
 use App\Repository\UtilisateurRepository;
+use Doctrine\ORM\EntityManager;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class UtilisateurService
@@ -15,11 +16,10 @@ class UtilisateurService
         $this->utilisateurRepository = $utilisateurRepo;
     }
  
-    public function isExistUser(string $userMatricule, string $userPassword){
-        $user = $this->utilisateurRepository->findOneBy(['user_matricule' => $userMatricule]);
-        if (!$user->getId()){
-            return false;
-        }
-        return true;
+    public function isExistUser(string $userMatricule){
+        $user = $this->utilisateurRepository->findOneByUserMatricule($userMatricule);
+        if(isset($user)){return true;}
+        return false;
     }
+
 }

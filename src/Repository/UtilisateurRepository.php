@@ -31,13 +31,23 @@ class UtilisateurRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Utilisateur
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findOneByUserMatricule($value): ?Utilisateur
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.user_matricule = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findUserByMatricule(string $user_matricule): array{
+        $entity_manager = $this->getEntityManager();
+        $query = $entity_manager->createQuery(
+            'select u.user_matricule
+            from APP\Entity\Utilisateur u
+            where u.user_matricule = :userMatricule'
+        )->setParameter('userMatricule', $user_matricule);
+        return $query->getResult();
+    }
 }

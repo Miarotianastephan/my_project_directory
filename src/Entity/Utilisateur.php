@@ -53,9 +53,16 @@ class Utilisateur
         return $this->date_ajout;
     }
 
-    public function setDateAjout(\DateTimeInterface $date_ajout): static
+    public function setDateAjout(string $date_ajout): static
     {
-        $this->date_ajout = $date_ajout;
+        $dateString = $date_ajout;
+        $date = \DateTime::createFromFormat('d-M-y', $dateString);
+
+        if ($date) {
+            $formattedDate = $date->format('Y-m-d H:i:s');
+            // Use $formattedDate in your Doctrine operations
+            $this->date_ajout = $formattedDate;
+        }
 
         return $this;
     }
