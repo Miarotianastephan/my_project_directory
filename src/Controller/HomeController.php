@@ -20,9 +20,12 @@ class HomeController extends AbstractController
     }
     
     #[Route(path: '/login', name: 'user_login', methods: ['POST'])]
-    public function loginUser(UtilisateurService $userService): Response{
+    public function loginUser(UtilisateurService $userService, Request $request): Response{
 
-        $user_matricule = "12345";
+        $user_matricule = $request->request->get("user_matricule");
+        $user_pass = $request->request->get("user_pass");
+
+        // $user_matricule = "12345";
         $is_exist_user = $userService->isExistUser($user_matricule);
         return new Response(
             '<html><body>Utilisateur status: '.var_dump($is_exist_user).'</body></html>'
