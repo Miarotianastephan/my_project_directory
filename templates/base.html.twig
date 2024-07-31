@@ -3,15 +3,76 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        
+        <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('css/init_sidebar.css') }}" rel="stylesheet"/>
         {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+        <div class="wrapper">
+            <aside id="sidebar">
+                <div class="d-flex">
+                    <button class="toggle-btn" type="button">
+                        <i class="lni lni-grid-alt"></i>
+                    </button>
+                    <div class="sidebar-logo">
+                        <a href="#">ProLog</a>
+                    </div>
+                </div>
+                <ul class="sidebar-nav">
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="lni lni-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="lni lni-user"></i>
+                            <span>Plan Comptable</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                            data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                            <i class="lni lni-protection"></i>
+                            <span>Gérer utilisateurs</span>
+                        </a>
+                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Créer</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Vérifier</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <a href="{{ path('user_logout') }}" class="sidebar-link">
+                        <i class="lni lni-exit"></i>
+                        <span>Se deconnecter</span>
+                    </a>
+                </div>
+            </aside>
+            <div class="main">
+                {% include "pages/header.html.twig" %}
+                <main class="content px-3 py-4" style="height: 100%;">
+                    <div class="container-fluid">
+                    {% block main_content %}{% endblock %}
+                    </div>
+                </main>
+                {% include "pages/footer.html.twig" %}
+            </div>
+        </div>
+        {% endblock %}
+
+        
+        
+        <script src="{{ asset('js/bootstrap.bundle.min.js') }}" ></script>
+        <script src="{{ asset('js/init_sidebar.js') }}" ></script>
     </body>
 </html>

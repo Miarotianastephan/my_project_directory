@@ -18,8 +18,12 @@ class UtilisateurService
  
     public function isExistUser(string $userMatricule){
         $user = $this->utilisateurRepository->findOneByUserMatricule($userMatricule);
-        if(isset($user)){return true;}
-        return false;
+        if(isset($user)){
+            $log_status = ['isExist' => true,'dataUser' => $user];
+            return $log_status;
+        }
+        $log_status = ['isExist' => false,'dataUser' => null];
+        return $log_status;
     }
 
 }
