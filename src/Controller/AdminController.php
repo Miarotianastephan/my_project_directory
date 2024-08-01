@@ -25,21 +25,26 @@ class AdminController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $user_matricule = $data["user_matricule"];
         $user_pass = $data["user_pass"];
+        $login_status = [];
 
-        $user_status = $userService->isExistUser($user_matricule);
-        $is_exist_user = $user_status['isExist'];
-        $url_admin_index = $this->generateUrl('admin_index');
-        $login_status = ($is_exist_user==true) ? 
-        ['message' => 'Reponse', 'valeur' => $is_exist_user, 'path' => $url_admin_index] :
-        ['message' => 'Reponse', 'valeur' => $is_exist_user] ;
-        // $login_status = $json_serial->serialize($login_status, 'json');
+        // AJOUTER APPEL ACTIVE DIRECTORY
+        $is_active_user = true;
+        // APPEL DIRECTORY
+        if ($is_active_user==true){
+            $user_status = $userService->isExistUser($user_matricule);
+            $is_exist_user = $user_status['isExist'];
+            $url_admin_index = $this->generateUrl('admin_index');
+            $login_status = ($is_exist_user==true) ? 
+            ['message' => 'OK', 'valeur' => $is_exist_user, 'path' => $url_admin_index] :
+            ['message' => 'Erreur', 'valeur' => $is_exist_user] ;
+        }else{
+            $login_status = ['message' => 'Erreur', 'valeur' => 'Utilisateur'];
+        }
 
         // $session = $request->getSession();
         // if ($is_exist_user==true){
         //     $session->set('user', $user_status[]);
         // }
-
-        // return JsonResponse::fromJsonString($login_status);
         return new JsonResponse($login_status);
     }
 
