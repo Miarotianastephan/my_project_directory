@@ -50,4 +50,6 @@ class UtilisateurRepository extends ServiceEntityRepository
         )->setParameter('userMatricule', $user_matricule);
         return $query->getResult();
     }
+
+    
 }

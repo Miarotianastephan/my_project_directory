@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des rôles: listes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }} {# Inclut les styles du parent pour ne pas les écraser #}
+    <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="mb-3">
+        <h3 class="fw-bold fs-4 mb-3">Gestion des rôles</h3>
+        <div class="row">
+            <a href="{{ path('app_groupe_utilisateur_new') }}">Nouveau rôle</a>
+
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Libelle</th>
+                        <th>Niveau</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for groupe_utilisateur in groupe_utilisateurs %}
+                    <tr>
+                        <td>{{ groupe_utilisateur.id }}</td>
+                        <td>{{ groupe_utilisateur.grpLibelle }}</td>
+                        <td>{{ groupe_utilisateur.grpNiveau }}</td>
+                        <td>
+                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-primary btn-sm">voir</a>
+                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-primary btn-sm">modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">aucun donnée inserer</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GroupeUtilisateur{% endblock %}
+
+{% block main_content %}
+    <h1>GroupeUtilisateur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ groupe_utilisateur.id }}</td>
+            </tr>
+            <tr>
+                <th>Grp_libelle</th>
+                <td>{{ groupe_utilisateur.grpLibelle }}</td>
+            </tr>
+            <tr>
+                <th>Grp_niveau</th>
+                <td>{{ groupe_utilisateur.grpNiveau }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_groupe_utilisateur_index') }}">back to list</a>
+
+    <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}">edit</a>
+
+    {{ include('groupe_utilisateur/_delete_form.html.twig') }}
+{% endblock %}

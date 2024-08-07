@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit GroupeUtilisateur{% endblock %}
+
+{% block main_content %}
+    <h1>Edit GroupeUtilisateur</h1>
+
+    {{ include('groupe_utilisateur/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    {{ include('groupe_utilisateur/_delete_form.html.twig') }}
+{% endblock %}

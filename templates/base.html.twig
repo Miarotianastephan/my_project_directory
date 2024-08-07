@@ -19,7 +19,7 @@
                         <i class="lni lni-grid-alt"></i>
                     </button>
                     <div class="sidebar-logo">
-                        <a href="#">ProLog</a>
+                        <a href="#">ProLog Compta</a>
                     </div>
                 </div>
                 <ul class="sidebar-nav">
@@ -30,23 +30,23 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a href="{{ path('app_groupe_utilisateur_index') }}" class="sidebar-link">
                             <i class="lni lni-user"></i>
-                            <span>Plan Comptable</span>
+                            <span>Gestion des rôles</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                             data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
                             <i class="lni lni-protection"></i>
-                            <span>Gérer utilisateurs</span>
+                            <span>Gestion utilisateurs</span>
                         </a>
                         <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Créer</a>
+                                <a href="#" class="sidebar-link">Nouvelle utilisateur</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Vérifier</a>
+                                <a href="#" class="sidebar-link">Liste</a>
                             </li>
                         </ul>
                     </li>
@@ -62,7 +62,9 @@
                 {% include "pages/header.html.twig" %}
                 <main class="content px-3 py-4" style="height: 100%;">
                     <div class="container-fluid">
-                    {% block main_content %}{% endblock %}
+                    {% block main_content %}
+                        
+                    {% endblock %}
                     </div>
                 </main>
                 {% include "pages/footer.html.twig" %}

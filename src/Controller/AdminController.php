@@ -48,7 +48,7 @@ class AdminController extends AbstractController
         return new JsonResponse($login_status);
     }
 
-    #[Route(path: '/admin/index', name: 'admin_index', methods: ['GET'])]
+    #[Route(path: '/acceuil', name: 'admin_index', methods: ['GET'])]
     public function acceuilAdmin(){
         return $this->render('back_office/admin_index.html.twig',[
             
@@ -59,5 +59,7 @@ class AdminController extends AbstractController
     public function logoutUser(){
         return $this->redirectToRoute('app_home');
     }
+
+    
 
 }

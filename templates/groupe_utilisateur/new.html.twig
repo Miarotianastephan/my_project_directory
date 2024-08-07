@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des rôles: affectation de nouveau rôle{% endblock %}
+
+{% block main_content %}
+<div class="mb-3">
+    <h3 class="fw-bold fs-4 mb-3">Gestion des rôles</h3>
+    <div class="row align-items-center">
+        <div class="card  col-lg-6">
+            <div class="card-body  py-5 px-md-5">
+                <h5 class="card-title mb-2">Formulaire d'ajout de rôle</h5>
+                {{ include('groupe_utilisateur/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
