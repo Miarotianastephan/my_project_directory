@@ -1,80 +1,188 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        
-        <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"/>
-        <link href="{{ asset('css/init_sidebar.css') }}" rel="stylesheet"/>
+        <meta
+            content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+            name="viewport"
+        />
+        <link
+            rel="icon"
+            href="{{ asset('img/app_ico.ico') }}"
+            type="image/x-icon"
+        />
+        <!-- Fonts and icons -->
+        <link rel="stylesheet" href={{ asset("css/all.min.css") }} />
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href={{ asset("css/bootstrap.min.css") }} />
+        <link rel="stylesheet" href={{ asset("css/plugins.min.css") }} />
+        <link rel="stylesheet" href={{ asset("css/kaiadmin.min.css") }} />
+        <link rel="stylesheet" href={{ asset("css/base_perso.css") }} />
         {% block stylesheets %}
         {% endblock %}
     </head>
     <body>
         {% block body %}
         <div class="wrapper">
-            <aside id="sidebar">
-                <div class="d-flex">
-                    <button class="toggle-btn" type="button">
-                        <i class="lni lni-grid-alt"></i>
-                    </button>
-                    <div class="sidebar-logo">
-                        <a href="#">ProLog Compta</a>
+            {# SIDEBAR #}
+            {% include 'pages/sidebar.html.twig' %}
+            
+            <div class="main-panel">
+                <div class="main-header">
+                    <div class="main-header-logo">
+                        <!-- Logo Header -->
+                        <div class="logo-header" data-background-color="light_logo">
+                            <a href="index.html" class="logo">
+                                <img src="{{ asset("img/app_logo.png") }}" alt="navbar brand"
+                                class="navbar-brand" height="70" width="80"
+                                />
+                            </a>
+                            <div class="nav-toggle">
+                                <button class="btn btn-toggle toggle-sidebar">
+                                <i class="gg-menu-right"></i>
+                                </button>
+                                <button class="btn btn-toggle sidenav-toggler">
+                                <i class="gg-menu-left"></i>
+                                </button>
+                            </div>
+                            <button class="topbar-toggler more">
+                                <i class="gg-more-vertical-alt"></i>
+                            </button>
+                        </div>
+                        <!-- End Logo Header -->
+                    </div>
+                    {# HEADER CONTENT#}
+                    {% include 'pages/header.html.twig' %}
+                </div>
+
+                <div class="container">
+                    <div class="page-inner">
+                        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                            <div>
+                                {# titre et sous-titre de la page #}
+                                <h3 class="fw-bold mb-3">{% block page_title %}Titre de la page{% endblock %}</h3>
+                                <h6 class="op-7 mb-2">{% block page_subtitle %}Sous-titre de la page{% endblock %}</h6>
+                            </div>
+                            <div class="ms-md-auto py-2 py-md-0">
+                                <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
+                                <a href="#" class="btn btn-primary btn-round">Add Customer</a>
+                            </div>
+                        </div>
+                        {# contenue principale #}
+                        {% block page_main_content %}
+                            <div class="row">
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="card card-stats card-round">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-icon">
+                                                    <div class="icon-big text-center icon-primary bubble-shadow-small" >
+                                                    <i class="fas fa-users"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-stats ms-3 ms-sm-0">
+                                                    <div class="numbers">
+                                                    <p class="card-category">Visitors</p>
+                                                    <h4 class="card-title">1,294</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="card card-stats card-round">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div
+                                            class="icon-big text-center icon-info bubble-shadow-small"
+                                            >
+                                            <i class="fas fa-user-check"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                            <p class="card-category">Subscribers</p>
+                                            <h4 class="card-title">1303</h4>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="card card-stats card-round">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div
+                                            class="icon-big text-center icon-success bubble-shadow-small"
+                                            >
+                                            <i class="fas fa-luggage-cart"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                            <p class="card-category">Sales</p>
+                                            <h4 class="card-title">$ 1,345</h4>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="card card-stats card-round">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div
+                                            class="icon-big text-center icon-secondary bubble-shadow-small"
+                                            >
+                                            <i class="far fa-check-circle"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                            <p class="card-category">Order</p>
+                                            <h4 class="card-title">576</h4>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endblock %}
                     </div>
                 </div>
-                <ul class="sidebar-nav">
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="lni lni-user"></i>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="{{ path('app_groupe_utilisateur_index') }}" class="sidebar-link">
-                            <i class="lni lni-user"></i>
-                            <span>Gestion des rôles</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                            data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                            <i class="lni lni-protection"></i>
-                            <span>Gestion utilisateurs</span>
-                        </a>
-                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Nouvelle utilisateur</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Liste</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="sidebar-footer">
-                    <a href="{{ path('user_logout') }}" class="sidebar-link">
-                        <i class="lni lni-exit"></i>
-                        <span>Se deconnecter</span>
-                    </a>
-                </div>
-            </aside>
-            <div class="main">
-                {% include "pages/header.html.twig" %}
-                <main class="content px-3 py-4" style="height: 100%;">
-                    <div class="container-fluid">
-                    {% block main_content %}
-                        
-                    {% endblock %}
-                    </div>
-                </main>
-                {% include "pages/footer.html.twig" %}
+                
+                {# FOOTER #}
+                {% include 'pages/footer.html.twig' %}
             </div>
+            {# FIN SIDEBAR #}
         </div>
         {% endblock %}
 
         
         
-        <script src="{{ asset('js/bootstrap.bundle.min.js') }}" ></script>
-        <script src="{{ asset('js/init_sidebar.js') }}" ></script>
+        {# CORE Js Files #}
+        <script src="{{ asset("js/core/jquery-3.7.1.min.js") }}"></script>
+        <script src="{{ asset("js/core/popper.min.js") }}"></script>
+        <script src="{{ asset("js/core/bootstrap.min.js") }}"></script>
+        <!-- jQuery Scrollbar -->
+        <script src="{{ asset("js/plugin/jquery-scrollbar/jquery.scrollbar.min.js") }}"></script>
+        <!-- Chart Circle --> 
+        <script src="{{ asset("js/plugin/chart-circle/circles.min.js") }}"></script>
+        <!-- Sweet Alert -->
+        <script src="{{ asset("js/plugin/sweetalert/sweetalert.min.js") }}"></script>
+        <!-- Kaiadmin JS -->
+        <script src="{{ asset("js/kaiadmin.min.js") }}"></script>
+        {% block js_script %}
+            
+        {% endblock %}
     </body>
 </html>

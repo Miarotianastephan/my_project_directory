@@ -4,13 +4,101 @@
     BFM Application de comptabilité en intranet
 {% endblock %}
 
+{% block page_title %}
+    Back-Office
+{% endblock %}
+{% block page_subtitle %}
+    Page d'acceuil du back-office
+{% endblock %}
 
-{% block main_content %}
 
-<div class="mb-3">
-    <h3 class="fw-bold fs-4 mb-3">Acceuil admin</h3>
-    <div class="row">
+{% block page_main_content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Formulaire d'ajout</div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="matricule">Rechercher le numéro matricule à ajouter</label>
+                        <input type="text" class="form-control" id="matricule" placeholder="Saisir un numéro matricule"/>
+                        <small id="matricule_help" class="form-text text-muted">
+                        Saisir un numéro matricule, exemple: 20024
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="formSelectGroupeAffectation">Choix du groupe d'affecttation</label>
+                        <select class="form-select" id="formSelectGroupeAffectation">
+                            <option>Responsable Commisssion</option>
+                            <option>Trésorier</option>
+                            <option>Comptable</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-action">
+                <button class="btn btn-success" id="alert_demo_7">Valider</button>
+                <button class="btn btn-danger">Annuler</button>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
 
+{% block js_script %}
+    <script>
+        //== Class definition
+        var SweetAlert2Demo = (function () {
+            //== Demos
+            var initDemos = function () 
+                {
+                    $("#alert_demo_7").click(function (e) {
+                        swal({
+                            title: "Confirmez-vous la saisie ?",
+                            text: "You won't be able to revert this!",
+                            type: "warning",
+                            buttons: {
+                                confirm: {
+                                    text: "Oui, valider!",
+                                    className: "btn btn-success",
+                                },
+                                cancel: {
+                                    text: "Non, annuler",
+                                    visible: true,
+                                    className: "btn btn-danger",
+                                },
+                            },
+                        }).then((Delete) => {
+                            if (Delete) {
+                                swal({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    type: "success",
+                                    buttons: {
+                                        confirm: {
+                                            className: "btn btn-success",
+                                        },
+                                    },
+                                });
+                            } else {
+                                swal.close();
+                            }
+                        });
+                    });
+                };
+
+                return {
+                    //== Init
+                    init: function () {
+                    initDemos();
+                    },
+            };
+        })();
+        //== Class Initialization
+        jQuery(document).ready(function () {
+            SweetAlert2Demo.init();
+        });
+    </script>
 {% endblock %}

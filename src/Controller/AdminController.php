@@ -18,6 +18,11 @@ class AdminController extends AbstractController
     {
         return $this->render('back_office/index.html.twig');
     }
+
+    #[Route(path: '/logout', name: 'user_logout', methods: ['GET'])]
+    public function logoutUser(){
+        return $this->redirectToRoute('app_home');
+    }
     
     #[Route(path: '/login', name: 'user_login', methods: ['POST'])]
     public function loginUser(UtilisateurService $userService, Request $request, SerializerInterface $json_serial): Response{
@@ -54,12 +59,13 @@ class AdminController extends AbstractController
             
         ]);  
     }
-
-    #[Route(path: '/logout', name: 'user_logout', methods: ['GET'])]
-    public function logoutUser(){
-        return $this->redirectToRoute('app_home');
+    
+    #[Route(path: '/utilisateurs', name: 'admin_users', methods: ['GET'])]
+    public function listUtilisateursAdmin(){
+        return $this->render('back_office/admin_list_utilisateur.html.twig',[
+            
+        ]);  
     }
-
     
 
 }

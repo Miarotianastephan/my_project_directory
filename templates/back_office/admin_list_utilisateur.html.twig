@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    BFM Application de comptabilité en intranet
+{% endblock %}
+
+{% block page_title %}
+    Back-Office
+{% endblock %}
+{% block page_subtitle %}
+    Page liste des utilisateurs
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Tables utilisateurs</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            {# Column #}
+                            <thead>
+                                <tr>
+                                    <th>Matricule</th>
+                                    <th>Groupe occupé</th>
+                                    <th>Date ajout</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Matricule</th>
+                                    <th>Groupe occupé</th>
+                                    <th>Date ajout</th>
+                                </tr>
+                            </tfoot>
+                            {# Data #}
+                            <tbody>
+                                <tr>
+                                    <td>90123</td>
+                                    <td>Trésorier</td>
+                                    <td>2024/07/01</td>
+                                </tr>
+                                <tr>
+                                    <td>90121</td>
+                                    <td>Comptable</td>
+                                    <td>2024/07/07</td>
+                                </tr>
+                                <tr>
+                                    <td>90122</td>
+                                    <td>Responsable Commission</td>
+                                    <td>2024/01/06</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_script %}
+    <!-- Datatables -->
+    <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
+    
+    <script>
+      $(document).ready(function () {
+        $("#basic-datatables").DataTable({
+                "pageLength": 2,
+                "language": {
+                        "lengthMenu": "Afficher _MENU_ éléments par page",
+                        "zeroRecords": "Aucun élément trouvé",
+                        "info": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                        "infoEmpty": "Aucun élément disponible",
+                        "infoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                        "search": "Rechercher :",
+                        "paginate": {
+                            "first": "Premier",
+                            "last": "Dernier",
+                            "next": "Suivant",
+                            "previous": "Précédent"
+                        }
+                }
+        });
+      });
+    </script>
+{% endblock %}

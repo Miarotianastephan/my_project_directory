@@ -1,0 +1,6 @@
+.logo-header[data-background-color=light_logo]{
+    background:#f5f7fd!important;
+}
+.logo-header[data-background-color] .btn-toggle{
+    color: #172035 !important;
+}

@@ -16,19 +16,15 @@ class Utilisateur
     #[ORM\Column(name:"user_id")]
     private ?int $id = null;
 
-    #[ORM\Column(name:"user_matricule" ,length: 50)]
+    #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false)]
     private ?string $user_matricule = null;
 
-    #[ORM\Column(name:"dt_ajout" ,type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:"dt_ajout" ,type: Types::DATE_MUTABLE,nullable: false)]
     private ?\DateTimeInterface $date_ajout = null;
 
     #[ORM\ManyToOne(targetEntity:GroupeUtilisateur::class ,inversedBy: 'utilisateurs')]
     #[ORM\JoinColumn(name:"grp_id",referencedColumnName:"grp_id",nullable: false)]
     private ?GroupeUtilisateur $group_utilisateur = null;
-
-    #[ORM\ManyToOne(targetEntity: DomaineActivite::class)]
-    #[ORM\JoinColumn(name:"dom_id" ,referencedColumnName:"dom_id" ,nullable: false)]
-    private ?DomaineActivite $domaine_activite = null;
 
     public function getId(): ?int
     {
@@ -78,15 +74,4 @@ class Utilisateur
         return $this;
     }
 
-    public function getDomaineActivite(): ?DomaineActivite
-    {
-        return $this->domaine_activite;
-    }
-
-    public function setDomaineActivite(?DomaineActivite $domaine_activite): static
-    {
-        $this->domaine_activite = $domaine_activite;
-
-        return $this;
-    }
 }
