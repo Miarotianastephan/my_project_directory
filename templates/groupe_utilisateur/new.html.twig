@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Gestion des rôles: affectation de nouveau rôle{% endblock %}
+{% block page_title %}
+    Back-Office
+{% endblock %}
+{% block page_subtitle %}
+    Page de création de nouveau rôle, ou groupe
+{% endblock %}
 
-{% block main_content %}
-<div class="mb-3">
-    <h3 class="fw-bold fs-4 mb-3">Gestion des rôles</h3>
+{% block page_main_content %}
     <div class="row align-items-center">
-        <div class="card  col-lg-6">
-            <div class="card-body  py-5 px-md-5">
-                <h5 class="card-title mb-2">Formulaire d'ajout de rôle</h5>
-                {{ include('groupe_utilisateur/_form.html.twig') }}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body  py-5 px-md-5">
+                    <h5 class="card-title mb-2">Formulaire d'ajout de rôle</h5>
+                    {{ include('groupe_utilisateur/_form.html.twig') }}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

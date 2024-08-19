@@ -1,11 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit GroupeUtilisateur{% endblock %}
+{% block title %}Gestion des rôles: affectation de nouveau rôle{% endblock %}
+{% block page_title %}
+    Back-Office
+{% endblock %}
+{% block page_subtitle %}
+    Page de modification d'un rôle
+{% endblock %}
 
-{% block main_content %}
-    <h1>Edit GroupeUtilisateur</h1>
+{% block page_main_content %}
 
-    {{ include('groupe_utilisateur/_form.html.twig', {'button_label': 'Modifier'}) }}
-
-    {{ include('groupe_utilisateur/_delete_form.html.twig') }}
+    <div class="row align-items-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body  py-5 px-md-5">
+                    <h5 class="card-title mb-2">Formulaire de modification</h5>
+                    {{ include('groupe_utilisateur/_form.html.twig', {'button_label': 'Modifier'}) }}
+                    {{ include('groupe_utilisateur/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

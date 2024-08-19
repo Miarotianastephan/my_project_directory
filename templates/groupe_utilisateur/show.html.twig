@@ -2,29 +2,37 @@
 
 {% block title %}GroupeUtilisateur{% endblock %}
 
-{% block main_content %}
-    <h1>GroupeUtilisateur</h1>
+{% block page_main_content %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ groupe_utilisateur.id }}</td>
-            </tr>
-            <tr>
-                <th>Grp_libelle</th>
-                <td>{{ groupe_utilisateur.grpLibelle }}</td>
-            </tr>
-            <tr>
-                <th>Grp_niveau</th>
-                <td>{{ groupe_utilisateur.grpNiveau }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_groupe_utilisateur_index') }}">back to list</a>
-
-    <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}">edit</a>
-
-    {{ include('groupe_utilisateur/_delete_form.html.twig') }}
+    <div class="row align-items-center">
+        <div class="col-md-12">
+            <div class="card">
+            
+                <div class="card-header">
+                    <h4 class="card-title">A propos du rôle</h4>
+                </div>
+                <div class="card-body  py-5 px-md-5">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Nom du rôle</th>
+                                    <td>{{ groupe_utilisateur.grpLibelle }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Niveau de catégorisation</th>
+                                    <td>{{ groupe_utilisateur.grpNiveau }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('app_groupe_utilisateur_index') }}" class="btn btn-secondary btn-sm">Retourner à la liste</a>
+                        <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    </div>
+                    {{ include('groupe_utilisateur/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

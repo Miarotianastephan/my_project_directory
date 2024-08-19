@@ -2,46 +2,91 @@
 
 {% block title %}Gestion des rôles: listes{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }} {# Inclut les styles du parent pour ne pas les écraser #}
+{# {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
+{% endblock %} #}
+
+{% block page_title %}
+    Back-Office
+{% endblock %}
+{% block page_subtitle %}
+    Page gestion des rôles
 {% endblock %}
 
-{% block main_content %}
+{# Bouton d'action #}
+{% block page_options %}
+    <a href="{{ path("app_groupe_utilisateur_new") }}" class="btn btn-label-secondary">
+        Créer un rôle
+    </a>
+{% endblock %}
 
-    <div class="mb-3">
-        <h3 class="fw-bold fs-4 mb-3">Gestion des rôles</h3>
+{% block page_main_content %}
         <div class="row">
-            <a href="{{ path('app_groupe_utilisateur_new') }}">Nouveau rôle</a>
-
-            <table class="table table-hover table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Libelle</th>
-                        <th>Niveau</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for groupe_utilisateur in groupe_utilisateurs %}
-                    <tr>
-                        <td>{{ groupe_utilisateur.id }}</td>
-                        <td>{{ groupe_utilisateur.grpLibelle }}</td>
-                        <td>{{ groupe_utilisateur.grpNiveau }}</td>
-                        <td>
-                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-primary btn-sm">voir</a>
-                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-primary btn-sm">modifier</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4">aucun donnée inserer</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Table des rôles</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="basic-datatables" class="display table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Libelle</th>
+                                        <th>Niveau</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for groupe_utilisateur in groupe_utilisateurs %}
+                                    <tr>
+                                        <td>{{ groupe_utilisateur.id }}</td>
+                                        <td>{{ groupe_utilisateur.grpLibelle }}</td>
+                                        <td>{{ groupe_utilisateur.grpNiveau }}</td>
+                                        <td>
+                                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-primary btn-sm">voir</a>
+                                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-primary btn-sm">modifier</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4">aucun donnée inserer</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+{% endblock %}
 
+
+{% block js_script %}
+    <!-- Datatables -->
+    <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
+    
+    <script>
+      $(document).ready(function () {
+        $("#basic-datatables").DataTable({
+                "pageLength": 5,
+                "language": {
+                        "lengthMenu": "Afficher _MENU_ éléments par page",
+                        "zeroRecords": "Aucun élément trouvé",
+                        "info": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                        "infoEmpty": "Aucun élément disponible",
+                        "infoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                        "search": "Rechercher :",
+                        "paginate": {
+                            "first": "Premier",
+                            "last": "Dernier",
+                            "next": "Suivant",
+                            "previous": "Précédent"
+                        }
+                }
+        });
+      });
+    </script>
 {% endblock %}
