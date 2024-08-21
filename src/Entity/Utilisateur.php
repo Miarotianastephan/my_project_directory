@@ -26,6 +26,8 @@ class Utilisateur
     #[ORM\JoinColumn(name:"grp_id",referencedColumnName:"grp_id",nullable: false)]
     private ?GroupeUtilisateur $group_utilisateur = null;
 
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -73,5 +75,7 @@ class Utilisateur
 
         return $this;
     }
+
+
 
 }
