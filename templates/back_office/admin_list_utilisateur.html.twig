@@ -38,21 +38,13 @@
                             </tfoot>
                             {# Data #}
                             <tbody>
+                            {% for usr in utilisateurs %}
                                 <tr>
-                                    <td>90123</td>
-                                    <td>Trésorier</td>
-                                    <td>2024/07/01</td>
+                                    <td>{{usr.userMatricule}}</td>
+                                    <td>{{usr.groupUtilisateur.grpLibelle}}</td>
+                                    <td>{{usr.dateAjout|date('Y/m/d')}}</td>
                                 </tr>
-                                <tr>
-                                    <td>90121</td>
-                                    <td>Comptable</td>
-                                    <td>2024/07/07</td>
-                                </tr>
-                                <tr>
-                                    <td>90122</td>
-                                    <td>Responsable Commission</td>
-                                    <td>2024/01/06</td>
-                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -69,7 +61,7 @@
     <script>
       $(document).ready(function () {
         $("#basic-datatables").DataTable({
-                "pageLength": 2,
+                "pageLength": 10,
                 "language": {
                         "lengthMenu": "Afficher _MENU_ éléments par page",
                         "zeroRecords": "Aucun élément trouvé",

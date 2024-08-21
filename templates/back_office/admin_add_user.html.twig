@@ -19,35 +19,39 @@
             <div class="card-header">
                 <div class="card-title">Formulaire d'ajout</div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="form-group">
-                        <label for="matricule">Rechercher le numéro matricule à ajouter</label>
-                        <input type="text" class="form-control" id="matricule" placeholder="Saisir un numéro matricule"/>
-                        <small id="matricule_help" class="form-text text-muted">
-                        Saisir un numéro matricule, exemple: 20024
-                        </small>
-                    </div>
-                    <div class="form-group">
-                        <label for="formSelectGroupeAffectation">Choix du groupe d'affecttation</label>
-                        <select class="form-select" id="formSelectGroupeAffectation">
-                            <option>Responsable Commisssion</option>
-                            <option>Trésorier</option>
-                            <option>Comptable</option>
-                        </select>
+            <form action="{{ path('admin_save_user_test') }}" method="post" id="add_user_form">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="matricule">Rechercher le numéro matricule à ajouter</label>
+                            <input type="text" name="user_matricule" class="form-control" id="matricule" placeholder="Saisir un numéro matricule"/>
+                            <small id="matricule_help" class="form-text text-muted">
+                            Saisir un numéro matricule, exemple: 20024
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="formSelectGroupeAffectation">Choix du groupe d'affecttation</label>
+                            <select name="id_groupe" class="form-select" id="formSelectGroupeAffectation">
+                                {% for grp in groupes %}
+                                    <option value="{{grp.id}}">{{grp.grpLibelle}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-action">
-                <button class="btn btn-success" id="alert_demo_7">Valider</button>
-                <button class="btn btn-danger">Annuler</button>
-            </div>
+                <div class="card-action">
+                    <button id="displayNotif" type="submit" class="btn btn-success">Valider</button>
+                    <button class="btn btn-danger">Annuler</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block js_script %}
+    <script src="{{ asset('js/xhr.js') }}" ></script>
+    <script src="{{ asset('js/scr/scr_admin_add_user.js') }}" ></script>
     <script>
         //== Class definition
         var SweetAlert2Demo = (function () {

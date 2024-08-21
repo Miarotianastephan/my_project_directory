@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @extends ServiceEntityRepository<Utilisateur>
@@ -51,5 +52,26 @@ class UtilisateurRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    
+    public function insertUtilisateur(string $user_matricule, int $groupeId): void
+    {
+        // Requête SQL Oracle
+        $sql = "INSERT INTO utilisateur (user_matricule, grp_id) 
+                VALUES (:user_matricule, :grp_id)";
+        // Récupérer la connexion Doctrine
+        $conn = $this->getEntityManager()->getConnection();
+        // Démarrer la transaction
+        $conn->beginTransaction();
+        try {
+            // Préparer et exécuter la requête SQL
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('user_matricule', $user_matricule);
+            $stmt->bindValue('grp_id', $groupeId);
+            $stmt->executeQuery();
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollBack();
+            throw $e; // Re-throw
+        }
+    }
+
 }
