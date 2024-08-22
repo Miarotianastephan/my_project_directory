@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Test;
+use Psr\Log\LoggerInterface;
 use App\Form\TestType;
 use App\Repository\TestRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,18 +24,35 @@ class TestController extends AbstractController
     }
 
     #[Route('/new', name: 'app_test_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         $test = new Test();
         $form = $this->createForm(TestType::class, $test);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer la date du formulaire
+            $date = $form->get('test_date')->getData();
+
+            // Vérifier si la date est bien un objet DateTime
+            if (!$date instanceof \DateTimeInterface) {
+                $date = \DateTimeInterface::createFromFormat('Y-m-d H:i:s', $date);
+                if ($date === false) {
+                    throw new \Exception('Invalid date format');
+                }
+            }
+
+            // Assigner la date convertie à l'entité
+            $test->setTestDate($date);
+
+            // Persister et sauvegarder l'entité
             $entityManager->persist($test);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_test_index', [], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->render('test/new.html.twig', [
             'test' => $test,
