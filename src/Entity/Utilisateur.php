@@ -19,7 +19,7 @@ class Utilisateur
     #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false)]
     private ?string $user_matricule = null;
 
-    #[ORM\Column(name:"dt_ajout" ,type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:"dt_ajout" ,type: 'customdate')]
     private ?\DateTimeInterface $date_ajout = null;
 
     #[ORM\ManyToOne(targetEntity:GroupeUtilisateur::class ,inversedBy: 'utilisateurs')]

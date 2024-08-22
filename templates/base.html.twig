@@ -22,6 +22,9 @@
         <link rel="stylesheet" href={{ asset("css/base_perso.css") }} />
         {% block stylesheets %}
         {% endblock %}
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
     </head>
     <body>
         {% block body %}
