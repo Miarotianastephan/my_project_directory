@@ -19,7 +19,7 @@ doctrine:
                 host: '%env(resolve:DATABASE_HOST)%'
                 port: '%env(resolve:DATABASE_PORT)%'
                 charset: AL32UTF8
-                servicename: XE
+                servicename: xe
                 # Add schema_filter to avoid dropping existing tables
                 schema_filter: ~
     orm:

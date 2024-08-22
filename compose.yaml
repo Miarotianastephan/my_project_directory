@@ -1,21 +1,48 @@
 version: '3'
-
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+  oracle-db:
+    image: oracleinanutshell/oracle-xe-11g
+    container_name: symfony_oracle
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      ORACLE_PASSWORD: dev_pass
+      ORACLE_USERNAME: dev_usr
+      ORACLE_PDB: 'XE'
+      ORACLE_MEMORY: 1g
+    ports:
+      - "1521:1521"
+      - "5500:5500"
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - oracle_data:/opt/oracle/oradata
+    networks:
+      - symfony-network
+
+  php:
+    image: php:8.2-fpm
+    container_name: symfony_php
+    volumes:
+      - .:/var/www/html
+    environment:
+      ORACLE_HOME: /usr/local/instantclient_19_8
+    depends_on:
+      - oracle-db
+    networks:
+      - symfony-network
+
+  web:
+    image: nginx:alpine
+    container_name: symfony_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - php
+    networks:
+      - symfony-network
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  oracle_data:
+
+networks:
+  symfony-network:
