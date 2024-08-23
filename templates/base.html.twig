@@ -3,27 +3,33 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <meta
-            content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-            name="viewport"
-        />
-        <link
-            rel="icon"
-            href="{{ asset('img/app_ico.ico') }}"
-            type="image/x-icon"
-        />
-        <!-- Fonts and icons -->
-        <link rel="stylesheet" href={{ asset("css/all.min.css") }} />
-
-        <!-- CSS Files -->
-        <link rel="stylesheet" href={{ asset("css/bootstrap.min.css") }} />
-        <link rel="stylesheet" href={{ asset("css/plugins.min.css") }} />
-        <link rel="stylesheet" href={{ asset("css/kaiadmin.min.css") }} />
-        <link rel="stylesheet" href={{ asset("css/base_perso.css") }} />
+        <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
+        <link rel="icon" href="{{ asset('img/app_ico.ico') }}" type="image/x-icon" />
         {% block stylesheets %}
+            <link rel="stylesheet" href={{ asset("css/all.min.css") }} /><!-- Fonts and icons -->
+            <link rel="stylesheet" href={{ asset("css/bootstrap.min.css") }} /><!-- CSS Files -->
+            <link rel="stylesheet" href={{ asset("css/plugins.min.css") }} />
+            <link rel="stylesheet" href={{ asset("css/kaiadmin.min.css") }} />
+            <link rel="stylesheet" href={{ asset("css/base_perso.css") }} />
         {% endblock %}
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            {# {% block importmap %}{{ importmap('app') }}{% endblock %} #}
+            {# CORE Js Files #}
+            <script src="{{ asset("js/core/jquery-3.7.1.min.js") }}"></script>
+            <script src="{{ asset("js/core/popper.min.js") }}"></script>
+            <script src="{{ asset("js/core/bootstrap.min.js") }}"></script>
+            <!-- Datatables -->
+            <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
+            <!-- Bootstrap Notify -->
+            <script src="{{ asset("js/plugin/bootstrap-notify/bootstrap-notify.min.js") }}"></script>
+            <!-- jQuery Scrollbar -->
+            <script src="{{ asset("js/plugin/jquery-scrollbar/jquery.scrollbar.min.js") }}"></script>
+            <!-- Chart Circle --> 
+            <script src="{{ asset("js/plugin/chart-circle/circles.min.js") }}"></script>
+            <!-- Sweet Alert -->
+            <script src="{{ asset("js/plugin/sweetalert/sweetalert.min.js") }}"></script>
+            <!-- Kaiadmin JS -->
+            <script src="{{ asset("js/kaiadmin.min.js") }}"></script>
         {% endblock %}
     </head>
     <body>
@@ -170,26 +176,6 @@
             </div>
             {# FIN SIDEBAR #}
         </div>
-        {% endblock %}
-
-        
-        
-        {# CORE Js Files #}
-        <script src="{{ asset("js/core/jquery-3.7.1.min.js") }}"></script>
-        <script src="{{ asset("js/core/popper.min.js") }}"></script>
-        <script src="{{ asset("js/core/bootstrap.min.js") }}"></script>
-        <!-- Bootstrap Notify -->
-        <script src="{{ asset("js/plugin/bootstrap-notify/bootstrap-notify.min.js") }}"></script>
-        <!-- jQuery Scrollbar -->
-        <script src="{{ asset("js/plugin/jquery-scrollbar/jquery.scrollbar.min.js") }}"></script>
-        <!-- Chart Circle --> 
-        <script src="{{ asset("js/plugin/chart-circle/circles.min.js") }}"></script>
-        <!-- Sweet Alert -->
-        <script src="{{ asset("js/plugin/sweetalert/sweetalert.min.js") }}"></script>
-        <!-- Kaiadmin JS -->
-        <script src="{{ asset("js/kaiadmin.min.js") }}"></script>
-        {% block js_script %}
-            
         {% endblock %}
     </body>
 </html>

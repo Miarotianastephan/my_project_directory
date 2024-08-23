@@ -1,14 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    BFM Application de comptabilité en intranet
-{% endblock %}
-
-{% block page_title %}
-    Back-Office
-{% endblock %}
-{% block page_subtitle %}
-    Page d'acceuil du back-office
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+{% block page_title %}Back-Office{% endblock %}
+{% block page_subtitle %}Page d'acceuil du back-office{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/xhr.js') }}" ></script>
+    <script src="{{ asset('js/scr/scr_admin_add_user.js') }}" ></script>
 {% endblock %}
 
 
@@ -47,62 +45,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block js_script %}
-    <script src="{{ asset('js/xhr.js') }}" ></script>
-    <script src="{{ asset('js/scr/scr_admin_add_user.js') }}" ></script>
-    <script>
-        //== Class definition
-        var SweetAlert2Demo = (function () {
-            //== Demos
-            var initDemos = function () 
-                {
-                    $("#alert_demo_7").click(function (e) {
-                        swal({
-                            title: "Confirmez-vous la saisie ?",
-                            text: "You won't be able to revert this!",
-                            type: "warning",
-                            buttons: {
-                                confirm: {
-                                    text: "Oui, valider!",
-                                    className: "btn btn-success",
-                                },
-                                cancel: {
-                                    text: "Non, annuler",
-                                    visible: true,
-                                    className: "btn btn-danger",
-                                },
-                            },
-                        }).then((Delete) => {
-                            if (Delete) {
-                                swal({
-                                    title: "Deleted!",
-                                    text: "Your file has been deleted.",
-                                    type: "success",
-                                    buttons: {
-                                        confirm: {
-                                            className: "btn btn-success",
-                                        },
-                                    },
-                                });
-                            } else {
-                                swal.close();
-                            }
-                        });
-                    });
-                };
-
-                return {
-                    //== Init
-                    init: function () {
-                    initDemos();
-                    },
-            };
-        })();
-        //== Class Initialization
-        jQuery(document).ready(function () {
-            SweetAlert2Demo.init();
-        });
-    </script>
 {% endblock %}
