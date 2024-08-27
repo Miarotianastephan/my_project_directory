@@ -19,11 +19,18 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class AdminController extends AbstractController
 {
-    // #[Route('/', name: 'app_home')]
-    // public function index(): Response{
-    //     return $this->render('back_office/index.html.twig');
-    // }
 
+    #[Route(path: '/', name: 'user_login')]
+    public function loginUser(Request $request,AuthenticationUtils $authUtils): Response{
+
+        $error = $authUtils->getLastAuthenticationError();
+        $lastUsername = $authUtils->getLastUsername();
+
+        return $this->render('back_office/index.html.twig',[
+            'error' => $error,
+            'lastUsername' => $lastUsername,
+        ]);
+    }
     #[Route(path: '/logout', name: 'user_logout', methods: ['GET'])]
     public function logoutUser(){}
     
@@ -88,19 +95,6 @@ class AdminController extends AbstractController
             $request_status = ['message' => $message, 'status' => false] ;
         }
         return new JsonResponse($request_status);
-    }
-
-    #[Route(path: '/', name: 'user_login')]
-    public function loginUser(Request $request,AuthenticationUtils $authUtils): Response{
-
-        $error = $authUtils->getLastAuthenticationError();
-        $lastUsername = $authUtils->getLastUsername();
-
-        return $this->render('back_office/index.html.twig',[
-            'error' => $error,
-            'lastUsername' => $lastUsername,
-        ]);
-
     }
     
 
