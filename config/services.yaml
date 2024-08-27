@@ -22,3 +22,14 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Security\ActiveDirectoryService:
+        arguments:
+            $host: '%env(AD_HOST)%'
+            $port: '%env(int:AD_PORT)%'
+            $baseDn: '%env(AD_BASE_DN)%'
+
+    App\Security\ActiveDirectoryAuthenticator:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $router: '@router'
+            $adService: '@App\Security\ActiveDirectoryService'

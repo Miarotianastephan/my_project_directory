@@ -5,18 +5,26 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Query\TreeWalker;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 #[ORM\Table(name: 'utilisateur')]
-class Utilisateur
+class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedUserInterface
 {
+    
+    public function __construct()
+    {
+        $this->roles = ['ROLE_USER']; // S'assurer que roles a toujours un tableau
+    }
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"SEQUENCE")]
     #[ORM\SequenceGenerator(sequenceName: 'user_seq', allocationSize: 1, initialValue: 1)]
     #[ORM\Column(name:"user_id")]
     private ?int $id = null;
 
-    #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false)]
+    #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false,unique: true)]
     private ?string $user_matricule = null;
 
     #[ORM\Column(name:"dt_ajout" ,type: 'customdate')]
@@ -25,6 +33,9 @@ class Utilisateur
     #[ORM\ManyToOne(targetEntity:GroupeUtilisateur::class ,inversedBy: 'utilisateurs')]
     #[ORM\JoinColumn(name:"grp_id",referencedColumnName:"grp_id",nullable: false)]
     private ?GroupeUtilisateur $group_utilisateur = null;
+
+    #[ORM\Column]
+    private array $roles = [];
 
     public function getId(): ?int
     {
@@ -48,16 +59,22 @@ class Utilisateur
         return $this->date_ajout;
     }
 
-    public function setDateAjout(string $date_ajout): static
-    {
-        $dateString = $date_ajout;
-        $date = \DateTime::createFromFormat('d-M-y', $dateString);
+    // public function setDateAjout(string $date_ajout): static
+    // {
+    //     $dateString = $date_ajout;
+    //     $date = \DateTime::createFromFormat('d-M-y', $dateString);
 
-        if ($date) {
-            $formattedDate = $date->format('Y-m-d H:i:s');
-            // Use $formattedDate in your Doctrine operations
-            $this->date_ajout = $formattedDate;
-        }
+    //     if ($date) {
+    //         $formattedDate = $date->format('Y-m-d H:i:s');
+    //         // Use $formattedDate in your Doctrine operations
+    //         $this->date_ajout = $formattedDate;
+    //     }
+
+    //     return $this;
+    // }
+    public function setDateAjout(\DateTimeInterface $date_ajout): static
+    {
+        $this->date_ajout = $date_ajout;
 
         return $this;
     }
@@ -74,4 +91,55 @@ class Utilisateur
         return $this;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return (string)$this->getUserMatricule();   
+    }
+
+    public function eraseCredentials(){}    
+    
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);  // Symfony requires unique roles
+        // return [];
+    }
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->user_matricule,
+            $this->group_utilisateur,
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        [
+            $this->id,
+            $this->user_matricule,
+            $this->group_utilisateur,
+        ] = unserialize($serialized);
+    }
+
+    public function getPassword(): ?string
+    {
+        return null;
+    }
+    public function setPassword(string $password): static
+    {
+        // $this->password = $password;
+        throw new \Exception("Le mot de passe doit être géré via Active Directory.");
+        // return $this;
+    }
+
+    public function isAdmin(){
+        return in_array('ROLE_ADMIN', $this->getRoles());
+    }
 }

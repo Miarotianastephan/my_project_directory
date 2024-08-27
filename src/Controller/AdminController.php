@@ -14,48 +14,47 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class AdminController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response{
-        return $this->render('back_office/index.html.twig');
-    }
+    // #[Route('/', name: 'app_home')]
+    // public function index(): Response{
+    //     return $this->render('back_office/index.html.twig');
+    // }
 
     #[Route(path: '/logout', name: 'user_logout', methods: ['GET'])]
-    public function logoutUser(){
-        return $this->redirectToRoute('app_home');
-    }
+    public function logoutUser(){}
     
-    #[Route(path: '/login', name: 'user_login', methods: ['POST'])]
-    public function loginUser(UtilisateurService $userService, Request $request, SerializerInterface $json_serial): Response{
+    // #[Route(path: '/login', name: 'user_login', methods: ['POST'])]
+    // public function loginUser(UtilisateurService $userService, Request $request, SerializerInterface $json_serial): Response{
 
-        $data = json_decode($request->getContent(), true);
-        $user_matricule = $data["user_matricule"];
-        $user_pass = $data["user_pass"];
-        $login_status = [];
+    //     $data = json_decode($request->getContent(), true);
+    //     $user_matricule = $data["user_matricule"];
+    //     $user_pass = $data["user_pass"];
+    //     $login_status = [];
 
-        // AJOUTER APPEL ACTIVE DIRECTORY
-        $is_active_user = true;
-        // APPEL DIRECTORY
-        if ($is_active_user==true){
-            $user_status = $userService->isExistUser($user_matricule);
-            $is_exist_user = $user_status['isExist'];
-            $url_admin_add_user = $this->generateUrl('admin_add_user');
-            $login_status = ($is_exist_user==true) ? 
-            ['message' => 'OK', 'valeur' => $is_exist_user, 'path' => $url_admin_add_user] :
-            ['message' => 'Erreur', 'valeur' => $is_exist_user] ;
-        }else{
-            $login_status = ['message' => 'Erreur', 'valeur' => 'Utilisateur'];
-        }
+    //     // AJOUTER APPEL ACTIVE DIRECTORY
+    //     $is_active_user = true;
+    //     // APPEL DIRECTORY
+    //     if ($is_active_user==true){
+    //         $user_status = $userService->isExistUser($user_matricule);
+    //         $is_exist_user = $user_status['isExist'];
+    //         $url_admin_add_user = $this->generateUrl('admin_add_user');
+    //         $login_status = ($is_exist_user==true) ? 
+    //         ['message' => 'OK', 'valeur' => $is_exist_user, 'path' => $url_admin_add_user] :
+    //         ['message' => 'Erreur', 'valeur' => $is_exist_user] ;
+    //     }else{
+    //         $login_status = ['message' => 'Erreur', 'valeur' => 'Utilisateur'];
+    //     }
 
-        // $session = $request->getSession();
-        // if ($is_exist_user==true){
-        //     $session->set('user', $user_status[]);
-        // }
-        return new JsonResponse($login_status);
-    }
+    //     // $session = $request->getSession();
+    //     // if ($is_exist_user==true){
+    //     //     $session->set('user', $user_status[]);
+    //     // }
+    //     return new JsonResponse($login_status);
+    // }
 
     #[Route(path: '/utilisateurs', name: 'admin_users', methods: ['GET'])]
     public function listUtilisateursAdmin(UtilisateurRepository $utilisateurRepository){
@@ -89,6 +88,19 @@ class AdminController extends AbstractController
             $request_status = ['message' => $message, 'status' => false] ;
         }
         return new JsonResponse($request_status);
+    }
+
+    #[Route(path: '/', name: 'user_login')]
+    public function loginUser(Request $request,AuthenticationUtils $authUtils): Response{
+
+        $error = $authUtils->getLastAuthenticationError();
+        $lastUsername = $authUtils->getLastUsername();
+
+        return $this->render('back_office/index.html.twig',[
+            'error' => $error,
+            'lastUsername' => $lastUsername,
+        ]);
+
     }
     
 

@@ -4,14 +4,18 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        my_provider: { entity: { class: App\Entity\Utilisateur, property: user_matricule } }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            lazy: true
-            provider: users_in_memory
+            provider: my_provider # comment on va stocker no données
+            custom_authenticators: 
+                - App\Security\ActiveDirectoryAuthenticator
+            logout:
+                path: user_logout
+                target: user_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
