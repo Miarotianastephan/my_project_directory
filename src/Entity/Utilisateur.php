@@ -9,7 +9,7 @@ use Doctrine\ORM\Query\TreeWalker;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-#[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
+#[ORM\Entity(repositoryClass: UtilisateurRepository::class)] 
 #[ORM\Table(name: 'utilisateur')]
 class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedUserInterface
 {
@@ -96,7 +96,7 @@ class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedU
         return (string)$this->getUserMatricule();   
     }
 
-    public function eraseCredentials(){}    
+    public function eraseCredentials():void{}    
     
     public function getRoles(): array
     {
