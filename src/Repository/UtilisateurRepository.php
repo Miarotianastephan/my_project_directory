@@ -52,11 +52,11 @@ class UtilisateurRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function insertUtilisateur(string $user_matricule, int $groupeId): void
+    public function insertUtilisateur(string $user_matricule, int $groupeId, string $roles): void
     {
         // Requête SQL Oracle
-        $sql = "INSERT INTO utilisateur (user_matricule, grp_id) 
-                VALUES (:user_matricule, :grp_id)";
+        $sql = "INSERT INTO utilisateur (user_id,user_matricule, grp_id, roles) 
+                VALUES (user_seq.NEXTVAL,:user_matricule, :grp_id, :roles)";
         // Récupérer la connexion Doctrine
         $conn = $this->getEntityManager()->getConnection();
         // Démarrer la transaction
@@ -66,11 +66,29 @@ class UtilisateurRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('user_matricule', $user_matricule);
             $stmt->bindValue('grp_id', $groupeId);
+            $stmt->bindValue('roles', $roles);
             $stmt->executeQuery();
             $conn->commit();
         } catch (Exception $e) {
             $conn->rollBack();
             throw $e; // Re-throw
+        }
+    }
+
+    public function updateUtilisateur(Utilisateur $u){
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($u);
+            $em->flush();
+            return [
+                "status" => true,
+                "message" => sprintf('Utilisateur %s créer avec succès',$u->getUserMatricule()),
+            ];
+        } catch (\Exception $except) {
+            return [
+                "status" => false,
+                "message" => $except->getMessage(),
+            ];
         }
     }
 

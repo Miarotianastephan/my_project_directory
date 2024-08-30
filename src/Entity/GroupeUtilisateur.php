@@ -6,6 +6,8 @@ use App\Repository\GroupeUtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: GroupeUtilisateurRepository::class)]
 #[ORM\Table(name: 'groupe_utilisateur')]
@@ -26,6 +28,8 @@ class GroupeUtilisateur
     /**
      * @var Collection<int, Utilisateur>
      */
+    // #[MaxDepth(1)]
+    #[Ignore] // Annotation pour éviter les boucles infinis
     #[ORM\OneToMany(targetEntity: Utilisateur::class, mappedBy: 'group_utilisateur')]
     private Collection $utilisateurs;
 

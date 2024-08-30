@@ -40,4 +40,20 @@ class GroupeUtilisateurRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    
+        /**
+     * Récupère la liste des groupes où l'utilisateur n'est pas concerné.
+     *
+     * @param int $currentGroupId L'ID du groupe actuel de l'utilisateur
+     * @return GroupeUtilisateur[] Retourne un tableau d'entités GroupeUtilisateur
+     */
+    public function findGroupsNotAssignedToUser(int $currentGroupId): array
+    {
+        // Création de la requête DQL pour récupérer tous les groupes sauf celui dont l'ID est passé en paramètre
+        return $this->createQueryBuilder('g')
+            ->where('g.id != :currentGroupId')
+            ->setParameter('currentGroupId', $currentGroupId)
+            ->getQuery()
+            ->getResult();
+    }
 }

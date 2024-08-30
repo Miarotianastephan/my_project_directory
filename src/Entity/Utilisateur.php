@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Query\TreeWalker;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)] 
 #[ORM\Table(name: 'utilisateur')]
@@ -16,7 +15,7 @@ class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedU
     
     public function __construct()
     {
-        $this->roles = ['ROLE_USER']; // S'assurer que roles a toujours un tableau
+        // $this->roles = ['ROLE_USER']; // S'assurer que roles a toujours un tableau
     }
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"SEQUENCE")]
@@ -30,6 +29,7 @@ class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedU
     #[ORM\Column(name:"dt_ajout" ,type: 'customdate')]
     private ?\DateTimeInterface $date_ajout = null;
 
+    // #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity:GroupeUtilisateur::class ,inversedBy: 'utilisateurs')]
     #[ORM\JoinColumn(name:"grp_id",referencedColumnName:"grp_id",nullable: false)]
     private ?GroupeUtilisateur $group_utilisateur = null;

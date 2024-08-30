@@ -10,7 +10,7 @@
             <link rel="stylesheet" href={{ asset("css/bootstrap.min.css") }} /><!-- CSS Files -->
             <link rel="stylesheet" href={{ asset("css/plugins.min.css") }} />
             <link rel="stylesheet" href={{ asset("css/kaiadmin.min.css") }} />
-            <link rel="stylesheet" href={{ asset("css/base_perso.css") }} />
+            <link rel="stylesheet" href={{ asset("css/base_perso.css") }} /> 
         {% endblock %}
         {% block javascripts %}
             {# {% block importmap %}{{ importmap('app') }}{% endblock %} #}
@@ -71,7 +71,7 @@
                         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                             <div>
                                 {# titre et sous-titre de la page #}
-                                <h3 class="fw-bold mb-3">{% block page_title %}Titre de la page{% endblock %}</h3>
+                                <h3 class="title_font fw-bold mb-3">{% block page_title %}Titre de la page{% endblock %}</h3>
                                 <h6 class="op-7 mb-2">{% block page_subtitle %}Sous-titre de la page{% endblock %}</h6>
                             </div>
                             <div class="ms-md-auto py-2 py-md-0">

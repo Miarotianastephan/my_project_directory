@@ -17,7 +17,7 @@ class GroupeUtilisateurController extends AbstractController
     #[Route('/', name: 'app_groupe_utilisateur_index', methods: ['GET'])]
     public function index(GroupeUtilisateurRepository $groupeUtilisateurRepository): Response
     {
-        return $this->render('groupe_utilisateur/index.html.twig', [
+        return $this->render('groupe_utilisateur/group_users.html.twig', [
             'groupe_utilisateurs' => $groupeUtilisateurRepository->findAll(),
         ]);
     }

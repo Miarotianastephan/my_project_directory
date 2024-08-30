@@ -23,34 +23,37 @@
                     <img src="{{ asset("/img/welcome2.png") }}" alt="..." class="avatar-img rounded-circle" />
                     </div>
                     <span class="profile-username">
-                        <span class="op-7">Bonjour,</span>
-                        <span class="fw-bold">USERXXX</span>
+                        <span class="op-7">Bonjour </span>
+                        {% if app.user %}
+                            <span class="fw-bold">{{app.user.userMatricule}} !</span>
+                        {% else %}
+                            <span class="fw-bold">!</span>
+                        {% endif %}
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                     <div class="dropdown-user-scroll scrollbar-outer">
-                    <li>
-                        <div class="user-box">
-                            <div class="avatar-lg">
-                                <img src="{{ asset("img/welcome2.png") }}" alt="image profile" class="avatar-img rounded" />
+                    {% if app.user %}
+                        <li>
+                            <div class="user-box">
+                                <div class="avatar-lg">
+                                    <img src="{{ asset("img/welcome2.png") }}" alt="image profile" class="avatar-img rounded" />
+                                </div>
+                                <div class="u-text">
+                                    <h4>Matricule: {{app.user.userMatricule}}</h4>
+                                    <p class="text-muted">Groupe: {{app.user.GroupUtilisateur.grpLibelle}}</p>
+                                    <a href="" class="btn btn-xs btn-label-secondary btn-sm">Voir le profil</a>
+                                </div>
                             </div>
-                            <div class="u-text">
-                                <h4>USERXXX</h4>
-                                <p class="text-muted">hello@example.com</p>
-                                <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">My Profile</a>
-                        <a class="dropdown-item" href="#">My Balance</a>
-                        <a class="dropdown-item" href="#">Inbox</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Account Setting</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ path("user_logout") }}">Logout</a>
-                    </li>
+                        </li>
+                        <li>
+                            <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Mes opérations</a>
+                                <a class="dropdown-item" href="#">Voir budget</a>
+                            <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ path("user_logout") }}">Se deconnecter</a>
+                        </li>
+                    {% endif %}
                     </div>
                 </ul>
             </li>

@@ -4,3 +4,21 @@
 .logo-header[data-background-color] .btn-toggle{
     color: #172035 !important;
 }
+@font-face {
+    font-family: 'poppins_regular_400';
+    /* font-weight: 400; */
+    font-display: swap;
+    src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}
+*{
+    font-family: 'poppins_regular_400';
+}
+@font-face {
+    font-family: 'lobster';
+    font-weight: 300;
+    font-display: swap;
+    src: url(../fonts/Lobster/Lobster-Regular.ttf);
+}
+.title_font{
+    font-family: 'lobster';
+}

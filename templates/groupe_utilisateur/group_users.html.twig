@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des rôles: listes{% endblock %}
+{% block page_title %}Gestion des rôles de l'application{% endblock %}
+{% block page_subtitle %}Back-Office{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/scr/scr_index_role.js") }}"></script>
+    <script src="{{ asset("js/scr/groupe_utilisateur/scr_group.js") }}"></script>
+{% endblock %}
+
+{# Bouton d'action #}
+{% block page_options %}
+    <a href="{{ path("app_groupe_utilisateur_new") }}" class="btn btn-secondary">Créer un rôle</a>
+{% endblock %}
+
+{% block page_main_content %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Les rôles</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="basic-datatables" class="display table table-striped table-hover">
+                                <thead>
+                                    <tr id="cols">
+                                        <th id="isCol" scope="col">Id</th>
+                                        <th id="isCol" scope="col">Libelle</th>
+                                        <th id="isCol" scope="col">Niveau</th>
+                                        <th id="isCol" scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyList">
+                                {% for groupe_utilisateur in groupe_utilisateurs %}
+                                    <tr id="{{groupe_utilisateur.id}}">
+                                        <td id="grp_id">{{ groupe_utilisateur.id }}</td>
+                                        <td id="grp_libelle">{{ groupe_utilisateur.grpLibelle }}</td>
+                                        <td id="grp_niveau">{{ groupe_utilisateur.grpNiveau }}</td>
+                                        <td>
+                                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
+                                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-secondary btn-sm delete" data-bs-toggle="modal" data-bs-target="#myModalDelete">supprimer</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4">aucun donnée inserer</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# ajout modal de update/delete#}
+            {{ include('groupe_utilisateur/_group_users_modal.html.twig') }}
+        </div>
+{% endblock %}

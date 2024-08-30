@@ -1,4 +1,3 @@
-// var addUserForm = $("#add_user_form");
 const appendAlert = (message, type) =>{
     var placementFrom = 'top';
     var placementAlign = 'right';
@@ -7,7 +6,7 @@ const appendAlert = (message, type) =>{
     var content = {};
 
     content.message = message;
-    content.title = "Enregistrement de nouvelle utilisateur !";
+    content.title = "Etat d'enregistrement d'utilisateur !";
     if (style == "withicon") {
       content.icon = "fa fa-bell";
     } else {
@@ -25,6 +24,9 @@ const appendAlert = (message, type) =>{
       time: 1000,
       delay: 0,
     });
+}
+const createMessage = (userName, userGroupe)=>{
+    return 'Utilisateur <strong>'+userName+ '</strong> a été ajouter comme '+userGroupe
 }
 //== Class definition
 var SweetAlert2Demo = (function () {
@@ -73,39 +75,44 @@ var SweetAlert2Demo = (function () {
           },
   };
 })();
+
+
 //== Class Initialization
 jQuery(document).ready(function () {
   SweetAlert2Demo.init();
   $("#displayNotif").on("click", function (e) {
       e.preventDefault();
-      console.log('')
-      // var userMatricule = $('input[name="user_matricule"]').val();
-      // var idGroupe = $('select[name="id_groupe"]').val();  
-      // var user_data = {
-      //     'user_matricule':userMatricule,
-      //     'id_groupe':idGroupe
-      // };
-      // const xhr = new newXhr();
-      // xhr.onreadystatechange = function(){
-      //     if (this.readyState == 4 && this.status == 200){
-      //         const rep = this.response;
-      //         // Ajout mesage d'erreur
-      //         console.log(rep);
-      //         if (rep.status == false){
-      //             appendAlert('Matricule incorrect ou introuvable !', 'danger');
-      //         }
-      //         else if (rep.status == true){
-      //             console.log(rep);
-      //             window.location.href = rep.path; // to admin
-      //         }
-      //     }
-      //     else if(this.readyState == 4){
-      //         alert('Erreur de traitement de requete');
-      //     }
-      // }
-      // xhr.open('POST', addUserForm.action, true)
-      // xhr.responseType = "json";
-      // xhr.send(JSON.stringify(user_data));
-      appendAlert('L \'utilisateur 90000 a été ajouter avec succès ', 'danger');
+      var addUserForm = $('#add_user_form');
+      console.log('Ajout de nouvelle utilisateur');
+      var userMatricule = $('input[name="user_matricule"]').val();
+      var idGroupe = $('select[name="id_groupe"]').val();  
+      var groupeName = $('select[name="id_groupe"] option:selected').text()
+
+      var user_data = {
+          'user_matricule':userMatricule,
+          'id_groupe':idGroupe
+      };
+      const xhr = new newXhr();
+      xhr.onreadystatechange = function(){
+          if (this.readyState == 4 && this.status == 200){
+              const rep = this.response;
+              // Ajout mesage d'erreur
+              console.log(rep);
+              if (rep.status == false){
+                  appendAlert(rep.message, 'danger');
+              }
+              else if (rep.status == true){
+                  console.log(rep);
+                  appendAlert(createMessage(userMatricule,groupeName), 'success');
+                //   window.location.href = rep.path; // to admin
+              }
+          }
+          else if(this.readyState == 4){
+              appendAlert('Erreur de traitement de requete','danger');
+          }
+      }
+      xhr.open('POST', addUserForm.attr('action'), true)
+      xhr.responseType = "json";
+      xhr.send(JSON.stringify(user_data));
   });
 });

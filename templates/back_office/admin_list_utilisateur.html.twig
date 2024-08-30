@@ -1,45 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
-{% block page_title %}Back-Office{% endblock %}
-{% block page_subtitle %}Page liste des utilisateurs{% endblock %}
+{% block page_title %}Informations des utilisateurs systèmes{% endblock %}
+{% block page_subtitle %}Back-Office{% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset("js/xhr.js") }}"></script>
     <script src="{{ asset("js/scr/scr_admin_list_user.js") }}"></script>
 {% endblock %}
 
+{# Bouton d'action #}
+{% block page_options %}
+    <a href="{{ path("admin_add_user") }}" class="btn btn-secondary">Nouvelle utilisateur</a>
+{% endblock %}
+
+
 {% block page_main_content %}
     <div class="row">
+        
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Tables utilisateurs</h4>
+                    <h4 class="card-title">Les utilisateurs</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="basic-datatables" class="display table table-striped table-hover">
+                        <table id="basic-datatables" class="display table table-hover">
                             {# Column #}
                             <thead>
-                                <tr>
-                                    <th>Matricule</th>
-                                    <th>Groupe occupé</th>
-                                    <th>Date ajout</th>
+                                <tr id="cols">
+                                    <th id="isCol" scope="col">Matricule</th>
+                                    <th id="isCol" scope="col">Groupe</th>
+                                    <th id="isCol" scope="col">Date ajout</th>
+                                    {# <th id="isCol" scope="col">Role</th> #}
+                                    <th id="isCol" scope="col">Action</th>
+                                    <th id="isCol" scope="col" style="display:none;">id Groupe</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Matricule</th>
-                                    <th>Groupe occupé</th>
-                                    <th>Date ajout</th>
+                                    <th>matricule</th>
+                                    <th>groupe</th>
+                                    <th>date ajout</th>
+                                    {# <th>role</th> #}
+                                    <th>action</th>
                                 </tr>
                             </tfoot>
                             {# Data #}
-                            <tbody>
+                            <tbody id="bodyList">
                             {% for usr in utilisateurs %}
-                                <tr>
-                                    <td>{{usr.userMatricule}}</td>
-                                    <td>{{usr.groupUtilisateur.grpLibelle}}</td>
-                                    <td>{{usr.dateAjout|date('Y/m/d')}}</td>
+                                <tr id="{{usr.id}}">
+                                    <td id="usr_matricule">{{usr.userMatricule}}</td>
+                                    <td id="usr_grp_name">{{usr.groupUtilisateur.grpLibelle}}</td>
+                                    <td id="usr_dt_ajout">{{usr.dateAjout|date('Y/m/d')}}</td>
+                                    {# <td id="usr_roles">{{ (usr.roles)|json_encode}}</td> #}
+                                    <td>
+                                        <a href="" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
+                                        <a href="" class="btn btn-label-secondary btn-sm delete" data-bs-toggle="modal" data-bs-target="#myModalDelete">supprimer</a>
+                                    </td>
+                                    <td id="usr_grp_id" style="display:none;">{{usr.groupUtilisateur.id}}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -48,5 +67,7 @@
                 </div>
             </div>
         </div>
+        {{ include('back_office/_admin_list_utilisateur_modal.html.twig') }}
+
     </div>
 {% endblock %}

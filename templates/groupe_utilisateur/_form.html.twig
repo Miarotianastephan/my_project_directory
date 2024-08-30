@@ -14,7 +14,7 @@
     {# {{ form_widget(form) }} #}
     {# <button class="btn btn-primary btn-block mb-4 btn-sm"></button> #}
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{{ path('app_groupe_utilisateur_index') }}" class="btn btn-secondary btn-sm">retourner à la liste</a>
-        <button class="btn btn-primary me-md-2 btn-sm" type="submit">{{ button_label|default('Inserer') }}</button>
+        <a href="{{ path('app_groupe_utilisateur_index') }}" class="btn btn-dark">retourner à la liste</a>
+        <button class="btn btn-secondary me-md-2" type="submit">{{ button_label|default('Inserer') }}</button>
     </div>
 {{ form_end(form) }}
