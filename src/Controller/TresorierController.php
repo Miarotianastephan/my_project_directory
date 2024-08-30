@@ -42,7 +42,7 @@ class TresorierController extends AbstractController
     public function remettre_fond($id,EntityManagerInterface $entityManager): JsonResponse
     {
 
-        $id_user_tresorier = 26;
+        $id_user_tresorier = 3;
         $dm_type = $entityManager->find(DemandeType::class, $id);
         $user_tresorier = $entityManager->find(Utilisateur::class, $id_user_tresorier);
         $user_sg = $dm_type->getUtilisateur();

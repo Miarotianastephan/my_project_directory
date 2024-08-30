@@ -51,7 +51,7 @@ class SGController extends AbstractController
     #[Route('/valider_demande/{id}', name: 'valider_demande', methods: ['POST'])]
     public function valider_demande($id, EntityManagerInterface $entityManager): JsonResponse
     {
-        $id_user_sg = 25;
+        $id_user_sg = 2;
 
         $dm_type = $entityManager->find(DemandeType::class, $id);
 
@@ -103,7 +103,7 @@ class SGController extends AbstractController
     #[Route('/refuser_demande/{id}', name: 'refuser_demande', methods: ['POST', 'GET'])]
     public function refuser_demande($id, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $id_user_sg = 25;
+        $id_user_sg = 2;
 
         $data = json_decode($request->getContent(), true);
         $commentaire_data = $data['commentaire'] ?? null;

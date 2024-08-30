@@ -20,7 +20,7 @@ class DemandePieceController extends AbstractController
     #[Route(path: '/', name: 'dm_piece.liste_demande', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_rep): Response
     {
-        $data = $dm_rep->findByEtat(40);
+        $data = $dm_rep->findByEtat(30);
         return $this->render('demande_piece/ajout_piece_justificative.html.twig', [
             'demande_types' => $data
         ]);
