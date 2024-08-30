@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -20,7 +23,7 @@ class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedU
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"SEQUENCE")]
     #[ORM\SequenceGenerator(sequenceName: 'user_seq', allocationSize: 1, initialValue: 1)]
-    #[ORM\Column(name:"user_id")]
+    #[ORM\Column(name: 'user_id', type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false,unique: true)]

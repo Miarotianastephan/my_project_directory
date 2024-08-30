@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des rôles: listes{% endblock %}
+
+{# {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
+{% endblock %} #}
+
+{% block page_title %}
+    SG
+{% endblock %}
+{% block page_subtitle %}
+    {# Liste des demandes en attente de validation #}
+{% endblock %}
+
+
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des demandes en attente de validation</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date de demande</th>
+                                    <th>Référence</th>
+                                    <th>Type de demande</th>
+                                    <th>Montant</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for demande_type in demande_types %}
+                                <tr class="col-12">
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-1">{{ demande_type.RefDemande }}</td>
+                                    <td class="col-2">{{ demande_type.demande.libelle }}</td>
+                                    <td class="text-end col-2" >
+                                        <div>
+                                            {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
+                                        </div>
+                                    </td>
+                                    <td class="col-3">
+                                        <div class="col-12 d-flex gap-5">
+                                            <div class="col-9">
+                                                <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}" class="btn btn-label-danger btn-sm">REFUSER</a>
+                                                <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}" class="btn btn-label-success btn-sm">VALIDER</a>
+                                            </div>
+                                            <div class="col-2">
+                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
+                                                    <a href="{{ path('SG.detail_demande_en_attente', {'id': demande_type.Id}) }}">
+                                                        {{ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
+
+                                                    </a>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">aucun donnée inserer</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block js_script %}
+    <!-- Datatables -->
+    <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
+
+
+{% endblock %}

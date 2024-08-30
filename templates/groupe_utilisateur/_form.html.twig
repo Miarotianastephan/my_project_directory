@@ -1,17 +1,17 @@
 {{ form_start(form) }}
-    
-    <div class="form-group">
-        {{ form_label(form.grp_libelle, 'Libelle du rôle') }}
-        {{ form_widget(form.grp_libelle, {'attr': {'class': 'form-control mb-4'}}) }}
-        {{ form_errors(form.grp_libelle) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.grp_niveau, 'Groupe numéro') }}
-        {{ form_widget(form.grp_niveau, {'attr': {'class': 'form-control mb-4'}}) }}
-        {{ form_errors(form.grp_niveau) }}
-    </div>
 
-    {# {{ form_widget(form) }} #}
+<div class="form-group">
+    {{ form_label(form.grp_libelle, 'Libelle du rôle') }}
+    {{ form_widget(form.grp_libelle, {'attr': {'class': 'form-control mb-4'}}) }}
+    {{ form_errors(form.grp_libelle) }}
+</div>
+<div class="form-group">
+    {{ form_label(form.grp_niveau, 'Groupe numéro') }}
+    {{ form_widget(form.grp_niveau, {'attr': {'class': 'form-control mb-4'}}) }}
+    {{ form_errors(form.grp_niveau) }}
+</div>
+
+{# {{ form_widget(form) }} #}
     {# <button class="btn btn-primary btn-block mb-4 btn-sm"></button> #}
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <a href="{{ path('app_groupe_utilisateur_index') }}" class="btn btn-dark">retourner à la liste</a>
