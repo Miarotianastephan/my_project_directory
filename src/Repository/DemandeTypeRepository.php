@@ -16,6 +16,15 @@ class DemandeTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, DemandeType::class);
     }
 
+    public function findByEtat(int $etat): array
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.dm_etat = :etat')
+            ->setParameter('etat', $etat)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return DemandeType[] Returns an array of DemandeType objects
 //     */

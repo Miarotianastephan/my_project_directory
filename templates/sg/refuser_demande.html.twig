@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande{% endblock %}
+{% block page_title %}
+    SG
+{% endblock %}
+{% block page_subtitle %}
+    {# Liste des demandes en attente de validation #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <form id="formulaire" action="{{ path('refuser_demande', {'id': demande_type.Id}) }}">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">REFUSER LA DEMANDE?</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Rérérence:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.RefDemande }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                <label for="commentaire">
+                                    Motif du refus de la demande:
+                                </label>
+                            </div>
+                            <div class="col">
+                                <textarea id="commentaire" name="commentaire" placeholder="Remarque"></textarea>
+                            </div>
+                        </div>
+                        <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="valider" type="submit" class="btn btn-success btn-sm">Refuser</button>
+                            <button id="annuler" type="button" class="btn btn-danger btn-sm">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        var form = document.getElementById('formulaire');
+        document.getElementById('valider').addEventListener('click', function (e) {
+            e.preventDefault()
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    commentaire: document.getElementById('commentaire').value
+                })
+            })
+                .then(response => {
+                    // Vérifie si la réponse est OK (status entre 200 et 299)
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau : ' + response.status);
+                    }
+                    // Convertir la réponse en JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // Affichez les données reçues du contrôleur
+                    //console.log(data); // Affiche tout l'objet de données reçu
+                    //console.log(data.message); // Affiche une propriété spécifique, si elle existe
+                    //alert(data.path); // Affiche un message reçu du contrôleur
+
+                    //Manao redirect makany amin'ny list demande en attente
+                    window.location.href = data.path;
+                })
+                .catch(error => console.error('Erreur:', error));
+        });
+
+        document.getElementById('annuler').addEventListener('click', function (e) {
+            e.preventDefault()
+            window.location.href = '/sg';
+        });
+    </script>
+{% endblock %}

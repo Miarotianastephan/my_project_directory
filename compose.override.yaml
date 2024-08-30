@@ -1,19 +1,48 @@
 version: '3'
-
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    ports:
-      - "5432"
-###< doctrine/doctrine-bundle ###
-
-###> symfony/mailer ###
-  mailer:
-    image: axllent/mailpit
-    ports:
-      - "1025"
-      - "8025"
+  oracle-db:
+    image: oracleinanutshell/oracle-xe-11g
+    container_name: symfony_oracle
     environment:
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
-###< symfony/mailer ###
+      ORACLE_PASSWORD: dev_pass
+      ORACLE_USERNAME: dev_usr
+      ORACLE_PDB: 'XE'
+      ORACLE_MEMORY: 1g
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+    networks:
+      - symfony-network
+
+  php:
+    image: php:8.2-fpm
+    container_name: symfony_php
+    volumes:
+      - .:/var/www/html
+    environment:
+      ORACLE_HOME: /usr/local/instantclient_19_8
+    depends_on:
+      - oracle-db
+    networks:
+      - symfony-network
+
+  web:
+    image: nginx:alpine
+    container_name: symfony_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - php
+    networks:
+      - symfony-network
+
+volumes:
+  oracle_data:
+
+networks:
+  symfony-network:

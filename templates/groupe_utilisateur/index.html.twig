@@ -21,72 +21,74 @@
 {% endblock %}
 
 {% block page_main_content %}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Table des rôles</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="basic-datatables" class="display table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Libelle</th>
-                                        <th>Niveau</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for groupe_utilisateur in groupe_utilisateurs %}
-                                    <tr>
-                                        <td>{{ groupe_utilisateur.id }}</td>
-                                        <td>{{ groupe_utilisateur.grpLibelle }}</td>
-                                        <td>{{ groupe_utilisateur.grpNiveau }}</td>
-                                        <td>
-                                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-primary btn-sm">voir</a>
-                                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-primary btn-sm">modifier</a>
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td colspan="4">aucun donnée inserer</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Table des rôles</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Libelle</th>
+                                <th>Niveau</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for groupe_utilisateur in groupe_utilisateurs %}
+                                <tr>
+                                    <td>{{ groupe_utilisateur.id }}</td>
+                                    <td>{{ groupe_utilisateur.grpLibelle }}</td>
+                                    <td>{{ groupe_utilisateur.grpNiveau }}</td>
+                                    <td>
+                                        <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}"
+                                           class="btn btn-label-primary btn-sm">voir</a>
+                                        <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}"
+                                           class="btn btn-label-primary btn-sm">modifier</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">aucun donnée inserer</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}
 
 
 {% block js_script %}
     <!-- Datatables -->
     <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
-    
+
     <script>
-      $(document).ready(function () {
-        $("#basic-datatables").DataTable({
+        $(document).ready(function () {
+            $("#basic-datatables").DataTable({
                 "pageLength": 5,
                 "language": {
-                        "lengthMenu": "Afficher _MENU_ éléments par page",
-                        "zeroRecords": "Aucun élément trouvé",
-                        "info": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-                        "infoEmpty": "Aucun élément disponible",
-                        "infoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-                        "search": "Rechercher :",
-                        "paginate": {
-                            "first": "Premier",
-                            "last": "Dernier",
-                            "next": "Suivant",
-                            "previous": "Précédent"
-                        }
+                    "lengthMenu": "Afficher _MENU_ éléments par page",
+                    "zeroRecords": "Aucun élément trouvé",
+                    "info": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "infoEmpty": "Aucun élément disponible",
+                    "infoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "search": "Rechercher :",
+                    "paginate": {
+                        "first": "Premier",
+                        "last": "Dernier",
+                        "next": "Suivant",
+                        "previous": "Précédent"
+                    }
                 }
+            });
         });
-      });
     </script>
 {% endblock %}

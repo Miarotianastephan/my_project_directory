@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +15,7 @@ class Utilisateur
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"SEQUENCE")]
     #[ORM\SequenceGenerator(sequenceName: 'user_seq', allocationSize: 1, initialValue: 1)]
-    #[ORM\Column(name:"user_id")]
+    #[ORM\Column(name: 'user_id', type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false)]
@@ -25,6 +27,9 @@ class Utilisateur
     #[ORM\ManyToOne(targetEntity:GroupeUtilisateur::class ,inversedBy: 'utilisateurs')]
     #[ORM\JoinColumn(name:"grp_id",referencedColumnName:"grp_id",nullable: false)]
     private ?GroupeUtilisateur $group_utilisateur = null;
+
+
+    public function __construct() {  }
 
 
 
@@ -75,7 +80,5 @@ class Utilisateur
 
         return $this;
     }
-
-
 
 }

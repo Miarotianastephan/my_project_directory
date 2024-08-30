@@ -5,16 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/Demande.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/sg/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/controllers.json" beforeDir="false" afterPath="$PROJECT_DIR$/assets/controllers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose.override.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.override.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/translation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/translation.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240812164534.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/custom_migration.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/custom_migration.tpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Demande.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Demande.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DemandeType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DemandeType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Exercice.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Exercice.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeUtilisateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeUtilisateur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/PlanCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/PlanCompte.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Utilisateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Utilisateur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/groupe_utilisateur/_form.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/groupe_utilisateur/_form.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/groupe_utilisateur/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/groupe_utilisateur/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +181,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/options-resolver" />
       <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher" />
       <path value="$PROJECT_DIR$/vendor/symfony/ux-icons" />
+      <path value="$PROJECT_DIR$/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/vendor/vich/uploader-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -170,6 +190,9 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2kuMgmY5X4kFph9Lg1u9Qq75L6I" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -185,6 +208,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -218,6 +242,9 @@
       <workItem from="1724142151324" duration="9815000" />
       <workItem from="1724215410126" duration="34000" />
       <workItem from="1724216899419" duration="5419000" />
+      <workItem from="1724648450883" duration="16570000" />
+      <workItem from="1724736971137" duration="51552000" />
+      <workItem from="1724930546169" duration="16906000" />
     </task>
     <servers />
   </component>
@@ -234,5 +261,20 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/templates/tresorier/index.html.twig</url>
+          <line>24</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

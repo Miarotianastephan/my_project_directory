@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande{% endblock %}
+{% block page_title %}
+    SG
+{% endblock %}
+{% block page_subtitle %}
+    {# Liste des demandes en attente de validation #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row align-items-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">A propos du demande</h4>
+                </div>
+                <div class="card-body col-12 px-md-5 d-flex flex-row">
+                    <div class="col-4">
+                        <button style="border: none;background-color: transparent; text-align: start">
+                            <a href="{{ path('SG.liste_demande_en_attente') }}">
+                                {{ ux_icon('heroicons:arrow-left-circle', {height: '10%', width:'25%',color:'#2a2f5b'}) }}
+                            </a>
+                        </button>
+                    </div>
+                    <div class="col py-5 px-3 d-flex flex-column gap-3">
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Rérérence:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.RefDemande }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Remettant:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.utilisateur.UserMatricule }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Date de la demande:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Type de demande:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.demande.libelle }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Motif de la demande:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Montant de la demande:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.DmMontant|number_format(2, '.', ' ')}} Ar
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Type de payement:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.DmModePaiement }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Personne concerné:
+                            </div>
+                            <div class="col">
+                                {{ demande_type.EntityCode.CptLibelle }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div class="col-3">
+                                Les pièces jointes:
+                            </div>
+                            <div class="col">
+                                <ul>
+                                    <li><a href="#">p1</a></li>
+                                    <li><a href="#">p2</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}" class="btn btn-danger btn-sm">REFUSER</a>
+                    <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}" class="btn btn-success btn-sm">VALIDER</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

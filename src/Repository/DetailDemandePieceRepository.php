@@ -2,33 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Demande;
+use App\Entity\DetailDemandePiece;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Demande>
+ * @extends ServiceEntityRepository<DetailDemandePiece>
  */
-class DemandeRepository extends ServiceEntityRepository
+class DetailDemandePieceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Demande::class);
-    }
-
-
-
-    public function findAll(): array
-    {
-        return $this->createQueryBuilder('d')
-             ->orderBy('d.id', 'ASC')
-             ->setMaxResults(10)
-             ->getQuery()
-              ->getResult();
+        parent::__construct($registry, DetailDemandePiece::class);
     }
 
     //    /**
-    //     * @return Demande[] Returns an array of Demande objects
+    //     * @return DetailDemandePiece[] Returns an array of DetailDemandePiece objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -42,7 +31,7 @@ class DemandeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Demande
+    //    public function findOneBySomeField($value): ?DetailDemandePiece
     //    {
     //        return $this->createQueryBuilder('d')
     //            ->andWhere('d.exampleField = :val')

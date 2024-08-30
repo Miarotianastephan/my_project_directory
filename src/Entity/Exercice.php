@@ -11,7 +11,8 @@ class Exercice
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\SequenceGenerator(sequenceName: 'exercice_seq')]
+    #[ORM\Column(name: 'exercice_id', type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

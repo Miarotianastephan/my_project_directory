@@ -3,14 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\PlanCompteRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PlanCompteRepository::class)]
+#[ORM\Table(name: 'plan_compte')]
 class PlanCompte
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\SequenceGenerator(sequenceName: 'cpt_seq')]
+    #[ORM\Column(name: 'cpt_id', type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
