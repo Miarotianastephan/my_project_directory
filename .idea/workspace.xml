@@ -9,6 +9,8 @@
       <change beforePath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,7 +222,7 @@
       <workItem from="1724216899419" duration="5419000" />
       <workItem from="1724648450883" duration="16570000" />
       <workItem from="1724736971137" duration="51552000" />
-      <workItem from="1724930546169" duration="17571000" />
+      <workItem from="1724930546169" duration="23317000" />
     </task>
     <servers />
   </component>

@@ -6,6 +6,7 @@ use App\Entity\DemandeType;
 use App\Entity\LogDemandeType;
 use App\Entity\Utilisateur;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\LogDemandeTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
 
 #[Route('/sg')]
 class SGController extends AbstractController
@@ -101,67 +103,31 @@ class SGController extends AbstractController
     }
 
     #[Route('/refuser_demande/{id}', name: 'refuser_demande', methods: ['POST', 'GET'])]
-    public function refuser_demande($id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function refuser_demande($id, Request $request, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-        $id_user_sg = 2;
 
+        $id_user_sg = 2;
         $data = json_decode($request->getContent(), true);
         $commentaire_data = $data['commentaire'] ?? null;
 
-        $dm_type = $entityManager->find(DemandeType::class, $id);
+        $rep = $logDemandeTypeRepository->ajoutRefuserDemande($id, $id_user_sg, $commentaire_data);
 
-        $user_sg = $entityManager->find(Utilisateur::class, $id_user_sg);
-        $user_demande = $dm_type->getUtilisateur();
+         $data = json_decode($rep->getContent(),true);
+        dump($data['success']);
 
-        $log_dm = new LogDemandeType();
-        $log_dm->setDmEtat($dm_type->getDmEtat());
-        $log_dm->setUserMatricule($user_demande->getUserMatricule());
-        $log_dm->setLogDmObservation($commentaire_data);
-        $log_dm->setDemandeType($dm_type);
-
-        $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, LOG_DM_OBSERVATION, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:observation,:user_matricule)";
-
-        if ($commentaire_data != null) {
-            $connection = $entityManager->getConnection();
-            $connection->beginTransaction();
-
-            try {
-                $statement = $connection->prepare($script);
-                $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
-                $statement->bindValue('observation', $log_dm->getLogDmObservation());
-                $statement->bindValue('etat', $log_dm->getDmEtat());
-                $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
-                $statement->executeQuery();
-                $connection->commit();
-
-                // MAJ de dm_type la base de données
-                $dm_type->setDmEtat(20);
-                $dm_type->setUtilisateur($user_sg);
-                $entityManager->persist($dm_type);
-
-                /**
-                 * Mila ovaine ilay date de demande
-                 *
-                 * */
-
-                $entityManager->flush();
-            } catch (Exception $exception) {
-                $connection->rollBack();
-                throw $exception;
-            }
-            return new JsonResponse([
-                'success' => true,
-                'message' => 'Commentaire reçu : ' . $commentaire_data,
-                'path' => $this->generateUrl('SG.liste_demande_en_attente')
-            ]);
-        } else {
-            //dump($commentaire_data . ' : est invalide');
+        if($data['success']==true){
             return new JsonResponse([
                 'success' => true,
                 'message' => 'Pas de commentaire reçu ',
                 'path' => $this->generateUrl('SG.liste_demande_en_attente')
             ]);
+        }else{
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Pas de commentaire reçu '
+            ]);
         }
+
     }
 }
 
