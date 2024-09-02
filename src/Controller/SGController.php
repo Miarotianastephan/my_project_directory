@@ -67,8 +67,8 @@ class SGController extends AbstractController
         $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:user_matricule)";
 
 
+        $connection = $entityManager->getConnection();
         try {
-            $connection = $entityManager->getConnection();
             $connection->beginTransaction();
             $statement = $connection->prepare($script);
             $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());

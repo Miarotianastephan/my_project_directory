@@ -55,3 +55,15 @@
     ALTER TABLE detail_demande_piece MODIFY det_dm_date DEFAULT SYSDATE;
 
 */
+
+
+INSERT INTO utilisateur (user_id, user_matricule, dt_ajout, roles, grp_id) 
+VALUES (user_seq.NEXTVAL, 'eclid', '2024-08-30 00:00:00', '[\"ROLE_USER\"]', 1); 
+INSERT INTO utilisateur (user_id, user_matricule, dt_ajout, roles, grp_id) 
+VALUES (?, ?, ?, ?, ?) 
+(
+    parameters: array{"1":81,"2":"euclid","3":"2024-08-30 00:00:00","4":"[\"ROLE_USER\"]","5":1},
+    types: array{"1":1,"2":2,"3":2,"4":2,"5":1}
+) params={"1":81,"2":"euclid","3":"2024-08-30 00:00:00","4":"[\"ROLE_USER\"]","5":1} 
+sql="INSERT INTO utilisateur (user_id, user_matricule, dt_ajout, roles, grp_id) VALUES (?, ?, ?, ?, ?)" 
+types={"1":1,"2":2,"3":2,"4":2,"5":1}

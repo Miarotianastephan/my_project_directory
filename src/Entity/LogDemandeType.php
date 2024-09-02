@@ -27,7 +27,7 @@ class LogDemandeType
     #[ORM\Column(length: 255)]
     private ?string $user_matricule = null;
 
-    #[ORM\ManyToOne(targetEntity: DemandeType::class)]
+    #[ORM\ManyToOne(targetEntity: DemandeType::class, inversedBy: 'logDemandeTypes')]
     #[ORM\JoinColumn(name: "demande_type_id", referencedColumnName: "dm_type_id",nullable: false)]
     private ?DemandeType $demande_type = null;
 
