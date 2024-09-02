@@ -6,6 +6,7 @@ use App\Entity\DemandeType;
 use App\Entity\LogDemandeType;
 use App\Entity\Utilisateur;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailDemandePieceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
@@ -27,10 +28,11 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, EntityManagerInterface $entityManager): Response
+    public function show($id, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data]);
+        $list_img = $demandePieceRepository->findByDemandeType($data);
+        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
