@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailDemandePieceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +25,13 @@ class SGController extends AbstractController
     }
 
     #[Route('/{id}', name: 'SG.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, DemandeTypeRepository $dm_Repository): Response
+    public function show($id, DemandeTypeRepository $dm_Repository, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $dm_Repository->find($id);
-        return $this->render('sg/show.html.twig', ['demande_type' => $data]);
+        $list_img = $demandePieceRepository->findByDemandeType($data);
+        return $this->render('sg/show.html.twig',
+            ['demande_type' => $data, 'images' => $list_img]
+        );
     }
 
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]

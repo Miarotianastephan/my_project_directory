@@ -56,6 +56,14 @@
 
 */
 
-INSERT INTO detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE)
-VALUES (detail_dm_type_seq.NEXTVAL,1,'66d5525a953ad.png','bon_livraison',DEFAULT);
- types={"det_dm_piece_url":2,"det_dm_type_url":2,"dm_type_id":2}
+
+insert into demande_type
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT)
+values (
+demande_type_seq.NEXTVAL,
+(select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_libelle='Caisse Siege'),
+(select u.user_id from utilisateur u where u.user_matricule='1989'),
+(select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_libelle='Social (Prime diverse)'),
+(select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+(select d.dm_id from demande d where d.libelle='Decaissement'),
+TO_DATE('27-08-2024','DD-MM-YYYY'),900000,'Cheque','REF_001234567',10);

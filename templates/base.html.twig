@@ -20,6 +20,7 @@
         <link rel="stylesheet" href={{ asset("css/plugins.min.css") }} />
         <link rel="stylesheet" href={{ asset("css/kaiadmin.min.css") }} />
         <link rel="stylesheet" href={{ asset("css/base_perso.css") }} />
+
         {% block stylesheets %}
         {% endblock %}
     </head>
@@ -168,7 +169,6 @@
             {# FIN SIDEBAR #}
         </div>
         {% endblock %}
-
         
         
         {# CORE Js Files #}
@@ -183,6 +183,11 @@
         <script src="{{ asset("js/plugin/sweetalert/sweetalert.min.js") }}"></script>
         <!-- Kaiadmin JS -->
         <script src="{{ asset("js/kaiadmin.min.js") }}"></script>
+
+
+        <!-- Sheet-->
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
         {% block js_script %}
             
         {% endblock %}

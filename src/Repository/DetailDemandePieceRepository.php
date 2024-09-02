@@ -91,6 +91,16 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
     }
 
 
+    public function findByDemandeType(DemandeType $dm_type): array
+    {
+        return $this->createQueryBuilder('d') // 'd' est l'alias pour l'entité DetailDemandePiece
+        ->andWhere('d.demande_type = :val') // Utilisez l'alias 'd' et la propriété correcte
+        ->setParameter('val', $dm_type) // Définir le paramètre de recherche
+        ->getQuery()
+            ->getResult();
+    }
+
+
     //    /**
     //     * @return DetailDemandePiece[] Returns an array of DetailDemandePiece objects
     //     */
