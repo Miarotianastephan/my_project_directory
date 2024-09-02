@@ -55,3 +55,7 @@
     ALTER TABLE detail_demande_piece MODIFY det_dm_date DEFAULT SYSDATE;
 
 */
+
+INSERT INTO detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE)
+VALUES (detail_dm_type_seq.NEXTVAL,1,'66d5525a953ad.png','bon_livraison',DEFAULT);
+ types={"det_dm_piece_url":2,"det_dm_type_url":2,"dm_type_id":2}

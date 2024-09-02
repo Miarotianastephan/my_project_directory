@@ -1,4 +1,3 @@
-version: '3'
 services:
   oracle-db:
     image: oracleinanutshell/oracle-xe-11g

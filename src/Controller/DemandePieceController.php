@@ -6,10 +6,13 @@ use App\Entity\DemandeType;
 use App\Entity\DetailDemandePiece;
 use App\Form\DetailDemandePieceType;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailDemandePieceRepository;
+use App\Service\DemandeTypeService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +38,7 @@ class DemandePieceController extends AbstractController
         ]);
     }
 
-
+/*
     #[Route('/upload_file/{id}', name: 'dm.image')]
     public function new($id, Request $request, DemandeTypeRepository $dm_rep, EntityManagerInterface $entityManager): Response
     {
@@ -59,7 +62,7 @@ class DemandePieceController extends AbstractController
             try {
 
                 // Déplacer le fichier dans le répertoire de destination
-                $file->move($destination, $newFilename);
+                //$file->move($destination, $newFilename);
                 $detail_dm = new DetailDemandePiece();
                 $detail_dm->setDemandeType($dm_type);
                 $detail_dm->setDetDmTypeUrl($type);
@@ -86,5 +89,43 @@ class DemandePieceController extends AbstractController
         }
 
         return new Response('Aucun fichier téléchargé');
+    }
+*/
+    #[Route('/upload_file/{id}', name: 'dm.image')]
+    public function uploadImage($id, Request $request,
+                                DetailDemandePieceRepository $dt_dm_rep,
+                                DemandeTypeService $dm_type_service)
+    {
+        $demande_user_id = 2;
+        $type = $request->request->get('type');
+        $file = $request->files->get('image');
+        // Définir le répertoire de destination pour le fichier téléchargé
+        // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
+        try {
+            $newFilename = $dm_type_service->uploadImage($file,$this->getParameter('uploads_directory'));
+
+            $rep = $dt_dm_rep->ajoutPieceJustificatif($id,  $demande_user_id,  $type, $newFilename);
+            $data = json_decode($rep->getContent(), true);
+            if ($data['success'] == true) {
+                dump($newFilename ."<------------ XXXXXXXXXX");
+
+                return new JsonResponse([
+                    'success' => true,
+                    'message' => 'Upload reussi',
+                    'path' => $this->generateUrl('dm_piece.liste_demande')
+                ]);
+            }else{
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => $data['message']
+                ]);
+            }
+        }catch (\Exception $e){
+            dump('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
+            return new JsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

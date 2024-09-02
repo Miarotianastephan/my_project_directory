@@ -28,17 +28,26 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             // Récupération des entités
             $dm_type = $entityManager->find(DemandeType::class, $dm_type_id);
             if (!$dm_type) {
-                throw new \Exception('Demande de type introuvable.');
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Demande de type introuvable'
+                ]);
             }
 
             $user_sg = $entityManager->find(Utilisateur::class, $sg_user_id);
             if (!$user_sg) {
-                throw new \Exception('Utilisateur SG introuvable.');
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Utilisateur SG introuvable.'
+                ]);
             }
 
             $user_demande = $dm_type->getUtilisateur();
             if (!$user_demande) {
-                throw new \Exception('Utilisateur associé à la demande introuvable.');
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Utilisateur associé à la demande introuvable.'
+                ]);
             }
 
             // Création du log
@@ -86,7 +95,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         return new JsonResponse([
             'success' => true,
             'message' => 'La demande a été validée',
-            'path' => $this->generateUrl('SG.liste_demande_en_attente')
+
         ]);
     }
 
@@ -157,7 +166,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
                 $entityManager->flush();
 
-                } catch (\Exception $e) {
+            } catch (\Exception $e) {
                 // En cas d'erreur, rollback de la transaction
                 $connection->rollBack();
                 return new JsonResponse([
@@ -181,6 +190,68 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         ]);
     }
 
+    public function ajoutDeblockageFond(int $dm_type_id, int $tresorier_user_id): JsonResponse
+    {
+        $entityManager = $this->getEntityManager();
+        $dm_type = $entityManager->find(DemandeType::class, $dm_type_id);
+        if (!$dm_type) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Demande de type introuvable'
+            ]);
+        }
+        $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
+        if (!$user_tresorier) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Utilisateur tresorier introuvable.'
+            ]);
+        }
+        $user_sg = $dm_type->getUtilisateur();
+        if (!$user_sg) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Utilisateur SG introuvable.'
+            ]);
+        }
+
+        $log_dm = new LogDemandeType();
+        $log_dm->setDmEtat($dm_type->getDmEtat());
+        $log_dm->setUserMatricule($user_sg->getUserMatricule());
+        $log_dm->setDemandeType($dm_type);
+
+        $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:user_matricule)";
+
+        try {
+            $connection = $entityManager->getConnection();
+            $connection->beginTransaction();
+            $statement = $connection->prepare($script);
+            $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
+            $statement->bindValue('etat', $log_dm->getDmEtat());
+            $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
+
+            $statement->executeQuery();
+            $connection->commit();
+
+            // MAJ de dm_type la base de données
+            $dm_type->setDmEtat(40);
+            $dm_type->setUtilisateur($user_tresorier);
+            $entityManager->persist($dm_type);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            $connection->rollBack();
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur lors du deblockage de fond : ' . $e->getMessage()
+            ]);
+        }
+
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Le fond a été remis'
+        ]);
+    }
 
     //    /**
     //     * @return LogDemandeType[] Returns an array of LogDemandeType objects
