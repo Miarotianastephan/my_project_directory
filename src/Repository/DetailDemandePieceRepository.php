@@ -19,8 +19,8 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
         parent::__construct($registry, DetailDemandePiece::class);
     }
 
-    public function ajoutPieceJustificatif(int $dm_type_id,
-                                           int $demande_user_id,
+    public function ajoutPieceJustificatif(int    $dm_type_id,
+                                           int    $demande_user_id,
                                            string $type,
                                            string $newFilename): JsonResponse
     {
@@ -61,18 +61,31 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             $statement->bindValue('dm_type_id', $dm_type->getId());
             $statement->bindValue('det_dm_piece_url', $newFilename);
             $statement->bindValue('det_dm_type_url', $type);
+
+            if ($type == "bon_livraison") {
+                //MAJ demande_type
+                $dm_type->setDmEtat(50);
+            } else if ($type == "facture_proformat") {
+                //MAJ demande_type
+                $dm_type->setDmEtat(51);
+            }
+            $dm_type->setUtilisateur($user_demande);
+            $entityManager->persist($dm_type);
+
             $statement->executeQuery();
             $connection->commit();
+            $entityManager->flush();
             return new JsonResponse([
                 'success' => true,
                 'message' => 'Ajout de piece justificative réussie.'
             ]);
         } catch (\Exception $e) {
             $connection->rollBack();
+            $entityManager->flush();
             // Gestion de l'erreur si le fichier ne peut pas être déplacé
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Erreur '.$e->getMessage()
+                'message' => 'Erreur ' . $e->getMessage()
             ]);
         }
     }

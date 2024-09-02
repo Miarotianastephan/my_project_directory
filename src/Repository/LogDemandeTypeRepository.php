@@ -163,7 +163,6 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $dm_type->setDmEtat(20);
                 $dm_type->setUtilisateur($user_sg);
                 $entityManager->persist($dm_type);
-
                 $entityManager->flush();
 
             } catch (\Exception $e) {
@@ -214,12 +213,10 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Utilisateur SG introuvable.'
             ]);
         }
-
         $log_dm = new LogDemandeType();
         $log_dm->setDmEtat($dm_type->getDmEtat());
         $log_dm->setUserMatricule($user_sg->getUserMatricule());
         $log_dm->setDemandeType($dm_type);
-
         $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:user_matricule)";
 
         try {
@@ -245,12 +242,15 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Erreur lors du deblockage de fond : ' . $e->getMessage()
             ]);
         }
-
-
         return new JsonResponse([
             'success' => true,
             'message' => 'Le fond a été remis'
         ]);
+    }
+
+    public function ajoutPieceJustificative(int $dm_type_id, int $demande_user_id): JsonResponse
+    {
+
     }
 
     //    /**
