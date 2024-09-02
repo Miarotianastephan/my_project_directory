@@ -22,6 +22,10 @@ class PlanCompte
     #[ORM\Column(length: 255)]
     private ?string $cpt_libelle = null;
 
+    #[ORM\ManyToOne(inversedBy: 'planComptes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CompteMere $compte_mere = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +51,18 @@ class PlanCompte
     public function setCptLibelle(string $cpt_libelle): static
     {
         $this->cpt_libelle = $cpt_libelle;
+
+        return $this;
+    }
+
+    public function getCompteMere(): ?CompteMere
+    {
+        return $this->compte_mere;
+    }
+
+    public function setCompteMere(?CompteMere $compte_mere): static
+    {
+        $this->compte_mere = $compte_mere;
 
         return $this;
     }

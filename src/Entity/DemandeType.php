@@ -26,7 +26,7 @@ class DemandeType
     //na siège na RT
     #[ORM\ManyToOne(targetEntity: PlanCompte::class)]
     #[ORM\JoinColumn(name: "entity_code_id", referencedColumnName: "cpt_id",nullable: false)]
-    private ?PlanCompte $entity_code = null;
+    private ?PlanCompte $entity_code = null; // pour avoir le code de l'entitée 
 
     #[ORM\Column(length: 255)]
     private ?string $dm_mode_paiement = null;
@@ -43,11 +43,14 @@ class DemandeType
 
     #[ORM\ManyToOne(targetEntity: PlanCompte::class)]
     #[ORM\JoinColumn(name: "plan_compte_id", referencedColumnName: "cpt_id",nullable: false)]
-    private ?PlanCompte $plan_compte = null;
+    private ?PlanCompte $plan_compte = null; // pour avoir le numéro du compte pour l'opération de demande
 
+    /*
+        Récupération dynamique lors d'insertion d'un nouveau demande
+    */
     #[ORM\ManyToOne(targetEntity: Exercice::class)]
     #[ORM\JoinColumn(name: "exercice_id",referencedColumnName: "exercice_id",nullable: false)]
-    private ?Exercice $exercice = null;
+    private ?Exercice $exercice = null; 
 
     #[ORM\ManyToOne(targetEntity: Demande::class)]
     #[ORM\JoinColumn(name: "dm_id", referencedColumnName: "dm_id",nullable: false)]

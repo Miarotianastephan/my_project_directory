@@ -105,7 +105,12 @@
                     <div class="collapse" id="demande">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="{{ path('nouveau_demande') }}">
+                                <a href="{{ path('demandeur.liste_demande') }}">
+                                    <span class="sub-item">Liste des demandes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('demandeur.nouveau_demande') }}">
                                     <span class="sub-item">Effectuer une demande</span>
                                 </a>
                             </li>

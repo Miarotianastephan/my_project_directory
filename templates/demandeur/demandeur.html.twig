@@ -1,14 +1,67 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}Section Demandeur{% endblock %}
-{% block page_subtitle %}Demande de décaissement de fonds{% endblock %}
+{% block page_subtitle %}Les décaissement de fonds effetués{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/xhr.js") }}"></script>
+    <script src="{{ asset("js/scr/scr_admin_list_user.js") }}"></script>
+{% endblock %}
 
 
 {# Bouton d'action #}
 {% block page_options %}
-    <a href="{{ path("admin_add_user") }}" class="btn btn-secondary">Nouvelle demande</a>
+    <a href="{{ path("demandeur.nouveau_demande") }}" class="btn btn-secondary">Nouvelle demande</a>
 {% endblock %}
 
 {% block page_main_content %}
-    
+    <div class="row">
+        
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Mes demandes</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-hover">
+                            {# Column #}
+                            <thead>
+                                <tr id="cols">
+                                    <th id="isCol" scope="col">Date de demande</th>
+                                    <th id="isCol" scope="col">Référence</th>
+                                    <th id="isCol" scope="col">Type de demande</th>
+                                    <th id="isCol" scope="col">Montant</th>
+                                    <th id="isCol" scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Date de demande</th>
+                                    <th>Référence</th>
+                                    <th>Type de demande</th>
+                                    <th>Montant</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot>
+                            {# Data #}
+                            <tbody id="bodyList">
+                                <tr id="0">
+                                    <td id=""></td>
+                                    <td id=""></td>
+                                    <td id=""></td>
+                                    <td id=""></td>
+                                    <td>
+                                        <a href="" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
+                                    </td>
+                                </tr>                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>    
 {% endblock %}

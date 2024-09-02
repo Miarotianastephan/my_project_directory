@@ -1,0 +1,23 @@
+<!-- SECTION UPDATE MODAL -->
+<div class="modal fade" id="myModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Azo apina class modal-dialog-scrollable dia lasa scrollena -->
+    <form action="{{ path('admin_edit_user') }}" class="modal-dialog modal-dialog-centered tablelist-form" autocomplete="off" id="formModalUpdate">
+        <input type="hidden" id="getAllGroupeId" value="{{ path('admin_group_user') }}">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title formModalUpdate_title" id="exampleModalLabel">Fiche de mise à jour</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Section dynamique par JS-->
+                <div id="sectionUpdate"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success" id="submitUpdate" data-bs-dismiss="modal">Valider</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
