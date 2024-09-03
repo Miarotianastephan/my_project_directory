@@ -24,6 +24,7 @@
         {% block stylesheets %}
         {% endblock %}
     </head>
+    
     <body>
         {% block body %}
         <div class="wrapper">
@@ -188,6 +189,9 @@
         <!-- Sheet-->
         <!-- <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>-->
         <script src={{ asset("js/xlsx.full.min.js") }}></script>
+
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+
         {% block js_script %}
             
         {% endblock %}

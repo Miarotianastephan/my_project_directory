@@ -20,13 +20,14 @@
                 <div class="card-header">
                     <h4 class="card-title">Ajout de pièce justificative</h4>
                 </div>
-                <form id="formulaire" action="{{ path('dm.image', {'id': demande_type.Id}) }}" enctype="multipart/form-data">
+                <form id="formulaire" action="{{ path('dm.image', {'id': demande_type.Id}) }}"
+                      enctype="multipart/form-data">
                     <div class="card-body d-flex flex-column gap-2">
                         <div class="col-12 d-flex flex-row">
                             <div class="col-3">
                                 Référence:
                             </div>
-                            <div class="col">
+                            <div class="col form-control form-control">
                                 {{ demande_type.RefDemande }}
                             </div>
                         </div>
@@ -36,15 +37,18 @@
                             </div>
                             <div class="col d-flex flex-column gap-1">
                                 <div class="col-12">
-                                    <label class="col-5" for="bon_livraison">Facture de payement ou bon de
-                                        livraison</label>
-                                    <input class="col" type="radio" name="type" value="bon_livraison"
-                                           id="bon_livraison">
-                                </div>
-                                <div class="col-12">
-                                    <label class="col-5" for="facture_proformat"> Facture proformat </label>
-                                    <input class="col" type="radio" name="type" value="facture_proformat"
-                                           id="facture_proformat">
+
+                                    <label class="selectgroup-item">
+                                        <input class="selectgroup-input" type="radio" name="type" value="bon_livraison">
+                                        <span class="selectgroup-button">
+                                            Facture de payement ou bon de livraison
+                                        </span>
+                                    </label>
+
+                                    <label class="selectgroup-item">
+                                        <input class="selectgroup-input" type="radio" name="type" value="facture_proformat">
+                                        <span class="selectgroup-button">Facture proformat</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +57,7 @@
                             <input class="col" type="file" id="image" name="image">
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="submit" id="valider" class="btn btn-primary">Valider</button>
                         <button type="button" id="annuler" class="btn btn-secondary">Annuler</button>
                     </div>

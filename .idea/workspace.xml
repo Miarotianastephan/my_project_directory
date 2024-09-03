@@ -7,6 +7,9 @@
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/refuser_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/refuser_demande.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,7 +222,7 @@
       <workItem from="1724648450883" duration="16570000" />
       <workItem from="1724736971137" duration="51552000" />
       <workItem from="1724930546169" duration="23824000" />
-      <workItem from="1725248144748" duration="19073000" />
+      <workItem from="1725248144748" duration="36514000" />
     </task>
     <servers />
   </component>

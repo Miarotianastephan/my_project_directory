@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comptable{% endblock %}
+
+{% block page_title %}
+    Tableau de bord
+{% endblock %}
+
+{% block page_subtitle %}
+    Comparaison des Fonds, Situation de caisse et Solde comptable
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Comparaison de l'état de caisse</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="min-height: 55vh">
+                        <canvas id="comparisonBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_script %}
+    {{ parent() }}
+    <!-- Inclure Chart.js depuis un CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById("comparisonBarChart").getContext("2d");
+
+            // Crée le bar chart avec plusieurs datasets pour comparaison
+            const myComparisonBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"], // Les mois
+                    datasets: [
+                        {
+                            label: "Fond",
+                            data: [100, 150, 200, 250, 300, 350], // Les valeurs pour "Fond"
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: "Situation de caisse",
+                            data: [120, 140, 180, 220, 260, 300], // Les valeurs pour "Situation de caisse"
+                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: "Solde comptable",
+                            data: [130, 160, 210, 240, 290, 310], // Les valeurs pour "Solde comptable"
+                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
