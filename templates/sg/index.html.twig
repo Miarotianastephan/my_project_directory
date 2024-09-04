@@ -26,35 +26,37 @@
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
-                                <tr>
-                                    <th>Date de demande</th>
-                                    <th>Référence</th>
-                                    <th>Type de demande</th>
-                                    <th>Montant</th>
-                                    <th>Actions</th>
-                                </tr>
+                            <tr class="col-12 text-end">
+                                <th class="col-2">Date de demande</th>
+                                <th class="col-1">Référence</th>
+                                <th class="col-2">Type de demande</th>
+                                <th class="col-2">Montant</th>
+                                <th class="col-4"></th>
+                            </tr>
                             </thead>
                             <tbody>
                             {% for demande_type in demande_types %}
                                 <tr class="col-12">
-                                    <td class="col-1">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
                                     <td class="col-1">{{ demande_type.RefDemande }}</td>
                                     <td class="col-2">{{ demande_type.demande.libelle }}</td>
-                                    <td class="text-end col-2" >
+                                    <td class="text-end col-2">
                                         <div>
                                             {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                         </div>
                                     </td>
                                     <td class="col-4">
                                         <div class="col-12 d-flex gap-5">
-                                            <div class="col-8">
-                                                <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}" class="btn btn-label-danger btn-sm">REFUSER</a>
-                                                <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}" class="btn btn-label-success btn-sm">VALIDER</a>
+                                            <div class="col-8 text-center">
+                                                <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
+                                                   class="btn btn-label-danger btn-sm">REFUSER</a>
+                                                <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}"
+                                                   class="btn btn-label-success btn-sm">VALIDER</a>
                                             </div>
                                             <div class="col-3">
                                                 <button style="width: 100%;height: 100%;border: none;background-color: transparent">
                                                     <a href="{{ path('SG.detail_demande_en_attente', {'id': demande_type.Id}) }}">
-                                                        {{ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
+                                                        {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
                                                     </a>
                                                 </button>
                                             </div>

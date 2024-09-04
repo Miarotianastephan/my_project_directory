@@ -16,46 +16,46 @@
                     <h4 class="card-title">À propos de la demande</h4>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
-                    <div class="col-4">
+                    <div class="col-1">
                         <button style="border: none; background-color: transparent; text-align: start">
                             <a href="{{ path('SG.liste_demande_en_attente') }}">
-                                {{ ux_icon('heroicons:arrow-left-circle', {height: '10%', width:'25%', color:'#2a2f5b'}) }}
+                                {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%', color:'#2a2f5b'}) }}
                             </a>
                         </button>
                     </div>
-                    <div class="col py-5 px-3 d-flex flex-column gap-3">
+                    <div class="col py-2 px-1 d-flex flex-column gap-3">
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Référence:</div>
-                            <div class="col">{{ demande_type.RefDemande }}</div>
+                            <label class="col-4 form-control-lg">Référence:</label>
+                            <div class="col form-control">{{ demande_type.RefDemande }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Remettant:</div>
-                            <div class="col">{{ demande_type.utilisateur.UserMatricule }}</div>
+                            <label class="col-4 form-control-lg">Remettant:</label>
+                            <div class="col form-control" >{{ demande_type.utilisateur.UserMatricule }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Date de la demande:</div>
-                            <div class="col">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
+                            <label class="col-4 form-control-lg">Date de la demande:</label>
+                            <div class="col form-control">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Type de demande:</div>
-                            <div class="col">{{ demande_type.demande.libelle }}</div>
+                            <label class="col-4 form-control-lg">Type de demande:</label>
+                            <div class="col form-control">{{ demande_type.demande.libelle }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Motif de la demande:</div>
-                            <div class="col">{{ demande_type.PlanCompte.CptNumero }}
+                            <label class="col-4 form-control-lg">Motif de la demande:</label>
+                            <div class="col form-control">{{ demande_type.PlanCompte.CptNumero }}
                                 - {{ demande_type.PlanCompte.CptLibelle }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Montant de la demande:</div>
-                            <div class="col">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
+                            <label class="col-4 form-control-lg">Montant de la demande:</label>
+                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Type de paiement:</div>
-                            <div class="col">{{ demande_type.DmModePaiement }}</div>
+                            <label class="col-4 form-control-lg">Type de paiement:</label>
+                            <div class="col form-control">{{ demande_type.DmModePaiement }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">Personne concernée:</div>
-                            <div class="col">{{ demande_type.EntityCode.CptLibelle }}</div>
+                            <label class="col-4 form-control-lg">Personne concernée:</label>
+                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->
