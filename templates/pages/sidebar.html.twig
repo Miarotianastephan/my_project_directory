@@ -89,8 +89,14 @@
                     <div class="collapse" id="planComptable">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="sidebar-style-2.html">
-                                    <span class="sub-item">Voir</span>
+                                <a href="{{ path('app_plan_compte') }}">
+                                    <span class="sub-item">Plan de Compte</span>
+                                </a>
+                                <a href="{{ path('app_plan_compte.import') }}">
+                                    <span class="sub-item">Importer les données</span>
+                                </a>
+                                <a href="{{ path('app_plan_compte.add') }}">
+                                    <span class="sub-item">Insérer manuellement</span>
                                 </a>
                             </li>
                         </ul>
@@ -106,7 +112,7 @@
                         <ul class="nav nav-collapse">
                             <li>
                                 <a href="{{ path('demandeur.liste_demande') }}">
-                                    <span class="sub-item">Liste des demandes</span>
+                                    <span class="sub-item">Mes demandes : DM</span>
                                 </a>
                             </li>
                             <li>
@@ -116,7 +122,7 @@
                             </li>
                             <li>
                                 <a href="{{ path('SG.liste_demande_en_attente') }}">
-                                    <span class="sub-item">Liste des demandes</span>
+                                    <span class="sub-item">Liste des demandes : SG</span>
                                 </a>
                             </li>
                             <li>

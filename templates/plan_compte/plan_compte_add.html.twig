@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+{% block page_title %}Ajouter un nouveau compte{% endblock %}
+{% block page_subtitle %}Gestion plan de compte{% endblock %}
+
+
+{% block page_main_content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Remplissez les champs</div>
+            </div>
+            <form id="add_user_form" action="" method="post">
+                <div class="card-body">
+                    <div class="row">
+                        
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="matricule">Tapez compte mère</label>
+                                <input type="text" name="user_matricule" class="form-control" id="matricule" placeholder="numéro mère"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="matricule">Tapez compte enfant</label>
+                                <input type="text" name="user_matricule" class="form-control" id="matricule" placeholder="numéro enfant"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="card-action text-end">
+                    <a href="{{ path('demandeur.liste_demande') }}" class="btn btn-dark">Annuler</a>
+                    <button id="displayNotif" type="submit" class="btn btn-secondary">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

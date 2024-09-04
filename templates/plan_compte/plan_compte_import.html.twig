@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+{% block page_title %}Importer un plan de compte{% endblock %}
+{% block page_subtitle %}Gestion plan de compte{% endblock %}
+
+
+{% block page_main_content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Selectionnez le fichier à importer</div>
+            </div>
+            <form id="add_user_form" action="" method="post">
+                <div class="card-body">
+                    <div class="row">
+                        
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="matricule">Numéro matricule</label>
+                                <input type="text" name="user_matricule" class="form-control" id="matricule" value="MATRICULE A CHANGER" readonly/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="date_input">Date d'opération</label>
+                                <input type="date" name="dm_date" class="form-control" id="date_input"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group gy-3 mb-3">
+                            <div class="">
+                                <label for="dm_piece">Insérer une pièce jointe</label>
+                                <input type="file" name="dm_piece" class="form-control" id="dm_piece"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="card-action text-end">
+                    <a href="{{ path('demandeur.liste_demande') }}" class="btn btn-dark">Annuler</a>
+                    <button id="displayNotif" type="submit" class="btn btn-secondary">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
