@@ -74,7 +74,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $connection->commit();
 
                 // Mise à jour de l'entité `DemandeType`
-                $dm_type->setDmEtat(30);
+                $dm_type->setDmEtat(20);
                 $dm_type->setUtilisateur($user_sg);
 
                 $entityManager->flush();
@@ -160,7 +160,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $connection->commit();
 
                 // MAJ de dm_type la base de données
-                $dm_type->setDmEtat(20);
+                $dm_type->setDmEtat(30);
                 $dm_type->setUtilisateur($user_sg);
                 $entityManager->persist($dm_type);
                 $entityManager->flush();
@@ -248,10 +248,6 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function ajoutPieceJustificative(int $dm_type_id, int $demande_user_id): JsonResponse
-    {
-
-    }
 
     //    /**
     //     * @return LogDemandeType[] Returns an array of LogDemandeType objects
