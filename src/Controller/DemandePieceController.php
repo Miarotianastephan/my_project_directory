@@ -107,7 +107,7 @@ class DemandePieceController extends AbstractController
             $rep = $dt_dm_rep->ajoutPieceJustificatif($id,  $demande_user_id,  $type, $newFilename);
             $data = json_decode($rep->getContent(), true);
             if ($data['success'] == true) {
-                dump($newFilename ."<------------ XXXXXXXXXX");
+                //dump($newFilename ."<------------ XXXXXXXXXX");
 
                 return new JsonResponse([
                     'success' => true,

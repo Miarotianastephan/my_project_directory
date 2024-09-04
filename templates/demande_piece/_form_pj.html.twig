@@ -24,11 +24,35 @@
                       enctype="multipart/form-data">
                     <div class="card-body d-flex flex-column gap-2">
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">
+                            <label class="form-label col-3">
                                 Référence:
-                            </div>
+                            </label>
                             <div class="col form-control form-control">
                                 {{ demande_type.RefDemande }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="form-label col-3">
+                                Montant reçu:
+                            </label>
+                            <div class="col form-control form-control">
+                                {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label for="montant_reel" class="col-3 form-label">
+                                Montant utilisé:
+                            </label>
+                            <div class="input-group mb-3">
+                                <input
+                                        type="number"
+                                        class="form-control"
+                                        step="0.01"
+                                        aria-label="Amount (to the nearest dollar)"
+                                        name="montant_reel"
+                                        value="{{ demande_type.DmMontant }}"
+                                />
+                                <span class="input-group-text">Ar</span>
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
@@ -37,16 +61,18 @@
                             </div>
                             <div class="col d-flex flex-column gap-1">
                                 <div class="col-12">
-
+                                    <!--
                                     <label class="selectgroup-item">
                                         <input class="selectgroup-input" type="radio" name="type" value="bon_livraison">
                                         <span class="selectgroup-button">
                                             Facture de payement ou bon de livraison
                                         </span>
                                     </label>
+                                    -->
 
                                     <label class="selectgroup-item">
-                                        <input class="selectgroup-input" type="radio" name="type" value="facture_proformat">
+                                        <input class="selectgroup-input" type="radio" name="type"
+                                               value="facture_proformat" checked="checked">
                                         <span class="selectgroup-button">Facture proformat</span>
                                     </label>
                                 </div>
