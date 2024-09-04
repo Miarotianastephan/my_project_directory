@@ -6,10 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/show.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/show.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +226,7 @@
       <workItem from="1724736971137" duration="51552000" />
       <workItem from="1724930546169" duration="23824000" />
       <workItem from="1725248144748" duration="36929000" />
-      <workItem from="1725428851262" duration="9870000" />
+      <workItem from="1725428851262" duration="16686000" />
     </task>
     <servers />
   </component>
@@ -240,17 +243,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/templates/tresorier/index.html.twig</url>
-          <line>24</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

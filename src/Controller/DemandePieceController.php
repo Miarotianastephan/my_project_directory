@@ -47,16 +47,21 @@ class DemandePieceController extends AbstractController
         $demande_user_id = 1;
         $type = $request->request->get('type');
         $file = $request->files->get('image');
-        $montant_reel = $request->files->get('montant_reel');
+        $montant_reel = $request->request->get('montant_reel');
+        if (!$file) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Pas de fichier trouver'
+            ]);
+        }
         // Définir le répertoire de destination pour le fichier téléchargé
         // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
         try {
-            $newFilename = $dm_type_service->uploadImage($file,$this->getParameter('uploads_directory'));
-            $rep = $dt_dm_rep->ajoutPieceJustificatif($id,  $demande_user_id,  $type, $newFilename, $montant_reel);
+            $newFilename = $dm_type_service->uploadImage($file, $this->getParameter('uploads_directory'));
+            $rep = $dt_dm_rep->ajoutPieceJustificatif($id, $demande_user_id, $type, $newFilename, $montant_reel);
             $data = json_decode($rep->getContent(), true);
 
             $dm_type = $data['dm_type'];
-            dump($dm_type.toJSON());
             if ($data['success'] == true) {
                 //dump($newFilename ."<------------ XXXXXXXXXX");
 
@@ -65,13 +70,13 @@ class DemandePieceController extends AbstractController
                     'message' => 'Upload reussi',
                     'path' => $this->generateUrl('dm_piece.liste_demande')
                 ]);
-            }else{
+            } else {
                 return new JsonResponse([
                     'success' => false,
                     'message' => $data['message']
                 ]);
             }
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             dump('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
             return new JsonResponse([
                 'success' => false,
