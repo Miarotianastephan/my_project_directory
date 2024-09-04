@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use function MongoDB\BSON\toJSON;
 
 #[Route('/demande_piece')]
 class DemandePieceController extends AbstractController
@@ -38,74 +39,24 @@ class DemandePieceController extends AbstractController
         ]);
     }
 
-/*
-    #[Route('/upload_file/{id}', name: 'dm.image')]
-    public function new($id, Request $request, DemandeTypeRepository $dm_rep, EntityManagerInterface $entityManager): Response
-    {
-        //$parameters = $request->request->all();
-        $dm_type = $dm_rep->find($id);
-        $type = $request->request->get('type');
-        $file = $request->files->get('image');
-
-        if ($file) {
-            // Obtenir le nom de fichier original
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-
-            // Générer un nom unique pour éviter les conflits
-            $newFilename = uniqid() . '.' . $file->guessExtension();
-
-            // Définir le répertoire de destination pour le fichier téléchargé
-            // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
-            $destination = $this->getParameter('uploads_directory');
-            $connection = $entityManager->getConnection();
-            $connection->beginTransaction();
-            try {
-
-                // Déplacer le fichier dans le répertoire de destination
-                //$file->move($destination, $newFilename);
-                $detail_dm = new DetailDemandePiece();
-                $detail_dm->setDemandeType($dm_type);
-                $detail_dm->setDetDmTypeUrl($type);
-                $detail_dm->setDetDmPieceUrl($newFilename);
-
-                $script = "INSERT INTO log_etat_demande (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID, DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (DETAIL_DM_TYPE_SEQ.NEXTVAL,:dm_type_id,:det_dm_piece_url,:det_dm_type_url,DEFAULT)";
-
-                $statement = $connection->prepare($script);
-                $statement->bindValue('dm_type_id', null);
-                $statement->bindValue('det_dm_piece_url', null);
-                $statement->bindValue('det_dm_type_url', null);
-                $statement->executeQuery();
-                $connection->commit();
-
-                //dump("nom = ".$destination);
-                // Message de confirmation
-                $file->move($destination, $newFilename);
-                return new Response('Fichier téléchargé avec succès : ' . $newFilename);
-            } catch (Exception $e) {
-                $connection->rollBack();
-                // Gestion de l'erreur si le fichier ne peut pas être déplacé
-                return new Response('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
-            }
-        }
-
-        return new Response('Aucun fichier téléchargé');
-    }
-*/
     #[Route('/upload_file/{id}', name: 'dm.image')]
     public function uploadImage($id, Request $request,
                                 DetailDemandePieceRepository $dt_dm_rep,
                                 DemandeTypeService $dm_type_service)
     {
-        $demande_user_id = 2;
+        $demande_user_id = 1;
         $type = $request->request->get('type');
         $file = $request->files->get('image');
+        $montant_reel = $request->files->get('montant_reel');
         // Définir le répertoire de destination pour le fichier téléchargé
         // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
         try {
             $newFilename = $dm_type_service->uploadImage($file,$this->getParameter('uploads_directory'));
-
-            $rep = $dt_dm_rep->ajoutPieceJustificatif($id,  $demande_user_id,  $type, $newFilename);
+            $rep = $dt_dm_rep->ajoutPieceJustificatif($id,  $demande_user_id,  $type, $newFilename, $montant_reel);
             $data = json_decode($rep->getContent(), true);
+
+            $dm_type = $data['dm_type'];
+            dump($dm_type.toJSON());
             if ($data['success'] == true) {
                 //dump($newFilename ."<------------ XXXXXXXXXX");
 

@@ -11,10 +11,10 @@
 
 
 -- insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values 
--- (user_seq.NEXTVAL,'1989',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tresorier'));
+-- (user_seq.NEXTVAL,'1989',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tsotra'));
 
 -- insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values 
--- (user_seq.NEXTVAL,'1846',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='SG'));
+-- (user_seq.NEXTVAL,'1846',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tresorier'));
 
 -- insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values 
 -- (user_seq.NEXTVAL,'2060',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='SG'));
@@ -66,4 +66,4 @@ demande_type_seq.NEXTVAL,
 (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_libelle='Social (Prime diverse)'),
 (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
 (select d.dm_id from demande d where d.libelle='Decaissement'),
-TO_DATE('27-08-2024','DD-MM-YYYY'),900000,'Cheque','REF_001234567',10);
+TO_DATE('27-08-2024','DD-MM-YYYY'),8000,'Espece','REF_002',10);

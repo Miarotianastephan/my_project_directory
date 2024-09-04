@@ -22,7 +22,8 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
     public function ajoutPieceJustificatif(int    $dm_type_id,
                                            int    $demande_user_id,
                                            string $type,
-                                           string $newFilename): JsonResponse
+                                           string $newFilename,
+                                           float  $montant_reel): JsonResponse
     {
         $entityManager = $this->getEntityManager();
         // Récupération des entités
@@ -62,14 +63,13 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             $statement->bindValue('det_dm_piece_url', $newFilename);
             $statement->bindValue('det_dm_type_url', $type);
 
-            if ($type == "bon_livraison") {
-                //MAJ demande_type
-                $dm_type->setDmEtat(50);
-            } else if ($type == "facture_proformat") {
-                //MAJ demande_type
-                $dm_type->setDmEtat(51);
-            }
+            //MAJ demande_type
+            //MAJ demande_type => mère sy fille avec demande réelle
+
+            $dm_type->setDmEtat(50);
+            $dm_type->setMontantReel($montant_reel);
             $dm_type->setUtilisateur($user_demande);
+
             $entityManager->persist($dm_type);
 
             $statement->executeQuery();
@@ -77,7 +77,8 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             $entityManager->flush();
             return new JsonResponse([
                 'success' => true,
-                'message' => 'Ajout de piece justificative réussie.'
+                'message' => 'Ajout de piece justificative réussie.',
+                'dm_type' => $dm_type
             ]);
         } catch (\Exception $e) {
             $connection->rollBack();
