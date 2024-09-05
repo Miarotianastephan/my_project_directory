@@ -11,13 +11,14 @@
 {% endblock %}
 
 {% block page_main_content %}
+
     <div class="row">
         <div class="col-md-12">
             <div class="card ">
                 <div class="card-header">
-                    <h4 class="card-title">Ajout des dépenses directes</h4>
+                    <h4 class="card-title">Ajout des dépenses directes  </h4>
                 </div>
-                <form id="formulaire" action="" method="post">
+                <form id="formulaire" action="">
                     <div class="card-body d-flex flex-column gap-2 py-5 px-5">
                         <div class="col-12 d-flex flex-row ">
                             <label for="entite" class="col-3 form-control-lg">
@@ -25,12 +26,9 @@
                             </label>
                             <div class="col">
                                 <select name="entite" id="entite" class="form-select form-control">
-                                    <option value="0">Caisse Siège</option>
-                                    <option value="1">Caisse RT ATB</option>
-                                    <option value="2">Caisse RT ATR</option>
-                                    <option value="3">Caisse RT FNR</option>
-                                    <option value="4">Caisse RT MHJ</option>
-                                    <option value="5">Caisse Caisse RT MNK</option>
+                                    {% for entite in liste_entite %}
+                                        <option value="{{ entite.Id }}">{{ entite.CptLibelle }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -41,8 +39,9 @@
                             </label>
                             <div class="col">
                                 <select name="transaction" id="transaction" class="form-select form-control">
-                                    <option value="0">CE-007 Dépense payées directement par BFM</option>
-                                    <option value="1">CE-011 Comptabilisation frais bancaire</option>
+                                    {% for opperation in list_opp %}
+                                        <option value="{{ opperation.Id }}">{{ opperation.TrsLibelle }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -52,17 +51,15 @@
                             </label>
                             <div class="col">
                                 <select name="plan_compte" id="plan_compte" class="form-select form-control">
-                                    <option value="0">Depenses</option>
-                                    <option value="1">Depenses CE</option>
+                                    <!-- Options dynamiques insérées ici par JavaScript -->
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label for="montant" class="col-3 form-control-lg">
-                                Montant
-                            </label>
+                            <label for="montant" class="col-3 form-control-lg"> Montant </label>
                             <div class="col">
-                                <input  class="form-control form-control" type="number" id="montant" name="montant" step="0.01">
+                                <input class="form-control form-control" type="number" id="montant" name="montant"
+                                       step="0.01">
                             </div>
                         </div>
                     </div>
@@ -74,10 +71,57 @@
             </div>
         </div>
     </div>
-
+    {{ dump(trType1|json_encode()) }}
 
 {% endblock %}
 
 {% block js_script %}
+    <script>
+jQuery(document).ready(function(){
+        // Données PHP envoyées à JavaScript
+
+        // Convertir l'objet PHP en JSON et le rendre accessible à JavaScript
+        var trType1 = {{ trType1|json_encode(constant('JSON_UNESCAPED_UNICODE'))|escape('js')|raw }};
+
+        // Exemple de manipulation de l'objet dans JavaScript
+        console.log(trType1);
+        console.log(trType1.id); // Accéder à l'ID
+        console.log(trType1.trsCode); // Accéder au code de la transaction
+        console.log(trType1.trsLibelle); // Accéder au libellé
+
+    /*
+        const detailTransaction = {{ detail_transaction|json_encode|raw }};
+        console.log({# {{ (test1|json_encode()|raw) }} #});
+
+        // Fonction pour mettre à jour les comptes en fonction de l'opération sélectionnée
+        function updatePlanCompteOptions() {
+            const transactionSelect = document.getElementById('transaction');
+            const planCompteSelect = document.getElementById('plan_compte');
+
+            // Obtenir la valeur sélectionnée
+            const selectedTransactionId = transactionSelect.value;
+
+            // Trouver les comptes associés à la transaction sélectionnée
+            const selectedTransaction = detailTransaction.find(detail =>
+                detail.transactionType[0].Id === selectedTransactionId
+            );
+
+            console.log(selectedTransaction);
+
+            // Vider les options actuelles
+            planCompteSelect.innerHTML = '';
+
+            // Ajouter de nouvelles options basées sur les comptes associés
+            if (selectedTransaction) {
+                selectedTransaction.planCompte.forEach(compte => {
+                    const option = document.createElement('option');
+                    option.value = compte.id;
+                    option.textContent = compte.cpt_libelle;
+                    planCompteSelect.appendChild(option);
+                });
+            }
+        }*/
+})
+    </script>
 
 {% endblock %}
