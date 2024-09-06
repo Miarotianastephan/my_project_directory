@@ -57,10 +57,30 @@ class DetailTransactionCompte
     }
 
     /**
+     * @return Collection
+     */
+    public function getPlanCompte(): Collection
+    {
+        return $this->plan_compte;
+    }
+    /**
      * @param Collection $plan_compte
      */
     public function setPlanCompte(Collection $plan_compte): void
     {
         $this->plan_compte = $plan_compte;
     }
+    public function __toString(): string
+    {
+        $transactionTypes = implode(', ', $this->transaction_type->map(fn($t) => (string)$t)->toArray());
+        $planComptes = implode(', ', $this->plan_compte->map(fn($p) => (string)$p)->toArray());
+
+        return sprintf(
+            "DetailTransactionCompte(ID: %d, Transaction Types: [%s], Plan Comptes: [%s])",
+            $this->id ?? 0,
+            $transactionTypes,
+            $planComptes
+        );
+    }
+
 }

@@ -22,6 +22,13 @@ class PlanCompte
     #[ORM\Column(length: 255)]
     private ?string $cpt_libelle = null;
 
+    public function __construct(int $id,string $cpt_numero, string $cpt_libelle)
+    {
+        $this->setCptLibelle($cpt_libelle);
+        $this->setCptNumero($cpt_numero);
+        $this->id = $id;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,4 +57,6 @@ class PlanCompte
 
         return $this;
     }
+
+
 }

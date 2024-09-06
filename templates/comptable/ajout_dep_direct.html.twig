@@ -3,7 +3,7 @@
 {% block title %}Comptable{% endblock %}
 
 {% block page_title %}
-    {#  #}
+    Comptable
 {% endblock %}
 
 {% block page_subtitle %}
@@ -16,9 +16,9 @@
         <div class="col-md-12">
             <div class="card ">
                 <div class="card-header">
-                    <h4 class="card-title">Ajout des dépenses directes  </h4>
+                    <h4 class="card-title">Ajout des dépenses directes</h4>
                 </div>
-                <form id="formulaire" action="">
+                <form id="formulaire" action="{{ path('comptable.graphe')}}" method="post">
                     <div class="card-body d-flex flex-column gap-2 py-5 px-5">
                         <div class="col-12 d-flex flex-row ">
                             <label for="entite" class="col-3 form-control-lg">
@@ -40,7 +40,7 @@
                             <div class="col">
                                 <select name="transaction" id="transaction" class="form-select form-control">
                                     {% for opperation in list_opp %}
-                                        <option value="{{ opperation.Id }}">{{ opperation.TrsLibelle }}</option>
+                                        <option value="{{ opperation.Id }}">{{ opperation.TrsCode }} - {{ opperation.TrsLibelle }}trs_libelle</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -71,27 +71,42 @@
             </div>
         </div>
     </div>
-    {{ dump(trType1|json_encode()) }}
 
 {% endblock %}
 
 {% block js_script %}
     <script>
-jQuery(document).ready(function(){
+        function sendData (){
+            var form = document.getElementById('formulaire');
+            document.getElementById('valider').addEventListener('click', function (e) {
+                e.preventDefault()
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: new FormData(form)
+                })
+                    .then(response => {
+                        // Vérifie si la réponse est OK (status entre 200 et 299)
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        // Convertir la réponse en JSON
+                        return response.json();
+                    })
+                    .then(data => {
+                        data.message
+
+                    })
+                    .catch(error => console.error('Erreur:', error));
+            });
+        }
+    </script>
+    <script>
         // Données PHP envoyées à JavaScript
+        const transactionCompteMap = {{ transactionCompteMap|raw }};
 
-        // Convertir l'objet PHP en JSON et le rendre accessible à JavaScript
-        var trType1 = {{ trType1|json_encode(constant('JSON_UNESCAPED_UNICODE'))|escape('js')|raw }};
-
-        // Exemple de manipulation de l'objet dans JavaScript
-        console.log(trType1);
-        console.log(trType1.id); // Accéder à l'ID
-        console.log(trType1.trsCode); // Accéder au code de la transaction
-        console.log(trType1.trsLibelle); // Accéder au libellé
-
-    /*
-        const detailTransaction = {{ detail_transaction|json_encode|raw }};
-        console.log({# {{ (test1|json_encode()|raw) }} #});
 
         // Fonction pour mettre à jour les comptes en fonction de l'opération sélectionnée
         function updatePlanCompteOptions() {
@@ -101,27 +116,24 @@ jQuery(document).ready(function(){
             // Obtenir la valeur sélectionnée
             const selectedTransactionId = transactionSelect.value;
 
-            // Trouver les comptes associés à la transaction sélectionnée
-            const selectedTransaction = detailTransaction.find(detail =>
-                detail.transactionType[0].Id === selectedTransactionId
-            );
-
-            console.log(selectedTransaction);
-
             // Vider les options actuelles
             planCompteSelect.innerHTML = '';
 
             // Ajouter de nouvelles options basées sur les comptes associés
-            if (selectedTransaction) {
-                selectedTransaction.planCompte.forEach(compte => {
+            if (transactionCompteMap[selectedTransactionId]) {
+                transactionCompteMap[selectedTransactionId].forEach(compte => {
                     const option = document.createElement('option');
                     option.value = compte.id;
-                    option.textContent = compte.cpt_libelle;
+                    option.textContent = `${compte.numero} - ${compte.libelle}`;
                     planCompteSelect.appendChild(option);
                 });
             }
-        }*/
-})
-    </script>
+        }
 
+        // Ajouter un écouteur d'événement pour détecter les changements sur le select d'opération
+        document.getElementById('transaction').addEventListener('change', updatePlanCompteOptions);
+
+        // Initialiser les options au chargement de la page
+        document.addEventListener('DOMContentLoaded', updatePlanCompteOptions);
+    </script>
 {% endblock %}
