@@ -34,14 +34,14 @@
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg"> Entité concerné </label>
                             <div class="col form-control">
-                                {{ entite }}
+                                {{ entite.CptNumero }} - {{ entite.CptLibelle }}
                             </div>
                         </div>
 
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Type de transaction: </label>
                             <div class="col form-control">
-                                {{ transaction }}
+                                {{ transaction.TrsCode }} - {{ transaction.TrsLibelle }}
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
