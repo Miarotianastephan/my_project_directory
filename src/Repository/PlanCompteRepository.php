@@ -42,26 +42,26 @@ class PlanCompteRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    // public function insertUtilisateur(string $user_matricule, int $groupeId, string $roles): void
-    // {
-    //     // Requête SQL Oracle
-    //     $sql = "INSERT INTO utilisateur (user_id,user_matricule, grp_id, roles) 
-    //             VALUES (user_seq.NEXTVAL,:user_matricule, :grp_id, :roles)";
-    //     // Récupérer la connexion Doctrine
-    //     $conn = $this->getEntityManager()->getConnection();
-    //     // Démarrer la transaction
-    //     $conn->beginTransaction();
-    //     try {
-    //         // Préparer et exécuter la requête SQL
-    //         $stmt = $conn->prepare($sql);
-    //         $stmt->bindValue('user_matricule', $user_matricule);
-    //         $stmt->bindValue('grp_id', $groupeId);
-    //         $stmt->bindValue('roles', $roles);
-    //         $stmt->executeQuery();
-    //         $conn->commit();
-    //     } catch (Exception $e) {
-    //         $conn->rollBack();
-    //         throw $e; // Re-throw
-    //     }
-    // }
+    public function insertUtilisateur(string $user_matricule, int $groupeId, string $roles): void
+    {
+        // Requête SQL Oracle
+        $sql = "INSERT INTO utilisateur (user_id,user_matricule, grp_id, roles) 
+                VALUES (user_seq.NEXTVAL,:user_matricule, :grp_id, :roles)";
+        // Récupérer la connexion Doctrine
+        $conn = $this->getEntityManager()->getConnection();
+        // Démarrer la transaction
+        $conn->beginTransaction();
+        try {
+            // Préparer et exécuter la requête SQL
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('user_matricule', $user_matricule);
+            $stmt->bindValue('grp_id', $groupeId);
+            $stmt->bindValue('roles', $roles);
+            $stmt->executeQuery();
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollBack();
+            throw $e; // Re-throw
+        }
+    }
 }

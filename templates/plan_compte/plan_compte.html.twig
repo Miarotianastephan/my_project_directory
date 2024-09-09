@@ -33,14 +33,16 @@
                             </tfoot>
                             {# Data #}
                             <tbody id="bodyList">
-                                <tr id="0">
-                                    <td id=""></td>
-                                    <td id=""></td>
+                                {% for compte in data_plan_compte %}
+                                <tr id="{{compte.id}}">
+                                    <td id="">{{compte.CptNumero}}</td>
+                                    <td id="">{{compte.CptLibelle}}</td>
                                     <td>
                                         <a href="" class="btn btn-dark btn-sm update">detail</a>
                                         <a href="" class="btn btn-label-secondary btn-sm update">modifier</a>
                                     </td>
-                                </tr>                            
+                                </tr>     
+                                {% endfor %}                       
                             </tbody>
                         </table>
                     </div>
