@@ -6,13 +6,17 @@ use App\Entity\DemandeType;
 use App\Entity\DetailDemandePiece;
 use App\Form\DetailDemandePieceType;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailDemandePieceRepository;
+use App\Service\DemandeTypeService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use function MongoDB\BSON\toJSON;
 
 #[Route('/demande_piece')]
 class DemandePieceController extends AbstractController
@@ -20,7 +24,7 @@ class DemandePieceController extends AbstractController
     #[Route(path: '/', name: 'dm_piece.liste_demande', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_rep): Response
     {
-        $data = $dm_rep->findByEtat(30);
+        $data = $dm_rep->findByEtat(40);
         return $this->render('demande_piece/ajout_piece_justificative.html.twig', [
             'demande_types' => $data
         ]);
@@ -35,52 +39,49 @@ class DemandePieceController extends AbstractController
         ]);
     }
 
-
     #[Route('/upload_file/{id}', name: 'dm.image')]
-    public function new($id,Request $request,DemandeTypeRepository $dm_rep): Response
+    public function uploadImage($id, Request $request,
+                                DetailDemandePieceRepository $dt_dm_rep,
+                                DemandeTypeService $dm_type_service)
     {
-        //$parameters = $request->request->all();
-        $dm_type = $dm_rep->find($id);
+        $demande_user_id = 1;
         $type = $request->request->get('type');
         $file = $request->files->get('image');
-
-        if ($file) {
-            // Obtenir le nom de fichier original
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $file->guessExtension();
-
-            // Générer un nom unique pour éviter les conflits
-            $newFilename = uniqid() . '.' . $file->guessExtension();
-
-            // Définir le répertoire de destination pour le fichier téléchargé
-            // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
-            $destination = $this->getParameter('uploads_directory');
-
-            try {
-
-                // Déplacer le fichier dans le répertoire de destination
-                $file->move($destination, $newFilename);
-                $detail_dm = new DetailDemandePiece();
-                $detail_dm->setDemandeType($dm_type);
-                $detail_dm->setDetDmTypeUrl($type);
-                $detail_dm->setDetDmPieceUrl($newFilename);
-
-
-                $script = "INSERT INTO log_demande_type (ID, DEMANDE_TYPE_ID, DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:observation,:user_matricule)";
-
-
-
-
-                //dump("nom = ".$destination);
-                // Message de confirmation
-                $file->move($destination, $newFilename);
-                return new Response('Fichier téléchargé avec succès : ' . $newFilename);
-            } catch (Exception $e) {
-                // Gestion de l'erreur si le fichier ne peut pas être déplacé
-                return new Response('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
-            }
+        $montant_reel = $request->request->get('montant_reel');
+        if (!$file) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Pas de fichier trouver'
+            ]);
         }
+        // Définir le répertoire de destination pour le fichier téléchargé
+        // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
+        try {
+            $newFilename = $dm_type_service->uploadImage($file, $this->getParameter('uploads_directory'));
+            $rep = $dt_dm_rep->ajoutPieceJustificatif($id, $demande_user_id, $type, $newFilename, $montant_reel);
+            $data = json_decode($rep->getContent(), true);
 
-        return new Response('Aucun fichier téléchargé');
+            $dm_type = $data['dm_type'];
+            if ($data['success'] == true) {
+                //dump($newFilename ."<------------ XXXXXXXXXX");
+
+                return new JsonResponse([
+                    'success' => true,
+                    'message' => 'Upload reussi',
+                    'path' => $this->generateUrl('dm_piece.liste_demande')
+                ]);
+            } else {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => $data['message']
+                ]);
+            }
+        } catch (\Exception $e) {
+            dump('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
+            return new JsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

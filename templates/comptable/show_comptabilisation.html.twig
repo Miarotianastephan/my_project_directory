@@ -2,10 +2,10 @@
 
 {% block title %}Demande{% endblock %}
 {% block page_title %}
-    SG
+    Comptable
 {% endblock %}
 {% block page_subtitle %}
-    Liste des demandes en attente de validation
+    {# Liste des demandes en attente de validation #}
 {% endblock %}
 
 {% block page_main_content %}
@@ -13,69 +13,84 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">À propos de la demande</h4>
+                    <h4 class="card-title">A propos de la demande</h4>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
-                        <button style="border: none; background-color: transparent; text-align: start">
-                            <a href="{{ path('SG.liste_demande_en_attente') }}">
-                                {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%', color:'#2a2f5b'}) }}
+                        <button style="border: none;background-color: transparent; text-align: start">
+                            <a href="{{ path('tresorier.liste_demande_en_attente') }}">
+                                {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
                             </a>
                         </button>
                     </div>
-                    <div class="col py-2 px-1 d-flex flex-column gap-3">
+                    <div class="col px-3 d-flex flex-column gap-3">
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Référence:</label>
-                            <div class="col form-control">{{ demande_type.RefDemande }}</div>
+                            <label class="col-4 form-control-lg"> Rérérence: </label>
+                            <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Remettant:</label>
-                            <div class="col form-control" >{{ demande_type.utilisateur.UserMatricule }}</div>
+                            <label class="col-4 form-control-lg"> Validateur demande </label>
+                            <div class="col form-control">
+                                {{ demande_type.utilisateur.UserMatricule }}
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Date de la demande:</label>
-                            <div class="col form-control">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
+                            <label class="col-4 form-control-lg">Date de la demande: </label>
+                            <div class="col form-control">
+                                {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de demande:</label>
-                            <div class="col form-control">{{ demande_type.demande.libelle }}</div>
+                            <label class="col-4 form-control-lg">Type de demande: </label>
+                            <div class="col form-control">
+                                {{ demande_type.demande.libelle }}
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Motif de la demande:</label>
-                            <div class="col form-control">{{ demande_type.PlanCompte.CptNumero }}
-                                - {{ demande_type.PlanCompte.CptLibelle }}</div>
+                            <label class="col-4 form-control-lg">Motif de la demande: </label>
+                            <div class="col form-control">
+                                {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Montant de la demande:</label>
-                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
+                            <label class="col-4 form-control-lg">Montant de la demande: </label>
+                            <div class="col form-control">
+                                {{ demande_type.DmMontant|number_format(5, '.', ' ') }} Ar
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de paiement:</label>
-                            <div class="col form-control">{{ demande_type.DmModePaiement }}</div>
+                            <label class="col-4 form-control-lg">Type de payement: </label>
+                            <div class="col form-control">
+                                {{ demande_type.DmModePaiement }}
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Personne concernée:</label>
-                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                            <label class="col-4 form-control-lg">
+                                Personne concernée:
+                            </label>
+                            <div class="col form-control">
+                                {{ demande_type.EntityCode.CptLibelle }}
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->
                             {% if images|length  != 0 %}
-                            <div class="col">
-                                <!-- Bouton pour ouvrir le modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#fileModal">
-                                    Voir les pièces jointes
-                                </button>
-                            </div>
+                                <div class="col">
+                                    <!-- Bouton pour ouvrir le modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#fileModal">
+                                        Voir les pièces jointes
+                                    </button>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-danger btn">REFUSER</a>
-                    <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-success btn">VALIDER</a>
+                    <a href="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
+                       class="btn btn-danger btn">Annuler</a>
+                    <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
+                       class="btn btn-success btn">Débloquer</a>
                 </div>
             </div>
         </div>

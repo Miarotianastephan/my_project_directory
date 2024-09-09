@@ -28,7 +28,6 @@ class DetailDemandePiece
 
     #[ORM\ManyToOne(targetEntity: DemandeType::class)]
     #[ORM\JoinColumn(name: "demande_type_id", referencedColumnName: "dm_type_id",nullable: false)]
-
     private ?DemandeType $demande_type = null;
 
     public function getId(): ?int

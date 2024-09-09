@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande{% endblock %}
+{% block page_title %}
+    Comptable
+{% endblock %}
+{% block page_subtitle %}
+    {# Liste des demandes en attente de validation #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row align-items-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Validation de la dépense directe</h4>
+                </div>
+                <div class="card-body col-12 px-md-5 d-flex flex-row">
+                    <div class="col px-3 d-flex flex-column gap-3">
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg"> Matricule: </label>
+                            <div class="col form-control"> {{ "XXXX" }} </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg"> Montant: </label>
+                            <div class="col form-control"> {{ montant }} </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Date: </label>
+                            <div class="col form-control">
+                                {{ date|date('d/m/y')|trans({}, 'fr') }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg"> Entité concerné </label>
+                            <div class="col form-control">
+                                {{ entite.CptNumero }} - {{ entite.CptLibelle }}
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Type de transaction: </label>
+                            <div class="col form-control">
+                                {{ transaction.TrsCode }} - {{ transaction.TrsLibelle }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Compte de debit: </label>
+                            <div class="col form-control">
+                                {{ "------" }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Compte de crédit: </label>
+                            <div class="col form-control">
+                                {{ "------" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href=""
+                       class="btn btn-danger btn">Annuler</a>
+                    <a href=""
+                       class="btn btn-success btn">Valider</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+
+    </script>
+{% endblock %}

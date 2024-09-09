@@ -37,8 +37,8 @@ class DemandeType
     #[ORM\Column]
     private ?int $dm_etat = null;
 
-    #[ORM\ManyToOne(targetEntity: Utilisateur::class,cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: "utilisateur_id", referencedColumnName: "user_id",nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: "utilisateur_id", referencedColumnName: "user_id", nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(targetEntity: PlanCompte::class)]
@@ -53,9 +53,8 @@ class DemandeType
     private ?Exercice $exercice = null; 
 
     #[ORM\ManyToOne(targetEntity: Demande::class)]
-    #[ORM\JoinColumn(name: "dm_id", referencedColumnName: "dm_id",nullable: false)]
+    #[ORM\JoinColumn(name: "dm_id", referencedColumnName: "dm_id", nullable: false)]
     private ?Demande $demande = null;
-
 
 
     /**
@@ -69,6 +68,12 @@ class DemandeType
      */
     #[ORM\OneToMany(targetEntity: DetailDemandePiece::class, mappedBy: 'demande_type')]
     private Collection $detailDemandePieces;
+
+    #[ORM\Column(nullable: false,options: ["default" => 0])]
+    private ?float $montant_reel = 0;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $mere_id = null;
 
     public function __construct()
     {
@@ -200,7 +205,6 @@ class DemandeType
     }
 
 
-
     /**
      * @return Collection<int, LogDemandeType>
      */
@@ -257,6 +261,30 @@ class DemandeType
                 $detailDemandePiece->setDemandeType(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMontantReel(): ?float
+    {
+        return $this->montant_reel;
+    }
+
+    public function setMontantReel(?float $montant_reel): static
+    {
+        $this->montant_reel = $montant_reel;
+
+        return $this;
+    }
+
+    public function getMereId(): ?int
+    {
+        return $this->mere_id;
+    }
+
+    public function setMereId(?int $mere_id): static
+    {
+        $this->mere_id = $mere_id;
 
         return $this;
     }

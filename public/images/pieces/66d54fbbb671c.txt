@@ -1,0 +1,227 @@
+create database testView ;
+use testView;
+
+create table employe(
+    numEmploye INT PRIMARY KEY AUTO_INCREMENT,
+    nomEmploye VARCHAR(255) NOT NULL,
+    dateNaissance DATE NOT NULL,
+    sexe VARCHAR(1) NOT NULL,
+    dateEmbauche DATE 
+);
+
+create table salaire(
+    numEmploye INT references employe(numEmploye),
+    montant DOUBLE DEFAULT 0,
+    dateDebut DATE ,
+    dateFin DATE
+);
+
+
+create table departement(
+    numDept INT PRIMARY KEY AUTO_INCREMENT,
+    nomDept VARCHAR(255) NOT NULL
+);
+
+create table departementEmploye(
+    numEmploye INT REFERENCES employe(numEmploye),
+    numDepartement INT REFERENCES departement(numDept),
+    dateDebut DATE ,
+    dateFin DATE,
+    isManager BOOLEAN 
+);
+
+----foreing key------
+ALTER table salaire add FOREIGN KEY (numEmploye) REFERENCES employe(numEmploye);
+ALTER table departementEmploye add FOREIGN KEY (numDepartement) REFERENCES departement(numDept);
+ALTER table departementEmploye add FOREIGN KEY (numEmploye) REFERENCES employe(numEmploye);
+
+
+6 12 3 10
+
+insert into employe values 
+(DEFAULT,'tes1','2004-01-20','F','2020-03-22'),(DEFAULT,'tes2','2004-02-20','H','2020-01-22'),
+(DEFAULT,'tes3','2004-03-20','F','2020-02-22'),(DEFAULT,'tes4','2004-04-20','H','2020-04-22'),
+(DEFAULT,'tes5','2004-05-20','F','2020-05-22'),(DEFAULT,'tes6','2004-06-20','H','2020-06-22');
+
+
+insert into salaire values
+(1,1000,'2020-01-22','2021-05-22'),(1,1500,'2021-05-22',NULL),
+(2,2000,'2020-01-22','2021-02-22'),(2,2500,'2021-02-22',NULL),
+(3,3000,'2020-02-22','2021-02-22'),(3,3500,'2021-02-22',NULL),
+(4,4000,'2020-04-22','2021-05-22'),(4,4500,'2021-05-22','2023-01-22'),
+(5,5000,'2020-05-22','2021-05-22'),(5,5500,'2021-05-22','2023-02-22'),
+(6,6000,'2020-06-22','2021-06-22'),(6,6500,'2021-06-22','2023-03-22');
+
+insert into departement values
+(DEFAULT,'D1'),(DEFAULT,'D2'),(DEFAULT,'D3');
+
+insert into departementEmploye values
+(1,1,'2020-01-22',NULL,TRUE),
+(2,1,'2020-01-22',NULL,TRUE),
+(3,1,'2020-02-22',NULL,TRUE) ,
+(4,2,'2020-04-22','2021-05-22',TRUE) ,
+(5,2,'2020-05-22','2021-05-22',TRUE) ,
+(6,2,'2020-06-22','2021-06-22',TRUE) ,
+(4,3,'2021-05-22','2023-01-22',FALSE) ,
+(5,3,'2021-05-22','2023-02-22',FALSE) ,
+(6,3,'2021-06-22','2023-03-22',FALSE) ;
+
+insert into departementEmploye values (3,3,'2020-02-22',NULL,FALSE);
+
+
+1-create or REPLACE view v_EmpValide as
+select e.numEmploye, e.nomEmploye, e.dateNaissance, e.sexe, e.dateEmbauche from employe e,salaire s where e.numEmploye=s.numEmploye and s.dateFin is NULL GROUP BY e.nomEmploye; 
+
+select liste.numEmploye, liste.nomEmploye, D.nomDept from v_EmpValide as liste,departement as D,departementEmploye as DE where liste.numEmploye=DE.numEmploye and DE.numDepartement=D.nomDept and DE.dateFin is NULL ;
+
+select liste.numEmploye, liste.nomEmploye, D.nomDept from v_EmpValide as liste,departement as D,departementEmploye as DE where liste.numEmploye=DE.numEmploye and DE.numDepartement in (select numDepartement from departement) and DE.dateFin is NULL ;
+
+3-create or REPLACE VIEW v_nbEmployeValide as
+select count(numemploye) from v_empvalide;
+
+4-create or REPLACE VIEW v_EmpNonValide as 
+select e.numEmploye, e.nomEmploye, e.dateNaissance, e.sexe, e.dateEmbauche from employe e,salaire s where e.numEmploye=s.numEmploye and s.dateFin is NOT NULL GROUP BY e.nomEmploye; 
+
+5-create or REPLACE view v_nbEmpHetF as
+select count((select sexe from employe where sexe='H') as huhu)as homme,count((select sexe from employe where sexe='F') as haha)as Femme from employe ;
+ select count(sexe) from employe where sexe='H';
+
+6-create or REPLACE view v_empMaxSal as
+select 
+
+
+
+---------------------------------------------------
+CREATE DATABASE mr_rojo_
+\c mr_rojo_
+
+
+CREATE TABLE etudiant (
+    Etu VARCHAR(255) PRIMARY KEY, 
+    nom VARCHAR (255),
+    prenom VARCHAR(255),
+    datenaissance DATE 
+);
+
+CREATE TABLE semestre(
+    idSemestre SERIAL PRIMARY KEY,
+    nomSemestre VARCHAR(255)
+);
+
+CREATE TABLE Inscription(
+    idInsciption SERIAL PRIMARY KEY,
+    dateinscription DATE DEFAULT now(),
+    ETU VARCHAR(255) REFERENCES etudiant(Etu),
+    idSemestre INT references semestre (idSemestre),
+);
+
+CREATE TABLE matiere(
+    idMatiere VARCHAR(255) PRIMARY KEY,
+    nomMatiere VARCHAR(255) ,
+    coeficient INT DEFAULT 1
+);
+
+CREATE TABLE note(
+    idNote SERIAL PRIMARY KEY,
+    datenote DATE DEFAULT now(),
+    ETU VARCHAR(255) REFERENCES etudiant(Etu),
+    idMatiere VARCHAR(255) references matiere (idMatiere),
+    valeurNote NUMERIC DEFAULT 0
+);
+
+CREATE TABLE option(
+    idOption SERIAL PRIMARY KEY,
+    nomOption VARCHAR(255)
+);
+
+CREATE TABLE SemestreMatiere(
+    idSemestre INT references semestre (idSemestre),
+    idMatiere VARCHAR(255) references matiere (idMatiere),
+    groupe INT DEFAULT 0,
+    idOption INT references option (idOption)
+);
+
+------------------------- Foreing KEY
+ALTER table Inscription add FOREIGN KEY (idSemestre) references semestre (idSemestre);
+ALTER table Inscription add FOREIGN KEY (ETU)  REFERENCES etudiant(Etu);
+
+ALTER table note add FOREIGN KEY (idMatiere) references matiere (idMatiere);
+ALTER table note add FOREIGN KEY (ETU) REFERENCES etudiant(Etu);
+
+ALTER table SemestreMatiere add FOREIGN KEY (idSemestre) references semestre (idSemestre);
+ALTER table SemestreMatiere add FOREIGN KEY (idMatiere) references matiere (idMatiere);
+ALTER table SemestreMatiere add FOREIGN KEY (idOption) references  option(idOption);
+
+
+
+
+insert into etudiant values
+('ETU0001','Rakoto','Jean','2003-02-02'),
+('ETU0002','Rasoa','Janne','2003-03-02'),
+('ETU0003','Rabe','Jeanine','2002-02-02'),
+('ETU0004','Razafy','John','2001-04-02');
+
+
+insert into inscription values
+(default,'2022-07-02','ETU0001',1),
+(default,'2022-07-05','ETU0002',1),
+(default,'2022-07-10','ETU0003',1),
+(default,'2022-07-15','ETU0004',1);
+
+insert into semestre values
+(default,'S1'),
+(default,'S3'),
+(default,'S5');
+
+insert into matiere values
+('INF100','BDD',5),
+('INF101','POO',6),
+('INF102','Web',4),
+('INF107','Web avance',5),
+('INF108','Conception',10),
+('INF109','Web service',10),
+('MAT103','Analyse',3),
+('MAT104','Equation diff',3),
+('MAT105','MAO',4),
+('MAT106','Arithmetique',3),
+('ANG','Anglais',3),
+('FRS','Francais',3),
+('INF110','Optimisation',4);
+
+insert into note values
+(default,'2023-12-20','ETU0001','INF100',10),
+(default,'2023-12-20','ETU0001','INF101',11),
+(default,'2023-12-20','ETU0001','INF107',12),
+(default,'2023-12-20','ETU0001','INF108',13),
+(default,'2023-12-20','ETU0001','INF109',14),
+(default,'2023-12-20','ETU0001','MAT103',10),
+(default,'2023-12-20','ETU0001','MAT104',8.75),
+(default,'2023-12-20','ETU0001','MAT105',12),
+(default,'2023-12-20','ETU0001','MAT106',11),
+(default,'2023-12-20','ETU0001','ANG',13),
+(default,'2023-12-20','ETU0001','FRS',15),
+(default,'2023-12-20','ETU0001','INF110',18.25);
+
+
+insert into option values
+(default,'Developpeur Application'),
+(default,'Developpeur Web et design'),
+(default,'Bdd et reseau'),
+(default,'All');
+
+insert into semestreMatiere values
+(1,'INF100',0,4),
+(1,'INF102',0,4),
+(3,'INF107',0,2),
+(3,'INF108',0,1),
+(3,'INF109',0,1),
+(1,'MAT103',0,4),
+(2,'MAT104',1,4),
+(2,'INF110',1,4),
+(2,'MAT105',0,4),
+(1,'MAT106',0,4),
+(1,'ANG',0,4),
+(1,'FRS',0,4),
+(2,'ANG',0,4),
+(3,'ANG',0,4);
+

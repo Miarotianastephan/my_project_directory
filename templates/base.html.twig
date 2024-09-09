@@ -30,8 +30,15 @@
             <script src="{{ asset("js/plugin/sweetalert/sweetalert.min.js") }}"></script>
             <!-- Kaiadmin JS -->
             <script src="{{ asset("js/kaiadmin.min.js") }}"></script>
+        <!-- Sheet-->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>-->
+        <script src={{ asset("js/xlsx.full.min.js") }}></script>
+
+        <!-- Chart -->
+        <script src="{{ asset("js/plugin/chart/chart.min.js") }}"></script>
         {% endblock %}
     </head>
+    
     <body>
         {% block body %}
         <div class="wrapper">
@@ -177,5 +184,6 @@
             {# FIN SIDEBAR #}
         </div>
         {% endblock %}
+        
     </body>
 </html>

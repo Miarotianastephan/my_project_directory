@@ -90,7 +90,6 @@ class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedU
     public function setGroupUtilisateur(?GroupeUtilisateur $group_utilisateur): static
     {
         $this->group_utilisateur = $group_utilisateur;
-
         return $this;
     }
 

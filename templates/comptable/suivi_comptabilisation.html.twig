@@ -7,7 +7,7 @@
 {% endblock %} #}
 
 {% block page_title %}
-    Trésorier
+    Comptable
 {% endblock %}
 {% block page_subtitle %}
     {# Liste des demandes en attente de validation #}
@@ -20,14 +20,14 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Liste des demandes en attente de déblocage de fond</h4>
+                    <h4 class="card-title">Liste des demandes pour suivi de comptabilisation</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
                             <tr class="col-12">
-                                <th class="col-3">Validation demande</th>
+                                <th class="col-3">Date</th>
                                 <th class="col-1">Référence</th>
                                 <th class="col-3">Type de demande</th>
                                 <th class="col-2 text-center px-3">Montant</th>
@@ -48,14 +48,13 @@
                                     <td class="col">
                                         <div class="col-12 d-flex gap-2">
                                             <div class="col">
-                                                <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
-                                                   class="btn btn-label-success btn-sm">Débolcker</a>
+                                                <a href="{{ path('comptable.comptabiliser', {'id': demande_type.Id}) }}"
+                                                   class="btn btn-label-success btn-sm">Comptabiliser</a>
                                             </div>
                                             <div class="col-4">
                                                 <button style="width: 100%;height: 100%;border: none;background-color: transparent">
                                                     <a href="{{ path('tresorier.detail_demande_en_attente', {'id': demande_type.Id}) }}">
                                                         {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
-
                                                     </a>
                                                 </button>
                                             </div>

@@ -17,6 +17,15 @@ class PlanCompteRepository extends ServiceEntityRepository
         parent::__construct($registry, PlanCompte::class);
     }
 
+    public function findByNumero(string $cpt_numero): ?PlanCompte
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.cpt_numero = :val')
+            ->setParameter('val', $cpt_numero)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return PlanCompte[] Returns an array of PlanCompte objects
     //     */

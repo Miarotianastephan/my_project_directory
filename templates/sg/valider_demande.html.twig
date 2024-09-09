@@ -17,52 +17,40 @@
                         <h4 class="card-title">VALIDER LA DEMANDE?</h4>
                     </div>
                     <div class="card-body">
-                        <div class="col py-5 px-3 d-flex flex-column gap-3">
+                        <div class="col py-3 px-3 d-flex flex-column gap-3">
                             <div class="col-12 d-flex flex-row">
-                                <div class="col-3">
-                                    Rérérence:
-                                </div>
-                                <div class="col">
-                                    {{ demande_type.RefDemande }}
-                                </div>
+                                <label class="col-3 form-control-lg"> Rérérence: </label>
+                                <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <div class="col-3">
-                                    Remettant:
-                                </div>
-                                <div class="col">
+                                <label class="col-3 form-control-lg"> Remettant: </label>
+                                <div class="col form-control">
                                     {{ demande_type.utilisateur.UserMatricule }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <div class="col-3">
-                                    Type de demande:
-                                </div>
-                                <div class="col">
+                                <label class="col-3 form-control-lg"> Type de demande: </label>
+                                <div class="col form-control">
                                     {{ demande_type.Demande.Libelle }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <div class="col-3">
-                                    Motif de la demande:
-                                </div>
-                                <div class="col">
+                                <label class="col-3 form-control-lg">Motif de la demande: </label>
+                                <div class="col form-control">
                                     {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <div class="col-3">
-                                    Montant de la demande:
-                                </div>
-                                <div class="col">
+                                <label class="col-3 form-control-lg"> Montant de la demande: </label>
+                                <div class="col form-control">
                                     {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button id="valider" type="submit" class="btn btn-success btn-sm">Valider</button>
-                        <button id="annuler" type="button" class="btn btn-danger btn-sm">Annuler</button>
+                    <div class="card-footer py-3 px-5 d-grid gap-3 d-md-flex justify-content-md-end">
+                        <button id="valider" type="submit" class="btn btn-success btn">Valider</button>
+                        <button id="annuler" type="button" class="btn btn-danger btn">Annuler</button>
                     </div>
                 </div>
             </form>
@@ -81,7 +69,7 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
-                    "message":"tongasoa"
+                    "message": "tongasoa"
                 })
             })
                 .then(response => {
