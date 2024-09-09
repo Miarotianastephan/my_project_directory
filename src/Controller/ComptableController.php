@@ -6,7 +6,9 @@ use App\Entity\DetailTransactionCompte;
 use App\Entity\PlanCompte;
 use App\Entity\TransactionType;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailTransactionCompteRepository;
 use App\Repository\PlanCompteRepository;
+use App\Repository\TransactionTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,19 +23,35 @@ class ComptableController extends AbstractController
     public function index(Request $request): Response
     {
         $annee = $request->query->get('annee', (int)date('Y'));
-        $mois = $request->query->get('mois', 'janvier');
+        $semestre = $request->query->get('semestre', (int)'1');
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
         // Ceci est juste un exemple
-        $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
-        $fond = [100, 150, 200, 250, 300, 350];
-        $caisse = [120, 140, 180, 220, 260, 300];
-        $sold = [130, 160, 210, 240, 290, 310];
+        if ($semestre == 1) {
+            $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
+            $fond = [100, 150, 200, 250, 300, 350];
+            $caisse = [120, 140, 180, 220, 260, 300];
+            $sold = [130, 160, 210, 240, 290, 310];
+        }
+        if ($semestre == 2) {
+            $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+            $fond = [];
+            $caisse = [];
+            $sold = [];
+
+            for ($i = 0; $i < 6; $i++) {
+                // Génère des valeurs aléatoires pour chaque tableau dans des plages similaires
+                $fond[] = rand(100, 350);    // Valeurs aléatoires entre 100 et 350
+                $caisse[] = rand(120, 300);  // Valeurs aléatoires entre 120 et 300
+                $sold[] = rand(130, 310);    // Valeurs aléatoires entre 130 et 310
+            }
+        }
+
 
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse([
                 'annee' => $annee,
-                'mois' => $mois,
+                'semestre' => $semestre,
                 'labels' => $labels,
                 'fond' => $fond,
                 'caisse' => $caisse,
@@ -47,94 +65,118 @@ class ComptableController extends AbstractController
             'caisse' => $caisse,
             'sold' => $sold,
             'annee' => $annee,
-            'mois' => $mois
+            'semestre' => $semestre
         ]);
     }
 
     #[Route('/form/depense', name: 'comptable.form_depense_directe', methods: ['GET'])]
-    public function form_depense_directe(PlanCompteRepository $planCompteRepository): Response
+    public function form_depense_directe(
+        PlanCompteRepository              $planCompteRepository,
+        TransactionTypeRepository         $transactionTypeRepository,
+        DetailTransactionCompteRepository $detailTransactionCompteRepository,
+        Request                           $request
+    ): Response
     {
-        $trType1 = new TransactionType();
-        $trType1->setId(1);
-        $trType1->setTrsCode('CE-007');
-        $trType1->setTrsDefinition(null);
-        $trType1->setTrsLibelle('Dépense payées directement pas BFM');
+        $list_transaction_code = ['CE-007', 'CE-011'];
+        $liste_transaction_type = array_filter(array_map(
+            fn($code) => $transactionTypeRepository->findTransactionByCode($code),
+            $list_transaction_code
+        ));
 
-        $trType2 = new TransactionType();
-        $trType2->setId(2);
-        $trType2->setTrsCode('CE-011');
-        $trType2->setTrsDefinition(null);
-        $trType2->setTrsLibelle('Comptabilisation de frais bancaire');
+        $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011"];
+        $liste_entite = array_filter(array_map(
+            fn($code) => $planCompteRepository->findByNumero($code),
+            $list_cpt_numero
+        ));
 
-        $liste_transaction_type = [$trType1, $trType2];
-
-        $plc1 = new PlanCompte(1, "510001", "Caisse siège");
-        $plc2 = new PlanCompte(2, "510002", "Caisse RT ATB");
-        $plc3 = new PlanCompte(3, "510003", "Caisse RT ATR");
-        $plc4 = new PlanCompte(4, "510004", "Caisse RT FNR");
-        $plc5 = new PlanCompte(5, "510005", "Caisse RT MDV");
-        $plc6 = new PlanCompte(6, "510006", "Caisse RT MHJ");
-        $plc7 = new PlanCompte(7, "510007", "Caisse RT MNK");
-        $plc8 = new PlanCompte(8, "510008", "Caisse RT SBV");
-        $plc9 = new PlanCompte(9, "510009", "Caisse RT TLG");
-        $plc10 = new PlanCompte(10, "510010", "Caisse RT TLR");
-        $plc11 = new PlanCompte(11, "510011", "Caisse RT TMS");
-
-        $pl3 = new PlanCompte(14, "67", "Frais et commission bancaire");
-        $pl4 = new PlanCompte(15, "670001", "Frais de tenue de compte");
-        $pl5 = new PlanCompte(16, "670002", "Frais de demande de chequier");
-        $pl6 = new PlanCompte(17, "670003", "Frais de retrait");
-        $pl7 = new PlanCompte(18, "670004", "Autres frais bancaires");
-        $pl8 = new PlanCompte(19, "670005", "Autres charges");
-
-        $pl2 = new PlanCompte(13, "442750", "Autres materiels");
-        $pl9 = new PlanCompte(20, "442710", "Materiels de bureau");
-        $pl10 = new PlanCompte(21, "442720", "Mobilier de bureau");
-        $pl11 = new PlanCompte(22, "442730", "Materiels informatiques");
-        $pl12 = new PlanCompte(23, "442740", "Materiles de communication");
-
-
-        $detail_transaction_cpt_1 = new DetailTransactionCompte();
-        $detail_transaction_cpt_1->setId(1);
-        $detail_transaction_cpt_1->setTransactionType(new ArrayCollection([$trType1]));
-        $detail_transaction_cpt_1->setPlanCompte(new ArrayCollection([$pl2, $pl9, $pl10, $pl11, $pl12, $pl3, $pl4, $pl5, $pl6, $pl7, $pl8]));
-
-        $detail_transaction_cpt_2 = new DetailTransactionCompte();
-        $detail_transaction_cpt_2->setId(22);
-        $detail_transaction_cpt_2->setTransactionType(new ArrayCollection([$trType2]));
-        $detail_transaction_cpt_2->setPlanCompte(new ArrayCollection([$pl3, $pl4, $pl5, $pl6, $pl7, $pl8]));
-
-        $detail_transaction_cpt = [$detail_transaction_cpt_1, $detail_transaction_cpt_2];
-
-        $liste_entite = [$plc1, $plc2, $plc3, $plc4, $plc5, $plc6, $plc7, $plc8, $plc9, $plc10, $plc11];
-
+        // Préparer les données pour JavaScript
         $transactionCompteMap = [];
-        foreach ($detail_transaction_cpt as $detail) {
-            foreach ($detail->getTransactionType() as $transactionType) {
-                $transactionCompteMap[$transactionType->getId()] = array_map(function($compte) {
-                    return [
-                        'id' => $compte->getId(),
-                        'numero' => $compte->getCptNumero(),
-                        'libelle' => $compte->getCptLibelle()
-                    ];
-                }, $detail->getPlanCompte()->toArray());
-            }
+        foreach ($liste_transaction_type as $transaction) {
+            $details = $detailTransactionCompteRepository->findByTransaction($transaction);
+            $transactionCompteMap[$transaction->getId()] = array_map(function ($detail) {
+                return [
+                    'id' => $detail->getPlanCompte()->getId(),
+                    'numero' => $detail->getPlanCompte()->getCptNumero(),
+                    'libelle' => $detail->getPlanCompte()->getCptLibelle(),
+                ];
+            }, $details);
         }
 
-        return $this->render('comptable/ajout_dep_direct.html.twig',
-            [
-                'liste_entite' => $liste_entite,
-                'list_opp' => $liste_transaction_type,
-                'transactionCompteMap' => json_encode($transactionCompteMap)
-            ]
-        );
+        return $this->render('comptable/ajout_dep_direct.html.twig', [
+            'liste_entite' => $liste_entite,
+            'list_opp' => $liste_transaction_type,
+            'transactionCompteMap' => json_encode($transactionCompteMap),
+        ]);
     }
 
+    #[Route('/get-transaction-details', name: 'get_transaction_details', methods: ['GET'])]
+    public function getTransactionDetails(
+        Request                           $request,
+        TransactionTypeRepository         $transactionTypeRepository,
+        DetailTransactionCompteRepository $detailTransactionCompteRepository
+    ): JsonResponse
+    {
+        $transactionId = $request->query->get('transactionId');
+        $transaction = $transactionTypeRepository->find($transactionId);
+
+        if (!$transaction) {
+            return new JsonResponse(['error' => 'Transaction not found'], 404);
+        }
+
+        $details = $detailTransactionCompteRepository->findByTransaction($transaction);
+        $formattedDetails = array_map(function ($detail) {
+            return [
+                'id' => $detail->getPlanCompte()->getId(),
+                'numero' => $detail->getPlanCompte()->getCptNumero(),
+                'libelle' => $detail->getPlanCompte()->getCptLibelle(),
+            ];
+        }, $details);
+        return new JsonResponse($formattedDetails);
+    }
+
+
+    #[Route('/valider/depense', name: 'comptable.validation_depense_directe', methods: ['POST'])]
+    public function validation_depense_directe(Request                   $request,
+                                               PlanCompteRepository      $planCompteRepository,
+                                               TransactionTypeRepository $transactionTypeRepository): Response
+    {
+        // Récupère les données du formulaire
+        $entite_id = $request->request->get('entite');
+        $entite = $planCompteRepository->find($entite_id);
+
+
+        $transaction_id = $request->request->get('transaction');
+        $transaction = $transactionTypeRepository->find($transaction_id);
+
+        $planCompte_id = $request->request->get('plan_compte');
+        $planCompte = $planCompteRepository->find($entite_id);
+
+        $montant = $request->request->get('montant');
+        $date = new \DateTime();
+        return $this->render('comptable/validation_dep_direct.html.twig',
+            [
+                'entite' => $entite,
+                'transaction' => $transaction,
+                'planCompte' => $planCompte,
+                'montant' => $montant,
+                'date' => $date,
+            ]);
+    }
+
+
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]
-    public function suivi_comptabilisation( DemandeTypeRepository $dm_rep): Response
+    public function suivi_comptabilisation(DemandeTypeRepository $dm_rep): Response
     {
         $demande_types = $dm_rep->findByEtat(70);
-        return $this->render('comptable/suivi_comptabilisation.html.twig',['demande_types'=>$demande_types]);
+        return $this->render('comptable/suivi_comptabilisation.html.twig', ['demande_types' => $demande_types]);
     }
+
+    #[Route('/comptabilisation/{id}', name: 'comptable.comptabiliser', methods: ['GET'])]
+    public function compatbilisation(int $id, DemandeTypeRepository $dm_rep): Response
+    {
+        $demande_types = $dm_rep->find($id);
+        return $this->render('comptable/show_comptabilisation.html.twig', ['demande_type' => $demande_types, 'images' => []]);
+    }
+
 
 }

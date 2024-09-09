@@ -188,3 +188,26 @@ INSERT INTO plan_compte (cpt_id, cpt_numero, cpt_libelle) VALUES (cpt_seq.NEXTVA
 INSERT INTO plan_compte (cpt_id, cpt_numero, cpt_libelle) VALUES (cpt_seq.NEXTVAL, '701000', 'Subvention BFM');
 INSERT INTO plan_compte (cpt_id, cpt_numero, cpt_libelle) VALUES (cpt_seq.NEXTVAL, '702000', 'Intérêt créditeur');
 INSERT INTO plan_compte (cpt_id, cpt_numero, cpt_libelle) VALUES (cpt_seq.NEXTVAL, '703000', 'Produits divers');
+
+INSERT INTO transaction_type (TRS_ID,TRS_CODE,TRS_DEFINITION,TRS_LIBELLE) VALUES (trs_seq.NEXTVAL, 'CE-007', NULL,'Dépense payées directement pas BFM');
+INSERT INTO transaction_type (TRS_ID,TRS_CODE,TRS_DEFINITION,TRS_LIBELLE) VALUES (trs_seq.NEXTVAL, 'CE-011', NULL,'Comptabilisation de frais bancaire');
+
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442750'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442710'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442720'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442730'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442740'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '67'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670001'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670002'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670003'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670004'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670005'));
+
+
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '67'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670001'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670002'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670003'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670004'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670005'));

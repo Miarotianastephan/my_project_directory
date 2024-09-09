@@ -16,6 +16,15 @@ class TransactionTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, TransactionType::class);
     }
 
+    public function findTransactionByCode(string $trs_code): ?TransactionType
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.trs_code = :trs_code')
+            ->setParameter('trs_code', $trs_code)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return TransactionType[] Returns an array of TransactionType objects
     //     */

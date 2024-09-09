@@ -8,10 +8,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/PlanCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/PlanCompte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/PlanCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PlanCompteRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/comptable/suivi_comptabilisation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/suivi_comptabilisation.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,6 +185,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;branche__v3__2&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -202,13 +206,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-php-predefined-ba97393d7c68-b4dcf6bb9de9-com.jetbrains.php.sharedIndexes-PS-233.13135.108" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -225,7 +222,9 @@
       <workItem from="1724736971137" duration="51552000" />
       <workItem from="1724930546169" duration="23824000" />
       <workItem from="1725248144748" duration="36929000" />
-      <workItem from="1725428851262" duration="47192000" />
+      <workItem from="1725428851262" duration="48315000" />
+      <workItem from="1725860572333" duration="508000" />
+      <workItem from="1725861106833" duration="9548000" />
     </task>
     <servers />
   </component>

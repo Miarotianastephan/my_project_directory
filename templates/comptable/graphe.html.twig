@@ -15,20 +15,18 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Comparaison de l'état de caisse <span id="monthYearDisplay">{{ mois }} - {{ annee }}</span></div>
+                    <div class="card-title">Comparaison de l'état de caisse <span
+                                id="monthYearDisplay">{{ semestre }} - {{ annee }}</span></div>
                 </div>
                 <div class="card-body">
                     <form method="get" id="formulaire" action="{{ path('comptable.graphe') }}">
                         <div class="col-12 d-md-flex justify-content-md-end mb-3">
                             <div class="form-group form-inline col-2">
-                                <label for="mois" class="mr-2">Mois</label>
-                                <input
-                                        type="text"
-                                        class="form-control form-control-sm"
-                                        id="mois"
-                                        name="mois"
-                                        value="{{ mois }}"
-                                />
+                                <label for="semestre" class="mr-2">Semestre</label>
+                                <select class="form-select" id="semestre" name="semestre">
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                </select>
                             </div>
                             <div class="form-group form-inline col-2 ml-3">
                                 <label for="annee" class="mr-2">Année</label>
@@ -60,7 +58,7 @@
         var fond = {{ fond|json_encode|raw }};
         var caisse = {{ caisse|json_encode|raw }};
         var sold = {{ sold|json_encode|raw }};
-        var mois = "{{ mois }}";
+        var semestre = "{{ semestre }}";
         var annee = {{ annee }};
         var myComparisonBarChart;
 
@@ -69,7 +67,7 @@
             const monthYearDisplay = document.getElementById("monthYearDisplay");
 
             // Fonction pour créer ou mettre à jour le graphique
-            function createOrUpdateChart(labels, fond, caisse, sold, mois, annee) {
+            function createOrUpdateChart(labels, fond, caisse, sold, semestre, annee) {
                 if (myComparisonBarChart) {
                     myComparisonBarChart.data.labels = labels;
                     myComparisonBarChart.data.datasets[0].data = fond;
@@ -121,15 +119,15 @@
                         }
                     });
                 }
-                // Mettre à jour l'affichage du mois et de l'année
-                monthYearDisplay.textContent = mois + " - " + annee;
+                // Mettre à jour l'affichage du semestre et de l'année
+                monthYearDisplay.textContent = semestre + " - " + annee;
             }
 
             // Créer le graphique initial
-            createOrUpdateChart(labels, fond, caisse, sold, mois, annee);
+            createOrUpdateChart(labels, fond, caisse, sold, semestre, annee);
 
             // Gérer la soumission du formulaire
-            document.getElementById('formulaire').addEventListener('submit', function(e) {
+            document.getElementById('formulaire').addEventListener('submit', function (e) {
                 e.preventDefault();
 
                 const formData = new FormData(this);
@@ -143,7 +141,7 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        createOrUpdateChart(data.labels, data.fond, data.caisse, data.sold, data.mois, data.annee);
+                        createOrUpdateChart(data.labels, data.fond, data.caisse, data.sold, data.semestre, data.annee);
                     })
                     .catch(error => console.error('Error:', error));
             });

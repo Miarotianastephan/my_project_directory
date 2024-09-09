@@ -17,17 +17,13 @@ class DetailTransactionCompte
     #[ORM\Column(name: 'det_trs_cpt_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    /**
-     * @var Collection<int, TransactionType>
-     */
-    #[ORM\OneToMany(targetEntity: TransactionType::class, mappedBy: 'detailTransactionCompte')]
-    private Collection $transaction_type;
+    #[ORM\ManyToOne(targetEntity: TransactionType::class)]
+    #[ORM\JoinColumn(name: "transaction_type_id", referencedColumnName: "trs_id", nullable: false)]
+    private ?TransactionType $transaction_type = null;
 
-    /**
-     * @var Collection<int, PlanCompte>
-     */
-    #[ORM\OneToMany(targetEntity: PlanCompte::class, mappedBy: 'detailTransactionCompte')]
-    private Collection $plan_compte;
+    #[ORM\ManyToOne(targetEntity: PlanCompte::class)]
+    #[ORM\JoinColumn(name: "plan_compte_id", referencedColumnName: "cpt_id", nullable: false)]
+    private ?PlanCompte $plan_compte = null;
 
 
     public function setId(?int $id): void
@@ -41,46 +37,35 @@ class DetailTransactionCompte
     }
 
     /**
-     * @return Collection<int, TransactionType>
+     * @return TransactionType|null
      */
-    public function getTransactionType(): Collection
+    public function getTransactionType(): ?TransactionType
     {
         return $this->transaction_type;
     }
 
     /**
-     * @param Collection $transaction_type
+     * @param TransactionType|null $transaction_type
      */
-    public function setTransactionType(Collection $transaction_type): void
+    public function setTransactionType(?TransactionType $transaction_type): void
     {
         $this->transaction_type = $transaction_type;
     }
 
     /**
-     * @return Collection
+     * @return PlanCompte|null
      */
-    public function getPlanCompte(): Collection
+    public function getPlanCompte(): ?PlanCompte
     {
         return $this->plan_compte;
     }
+
     /**
-     * @param Collection $plan_compte
+     * @param PlanCompte|null $plan_compte
      */
-    public function setPlanCompte(Collection $plan_compte): void
+    public function setPlanCompte(?PlanCompte $plan_compte): void
     {
         $this->plan_compte = $plan_compte;
-    }
-    public function __toString(): string
-    {
-        $transactionTypes = implode(', ', $this->transaction_type->map(fn($t) => (string)$t)->toArray());
-        $planComptes = implode(', ', $this->plan_compte->map(fn($p) => (string)$p)->toArray());
-
-        return sprintf(
-            "DetailTransactionCompte(ID: %d, Transaction Types: [%s], Plan Comptes: [%s])",
-            $this->id ?? 0,
-            $transactionTypes,
-            $planComptes
-        );
     }
 
 }
