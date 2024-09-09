@@ -1,0 +1,83 @@
+
+.display-section {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+ul {
+    margin-top: 6px;
+    list-style-type: none;
+    padding-left: 20px;
+}
+li {
+    margin-bottom: 5px;
+}
+.compte {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+}
+.compte:hover {
+    background-color: #f0f0f0;
+}
+.compte-mere {
+    font-weight: bold;
+    color: #2c3e50;
+}
+.compte-enfant {
+    margin-left: 20px;
+    color: #34495e;
+}
+.actions {
+    display: inline-block;
+    /*display: flex;*/
+    gap: 5px;
+    margin-left: 10px;
+}
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.delete-button:hover {
+    background-color: #c0392b;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.dropdown-button{
+    width: inherit;
+    background-color: #4CAF50;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.dropdown-button:hover {
+    background-color: #45a049;
+}

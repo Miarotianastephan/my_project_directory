@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -24,4 +25,18 @@ class PlanCompteController extends AbstractController
     public function ajouterPlanCompte(){
         return $this->render('plan_compte/plan_compte_add.html.twig');
     }
+
+    #[Route(path: '/import/save', name: 'app_plan_compte.save', methods: ['POST'])]
+    public function sauvegarderImportPlanCompte(Request $request){
+        $data = json_decode($request->getContent(), true);
+
+        foreach($data as $key => $compte){
+            $enfant_count = count($compte['enfants']);
+            if($enfant_count > 0){
+                dump($compte);
+                dump($enfant_count);
+            }
+        }
+    }
+
 }

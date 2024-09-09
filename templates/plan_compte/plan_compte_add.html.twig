@@ -3,38 +3,101 @@
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}Ajouter un nouveau compte{% endblock %}
 {% block page_subtitle %}Gestion plan de compte{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href={{ asset("css/plan_compte/plan_cpt.css") }} /> 
+{% endblock %}
 
 
 {% block page_main_content %}
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Remplissez les champs</div>
             </div>
-            <form id="add_user_form" action="" method="post">
+            <form id="add_cpt_form">
                 <div class="card-body">
                     <div class="row">
                         
                         <div class="row form-group">
                             <div class="col-md-6">
-                                <label for="matricule">Tapez compte mère</label>
-                                <input type="text" name="user_matricule" class="form-control" id="matricule" placeholder="numéro mère"/>
+                                <label for="compte-numero">Tapez le numéro du compte</label>
+                                <input type="text" name="cpt_numero" class="form-control" id="compte-numero" placeholder="Numéro du compte"/>
                             </div>
                             <div class="col-md-6">
-                                <label for="matricule">Tapez compte enfant</label>
-                                <input type="text" name="user_matricule" class="form-control" id="matricule" placeholder="numéro enfant"/>
+                                <label for="ompte-libelle">Tapez le libellé du compte</label>
+                                <input type="text" name="cpt_libelle" class="form-control" id="compte-libelle" placeholder="Libellé du compte"/>
+                            </div>
+                        </div>
+                        <div class="form-group gy-3 mb-3">
+                            <div class="">
+                                <label for="file-input">Insérer une pièce jointe</label>
+                                <input class="form-control" type="file" id="file-input" accept=".xlsx" />
                             </div>
                         </div>
                         
                     </div>
                 </div>
                 <div class="card-action text-end">
-                    <a href="{{ path('demandeur.liste_demande') }}" class="btn btn-dark">Annuler</a>
-                    <button id="displayNotif" type="submit" class="btn btn-secondary">Ajouter</button>
+                    <a href="{{ path('demandeur.liste_demande') }}" class="btn btn-sm btn-dark">Annuler</a>
+                    <button type="submit" id="add-plan" class="btn btn-sm btn-label-primary">Importer depuis Excel</button>
+                    <button type="submit" id="add-compte" class="btn btn-sm btn-secondary">Ajouter Compte</button>
                 </div>
             </form>
         </div>
+        
+<div class="modal" id="modal-edit">
+    <!-- Azo apina class modal-dialog-scrollable dia lasa scrollena -->
+    <div action="" class="modal-dialog modal-dialog-centered tablelist-form" autocomplete="off" id="formModalUpdate">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title formModalUpdate_title" id="exampleModalLabel">Fiche de mise à jour</h5>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- Section dynamique par JS-->
+                <div id="sectionUpdate">
+                    <div class="form-group">
+                        <label for="edit-numero">Modifier le numéro du compte</label>
+                        <input type="text" class="form-control" id="edit-numero" placeholder="Numéro de compte">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-libelle">Modifier le libellé du compte</label>
+                        <input type="text" class="form-control" id="edit-libelle" placeholder="Libellé du compte">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button id="save-modif" class="btn btn-secondary">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <form id="form_save_compte" action="{{ path('app_plan_compte.save') }}" class="card-title">
+                    Hiérarchie des comptes
+                    <button type="submit" id="save-compte" class="btn btn-xs btn-primary">Sauvegarder</button>
+                </form> 
+            </div>
+            <div class="card-body">
+                <ul id="hierarchie-comptes"></ul>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/xhr.js") }}"></script>
+    <script src="{{ asset("js/scr/plan_compte/plan_cpt.js") }}"></script>
+    <script src="{{ asset("/js/plugin/xlsx/xlsx.full.min.js") }}"></script>
 {% endblock %}
