@@ -17,7 +17,7 @@ class DemandeType
     #[ORM\Column(name: 'dm_type_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: 'customdate')]
     private ?\DateTimeInterface $dm_date = null;
 
     #[ORM\Column]
@@ -72,8 +72,8 @@ class DemandeType
     #[ORM\Column(nullable: false,options: ["default" => 0])]
     private ?float $montant_reel = 0;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $mere_id = null;
+    // #[ORM\Column(nullable: true)]
+    // private ?int $mere_id = null;
 
     public function __construct()
     {
@@ -277,15 +277,15 @@ class DemandeType
         return $this;
     }
 
-    public function getMereId(): ?int
-    {
-        return $this->mere_id;
-    }
+    // public function getMereId(): ?int
+    // {
+    //     return $this->mere_id;
+    // }
 
-    public function setMereId(?int $mere_id): static
-    {
-        $this->mere_id = $mere_id;
+    // public function setMereId(?int $mere_id): static
+    // {
+    //     $this->mere_id = $mere_id;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

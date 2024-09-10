@@ -7,10 +7,10 @@
 {% endblock %} #}
 
 {% block page_title %}
-    Trésorier
+    Demandeur
 {% endblock %}
 {% block page_subtitle %}
-    Liste des demandes validées sans pièce justificative
+    Information de la demande
 {% endblock %}
 
 {% block page_main_content %}
@@ -66,8 +66,8 @@
 
                                     <label class="selectgroup-item">
                                         <input class="selectgroup-input" type="radio" name="type"
-                                               value="facture_proformat" checked="checked">
-                                        <span class="selectgroup-button">Facture proformat</span>
+                                               value="bon_livraison" checked="checked">
+                                        <span class="selectgroup-button">PJ bon de livraison</span>
                                     </label>
                                 </div>
                             </div>
@@ -77,7 +77,7 @@
                             <!--<input class="col form-control-file" type="file" id="image" name="image">-->
                             <div class="col input-group">
                                 <label class="input-group-text" for="customFile">
-                                    <i class="bi bi-file-earmark-image">icon no eto</i>
+                                    <i class="bi bi-file-earmark-image">PJ</i>
                                 </label>
                                 <input type="file" class="form-control visually-hidden"
                                        id="customFile" accept="image/*,.xls,.xlsx,.txt,.pdf"
@@ -213,7 +213,7 @@
 
 {% endblock %}
 
-{% block js_script %}
+{% block javascripts %}
     <!-- Datatables -->
     <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
 {% endblock %}

@@ -24,3 +24,4 @@
 /assets/vendor/
 /public/images/pieces/
 ###< symfony/asset-mapper ###
+/migrations/*.php

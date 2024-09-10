@@ -19,17 +19,57 @@
 -- insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values 
 -- (user_seq.NEXTVAL,'2060',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='SG'));
 
--- insert into demande_type 
--- (DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
--- values (
---     demande_type_seq.NEXTVAL,
---     (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_libelle='Caisse Siege'),
---     (select u.user_id from utilisateur u where u.user_matricule='1989'),
---     (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_libelle='Social (Prime diverse)'),
---     (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
---     (select d.dm_id from demande d where d.libelle='Decaissement'),
---     TO_DATE('27-08-2024','DD-MM-YYYY'),20000000,'Cheque','REF_001',10)
---     ;
+insert into demande_type 
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
+values (
+    demande_type_seq.NEXTVAL,
+    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
+    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
+    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
+    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+    (select d.dm_id from demande d where d.libelle='Decaissement'),
+    TO_DATE('27-08-2024','DD-MM-YYYY'),20000000,'Cheque','REF_001',10)
+    ;
+
+
+insert into demande_type
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
+values (
+    demande_type_seq.NEXTVAL,
+    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
+    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
+    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
+    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+    (select d.dm_id from demande d where d.libelle='Decaissement'),
+    TO_DATE('27-08-2024','DD-MM-YYYY'),500000,'Espece','REF_002',10)
+    ;
+
+insert into demande_type
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
+values (
+    demande_type_seq.NEXTVAL,
+    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
+    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
+    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
+    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+    (select d.dm_id from demande d where d.libelle='Decaissement'),
+    TO_DATE('27-08-2024','DD-MM-YYYY'),200000,'Espece','REF_003',10)
+    ;
+
+insert into demande_type
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
+values (
+    demande_type_seq.NEXTVAL,
+    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
+    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
+    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
+    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+    (select d.dm_id from demande d where d.libelle='Decaissement'),
+    TO_DATE('27-08-2024','DD-MM-YYYY'),200000,'Espece','REF_004',10)
+    ;
+
+    
+
 
 -- insert into demande_type 
 -- (DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
@@ -222,3 +262,4 @@ VALUES (?, ?, ?, ?, ?)
 ) params={"1":81,"2":"euclid","3":"2024-08-30 00:00:00","4":"[\"ROLE_USER\"]","5":1} 
 sql="INSERT INTO utilisateur (user_id, user_matricule, dt_ajout, roles, grp_id) VALUES (?, ?, ?, ?, ?)" 
 types={"1":1,"2":2,"3":2,"4":2,"5":1}
+

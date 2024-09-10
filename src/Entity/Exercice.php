@@ -15,10 +15,10 @@ class Exercice
     #[ORM\Column(name: 'exercice_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: 'customdate')]
     private ?\DateTimeInterface $exercice_date_debut = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: 'customdate', nullable: true)]
     private ?\DateTimeInterface $exercice_date_fin = null;
 
     public function getId(): ?int

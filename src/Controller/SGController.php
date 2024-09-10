@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\DemandeType;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/sg')]
 class SGController extends AbstractController
-{
+{    
+    private $user;
+
+    public function __construct(Security $security)
+    {
+        // $this->security = $security;
+        $this->user = $security->getUser(); 
+    }
 
     #[Route(path: '/', name: 'SG.liste_demande_en_attente', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_Repository): Response
@@ -51,8 +60,8 @@ class SGController extends AbstractController
     #[Route('/valider_demande/{id}', name: 'valider_demande', methods: ['POST'])]
     public function valider_demande($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-        $id_user_sg = 2;
-
+        $id_user_sg = $this->user->getId(); // mandeha io 
+        
         $rep = $logDemandeTypeRepository->ajoutValidationDemande($id, $id_user_sg);
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {
@@ -73,7 +82,7 @@ class SGController extends AbstractController
     public function refuser_demande($id, Request $request, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
 
-        $id_user_sg = 2;
+        $id_user_sg = $this->user->getId();
         $data = json_decode($request->getContent(), true);
         $commentaire_data = $data['commentaire'] ?? null;
 

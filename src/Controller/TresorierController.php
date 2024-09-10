@@ -11,6 +11,7 @@ use App\Repository\LogDemandeTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,6 +19,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/tresorier')]
 class TresorierController extends AbstractController
 {
+    private $user;
+
+    public function __construct(Security $security)
+    {
+        // $this->security = $security;
+        $this->user = $security->getUser(); 
+    }
     #[Route('/', name: 'tresorier.liste_demande_en_attente', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
@@ -45,8 +53,8 @@ class TresorierController extends AbstractController
     #[Route('/remettre_fond/{id}', name: 'tresorier.remettre_fond', methods: ['POST'])]
     public function remettre_fond($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-
-        $id_user_tresorier = 3;
+        
+        $id_user_tresorier = $this->user->getId();
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier);
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {

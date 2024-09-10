@@ -11,6 +11,7 @@ use App\Service\DemandeTypeService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,13 @@ use function MongoDB\BSON\toJSON;
 #[Route('/demande_piece')]
 class DemandePieceController extends AbstractController
 {
+    private $user;
+
+    public function __construct(Security $security)
+    {
+        // $this->security = $security;
+        $this->user = $security->getUser(); 
+    }
     #[Route(path: '/', name: 'dm_piece.liste_demande', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_rep): Response
     {
@@ -44,7 +52,7 @@ class DemandePieceController extends AbstractController
                                 DetailDemandePieceRepository $dt_dm_rep,
                                 DemandeTypeService $dm_type_service)
     {
-        $demande_user_id = 1;
+        $demande_user_id = $this->user->getId();
         $type = $request->request->get('type');
         $file = $request->files->get('image');
         $montant_reel = $request->request->get('montant_reel');
