@@ -75,5 +75,6 @@
 
 {% block javascripts %}
     <!-- Datatables -->
+    {{ parent() }} 
     <script src="{{ asset("js/plugin/datatables/datatables.min.js") }}"></script>
 {% endblock %}

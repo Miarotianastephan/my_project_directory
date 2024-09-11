@@ -31,13 +31,13 @@ class CompteMereRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?CompteMere
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+       public function findByCptNumero($compteNumero): ?CompteMere
+       {
+           return $this->createQueryBuilder('c')
+               ->andWhere('c.CptNumero = :val')
+               ->setParameter('val', $compteNumero)
+               ->getQuery()
+               ->getOneOrNullResult()
+           ;
+       }
 }

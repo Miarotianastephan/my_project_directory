@@ -1,0 +1,55 @@
+
+<li class="nav-section">
+    <span class="sidebar-mini-icon">
+    <i class="fa fa-ellipsis-h"></i>
+    </span>
+    <h4 class="text-section">Admin</h4>
+</li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#addUser">
+        <i class="fas fa-th-list"></i>
+        <p>Gestion utilisateur</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="addUser">
+    <ul class="nav nav-collapse">
+        <li>
+        <a href="{{ path("admin_users") }}">
+            <span class="sub-item">Lister les utilisateurs</span>
+        </a>
+        </li>
+        <li>
+        <a href="{{ path("admin_add_user") }}">
+            <span class="sub-item">Ajouter un utilisateur</span>
+        </a>
+        </li>
+        <li>
+        <a href="{{ path("app_groupe_utilisateur_index") }}">
+            <span class="sub-item">Gérer les groupes</span>
+        </a>
+        </li>
+    </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#planComptable">
+        <i class="fas fa-th-list"></i>
+        <p>Gestion plan comptable</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="planComptable">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('app_plan_compte') }}">
+                    <span class="sub-item">Plan de Compte</span>
+                </a>
+                <a href="{{ path('app_plan_compte.import') }}">
+                    <span class="sub-item">Importer les données</span>
+                </a>
+                <a href="{{ path('app_plan_compte.add') }}">
+                    <span class="sub-item">Insérer manuellement</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
