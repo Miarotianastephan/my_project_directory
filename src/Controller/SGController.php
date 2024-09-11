@@ -47,7 +47,15 @@ class SGController extends AbstractController
     public function valider($id, DemandeTypeRepository $dm_Repository): Response
     {
         $data = $dm_Repository->find($id);
-        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data]);
+        if (!$data){
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Demande introuvable',
+            ]);
+        }
+        $plan_compte = $data -> getEntityCode();
+        $montant = 20000 ;
+        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data,'montant'=>$montant]);
     }
 
     #[Route('/demande/refuser/{id}', name: 'SG.refus_demande_en_attente', methods: ['GET'])]

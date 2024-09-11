@@ -65,12 +65,16 @@ class DemandePieceController extends AbstractController
         // Définir le répertoire de destination pour le fichier téléchargé
         // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
         try {
-            $newFilename = $dm_type_service->uploadImage($file, $this->getParameter('uploads_directory'));
-            $rep = $dt_dm_rep->ajoutPieceJustificatif($id, $demande_user_id, $type, $newFilename, $montant_reel);
-            $data = json_decode($rep->getContent(), true);
+            return new JsonResponse(['success' => false,
+                'message' =>count($file)]);
 
-            $dm_type = $data['dm_type'];
-            if ($data['success'] == true) {
+
+            //$newFilename = $dm_type_service->uploadImage($file, $this->getParameter('uploads_directory'));
+            //$rep = $dt_dm_rep->ajoutPieceJustificatif($id, $demande_user_id, $type, $newFilename, $montant_reel);
+            //$data = json_decode($rep->getContent(), true);
+
+            //$dm_type = $data['dm_type'];
+            /*if ($data['success'] == true) {
                 //dump($newFilename ."<------------ XXXXXXXXXX");
 
                 return new JsonResponse([
@@ -83,7 +87,7 @@ class DemandePieceController extends AbstractController
                     'success' => false,
                     'message' => $data['message']
                 ]);
-            }
+            }*/
         } catch (\Exception $e) {
             dump('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
             return new JsonResponse([

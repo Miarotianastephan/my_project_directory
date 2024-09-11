@@ -24,8 +24,9 @@ class TresorierController extends AbstractController
     public function __construct(Security $security)
     {
         // $this->security = $security;
-        $this->user = $security->getUser(); 
+        $this->user = $security->getUser();
     }
+
     #[Route('/', name: 'tresorier.liste_demande_en_attente', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
@@ -44,16 +45,19 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
-    public function valider_fond($id, EntityManagerInterface $entityManager): Response
+    public function valider_fond($id, DemandeTypeRepository $dm_type): Response
     {
-        $data = $entityManager->find(DemandeType::class, $id);
-        return $this->render('tresorier/deblocker_fond.html.twig', ['demande_type' => $data]);
+        $data = $dm_type->find($id);
+        $montant = 20000;
+        return $this->render('tresorier/deblocker_fond.html.twig',
+            ['demande_type' => $data, 'montant' => $montant]
+        );
     }
 
     #[Route('/remettre_fond/{id}', name: 'tresorier.remettre_fond', methods: ['POST'])]
     public function remettre_fond($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-        
+
         $id_user_tresorier = $this->user->getId();
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier);
         $data = json_decode($rep->getContent(), true);

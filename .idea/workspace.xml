@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/my_project_directory.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/my_project_directory.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,6 +167,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/ux-icons" />
       <path value="$PROJECT_DIR$/vendor/jms/metadata" />
       <path value="$PROJECT_DIR$/vendor/vich/uploader-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -176,7 +188,7 @@
     "PHP Script.AdminController.php.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "branch__integration__v2",
+    "git-widget-placeholder": "integration__v2__2",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
