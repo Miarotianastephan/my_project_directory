@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\CompteMere;
 use App\Entity\DetailBudget;
+use App\Entity\Exercice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +16,17 @@ class DetailBudgetRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DetailBudget::class);
+    }
+
+    public function findByExerciceEtCpt(Exercice $exercice, CompteMere $compteMere ): ?DetailBudget{
+        $data= $this->createQueryBuilder('d')
+            ->andWhere('d.exercice = :ex')
+            ->andWhere('d.compte_mere = :cpt')
+            ->setParameter('ex', $exercice)
+            ->setParameter('cpt', $compteMere)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $data;
     }
 
     //    /**

@@ -23,12 +23,14 @@ use function MongoDB\BSON\toJSON;
 class DemandePieceController extends AbstractController
 {
     private $user;
+    private $megaByte = 1048576;
 
     public function __construct(Security $security)
     {
         // $this->security = $security;
-        $this->user = $security->getUser(); 
+        $this->user = $security->getUser();
     }
+
     #[Route(path: '/', name: 'dm_piece.liste_demande', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_rep): Response
     {
@@ -54,45 +56,65 @@ class DemandePieceController extends AbstractController
     {
         $demande_user_id = $this->user->getId();
         $type = $request->request->get('type');
-        $file = $request->files->get('image');
         $montant_reel = $request->request->get('montant_reel');
-        if (!$file) {
-            return new JsonResponse([
+
+
+        $files = $request->files->get('image');
+
+        if (empty($files)) {
+            return $this->json([
                 'success' => false,
-                'message' => 'Pas de fichier trouver'
+                'message' => 'Aucun fichier trouvé'
             ]);
+        }
+        $uploadedFiles = [];
+        $errors = [];
+
+
+        foreach ($files as $file) {
+            if ($file) {
+                //taille de chaque fichier
+                // Récupérer la taille du fichier en octets
+                $fileSizeInBytes = $file->getSize() / $this->megaByte;
+                dump("La taille du fichier=" . $fileSizeInBytes . "Mb \n le nom du fichier=" . $file->getClientOriginalName());
+                if ($fileSizeInBytes > 1) {
+                    return $this->json([
+                        'success' => false,
+                        'message' => 'Le fichier ' . $file->getClientOriginalName() . ' est trop volimineux'
+                    ]);
+                }
+            }
         }
         // Définir le répertoire de destination pour le fichier téléchargé
         // Assurez-vous que le paramètre 'uploads_directory' est défini dans config/services.yaml
-        try {
-            return new JsonResponse(['success' => false,
-                'message' =>count($file)]);
+        foreach ($files as $file) {
+            try {
+                $newFilename = $dm_type_service->uploadImage($file, $this->getParameter('uploads_directory'));
+                $rep = $dt_dm_rep->ajoutPieceJustificatif($id, $demande_user_id, $type, $newFilename, $montant_reel);
+                $data = json_decode($rep->getContent(), true);
 
-
-            //$newFilename = $dm_type_service->uploadImage($file, $this->getParameter('uploads_directory'));
-            //$rep = $dt_dm_rep->ajoutPieceJustificatif($id, $demande_user_id, $type, $newFilename, $montant_reel);
-            //$data = json_decode($rep->getContent(), true);
-
-            //$dm_type = $data['dm_type'];
-            /*if ($data['success'] == true) {
-                //dump($newFilename ."<------------ XXXXXXXXXX");
-
-                return new JsonResponse([
-                    'success' => true,
-                    'message' => 'Upload reussi',
-                    'path' => $this->generateUrl('dm_piece.liste_demande')
-                ]);
-            } else {
-                return new JsonResponse([
-                    'success' => false,
-                    'message' => $data['message']
-                ]);
-            }*/
-        } catch (\Exception $e) {
-            dump('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
-            return new JsonResponse([
+                if ($data['success']) {
+                    $uploadedFiles[] = $newFilename;
+                } else {
+                    $errors[] = $data['message'];
+                }
+            } catch (\Exception $e) {
+                $errors[] = 'Erreur lors du téléchargement du fichier ' . $file->getClientOriginalName() . ' : ' . $e->getMessage();
+            }
+        }
+        if (empty($errors)) {
+            return $this->json([
+                'success' => true,
+                'message' => count($uploadedFiles) . ' fichier(s) téléchargé(s) avec succès',
+                'files' => $uploadedFiles,
+                'path' => $this->generateUrl('dm_piece.liste_demande')
+            ]);
+        } else {
+            return $this->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Des erreurs sont survenues lors du téléchargement',
+                'errors' => $errors,
+                'files' => $uploadedFiles
             ]);
         }
     }

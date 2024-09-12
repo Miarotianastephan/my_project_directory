@@ -16,28 +16,20 @@
                     <div class="card-header">
                         <h4 class="card-title">REFUSER LA DEMANDE?</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column gap-4">
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">
-                                Rérérence:
-                            </div>
-                            <div class="col">
-                                {{ demande_type.RefDemande }}
-                            </div>
+                            <label class="col-3 form-control-lg"> Rérérence: </label>
+                            <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <div class="col-3">
-                                <label for="commentaire">
+                                <label for="commentaire" class="col-3 form-control-lg">
                                     Motif du refus de la demande:
                                 </label>
-                            </div>
-                            <div class="col">
-                                <textarea id="commentaire" class="form-control" name="commentaire" placeholder="Remarque"></textarea>
-                            </div>
+                                <textarea id="commentaire" class="col form-control" name="commentaire" placeholder="Remarque"></textarea>
                         </div>
                         <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button id="valider" type="submit" class="btn btn-success btn-sm">Refuser</button>
                             <button id="annuler" type="button" class="btn btn-danger btn-sm">Annuler</button>
+                            <button id="valider" type="submit" class="btn btn-success btn-sm">Refuser</button>
                         </div>
                     </div>
                 </div>
@@ -74,8 +66,12 @@
                     //console.log(data.message); // Affiche une propriété spécifique, si elle existe
                     //alert(data.path); // Affiche un message reçu du contrôleur
 
-                    //Manao redirect makany amin'ny list demande en attente
-                    window.location.href = data.path;
+                    if (!data.success){
+                        alert(data.message)
+                    }else{
+                        //Manao redirect makany amin'ny list demande en attente
+                        window.location.href = data.path;
+                    }
                 })
                 .catch(error => console.error('Erreur:', error));
         });

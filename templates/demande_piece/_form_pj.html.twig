@@ -81,7 +81,7 @@
                                 </label>
                                 <input type="file" class="form-control visually-hidden"
                                        id="customFile" accept="image/*,.xls,.xlsx,.txt,.pdf"
-                                       onchange="showFiles(this)" name="image" multiple>
+                                       onchange="showFiles(this)" name="image[]" multiple>
                                 <button class="btn bg-dark-subtle" type="button"
                                         onclick="document.getElementById('customFile').click()">
                                     parcourir les documents
@@ -163,7 +163,7 @@
                     reader.onload = function (e) {
                         preview.innerHTML = `
                     <img src="${e.target.result}" alt="Preview" class="img-fluid rounded">
-                    <div class="text-center mt-2">
+                    <div class="text-center">
                         <span class="badge bg-secondary">${file.name}</span>
                     </div>
                 `;

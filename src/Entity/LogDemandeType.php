@@ -28,7 +28,7 @@ class LogDemandeType
     private ?string $user_matricule = null;
 
     #[ORM\ManyToOne(targetEntity: DemandeType::class, inversedBy: 'logDemandeTypes')]
-    #[ORM\JoinColumn(name: "demande_type_id", referencedColumnName: "dm_type_id",nullable: false)]
+    #[ORM\JoinColumn(name: "demande_type_id", referencedColumnName: "dm_type_id", nullable: false)]
     private ?DemandeType $demande_type = null;
 
     public function getId(): ?int
@@ -41,11 +41,38 @@ class LogDemandeType
         return $this->log_dm_date;
     }
 
-    public function setLogDmDate(\DateTimeInterface $log_dm_date): static
+    public function setLogDmDate(\DateTimeInterface|string $log_dm_date): static
     {
+
+        if (is_string($log_dm_date)) {
+            // Si c'est une chaîne de caractères, tente de la convertir au format souhaité
+            $date = \DateTime::createFromFormat('d-M-y', $log_dm_date);
+            if ($date === false) {
+                // Gérer l'erreur si le format de la date est incorrect
+                throw new \InvalidArgumentException("Date invalide. Utilisez le format 'd-M-y'.");
+            }else {
+                // Si c'est déjà un objet DateTimeInterface (comme DateTimeImmutable), on l'utilise directement
+                $date = \DateTimeImmutable::createFromInterface($log_dm_date);
+            }
+            // Convertit en DateTimeImmutable
+            $date = \DateTimeImmutable::createFromMutable($date);
+        }
         $this->log_dm_date = $log_dm_date;
 
         return $this;
+    }
+
+    public function setDate(\DateTimeInterface|string $date_ajout):static
+    {
+        $dateString = $date_ajout;
+        $date = \DateTime::createFromFormat('d-M-y', $dateString);
+        if ($date) {
+            $formattedDate = $date->format('Y-m-d H:i:s');
+            // Use $formattedDate in your Doctrine operations
+            $this->log_dm_date = $formattedDate;
+        }
+        return $this;
+
     }
 
     public function getDmEtat(): ?int

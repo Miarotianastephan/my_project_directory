@@ -1,70 +1,83 @@
-insert into groupe_utilisateur (grp_id,grp_libelle,grp_niveau) values (grp_seq.NEXTVAL,'Tsotra',10);
-insert into groupe_utilisateur (grp_id,grp_libelle,grp_niveau) values (grp_seq.NEXTVAL,'SG',20);
-insert into groupe_utilisateur (grp_id,grp_libelle,grp_niveau) values (grp_seq.NEXTVAL,'Tresorier',30);
+insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau)
+values (grp_seq.NEXTVAL, 'Tsotra', 10);
+insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau)
+values (grp_seq.NEXTVAL, 'SG', 20);
+insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau)
+values (grp_seq.NEXTVAL, 'Tresorier', 30);
 
-insert into demande (dm_id,libelle) values (demande_seq.NEXTVAL,'Decaissement');
+insert into demande (dm_id, libelle)
+values (demande_seq.NEXTVAL, 'Decaissement');
 
-insert into exercice (exercice_id,exercice_date_debut) values (exercice_seq.NEXTVAL,TO_DATE('01-01-2004','DD-MM-YYYY'));
+insert into exercice (exercice_id, exercice_date_debut)
+values (exercice_seq.NEXTVAL, TO_DATE('01-01-2004', 'DD-MM-YYYY'));
 
 --insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values (user_seq.NEXTVAL,'1989',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tsotra'));
 --insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values (user_seq.NEXTVAL,'1846',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tresorier'));
 --insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values (user_seq.NEXTVAL,'2060',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='SG'));
 
-insert into demande_type 
-(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
-values (
-    demande_type_seq.NEXTVAL,
-    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
-    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
-    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
-    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
-    (select d.dm_id from demande d where d.libelle='Decaissement'),
-    TO_DATE('27-08-2024','DD-MM-YYYY'),20000000,'Cheque','REF_001',10)
-    ;
+insert into demande_type
+(DM_TYPE_ID, ENTITY_CODE_ID, UTILISATEUR_ID, PLAN_COMPTE_ID, EXERCICE_ID, DM_ID, DM_DATE, DM_MONTANT, DM_MODE_PAIEMENT,
+ REF_DEMANDE, DM_ETAT)
+values (demande_type_seq.NEXTVAL,
+        (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero = '510001'),
+        (select u.user_id from utilisateur u where u.user_matricule = 'tesla'),
+        (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero = '611000'),
+        (select e.exercice_id from exercice e where e.exercice_date_debut = TO_DATE('01-01-2004', 'DD-MM-YYYY')),
+        (select d.dm_id from demande d where d.libelle = 'Decaissement'),
+        TO_DATE('27-08-2024', 'DD-MM-YYYY'), 20000000, 'Cheque', 'REF_001', 10)
+;
 
 
 insert into demande_type
-(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
-values (
-    demande_type_seq.NEXTVAL,
-    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
-    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
-    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
-    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
-    (select d.dm_id from demande d where d.libelle='Decaissement'),
-    TO_DATE('27-08-2024','DD-MM-YYYY'),500000,'Espece','REF_002',10)
-    ;
+(DM_TYPE_ID, ENTITY_CODE_ID, UTILISATEUR_ID, PLAN_COMPTE_ID, EXERCICE_ID, DM_ID, DM_DATE, DM_MONTANT, DM_MODE_PAIEMENT,
+ REF_DEMANDE, DM_ETAT)
+values (demande_type_seq.NEXTVAL,
+        (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero = '510001'),
+        (select u.user_id from utilisateur u where u.user_matricule = 'tesla'),
+        (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero = '611000'),
+        (select e.exercice_id from exercice e where e.exercice_date_debut = TO_DATE('01-01-2004', 'DD-MM-YYYY')),
+        (select d.dm_id from demande d where d.libelle = 'Decaissement'),
+        TO_DATE('27-08-2024', 'DD-MM-YYYY'), 500000, 'Espece', 'REF_002', 10)
+;
 
 insert into demande_type
-(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT)
-values (
-    demande_type_seq.NEXTVAL,
-    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
-    (select u.user_id from utilisateur u where u.user_matricule='1989'),
-    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
-    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
-    (select d.dm_id from demande d where d.libelle='Decaissement'),
-    TO_DATE('27-08-2024','DD-MM-YYYY'),200000,'Espece','REF_003',10)
-    ;
+(DM_TYPE_ID, ENTITY_CODE_ID, UTILISATEUR_ID, PLAN_COMPTE_ID, EXERCICE_ID, DM_ID, DM_DATE, DM_MONTANT, DM_MODE_PAIEMENT,
+ REF_DEMANDE, DM_ETAT)
+values (demande_type_seq.NEXTVAL,
+        (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero = '510001'),
+        (select u.user_id from utilisateur u where u.user_matricule = '1989'),
+        (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero = '611000'),
+        (select e.exercice_id from exercice e where e.exercice_date_debut = TO_DATE('01-01-2004', 'DD-MM-YYYY')),
+        (select d.dm_id from demande d where d.libelle = 'Decaissement'),
+        TO_DATE('27-08-2024', 'DD-MM-YYYY'), 200000, 'Espece', 'REF_003', 10)
+;
 
 insert into demande_type
-(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,REF_DEMANDE,DM_ETAT) 
-values (
-    demande_type_seq.NEXTVAL,
-    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
-    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
-    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
-    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
-    (select d.dm_id from demande d where d.libelle='Decaissement'),
-    TO_DATE('27-08-2024','DD-MM-YYYY'),200000,'Espece','REF_004',10)
-    ;
+(DM_TYPE_ID, ENTITY_CODE_ID, UTILISATEUR_ID, PLAN_COMPTE_ID, EXERCICE_ID, DM_ID, DM_DATE, DM_MONTANT, DM_MODE_PAIEMENT,
+ REF_DEMANDE, DM_ETAT)
+values (demande_type_seq.NEXTVAL,
+        (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero = '510001'),
+        (select u.user_id from utilisateur u where u.user_matricule = 'tesla'),
+        (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero = '611000'),
+        (select e.exercice_id from exercice e where e.exercice_date_debut = TO_DATE('01-01-2004', 'DD-MM-YYYY')),
+        (select d.dm_id from demande d where d.libelle = 'Decaissement'),
+        TO_DATE('27-08-2024', 'DD-MM-YYYY'), 200000, 'Espece', 'REF_004', 10)
+;
 
-insert into budget_type (BUDGET_TYPE_ID,LIBELLE) values (budget_type_seq.NEXTVAL,'Depense');
-insert into budget_type (BUDGET_TYPE_ID,LIBELLE) values (budget_type_seq.NEXTVAL,'Investissement');
-insert into budget_type (BUDGET_TYPE_ID,LIBELLE) values (budget_type_seq.NEXTVAL,'Fonctionnement');
+insert into budget_type (BUDGET_TYPE_ID, LIBELLE)
+values (budget_type_seq.NEXTVAL, 'Depense');
+insert into budget_type (BUDGET_TYPE_ID, LIBELLE)
+values (budget_type_seq.NEXTVAL, 'Investissement');
+insert into budget_type (BUDGET_TYPE_ID, LIBELLE)
+values (budget_type_seq.NEXTVAL, 'Fonctionnement');
 
-insert into detail_budget (DETAIL_BUDGET_ID,BUDGET_MONTANT,BUDGET_DATE,BUDGET_TYPE_ID,EXERCICE_ID,COMPTE_MERE_ID)
-values (detail_budget_seq.NEXTVAL,20000,TO_DATE('27-08-2024','DD-MM-YYYY'));
+insert into detail_budget (DETAIL_BUDGET_ID, BUDGET_MONTANT, BUDGET_DATE, BUDGET_TYPE_ID, EXERCICE_ID, COMPTE_MERE_ID)
+values (detail_budget_seq.NEXTVAL,
+        20000,
+        TO_DATE('27-08-2024', 'DD-MM-YYYY'),
+        (select b.BUDGET_TYPE_ID from BUDGET_TYPE b where b.LIBELLE = 'Depense'),
+        (select e.exercice_id from exercice e where e.exercice_date_debut = TO_DATE('01-01-2004', 'DD-MM-YYYY')),
+        (select cpt.ID from compte_mere cpt where cpt.CPT_NUMERO = 61));
 
 
 
@@ -79,7 +92,6 @@ values (detail_budget_seq.NEXTVAL,20000,TO_DATE('27-08-2024','DD-MM-YYYY'));
 --     (select d.dm_id from demande d where d.libelle='Decaissement'),
 --     TO_DATE('27-08-2024','DD-MM-YYYY'),900000,'Cheque','REF_001',10)
 --     ;
-
 
 
 --INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,9,DEFAULT,10,24);
@@ -228,25 +240,61 @@ INSERT INTO plan_compte (cpt_id, cpt_numero, cpt_libelle) VALUES (cpt_seq.NEXTVA
 */
 
 
-INSERT INTO transaction_type (TRS_ID,TRS_CODE,TRS_DEFINITION,TRS_LIBELLE) VALUES (trs_seq.NEXTVAL, 'CE-007', NULL,'Depense payees directement pas BFM');
-INSERT INTO transaction_type (TRS_ID,TRS_CODE,TRS_DEFINITION,TRS_LIBELLE) VALUES (trs_seq.NEXTVAL, 'CE-011', NULL,'Comptabilisation de frais bancaire');
+INSERT INTO transaction_type (TRS_ID, TRS_CODE, TRS_DEFINITION, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL, 'CE-007', NULL, 'Depense payees directement pas BFM');
+INSERT INTO transaction_type (TRS_ID, TRS_CODE, TRS_DEFINITION, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL, 'CE-011', NULL, 'Comptabilisation de frais bancaire');
 
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442750'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442710'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442720'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442730'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '442740'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '67'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670001'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670002'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670003'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670004'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),(select cpt_id from plan_compte where cpt_numero = '670005'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '442750'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '442710'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '442720'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '442730'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '442740'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '67'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '670001'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '670002'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '670003'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '670004'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
+        (select cpt_id from plan_compte where cpt_numero = '670005'));
 
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '67'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670001'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670002'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670003'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670004'));
-INSERT INTO DETAIL_TRANSACTION_COMPTE ( DET_TRS_CPT_ID,TRANSACTION_TYPE_ID,PLAN_COMPTE_ID) VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),(select cpt_id from plan_compte where cpt_numero = '670005'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
+        (select cpt_id from plan_compte where cpt_numero = '67'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
+        (select cpt_id from plan_compte where cpt_numero = '670001'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
+        (select cpt_id from plan_compte where cpt_numero = '670002'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
+        (select cpt_id from plan_compte where cpt_numero = '670003'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
+        (select cpt_id from plan_compte where cpt_numero = '670004'));
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
+        (select cpt_id from plan_compte where cpt_numero = '670005'));
 

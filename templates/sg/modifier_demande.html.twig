@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande{% endblock %}
+{% block page_title %}
+    SG
+{% endblock %}
+{% block page_subtitle %}
+    Liste des demandes en attente de validation
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row align-items-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">À propos de la demande {{ demande_type.Id }}</h4>
+                    <div class="text-end">
+                        <h3>
+                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
+                        </h3>
+                    </div>
+                </div>
+                <form id="formulaire" action="{{ path('sg.modifier', {'id': demande_type.Id}) }}">
+                    <div class="card-body col-12 px-md-5 d-flex flex-row" >
+                        <div class="col-1">
+                            <button style="border: none; background-color: transparent; text-align: start">
+                                <a href="{{ path('SG.liste_demande_en_attente') }}">
+                                    {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%', color:'#2a2f5b'}) }}
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col py-2 px-1 d-flex flex-column gap-3">
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Référence:</label>
+                                <div class="col form-control">{{ demande_type.RefDemande }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Remettant:</label>
+                                <div class="col form-control">{{ demande_type.utilisateur.UserMatricule }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Date de la demande:</label>
+                                <div class="col form-control">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Type de demande:</label>
+                                <div class="col form-control">{{ demande_type.demande.libelle }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Motif de la demande:</label>
+                                <div class="col form-control">
+                                    {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Montant de la demande:</label>
+                                <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }}Ar
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Type de paiement:</label>
+                                <div class="col form-control">{{ demande_type.DmModePaiement }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Personne concernée:</label>
+                                <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label for="commentaire" class="col-4 form-control-lg">
+                                    Ajout de remarque:
+                                </label>
+                                <textarea id="commentaire" class="col form-control" name="commentaire"
+                                          placeholder="suggestion de modification"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="annuler" name="annuler" value="annuler" class="btn btn-danger btn">ANNULER</button>
+                        <button id="modifier" name="modifier" value="modifier" class="btn btn-primary btn">MODIFIER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        //ajout de commentaire de modifier
+        var form = document.getElementById('formulaire');
+        document.getElementById('annuler').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/sg'; // Redirige vers une autre page en cas d'annulation
+        });
+        document.getElementById('modifier').addEventListener('click', function (e) {
+            e.preventDefault();
+            // Récupérer la valeur du champ commentaire
+            var commentaire = document.getElementById('commentaire').value;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    "commentaire": commentaire
+                })
+            })
+                .then(response => {
+                    // Vérifie si la réponse est OK (status entre 200 et 299)
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau : ' + response.status);
+                    }
+                    // Convertir la réponse en JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // Affichez les données reçues du contrôleur
+                    //alert(data.message);
+                    if (!data.success){
+                        alert(data.message)
+                    }else{
+                        //Manao redirect makany amin'ny list demande en attente
+                        window.location.href = data.path;
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+        });
+    </script>
+{% endblock %}

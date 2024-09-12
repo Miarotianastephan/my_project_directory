@@ -17,7 +17,7 @@
                         <h4 class="card-title">VALIDER LA DEMANDE? </h4>
                         <div class="text-end">
                             <h3>
-                                Montant restant : {{ montant|number_format(2, '.', ' ') }} Ar
+                                Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
                             </h3>
                         </div>
                     </div>
@@ -54,19 +54,22 @@
                         </div>
                     </div>
                     <div class="card-footer py-3 px-5 d-grid gap-3 d-md-flex justify-content-md-end">
-                        <button id="valider" type="submit" class="btn btn-success btn">Valider</button>
-                        <button id="annuler" type="button" class="btn btn-danger btn">Annuler</button>
+                        <button id="annuler" name="annuler" type="button" class="btn btn-danger btn">Annuler</button>
+                        <button id="modifier" name="modifier" type="button" class="btn btn-primary btn">
+                            Modifier
+                        </button>
+                        <button id="valider" name="valider" type="submit" class="btn btn-success btn">Valider</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-
     <script>
         var form = document.getElementById('formulaire');
         document.getElementById('valider').addEventListener('click', function (e) {
             e.preventDefault()
+
             fetch(form.action, {
                 method: 'POST',
                 headers: {
@@ -91,15 +94,25 @@
                     //console.log(data.message); // Affiche une propriété spécifique, si elle existe
                     //alert(data.path); // Affiche un message reçu du contrôleur
 
-                    //Manao redirect makany amin'ny list demande en attente
-                    window.location.href = data.path;
+                    //alert(data.message);
+                    if (!data.success) {
+                        alert(data.message)
+                    } else {
+                        //Manao redirect makany amin'ny list demande en attente
+                        window.location.href = data.path;
+                    }
                 })
                 .catch(error => console.error('Erreur:', error));
         });
 
         document.getElementById('annuler').addEventListener('click', function (e) {
-            e.preventDefault()
-            window.location.href = '/sg';
+            e.preventDefault();
+            window.location.href = '/sg'; // Redirige vers une autre page en cas d'annulation
+        });
+
+        document.getElementById('modifier').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/sg/demande/modifier/{{ demande_type.Id }}';
         });
     </script>
 

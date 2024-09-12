@@ -49,13 +49,12 @@
                                         <div class="col-12 d-flex gap-2">
                                             <div class="col">
                                                 <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
-                                                   class="btn btn-label-success btn-sm">Débolcker</a>
+                                                   class="btn btn-label-success btn-sm">Comptabiliser</a>
                                             </div>
                                             <div class="col-4">
                                                 <button style="width: 100%;height: 100%;border: none;background-color: transparent">
                                                     <a href="{{ path('tresorier.detail_demande_en_attente', {'id': demande_type.Id}) }}">
                                                         {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
-
                                                     </a>
                                                 </button>
                                             </div>

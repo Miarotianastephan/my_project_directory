@@ -14,6 +14,11 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">À propos de la demande</h4>
+                    <div class="text-end">
+                        <h3>
+                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
+                        </h3>
+                    </div>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
@@ -30,7 +35,7 @@
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Remettant:</label>
-                            <div class="col form-control" >{{ demande_type.utilisateur.UserMatricule }}</div>
+                            <div class="col form-control">{{ demande_type.utilisateur.UserMatricule }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Date de la demande:</label>
@@ -47,7 +52,8 @@
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Montant de la demande:</label>
-                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
+                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }}Ar
+                            </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Type de paiement:</label>
@@ -60,23 +66,25 @@
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->
                             {% if images|length  != 0 %}
-                            <div class="col">
-                                <!-- Bouton pour ouvrir le modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#fileModal">
-                                    Voir les pièces jointes
-                                </button>
-                            </div>
+                                <div class="col">
+                                    <!-- Bouton pour ouvrir le modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#fileModal">
+                                        Voir les pièces jointes
+                                    </button>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-danger btn">REFUSER</a>
-                    <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-success btn">VALIDER</a>
-                </div>
+                <form id="formulaire">
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="refuser" name="refuser" value="refuser" class="btn btn-danger btn">REFUSER</button>
+                        <button id="modifier" name="modifier" value="modifier" class="btn btn-primary btn">MODIFIER</button>
+                        <button id="valider" name="valider" value="valider" class="btn btn-success btn">VALIDER</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
@@ -221,5 +229,19 @@
             var pdfModal = new bootstrap.Modal(document.getElementById('pdfModal'));
             pdfModal.show();
         }
+
+        var form = document.getElementById('formulaire');
+        document.getElementById('valider').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/sg/demande/valider/{{ demande_type.Id }}'; // Redirige vers une autre page en cas d'annulation
+        });
+        document.getElementById('refuser').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/sg/demande/refuser/{{ demande_type.Id }}'; // Redirige vers une autre page en cas d'annulation
+        });
+        document.getElementById('modifier').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/sg/demande/modifier/{{ demande_type.Id }}'; // Redirige vers une autre page en cas d'annulation
+        });
     </script>
 {% endblock %}
