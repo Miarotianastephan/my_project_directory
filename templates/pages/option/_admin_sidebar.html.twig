@@ -15,17 +15,17 @@
     <ul class="nav nav-collapse">
         <li>
         <a href="{{ path("admin_users") }}">
-            <span class="sub-item">Lister les utilisateurs</span>
+            <span class="sub-item">liste utilisateur</span>
         </a>
         </li>
         <li>
         <a href="{{ path("admin_add_user") }}">
-            <span class="sub-item">Ajouter un utilisateur</span>
+            <span class="sub-item">ajouter utilisateur</span>
         </a>
         </li>
         <li>
         <a href="{{ path("app_groupe_utilisateur_index") }}">
-            <span class="sub-item">Gérer les groupes</span>
+            <span class="sub-item">rôles utilisateur</span>
         </a>
         </li>
     </ul>
@@ -34,20 +34,20 @@
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#planComptable">
         <i class="fas fa-th-list"></i>
-        <p>Gestion plan comptable</p>
+        <p>Gestion plan de compte</p>
         <span class="caret"></span>
     </a>
     <div class="collapse" id="planComptable">
         <ul class="nav nav-collapse">
             <li>
                 <a href="{{ path('app_plan_compte') }}">
-                    <span class="sub-item">Plan de Compte</span>
+                    <span class="sub-item">liste plan de compte</span>
                 </a>
                 <a href="{{ path('app_plan_compte.import') }}">
-                    <span class="sub-item">Importer les données</span>
+                    <span class="sub-item">page import</span>
                 </a>
                 <a href="{{ path('app_plan_compte.add') }}">
-                    <span class="sub-item">Insérer manuellement</span>
+                    <span class="sub-item">page modification</span>
                 </a>
             </li>
         </ul>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\PlanCompteRepository;
 use App\Service\CompteService;
 use CompteHierarchyService;
 use CompteIndex;
@@ -12,6 +13,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DemandeurController extends AbstractController
 {
+
+    private $plan_cpt_repo;
+
+    
+    public function __construct(PlanCompteRepository $planCptRepo)
+    {
+        $this->plan_cpt_repo = $planCptRepo;
+    }
+    
+
     #[Route('/demandeur', name: 'demandeur.liste_demande')]
     public function index(): Response
     {
@@ -37,7 +48,12 @@ class DemandeurController extends AbstractController
     #[Route('/demandeur/form', name: 'demandeur.nouveau_demande')]
     public function addNewDemandeForm(): Response
     {
-        return $this->render('demandeur/demandeur_add.html.twig');
+        $data_compte_depense = $this->plan_cpt_repo->findCompteDepense();
+        $data_entity = $this->plan_cpt_repo->findEntityCode();
+        return $this->render('demandeur/demandeur_add.html.twig',[
+            'data_compte_depense' => $data_compte_depense,
+            'data_entity' => $data_entity
+        ]);
     }
 
     #[Route(path: '/demandeur/add', name: 'demandeur.save_nouveau_demande', methods: ['POST'])]

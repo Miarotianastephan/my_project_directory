@@ -4,7 +4,11 @@ namespace App\Service;
 
 use App\Entity\CompteMere;
 use App\Entity\PlanCompte;
+use App\Repository\CompteMereRepository;
+use App\Repository\PlanCompteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PlanCompteService
 {
@@ -63,6 +67,38 @@ class PlanCompteService
         $existingAccount = $repository->findOneBy(['cpt_numero' => $numero]);
 
         return $existingAccount !== null;
+    }
+
+    public function updatePlanCompte($plan_cpt_id, $cpt_numero, $cpt_libelle, $cpt_mere_numero, PlanCompteRepository $plCptRepo, CompteMereRepository $cptMere){
+        try {
+            $plan_to_update = $plCptRepo->find($plan_cpt_id);
+
+            // update
+            $stat_num = $plan_to_update->setCptNumero($cpt_numero);
+            $stat_lib = $plan_to_update->setCptLibelle($cpt_libelle);
+            $stat_mere = false;
+    
+            // find compte mere by numero
+            if($cpt_mere_numero != '-1' && $cpt_libelle != -1){ // Si on change 
+               $cpt_mere_update = $cptMere->findByCptNumero($cpt_mere_numero);
+               $plan_to_update->setCompteMere($cpt_mere_update);
+               $stat_mere = true;
+            }
+            if($stat_num == false && $stat_lib == false && $stat_mere == false){ // Si aucun changement 
+                return [
+                    "status" => true,
+                    "update" => false,
+                    "message" => "Aucun changement effectué !",
+                ];
+            }
+
+            return $plCptRepo->updatePlanCompte($plan_to_update);
+        } catch (InvalidArgumentException $th) { // En cas d'erreur
+            return [
+                'status' => false,
+                'message' => $th->getMessage()
+            ];
+        }        
     }
 
 

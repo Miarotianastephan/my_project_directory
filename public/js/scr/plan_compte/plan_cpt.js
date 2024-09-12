@@ -5,6 +5,7 @@ jQuery(document).ready(function() {
     // Ajouter un compte
     document.getElementById('add_cpt_form').addEventListener('submit', (e)=>{
         e.preventDefault();
+        // revoir
         ajouterCompte();
     });
 

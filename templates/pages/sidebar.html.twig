@@ -48,9 +48,26 @@
                         </ul>
                     </div>
                 </li>
-                {{ include('pages/option/_admin_sidebar.html.twig') }}
-                {{ include('pages/option/_demandeur_sidebar.html.twig') }}
-                {{ include('pages/option/_comptable_sidebar.html.twig') }}
+                {% if is_granted('ROLE_0') %}
+                    {{ include('pages/option/_admin_sidebar.html.twig') }}
+                    {{ include('pages/option/_demandeur_sidebar.html.twig') }}
+                    {{ include('pages/option/_sg_sidebar.html.twig') }}
+                    {{ include('pages/option/_tresorier_sidebar.html.twig') }}
+                    {{ include('pages/option/_comptable_sidebar.html.twig') }}
+
+                {% elseif is_granted('ROLE_10') %}
+                    {{ include('pages/option/_demandeur_sidebar.html.twig') }}
+
+                {% elseif is_granted('ROLE_20') %}
+                    {{ include('pages/option/_tresorier_sidebar.html.twig') }}
+
+                {% elseif is_granted('ROLE_30') %}
+                    {{ include('pages/option/_sg_sidebar.html.twig') }}
+
+                {% elseif is_granted('ROLE_40') %}
+                    {{ include('pages/option/_comptable_sidebar.html.twig') }}
+                    
+                {% endif %}
             </ul>
         </div>
     </div>

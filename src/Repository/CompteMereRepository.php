@@ -34,7 +34,7 @@ class CompteMereRepository extends ServiceEntityRepository
        public function findByCptNumero($compteNumero): ?CompteMere
        {
            return $this->createQueryBuilder('c')
-               ->andWhere('c.CptNumero = :val')
+               ->andWhere('c.cpt_numero = :val')
                ->setParameter('val', $compteNumero)
                ->getQuery()
                ->getOneOrNullResult()
