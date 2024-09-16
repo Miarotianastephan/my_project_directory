@@ -31,5 +31,10 @@ class DemandeTypeService
             throw new ('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
         }
     }
-
+    
+    public function insertDemandeType($exerciceId, $planCptEntityId, $planCptMotifId, $montantDemande, $modePaiement){
+        // getUserConnected
+        // createReferenceDemande
+        // createTypeDeDemande
+    }
 }

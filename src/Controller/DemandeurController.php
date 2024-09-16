@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Repository\PlanCompteRepository;
 use App\Service\CompteService;
+use App\Service\DemandeTypeService;
+use App\Service\ExerciceService;
 use CompteHierarchyService;
 use CompteIndex;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,8 +59,24 @@ class DemandeurController extends AbstractController
     }
 
     #[Route(path: '/demandeur/add', name: 'demandeur.save_nouveau_demande', methods: ['POST'])]
-    public function addNewDemandeFormAction(Request $request){
+    public function addNewDemandeFormAction(Request $request, DemandeTypeService $dmService, ExerciceService $exoService){
+        // getExerciceId 
+        $exercice_id = $exoService->getLastExercice();
+        $data_parametre = $request->request->all();
+        
+        // les données :
+        $plan_cpt_entity_id = $data_parametre['id_plan_comptable_entity'];
+        $plan_cpt_motif_id = $data_parametre['id_plan_comptable_motif'];
+        $montant_demande = $data_parametre['dm_montant'];
+        $paiement = $data_parametre['mode_paiement'];
+        
+        // les dates :
+        $date_operation = $data_parametre['date_operation'];
+        $date_saisie = $data_parametre['date_saisie'];
+        
+        $dmService->insertDemandeType($exercice_id, $plan_cpt_entity_id, $plan_cpt_motif_id, $montant_demande, $paiement);
 
+        return $this->redirectToRoute('demandeur.nouveau_demande');
     }
 
 }

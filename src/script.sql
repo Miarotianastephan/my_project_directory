@@ -7,7 +7,8 @@
 -- insert into plan_compte (cpt_id,cpt_numero,cpt_libelle) values (cpt_seq.NEXTVAL,'51','Caisse');
 -- insert into plan_compte (cpt_id,cpt_numero,cpt_libelle) values (cpt_seq.NEXTVAL,'510001','Caisse Siege');
 -- insert into plan_compte (cpt_id,cpt_numero,cpt_libelle) values (cpt_seq.NEXTVAL,'611000','Social (Prime diverse)');	
--- insert into exercice (exercice_id,exercice_date_debut) values (exercice_seq.NEXTVAL,TO_DATE('01-01-2004','DD-MM-YYYY'));
+insert into exercice (exercice_id,exercice_date_debut) values (exercice_seq.NEXTVAL,TO_DATE('01-01-2004','DD-MM-YYYY'));
+insert into exercice (exercice_id,exercice_date_debut) values (exercice_seq.NEXTVAL,TO_DATE('01-01-2024','DD-MM-YYYY'));
 
 
 -- insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values 
@@ -262,4 +263,6 @@ VALUES (?, ?, ?, ?, ?)
 ) params={"1":81,"2":"euclid","3":"2024-08-30 00:00:00","4":"[\"ROLE_USER\"]","5":1} 
 sql="INSERT INTO utilisateur (user_id, user_matricule, dt_ajout, roles, grp_id) VALUES (?, ?, ?, ?, ?)" 
 types={"1":1,"2":2,"3":2,"4":2,"5":1}
+
+
 

@@ -16,29 +16,29 @@
             <div class="card-header">
                 <div class="card-title">Remplissez ce formulaire de demande</div>
             </div>
-            <form id="add_user_form" action="" method="post">
+            <form id="add_demande_form" action="{{ path('demandeur.save_nouveau_demande') }}" method="post">
                 <div class="card-body">
                     <div class="row">
                         
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="matricule">Numéro matricule</label>
-                                <input type="text" name="user_matricule" class="form-control" id="matricule" value="UTILISATEUR CONNECTE" readonly/><!-- Champ de saisie affiché -->>
+                                <input type="text" name="user_matricule" class="form-control" id="matricule" value="{{app.user.userMatricule}}" readonly/><!-- Champ de saisie affiché -->
                             </div>
                             <div class="col-md-3">
                                 <label for="date_operation">Date d'opération</label>
-                                <input type="date" name="dm_date" class="form-control" id="date_operation"/>
+                                <input type="date" name="date_operation" class="form-control" id="date_operation"/>
                             </div>
                             <div class="col-md-3">
                                 <label for="date_saisie">Date de saisie</label>
-                                <input type="date" name="dm_date" class="form-control" id="date_saisie" readonly/>
+                                <input type="date" name="date_saisie" class="form-control" id="date_saisie" readonly/>
                             </div>
                         </div>
                         
                         <div class="row form-group  gy-3 mb-3">
                             <div class="col-md-6">
                                 <label for="Motif">Motif du demande</label>
-                                <select name="id_plan_comptable" class="form-select" id="Motif"> 
+                                <select name="id_plan_comptable_motif" class="form-select" id="Motif"> 
                                 {% for depense in data_compte_depense %}
                                     <option value="{{depense.Id}}">{{depense.getCptNumero}} {{depense.getCptLibelle}}</option>
                                 {% endfor %}
@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="EntityCode">Entité pour l'opération</label>
-                                <select name="id_plan_comptable" class="form-select" id="EntityCode"> 
+                                <select name="id_plan_comptable_entity" class="form-select" id="EntityCode">
                                 {% for entity in data_entity %}
                                     <option value="{{entity.Id}}">{{entity.getCptNumero}} {{entity.getCptLibelle}}</option>
                                 {% endfor %}
@@ -66,15 +66,15 @@
                                 <label>Mode de paiement</label><br />
                                 <div class="d-flex">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
+                                        <input class="form-check-input" type="radio" name="mode_paiement" id="flexRadioDefault1" value="0"/>
                                         <label class="form-check-label" for="flexRadioDefault1">En éspèces</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                        <input class="form-check-input" type="radio" name="mode_paiement" id="flexRadioDefault2" checked value="1"/>
                                         <label class="form-check-label" for="flexRadioDefault2" >Par chèques</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" disabled />
+                                        <input class="form-check-input" type="radio" name="mode_paiement" id="flexRadioDefault3" disabled  value="2"/>
                                         <label class="form-check-label" for="flexRadioDefault3" >Subvention BFM</label>
                                     </div>
                                 </div>
