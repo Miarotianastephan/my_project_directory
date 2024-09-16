@@ -42,8 +42,7 @@ class SGController extends AbstractController
                              DemandeTypeRepository $dm_Repository,
                              DetailDemandePieceRepository $demandePieceRepository,
                              DetailBudgetRepository $detailBudgetRepository,
-                             CompteMereRepository $compteMereRepository,
-                             Request $request,): Response
+                             CompteMereRepository $compteMereRepository): Response
     {
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
@@ -65,13 +64,13 @@ class SGController extends AbstractController
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
-    public function modifier_post($id,Request $request,LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
+    public function modifier_post($id, Request $request, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $commentaire_data = $data['commentaire'] ?? null;
         $id_user_sg = $this->user->getId(); // mandeha io
 
-        if (!$commentaire_data){
+        if (!$commentaire_data) {
             return new JsonResponse([
                 'success' => false,
                 'message' => "Pas de modification reçu"
@@ -198,7 +197,6 @@ class SGController extends AbstractController
         }
 
     }
-
 
 
     #[Route('/test/test_budget', name: 'test_budget', methods: ['GET'])]

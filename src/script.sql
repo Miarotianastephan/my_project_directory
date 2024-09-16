@@ -8,8 +8,9 @@ values (grp_seq.NEXTVAL, 'Tresorier', 30);
 insert into demande (dm_id, libelle)
 values (demande_seq.NEXTVAL, 'Decaissement');
 
-insert into exercice (exercice_id, exercice_date_debut)
-values (exercice_seq.NEXTVAL, TO_DATE('01-01-2004', 'DD-MM-YYYY'));
+insert into exercice (exercice_id, exercice_date_debut) values (exercice_seq.NEXTVAL, TO_DATE('01-01-2004', 'DD-MM-YYYY'));
+insert into exercice (exercice_id, exercice_date_debut) values (exercice_seq.NEXTVAL, TO_DATE('01-01-2024', 'DD-MM-YYYY'));
+insert into exercice (exercice_id, exercice_date_debut) values (exercice_seq.NEXTVAL, TO_DATE('01-01-2025', 'DD-MM-YYYY'));
 
 --insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values (user_seq.NEXTVAL,'1989',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tsotra'));
 --insert into utilisateur (user_id,user_matricule,dt_ajout,grp_id) values (user_seq.NEXTVAL,'1846',(select current_date from dual),(select gp.grp_id from groupe_utilisateur gp where gp.grp_libelle='Tresorier'));
@@ -297,4 +298,9 @@ VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where T
 INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
 VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-011'),
         (select cpt_id from plan_compte where cpt_numero = '670005'));
+
+
+--Get Exercice valide pour budget
+select * from exercice where EXERCICE_DATE_DEBUT > TO_DATE('01-08-2024','DD-MM-YYYY') and EXERCICE_DATE_FIN is null ;
+
 

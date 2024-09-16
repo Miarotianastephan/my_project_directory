@@ -90,4 +90,8 @@ class CompteMere
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return sprintf('%s - %s', $this->cpt_numero ?? 'N/A', $this->cpt_libelle ?? 'N/A');
+    }
 }

@@ -21,6 +21,14 @@ class Exercice
     #[ORM\Column(type: 'customdate', nullable: true)]
     private ?\DateTimeInterface $exercice_date_fin = null;
 
+    public function __toString(): string
+    {
+        $debut = $this->exercice_date_debut ? $this->exercice_date_debut->format('d-m-Y') : 'N/A';
+        $fin = $this->exercice_date_fin ? $this->exercice_date_fin->format('d-m-Y') : 'N/A';
+
+        return sprintf('Exercice du %s au %s', $debut, $fin);
+    }
+
     public function getId(): ?int
     {
         return $this->id;

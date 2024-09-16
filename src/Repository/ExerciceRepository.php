@@ -16,6 +16,17 @@ class ExerciceRepository extends ServiceEntityRepository
         parent::__construct($registry, Exercice::class);
     }
 
+    public function getExerciceValide(\DateTime $date): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.exercice_date_debut > :date')
+            ->andWhere('e.exercice_date_fin IS NULL')
+            ->setParameter('date', $date, 'customdate')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     //    /**
     //     * @return Exercice[] Returns an array of Exercice objects
     //     */

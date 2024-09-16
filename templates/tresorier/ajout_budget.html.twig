@@ -1,0 +1,262 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des rôles: listes{% endblock %}
+
+{# {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
+{% endblock %} #}
+
+{% block page_title %}
+    Trésorier
+{% endblock %}
+{% block page_subtitle %}
+    {#
+    Chaque budget est lié à un exercice et plan de compte. Veuillez bien vérifier.
+    #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Ajout de budget</h4>
+                </div>
+
+                <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post">
+                    <div class="card-body col-12 d-flex flex-column gap-2">
+                        <div class="form-group">
+                            <label for="exercice">Exercice</label>
+                            <select class="form-select" id="exercice" name="exercice">
+                                {% for exercice in exercices %}
+                                    <option value="{{ exercice.id }}">{{ exercice }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan_cpt">Plan de compte</label>
+                            <select class="form-select" id="plan_cpt" name="plan_cpt">
+                                {% for plan_compte in plan_comptes %}
+                                    <option value="{{ plan_compte.id }}">{{ plan_compte }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="montant">Montant</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Ar</span>
+                                <input
+                                        id="montant"
+                                        name="montant"
+                                        type="number"
+                                        step="0.01"
+                                        class="form-control"
+                                        aria-label="montant"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="annuler" name="annuler" value="annuler" class="btn btn-danger">
+                            ANNULER
+                        </button>
+                        <button id="valider" name="valider" value="valider" class="btn btn-success">
+                            VALIDER
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Message will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour mise à jour du montant -->
+    <div class="modal fade" id="updateAmountModal" tabindex="-1" aria-labelledby="updateAmountModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="modifier" action="{{ path('tresorier.modifier_budget') }}" method="post">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateAmountModalLabel">Voulez vous mettre à jour le montant?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body col-12">
+                        <!-- Message de mise à jour du montant sera inséré ici -->
+                        <div class="col-10 d-flex flex-row">
+                            <label class="col"> Exercice: </label>
+                            <div class="col-6 form-control-sm" id="new-exercice"></div>
+                            <input hidden="hidden" id="new-exercice-input" name="new-exercice" class=" form-control-sm">
+                        </div>
+                        <div class="col-10 d-flex flex-row">
+                            <label class="col"> Plan de compte: </label>
+                            <div class="col-6 form-control-sm" id="new-cpt"></div>
+                            <input hidden="hidden" id="new-cpt-input" name="new-cpt" class="col-6 form-control-sm">
+                        </div>
+                        <div class="col-10 d-flex flex-row">
+                            <label class="col"> Ancien montant: </label>
+                            <div class="col-6 form-control-sm" id="old-montant"></div>
+                            <input hidden="hidden" id="old-montant-input" name="old-montant"
+                                   class="col-6 form-control-sm">
+                        </div>
+                        <div class="col-10 d-flex flex-row">
+                            <label class="col">Nouveau montant:</label>
+                            <div class="col-6 form-control-sm" id="new-montant"></div>
+                            <input hidden="hidden" id="new-montant-input" name="new-montant"
+                                   class="col-6 form-control-sm">
+                        </div>
+                        <input hidden="hidden" id="detailbudget-input" name="detailbudget"
+                               class="col-6 form-control-sm">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="non" name="non" data-bs-dismiss="modal" class="btn btn-danger">NON
+                        </button>
+                        <button type="button" id="oui" name="oui" class="btn btn-success">OUI</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var formulaire = document.getElementById("formulaire");
+            var modifier = document.getElementById("modifier");
+            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+
+            document.getElementById('annuler').addEventListener('click', function (e) {
+                e.preventDefault();
+                window.location.href = '/tresorier';
+            });
+
+            // Fonction pour fermer la modal et rediriger
+            function closeModalAndRedirect() {
+                messageModal.hide();
+            }
+
+            // Gestionnaire pour le bouton "Close" dans la modale de message
+            document.querySelector('#messageModal .btn-secondary').addEventListener('click', closeModalAndRedirect);
+
+            // Gestionnaire pour le bouton "Close" (x) dans la modale de message
+            document.querySelector('#messageModal .btn-close').addEventListener('click', closeModalAndRedirect);
+
+            document.getElementById('oui').addEventListener('click', function (e) {
+                e.preventDefault();
+                exercice = document.getElementById('new-exercice-input').value;
+                plan_cpt = document.getElementById('new-cpt-input').value;
+                montant = document.getElementById('new-montant-input').value;
+                detailbudget = document.getElementById('detailbudget-input').value;
+                fetch(modifier.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        detail_budget: detailbudget,
+                        montant: montant
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var modalBody = document.querySelector('#messageModal .modal-body');
+                        if (!data.success) {
+                            modalBody.textContent = data.message;
+                            messageModal.show();
+                        } else {
+                            if (data.url) {
+                                alert(JSON.stringify(data.message));
+                                //window.location.href = data.url;
+                            } else {
+                                alert("impossible de trouver url");
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Une erreur est survenue : ' + error.message);
+                    });
+            });
+
+            document.getElementById('valider').addEventListener('click', function (e) {
+                e.preventDefault();
+                var exercice = document.getElementById('exercice').value;
+                var plan_cpt = document.getElementById('plan_cpt').value;
+                var montant = document.getElementById('montant').value;
+                fetch(formulaire.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        exercice: exercice,
+                        plan_cpt: plan_cpt,
+                        montant: montant
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var modalBody = document.querySelector('#messageModal .modal-body');
+                        var updateAmountModal = new bootstrap.Modal(document.getElementById('updateAmountModal'));
+                        if (!data.success) {
+                            modalBody.textContent = data.message;
+                            messageModal.show();
+                        } else {
+                            if (data.url) {
+                                alert(JSON.stringify(data.message));
+                                //window.location.href = data.url;
+                            } else {
+                                // Mettre à jour les valeurs des champs input
+                                document.getElementById('new-exercice-input').value = data.exercice.id;
+                                document.getElementById('new-cpt-input').value = data.cpt.id;
+                                document.getElementById('old-montant-input').value = data.oldmontant;
+                                document.getElementById('new-montant-input').value = data.newmontant;
+                                document.getElementById('detailbudget-input').value = data.detailbudget;
+
+                                // Si vous voulez aussi mettre à jour le texte à côté des inputs
+                                document.getElementById('new-exercice').textContent = data.exercice.DateDebut;
+                                document.getElementById('new-cpt').textContent = data.cpt.CptLibelle;
+                                document.getElementById('old-montant').textContent = data.oldmontant + ' Ar';
+                                document.getElementById('new-montant').textContent = data.newmontant + ' Ar';
+                                updateAmountModal.show();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Une erreur est survenue : ' + error.message);
+                    });
+            });
+        });
+    </script>
+{% endblock %}
+
