@@ -300,6 +300,21 @@ VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where T
         (select cpt_id from plan_compte where cpt_numero = '670005'));
 
 
+INSERT INTO banque (BANQUE_ID,NOM_BANQUE) VALUES (banque_seq.NEXTVAL,'BMOI');
+insert into banque (BANQUE_ID,NOM_BANQUE) VALUES (banque_seq.NEXTVAL,'BOA');
+insert into banque (BANQUE_ID,NOM_BANQUE) VALUES (banque_seq.NEXTVAL,'Baoba banque');
+insert into banque (BANQUE_ID,NOM_BANQUE) VALUES (banque_seq.NEXTVAL,'Societe generale');
+insert into banque (BANQUE_ID,NOM_BANQUE) VALUES (banque_seq.NEXTVAL,'BGFI Bank Madagascar');
+insert into banque (BANQUE_ID,NOM_BANQUE) VALUES (banque_seq.NEXTVAL,'MCB Madagascar');
+
+INSERT INTO chequier (CHEQUIER_ID,BANQUE_ID,CHEQUIER_NUMERO_DEBUT,CHEQUIER_NUMERO_FIN,CHEQUIER_DATE_ARRIVEE)
+VALUES (
+        chequier_seq.NEXTVAL,
+        (select BANQUE_ID from banque where NOM_BANQUE = 'BMOI'),
+        '1'
+       );
+
+
 --Get Exercice valide pour budget
 select * from exercice where EXERCICE_DATE_DEBUT > TO_DATE('01-08-2024','DD-MM-YYYY') and EXERCICE_DATE_FIN is null ;
 

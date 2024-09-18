@@ -100,8 +100,6 @@ class DetailBudgetRepository extends ServiceEntityRepository
         $detail_budget = $entityManager->find(DetailBudget::class, $detail_budget_id);
         //$budget = $detailBudgetRepository->findByExerciceEtCpt($detail_budget->getExercice(), $detail_budget->getCompteMere());
         $detail_budget->setBudgetMontant($montant);
-        dump($montant);
-        dump($detail_budget);
         try {
             $entityManager->persist($detail_budget);
             $entityManager->flush();

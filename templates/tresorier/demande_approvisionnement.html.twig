@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comptable{% endblock %}
+
+{% block page_title %}
+    Trésorier
+{% endblock %}
+
+{% block page_subtitle %}
+    {# Demande d'approvisionnement #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Approvisionnement</h4>
+                </div>
+                <form id="formulaire" action="{{ path('tresorier.ajout_approvisionnement') }}" method="post">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col">
+                                <label for="date_dm">Date de la demande</label>
+                                <input type="date" id="date_dm" name="date_dm" class="form-control" value="{{ 'now'|date('Y-m-d') }}">
+                            </div>
+                            <div class="col">
+                                <label for="caisse">Situation de caisse</label>
+                                <input type="number" name="caisse" class="form-control" id="caisse" value="{{ situation_caisse }}" readonly/>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col">
+                                <label for="entite">Entité concernée</label>
+                                <select name="entite" class="form-control" id="entite">
+                                    {% for entite in entites %}
+                                        <option value="{{ entite.Id }}">{{ entite.CptNumero }} - {{ entite.CptLibelle }}</option>
+                                    {% else %}
+                                        <option disabled>Ajouter des données</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="montant">Montant</label>
+                                <input type="number" name="montant" class="form-control" id="montant"/>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col">
+                                <label for="banque">Choix de la banque</label>
+                                <select name="banque" class="form-control" id="banque">
+                                    {% for banque in banques %}
+                                        <option value="{{ banque.Id }}">{{ banque.NomBanque }}</option>
+                                    {% else %}
+                                        <option disabled>Ajouter des données</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="chequier">Numéro de chèque</label>
+                                <input type="text" name="chequier" class="form-control" id="chequier"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" id="annuler" class="btn btn-secondary">Annuler</button>
+                        <button type="submit" id="valider" class="btn btn-primary">Valider</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Message will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var formulaire = document.getElementById("formulaire");
+            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+
+            // Interception de la soumission du formulaire
+            document.getElementById('valider').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Récupération des valeurs des champs
+                var date_dm = document.getElementById('date_dm').value;
+                var caisse = document.getElementById('caisse').value;
+                var entite = document.getElementById('entite').value;
+                var montant = document.getElementById('montant').value;
+                var banque = document.getElementById('banque').value;
+                var chequier = document.getElementById('chequier').value;
+
+                // Envoi de la requête avec Fetch API
+                fetch(formulaire.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        date_dm: date_dm,
+                        caisse: caisse,
+                        entite: entite,
+                        montant: montant,
+                        banque: banque,
+                        chequier: chequier
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        //alert(JSON.stringify(data))
+                        var modalBody = document.querySelector('#messageModal .modal-body');
+                        if (!data.success) {
+                            modalBody.textContent = data.message;
+                            messageModal.show();
+                        } else {
+                            if (data.url) {
+                                alert(JSON.stringify(data.message));
+                                //window.location.href = data.url;
+                            } else {
+                                alert("impossible de trouver url");
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Une erreur est survenue : ' + error.message);
+                    });
+            });
+
+            // Gestion de l'annulation
+            document.getElementById('annuler').addEventListener('click', function (e) {
+                e.preventDefault();
+                window.location.href = '{{ path('tresorier.liste_demande_en_attente') }}';
+            });
+        });
+    </script>
+
+
+{% endblock %}

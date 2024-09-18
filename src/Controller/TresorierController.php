@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\DemandeType;
+use App\Repository\BanqueRepository;
 use App\Repository\BudgetTypeRepository;
 use App\Repository\CompteMereRepository;
 use App\Repository\DemandeTypeRepository;
@@ -10,7 +11,9 @@ use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
+use App\Repository\PlanCompteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Monolog\DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +21,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 #[Route('/tresorier')]
 class TresorierController extends AbstractController
@@ -162,6 +166,70 @@ class TresorierController extends AbstractController
                 'message' => $addbase['message'],
                 'url' => "Voici un url"
             ]);
-
     }
+
+    #[Route('/demande_approvisionnement', name: 'tresorier.form_approvisionnement', methods: ['GET'])]
+    public function form_approvisionnement(PlanCompteRepository $planCompteRepository,
+                                           BanqueRepository     $banqueRepository): Response
+    {
+
+        $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011","611000"];
+        $liste_entite = array_filter(array_map(
+            fn($code) => $planCompteRepository->findByNumero($code),
+            $list_cpt_numero
+        ));
+
+
+        $situation_caisse = 10000;
+        $liste_banque = $banqueRepository->findAll();
+
+        return $this->render('tresorier/demande_approvisionnement.html.twig', [
+            'entites' => $liste_entite,
+            'banques' => $liste_banque,
+            'situation_caisse' => $situation_caisse,
+        ]);
+    }
+
+    #[Route('/ajout_approvisionnement', name: 'tresorier.ajout_approvisionnement', methods: ['POST'])]
+    public function ajout_approvisionnement(Request $request): JsonResponse
+    {
+        $data = $request->request->all();
+
+        $date = $data['date_dm'] ?? null;
+        $caisse = $data['caisse'] ?? null;
+        $entite = $data['entite'] ?? null;
+        $montant = $data['montant'] ?? null;
+        $banque = $data['banque'] ?? null;
+        $chequier = $data['chequier'] ?? null;
+
+        // Validation des données
+        if (!$date) {
+            return new JsonResponse(['success' => false, 'message' => "La date est nécessaire"]);
+        }
+        if (!$caisse) {
+            return new JsonResponse(['success' => false, 'message' => "La situation de caisse est nécessaire"]);
+        }
+        if (!$entite) {
+            return new JsonResponse(['success' => false, 'message' => "Le choix d'entité est nécessaire"]);
+        }
+        if (!$montant) {
+            return new JsonResponse(['success' => false, 'message' => "Le montant est nécessaire"]);
+        }
+        if (!$banque) {
+            return new JsonResponse(['success' => false, 'message' => "Le choix de banque est nécessaire"]);
+        }
+        if (!$chequier) {
+            return new JsonResponse(['success' => false, 'message' => "Le choix de chéquier est nécessaire"]);
+        }
+
+        // Si tout est correct
+        return new JsonResponse(
+            [
+                'success' => true,
+                'message' => "Votre demande a été enregistrée avec succès.",
+                'url' => "Voici un url" // Vous pouvez personnaliser cette partie
+            ]
+        );
+    }
+
 }
