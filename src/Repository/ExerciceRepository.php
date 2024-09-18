@@ -17,12 +17,12 @@ class ExerciceRepository extends ServiceEntityRepository
     }
     
     public function findMostRecentOpenExercice(): ?Exercice
-{
-    return $this->createQueryBuilder('e')
-        ->andWhere('e.exercice_date_fin IS NULL')
-        ->orderBy('e.exercice_date_debut', 'DESC')
-        ->setMaxResults(1)
-        ->getQuery()
-        ->getOneOrNullResult();
-}
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.exercice_date_fin IS NULL')
+            ->orderBy('e.exercice_date_debut', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

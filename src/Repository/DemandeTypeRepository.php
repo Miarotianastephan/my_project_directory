@@ -24,31 +24,21 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-
-
-//    /**
-//     * @return DemandeType[] Returns an array of DemandeType objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?DemandeType
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    
+    public function insertDemandeType(DemandeType $demandeType){
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($demandeType);
+            $em->flush();
+            return [
+                "status" => true,
+                "message" => 'Demande insérer avec succes',
+            ];
+        } catch (\Throwable $th) {
+            return [
+                "status" => false,
+                "message" => $th->getMessage(),
+            ];
+        }
+    }
 }

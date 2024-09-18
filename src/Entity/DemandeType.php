@@ -72,6 +72,9 @@ class DemandeType
     #[ORM\Column(nullable: false,options: ["default" => 0])]
     private ?float $montant_reel = 0;
 
+    #[ORM\Column(type: 'customdate')]
+    private $dm_date_operation = null;
+
     // #[ORM\Column(nullable: true)]
     // private ?int $mere_id = null;
 
@@ -288,4 +291,16 @@ class DemandeType
 
     //     return $this;
     // }
+
+    public function getDmDateOperation()
+    {
+        return $this->dm_date_operation;
+    }
+
+    public function setDmDateOperation($dm_date_operation): static
+    {
+        $this->dm_date_operation = $dm_date_operation;
+
+        return $this;
+    }
 }

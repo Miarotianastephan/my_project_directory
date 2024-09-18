@@ -42,13 +42,13 @@ class DemandeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Demande
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+       public function findDemandeByCode($code_value): ?Demande
+       {
+           return $this->createQueryBuilder('d')
+               ->andWhere('d.dm_code = :val')
+               ->setParameter('val', $code_value)
+               ->getQuery()
+               ->getOneOrNullResult()
+           ;
+       }
 }

@@ -61,7 +61,7 @@ class DemandeurController extends AbstractController
     #[Route(path: '/demandeur/add', name: 'demandeur.save_nouveau_demande', methods: ['POST'])]
     public function addNewDemandeFormAction(Request $request, DemandeTypeService $dmService, ExerciceService $exoService){
         // getExerciceId 
-        $exercice_id = $exoService->getLastExercice();
+        $exercice = $exoService->getLastExercice();
         $data_parametre = $request->request->all();
         
         // les données :
@@ -69,13 +69,13 @@ class DemandeurController extends AbstractController
         $plan_cpt_motif_id = $data_parametre['id_plan_comptable_motif'];
         $montant_demande = $data_parametre['dm_montant'];
         $paiement = $data_parametre['mode_paiement'];
-        
+
         // les dates :
         $date_operation = $data_parametre['date_operation'];
         $date_saisie = $data_parametre['date_saisie'];
         
-        $dmService->insertDemandeType($exercice_id, $plan_cpt_entity_id, $plan_cpt_motif_id, $montant_demande, $paiement);
-
+        $response_data = $dmService->insertDemandeType($exercice, $plan_cpt_entity_id, $plan_cpt_motif_id, $montant_demande, $paiement,$date_saisie , $date_operation);
+        dump($response_data);
         return $this->redirectToRoute('demandeur.nouveau_demande');
     }
 

@@ -265,4 +265,41 @@ sql="INSERT INTO utilisateur (user_id, user_matricule, dt_ajout, roles, grp_id) 
 types={"1":1,"2":2,"3":2,"4":2,"5":1}
 
 
+CREATE OR REPLACE TRIGGER trg_generate_reference
+BEFORE INSERT ON demande_type
+FOR EACH ROW
+DECLARE
+  v_year VARCHAR2(4);   
+  v_sequence NUMBER;    
+  v_prefix VARCHAR2(3); 
+  v_code_dm NUMBER;   
+BEGIN
+ 
+  SELECT TO_CHAR(SYSDATE, 'YYYY') INTO v_year FROM DUAL;
+  SELECT :NEW.dm_type_id INTO v_sequence FROM DUAL;
 
+  SELECT dm_code INTO v_code_dm 
+  FROM demande
+  WHERE dm_id = :NEW.dm_id;
+
+  IF v_code_dm = 10 THEN
+    v_prefix := 'DEC';
+  ELSE
+    v_prefix := 'APR';
+  END IF;
+
+  :NEW.REF_DEMANDE := v_prefix || '_' || v_year || '_' || v_sequence;
+END;
+/
+
+insert into demande_type
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,DM_ETAT,DM_DATE_OPERATION) 
+values (
+    demande_type_seq.NEXTVAL,
+    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
+    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
+    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
+    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+    (select d.dm_id from demande d where d.libelle='Decaissement'),
+    TO_DATE('16-09-2024','DD-MM-YYYY'),25000,'Espece',10,TO_DATE('16-09-2024','DD-MM-YYYY'))
+    ;
