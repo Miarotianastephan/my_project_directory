@@ -55,7 +55,11 @@ class TresorierController extends AbstractController
     {
         
         $id_user_tresorier = $this->user->getId();
-        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier);
+        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier); // Déblocage du fonds demandée
+        // Comptabilisation de l'opération de décaissement
+            // à compléter
+        // fin comptabilisation
+        
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {
             return new JsonResponse([

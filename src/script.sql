@@ -303,3 +303,35 @@ values (
     (select d.dm_id from demande d where d.libelle='Decaissement'),
     TO_DATE('16-09-2024','DD-MM-YYYY'),25000,'Espece',10,TO_DATE('16-09-2024','DD-MM-YYYY'))
     ;
+
+
+-- Insertion de transaction 
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-001','Encaissement Subvention BFM');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-002','Approvisionnement petite caissse Siège');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-003','Approvisionnement petite caissse RT');
+-- Les paiements
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-004','Paiement facture par chèque');
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-005','Paiement facture en espèces sièges');
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-006','Paiement facture en espèces RT');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-010','Encaissement interêt opération');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-011','Comptabilisation des frais bancaires');

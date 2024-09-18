@@ -7,7 +7,7 @@ class InvalidUserStatusException extends CustomUserMessageAuthenticationExceptio
 {
     public function __construct($defaultUserMatricule = "")
     {
-        $message = sprintf('L\'utilisateur "%s" n\'est pas actif.', $defaultUserMatricule);
+        $message = sprintf('L\'utilisateur "%s" n\'est pas dans la base de données.', $defaultUserMatricule);
         parent::__construct($message);
     }
 }

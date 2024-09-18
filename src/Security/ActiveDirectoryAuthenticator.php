@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\Utilisateur;
+use App\Exception\InvalidDataUserException;
 use App\Exception\InvalidUserStatusException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,7 +36,6 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
     public function supports(Request $request): ?bool
     {
         dump([
-            'Requete'=> '1)',
             '_route' => $request->attributes->get('_route'),
             'method' => $request->getMethod()
         ]);
@@ -46,12 +46,15 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
     {
         $user_matricule = $request->request->get('user_matricule');
         $user_password = $request->request->get('user_pass');
-        // dump([
-        //     'Requete' => '2)',
-        //     'user_matricule' => $user_matricule,
-        //     'user_password' => $user_password,
-        // ]);
+        // vérifier si non vide
+        if (strlen($user_matricule) == 0 || strlen($user_password) == 0) {
+            throw new InvalidDataUserException();
+        }
+        // enlever les espaces
+        $user_matricule = trim($user_matricule);
+        $user_password = trim($user_password);
 
+        // Pour vérifier sio l'utilisateur est dans la base de donnée
         $this->isValidUser($user_matricule);
 
         return new Passport(
@@ -67,6 +70,7 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // mila gestion des redirection selon ny rôle
         return new RedirectResponse($this->router->generate('admin_users'));
     }
 
@@ -76,6 +80,8 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
             $errorMessage = $exception->getMessageKey();
         } elseif ($exception instanceof BadCredentialsException) {
             $errorMessage = 'Matricule ou Mot de passe incorrect.';
+        }elseif ($exception instanceof InvalidDataUserException){
+            $errorMessage = $exception->getMessageKey();
         } else {
             $errorMessage = 'Erreur d\'authentification.';
         }

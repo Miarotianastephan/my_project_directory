@@ -196,14 +196,15 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         if (!$dm_type) {
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Demande de type introuvable'
+                'message' => 'Déblocage impossible car demande introuvable'
             ]);
         }
+        // mila atao vérification hoe tena trésorier ve no manao ilay déblocage
         $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
         if (!$user_tresorier) {
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Utilisateur tresorier introuvable.'
+                'message' => 'Utilisateur trésorier introuvable.'
             ]);
         }
         $user_sg = $dm_type->getUtilisateur();
@@ -219,8 +220,8 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         $log_dm->setDemandeType($dm_type);
         $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:user_matricule)";
 
+        $connection = $entityManager->getConnection();
         try {
-            $connection = $entityManager->getConnection();
             $connection->beginTransaction();
             $statement = $connection->prepare($script);
             $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
@@ -228,13 +229,13 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
 
             $statement->executeQuery();
-            $connection->commit();
+            $connection->commit();                      // Ajout dans log_etat_demande 
 
-            // MAJ de dm_type la base de données
             $dm_type->setDmEtat(40);
             $dm_type->setUtilisateur($user_tresorier);
             $entityManager->persist($dm_type);
-            $entityManager->flush();
+            $entityManager->flush();                    // MAJ de dm_type la base de données
+
         } catch (\Exception $e) {
             $connection->rollBack();
             return new JsonResponse([
@@ -247,30 +248,4 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             'message' => 'Le fond a été remis'
         ]);
     }
-
-
-    //    /**
-    //     * @return LogDemandeType[] Returns an array of LogDemandeType objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?LogDemandeType
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
