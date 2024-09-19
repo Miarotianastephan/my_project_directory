@@ -68,4 +68,12 @@ class DemandeTypeService
         return $response_data;
     }
 
+    public function findAllMyDemandeTypes(){
+        $data = $this->demandeTypeRepository->findByUtilisateur($this->user);
+        foreach ($data as $key => $value) {
+            # code...
+        }
+        return $data;
+    }
+
 }

@@ -23,7 +23,7 @@ class DetailDemandePiece
     #[ORM\Column(length: 255)]
     private ?string $det_dm_type_url = null;
 
-    #[ORM\Column(type: 'customdate')]
+    #[ORM\Column(type: 'customdate', nullable:false)]
     private ?\DateTimeInterface $det_dm_date = null;
 
     #[ORM\ManyToOne(targetEntity: DemandeType::class)]

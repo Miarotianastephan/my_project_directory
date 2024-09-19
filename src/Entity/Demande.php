@@ -16,10 +16,10 @@ class Demande
     #[ORM\Column(name: 'dm_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,unique: true, nullable: false)]
     private ?string $libelle = null;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true, nullable: false)]
     private ?int $dm_code = null;
 
     public function __construct(){ }

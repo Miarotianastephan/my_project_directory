@@ -29,7 +29,7 @@ class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedU
     #[ORM\Column(name:"user_matricule" ,length: 255,nullable:false,unique: true)]
     private ?string $user_matricule = null;
 
-    #[ORM\Column(name:"dt_ajout" ,type: 'customdate')]
+    #[ORM\Column(name:"dt_ajout" ,type: 'customdate', nullable:false)]
     private ?\DateTimeInterface $date_ajout = null;
 
     // #[MaxDepth(1)]

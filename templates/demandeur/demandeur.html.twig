@@ -48,17 +48,39 @@
                             </tfoot>
                             {# Data #}
                             <tbody id="bodyList">
-                                <tr id="0">
-                                    <td id=""></td>
-                                    <td id=""></td>
-                                    <td id=""></td>
-                                    <td id=""></td>
-                                    <td id=""></td>
-                                    <td id=""></td>
-                                    <td>
-                                        <a href="" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
+                            {% for demande_type in demandes %}
+                                <tr class="col-12">
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-1">{{ demande_type.RefDemande }}</td>
+                                    <td class="col-2">{{ demande_type.demande.libelle }}</td>
+                                    <td class="text-end col-2">
+                                        <div>
+                                            {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
+                                        </div>
                                     </td>
-                                </tr>                            
+                                    <td>{{ demande_type.DmEtat }}</td>
+                                    <td class="col-4">
+                                        <div class="col-12 d-flex gap-5">
+                                            <div class="col-8 text-center">
+                                                <a class="btn btn-label-warning btn-sm">Modifier</a>
+                                            </div>
+                                            <div class="col-3">
+                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
+                                                    <a href="{{ path('demandeur.detail_demande_en_attente', {'id': demande_type.Id}) }}">
+                                                        {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
+                                                    </a>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">aucun donnée inserer</td>
+                                </tr>
+                            {% endfor %}                           
                             </tbody>
                         </table>
                     </div>

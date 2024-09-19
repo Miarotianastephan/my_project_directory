@@ -18,7 +18,7 @@
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
                         <button style="border: none; background-color: transparent; text-align: start">
-                            <a href="{{ path('SG.liste_demande_en_attente') }}">
+                            <a href="{{ path('demandeur.liste_demande') }}">
                                 {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%', color:'#2a2f5b'}) }}
                             </a>
                         </button>
@@ -73,9 +73,7 @@
                 </div>
                 <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-danger btn">REFUSER</a>
-                    <a href="{{ path('SG.valider_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-success btn">VALIDER</a>
+                       class="btn btn-warning btn">MODIFIER</a>
                 </div>
             </div>
         </div>

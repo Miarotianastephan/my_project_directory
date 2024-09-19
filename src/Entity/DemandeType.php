@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DemandeTypeRepository;
+use App\Repository\EtatDemandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ class DemandeType
     #[ORM\Column(name: 'dm_type_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'customdate')]
+    #[ORM\Column(type: 'customdate', nullable:false)]
     private ?\DateTimeInterface $dm_date = null;
 
     #[ORM\Column]
@@ -72,8 +73,12 @@ class DemandeType
     #[ORM\Column(nullable: false,options: ["default" => 0])]
     private ?float $montant_reel = 0;
 
-    #[ORM\Column(type: 'customdate')]
+    #[ORM\Column(type: 'customdate', nullable:false)]
     private $dm_date_operation = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: "etat_id", referencedColumnName: "etat_id",nullable: false)]
+    private ?EtatDemande $etat_demande_obj = null;
 
     // #[ORM\Column(nullable: true)]
     // private ?int $mere_id = null;
@@ -300,6 +305,18 @@ class DemandeType
     public function setDmDateOperation($dm_date_operation): static
     {
         $this->dm_date_operation = $dm_date_operation;
+
+        return $this;
+    }
+
+    public function getEtatDemandeObj(): ?EtatDemande
+    {
+        return $this->etat_demande_obj;
+    }
+
+    public function setEtatDemandeObj(?EtatDemande $etat_demande_obj): static
+    {
+        $this->etat_demande_obj = $etat_demande_obj;
 
         return $this;
     }

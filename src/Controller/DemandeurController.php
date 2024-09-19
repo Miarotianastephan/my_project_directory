@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailDemandePieceRepository;
 use App\Repository\PlanCompteRepository;
 use App\Service\CompteService;
 use App\Service\DemandeTypeService;
@@ -26,25 +28,13 @@ class DemandeurController extends AbstractController
     
 
     #[Route('/demandeur', name: 'demandeur.liste_demande')]
-    public function index(): Response
+    public function index(DemandeTypeService $dmService): Response
     {
-        // Récupération des plans de comptes
-        $rawData = [
-            ['N° de compte' => '67', 'Intitullé' => 'Matériels de bureau'],
-            ['N° de compte' => '67900', 'Intitullé' => 'Compte d\'attente à régulariser'],
-            ['N° de compte' => '66', 'Intitullé' => 'Matériels de bureau'],
-            ['N° de compte' => '661', 'Intitullé' => 'Compte d\'attente à régulariser'],
-            ['N° de compte' => '661100', 'Intitullé' => 'Matériels de bureau 2'],
-            ['N° de compte' => '661120', 'Intitullé' => 'Matériels de bureau 3'],
-            ['N° de compte' => '330000', 'Intitullé' => 'TEST SANS MERE'],
-            // ... Ajoutez le reste des données ici
-        ];
-        $compteHierarchy = new CompteIndex($rawData);
-        // $hierarchy = $compteHierarchy->getHierarchy();
-        
-        // Affichage de la hiérarchie (à des fins de démonstration)
-        // dump($hierarchy);
-        return $this->render('demandeur/demandeur.html.twig');
+        // Lister mes demandes
+        $mes_demandes = $dmService->findAllMyDemandeTypes();
+        return $this->render('demandeur/demandeur.html.twig',[
+            'demandes' => $mes_demandes
+        ]);
     }
 
     #[Route('/demandeur/form', name: 'demandeur.nouveau_demande')]
@@ -76,7 +66,18 @@ class DemandeurController extends AbstractController
         
         $response_data = $dmService->insertDemandeType($exercice, $plan_cpt_entity_id, $plan_cpt_motif_id, $montant_demande, $paiement,$date_saisie , $date_operation);
         dump($response_data);
-        return $this->redirectToRoute('demandeur.nouveau_demande');
+        return $this->redirectToRoute('demandeur.liste_demande');
+    }
+
+    // get by ID
+    #[Route('/demandeur/{id}', name: 'demandeur.detail_demande_en_attente', methods: ['GET'])]
+    public function show($id, DemandeTypeRepository $dm_Repository, DetailDemandePieceRepository $demandePieceRepository): Response
+    {
+        $data = $dm_Repository->find($id);
+        $list_img = $demandePieceRepository->findByDemandeType($data);
+        return $this->render('/demandeur/demandeur_show.html.twig',
+            ['demande_type' => $data, 'images' => $list_img]
+        );
     }
 
 }

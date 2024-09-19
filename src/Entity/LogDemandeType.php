@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EtatDemandeRepository;
 use App\Repository\LogDemandeTypeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ class LogDemandeType
     #[ORM\Column(name: 'log_dm_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable:false)]
     private ?\DateTimeInterface $log_dm_date = null;
 
     #[ORM\Column]
@@ -30,6 +31,10 @@ class LogDemandeType
     #[ORM\ManyToOne(targetEntity: DemandeType::class, inversedBy: 'logDemandeTypes')]
     #[ORM\JoinColumn(name: "demande_type_id", referencedColumnName: "dm_type_id",nullable: false)]
     private ?DemandeType $demande_type = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: "etat_id", referencedColumnName: "etat_id", nullable: false)]
+    private ?EtatDemande $etat_log_demande_obj = null;
 
     public function getId(): ?int
     {
@@ -94,4 +99,19 @@ class LogDemandeType
         $this->demande_type = $demande_type;
         return $this;
     }
+
+    public function getEtatLogDemandeObj(): ?EtatDemande
+    {
+        return $this->etat_log_demande_obj;
+    }
+
+    public function setEtatLogDemandeObj(?EtatDemande $etat_log_demande_obj): static
+    {
+        $this->etat_log_demande_obj = $etat_log_demande_obj;
+
+        return $this;
+    }
+    
+
+
 }

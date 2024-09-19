@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DemandeType;
+use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,5 +41,14 @@ class DemandeTypeRepository extends ServiceEntityRepository
                 "message" => $th->getMessage(),
             ];
         }
+    }
+
+    public function findByUtilisateur(Utilisateur $utilisateur){
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.utilisateur', 'u')
+            ->andWhere('u = :utilisateur')
+            ->setParameter('utilisateur', $utilisateur)
+            ->getQuery()
+            ->getResult();
     }
 }

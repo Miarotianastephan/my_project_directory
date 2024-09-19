@@ -335,3 +335,29 @@ VALUES (trs_seq.NEXTVAL,'CE-010','Encaissement interêt opération');
 insert into transaction_type
 (TRS_ID, TRS_CODE, TRS_LIBELLE)
 VALUES (trs_seq.NEXTVAL,'CE-011','Comptabilisation des frais bancaires');
+
+-- améliorations des états xxx
+-- ETAT INITIEE 1xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,100, 'Initié');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,101, 'Modifié');
+
+-- ETAT ATTENTES 2xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,200, 'Attente fonds');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,201, 'Attente modification');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,202, 'Attente versement');
+
+-- ETAT REFUS 3xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,300, 'Refusé');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,301, 'Débloqué');
+
+-- ETAT AVANT FIN 4xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,400, 'Justifié');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,401, 'Reversé');
+
+-- ETAT FIN 5xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,500, 'Comptabilisé');
+
+-- FREE DEMANDE
+-- delete from log_demande_type;
+-- delete from demande_type;
+-- commit;
