@@ -158,8 +158,11 @@ class DemandeType
         return $this->dm_etat;
     }
 
-    public function setDmEtat(int $dm_etat): static
+    public function setDmEtat(EtatDemandeRepository $etatDmRepo,int $dm_etat): static
     {
+        // Ajout de l'état du demande
+        $etat_demande = $this->findEtatDemande($etatDmRepo, $dm_etat);
+        $this->setEtatDemandeObj($etat_demande);
         $this->dm_etat = $dm_etat;
 
         return $this;
@@ -307,6 +310,11 @@ class DemandeType
         $this->dm_date_operation = $dm_date_operation;
 
         return $this;
+    }
+
+    // Gestion du etat demande
+    public function findEtatDemande(EtatDemandeRepository $etatDmRepo, $codeEtat): EtatDemande{
+        return $etatDmRepo->findByEtatCode($codeEtat);
     }
 
     public function getEtatDemandeObj(): ?EtatDemande

@@ -58,8 +58,11 @@ class LogDemandeType
         return $this->dm_etat;
     }
 
-    public function setDmEtat(int $dm_etat): static
+    public function setDmEtat(EtatDemandeRepository $etatDmRepo, int $dm_etat): static
     {
+        // Ajout de l'état du demande
+        $etat_demande = $this->findEtatDemande($etatDmRepo, $dm_etat);
+        $this->setEtatLogDemandeObj($etat_demande);
         $this->dm_etat = $dm_etat;
 
         return $this;
@@ -98,6 +101,11 @@ class LogDemandeType
     {
         $this->demande_type = $demande_type;
         return $this;
+    }
+
+    // Gestion du etat demande
+    public function findEtatDemande(EtatDemandeRepository $etatDmRepo, $codeEtat): EtatDemande{
+        return $etatDmRepo->findByEtatCode($codeEtat);
     }
 
     public function getEtatLogDemandeObj(): ?EtatDemande

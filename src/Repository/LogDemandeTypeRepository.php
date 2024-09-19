@@ -15,8 +15,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class LogDemandeTypeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    private $etatDmRepository;
+
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo)
     {
+        $this->etatDmRepository = $etatDmRepo;
         parent::__construct($registry, LogDemandeType::class);
     }
 
@@ -52,7 +56,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($dm_type->getDmEtat());
+            $log_dm->setDmEtat($this->etatDmRepository , $dm_type->getDmEtat()); // OK_ETAT
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
 
@@ -74,7 +78,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $connection->commit();
 
                 // Mise à jour de l'entité `DemandeType`
-                $dm_type->setDmEtat(20);
+                $dm_type->setDmEtat($this->etatDmRepository , 200); // OK_ETAT
                 $dm_type->setUtilisateur($user_sg);
 
                 $entityManager->flush();
@@ -135,7 +139,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($dm_type->getDmEtat());
+            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setLogDmObservation($commentaire_data);
             $log_dm->setDemandeType($dm_type);
@@ -160,7 +164,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $connection->commit();
 
                 // MAJ de dm_type la base de données
-                $dm_type->setDmEtat(30);
+                $dm_type->setDmEtat($this->etatDmRepository , 300); // OK_ETAT
                 $dm_type->setUtilisateur($user_sg);
                 $entityManager->persist($dm_type);
                 $entityManager->flush();
@@ -215,7 +219,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ]);
         }
         $log_dm = new LogDemandeType();
-        $log_dm->setDmEtat($dm_type->getDmEtat());
+        $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
         $log_dm->setUserMatricule($user_sg->getUserMatricule());
         $log_dm->setDemandeType($dm_type);
         $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:user_matricule)";
@@ -231,7 +235,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $statement->executeQuery();
             $connection->commit();                      // Ajout dans log_etat_demande 
 
-            $dm_type->setDmEtat(40);
+            $dm_type->setDmEtat($this->etatDmRepository, 40); // OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $entityManager->persist($dm_type);
             $entityManager->flush();                    // MAJ de dm_type la base de données
