@@ -26,12 +26,21 @@ class PlanCompteService
             $entityManager->persist($compteMere);
             $entityManager->flush(); // Flush pour obtenir l'ID du compte mère
     
+            if (empty($data['enfants'])) { // On n'a pas de fils donc mère = fils
+                $planCompte = new PlanCompte();
+                $planCompte->setCptNumero($data['numero']);
+                $planCompte->setCptLibelle($data['libelle']);
+                $planCompte->setCompteMere($compteMere);
+                $entityManager->persist($planCompte);
+                $entityManager->flush();
+            }
             // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
             if (!empty($data['enfants'])) {
                 foreach ($data['enfants'] as $enfant) {
                     $this->insertHierarchy($entityManager, $enfant, $compteMere);
                 }
             }
+            
         } else {
             // Vérifier si le plan de compte existe déjà
             if ($this->accountExists($entityManager ,$data['numero'], PlanCompte::class)) {
@@ -99,6 +108,11 @@ class PlanCompteService
                 'message' => $th->getMessage()
             ];
         }        
+    }
+
+    public function hasDataPlanCompte(PlanCompteRepository $plCompteRepo){
+        $data_count = $plCompteRepo->count();
+        return $retVal = ($data_count>0) ? true : false ;
     }
 
 

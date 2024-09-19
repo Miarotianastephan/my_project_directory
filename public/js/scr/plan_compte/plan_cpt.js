@@ -31,15 +31,12 @@ jQuery(document).ready(function() {
         xhr.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
                 const rep = this.response;
-                // Ajout mesage d'erreur
-                console.log(rep);
                 if (rep.status == false){
                     appendAlert(rep.message, 'danger');
                 }
                 else if (rep.status == true){
-                    console.log(rep);
-                    appendAlert(createMessage(userMatricule,groupeName), 'success');
-                //   window.location.href = rep.path; // to admin
+                    appendAlert(rep.message, 'success');
+                    // window.location.href = rep.path; // to admin
                 }
             }
             else if(this.readyState == 4){

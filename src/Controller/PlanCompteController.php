@@ -34,8 +34,13 @@ class PlanCompteController extends AbstractController
     }
 
     #[Route(path: '/add', name: 'app_plan_compte.add', methods: ['GET'])]
-    public function ajouterPlanCompte(){
-        return $this->render('plan_compte/plan_compte_add.html.twig');
+    public function ajouterPlanCompte(PlanCompteService $planCompteService, PlanCompteRepository $planCompteRepo){
+        $has_data_plan_compte = $planCompteService->hasDataPlanCompte($planCompteRepo); // sécurisation du page si le plan compte non vide
+        if($has_data_plan_compte == false){
+            return $this->render('plan_compte/plan_compte_add.html.twig');
+        }
+        $this->addFlash('message', 'Page ajout plan compte non accessible.');
+        return $this->redirectToRoute('app_plan_compte');
     }
 
     #[Route(path: '/import/save', name: 'app_plan_compte.save', methods: ['POST'])]
@@ -44,6 +49,11 @@ class PlanCompteController extends AbstractController
         foreach($data as $key => $compte){
             $planCompteService->insertHierarchy($entityManager, $compte);
         }
+        return new JsonResponse([
+            'status' => true,
+            'message' => 'Importation réussie',
+            'path' => $this->generateUrl('app_plan_compte'),
+        ]);
     }
 
     #[Route(path: '/update/save', name: 'app_plan_compte.update.save', methods: ['POST'])]

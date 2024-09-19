@@ -7,6 +7,13 @@
     {{ parent() }}
     <script src="{{ asset("js/xhr.js") }}"></script>
     <script src="{{ asset("js/scr/plan_compte/plan_cpt_modal.js") }}"></script>
+    
+    {# Passage des messages flash au JavaScript #}
+    <script>
+        var flashMessages = {{ app.flashes|json_encode|raw }};
+    </script>
+    <script src="{{ asset("js/scr/plan_compte/plan_cpt_message.js") }}"></script>
+    
 {% endblock %}
 
 
@@ -16,7 +23,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Le plan de compte</h4>
+                    <h4 class="card-title">Le plan de compte</h4>   
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -60,4 +67,3 @@
         {{ include('plan_compte/_plan_compte_modal.html.twig') }}
     </div>    
 {% endblock %}
-
