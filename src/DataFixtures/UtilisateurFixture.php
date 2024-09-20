@@ -12,7 +12,6 @@ class UtilisateurFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Création d'un groupe utilisateur
-        //$groupe = $manager->getRepository(GroupeUtilisateur::class)->find(23);
         $groupe = $manager->getRepository(GroupeUtilisateur::class)->findByLibelle('Admin');
         
         if (!$groupe) {

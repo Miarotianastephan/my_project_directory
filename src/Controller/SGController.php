@@ -51,7 +51,8 @@ class SGController extends AbstractController
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
         $exercice = $data->getExercice();
-        $cpt = $compteMereRepository->find(41);
+        // $cpt = $compteMereRepository->find(2);
+        $cpt = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
@@ -106,7 +107,8 @@ class SGController extends AbstractController
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
         $exercice = $data->getExercice();
-        $cpt = $compteMereRepository->find(41);
+        // $cpt = $compteMereRepository->find(2);
+        $cpt = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
@@ -143,13 +145,10 @@ class SGController extends AbstractController
         }
 
         $exercice = $data->getExercice();
-        $cpt = $compteMereRepository->find(41);
-        if (!$cpt) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'Compte mère introuvable',
-            ]);
-        }
+        // $cpt = $compteMereRepository->find(2);
+        $cpt = $data->getPlanCompte()->getCompteMere();
+        dump($cpt);
+        dump($data);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
@@ -224,7 +223,8 @@ class SGController extends AbstractController
                                 CompteMereRepository   $compteMereRepository): JsonResponse
     {
         $exercice = $exerciceRepository->find(21);
-        $cpt = $compteMereRepository->find(41);
+        // $cpt = $compteMereRepository->find(41);
+        // $cpt = $data->getPlanCompte()->getCompteMere();
         $detail = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         dump($detail);
         return new JsonResponse([
