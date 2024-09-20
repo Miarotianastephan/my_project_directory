@@ -14,8 +14,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class DetailDemandePieceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    private $etatDmRepository;
+
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo)
     {
+        $this->etatDmRepository = $etatDmRepo;
         parent::__construct($registry, DetailDemandePiece::class);
     }
 
@@ -66,7 +70,7 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             //MAJ demande_type
             //MAJ demande_type => mère sy fille avec demande réelle
 
-            $dm_type->setDmEtat(50);
+            $dm_type->setDmEtat($this->etatDmRepository, 400); // OK_ETAT
             $dm_type->setMontantReel($montant_reel);
             $dm_type->setUtilisateur($user_demande);
 

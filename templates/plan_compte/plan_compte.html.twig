@@ -3,6 +3,18 @@
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}Informations sur le plan de compte du CE{% endblock %}
 {% block page_subtitle %}Gestion plan de compte{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/xhr.js") }}"></script>
+    <script src="{{ asset("js/scr/plan_compte/plan_cpt_modal.js") }}"></script>
+    
+    {# Passage des messages flash au JavaScript #}
+    <script>
+        var flashMessages = {{ app.flashes|json_encode|raw }};
+    </script>
+    <script src="{{ asset("js/scr/plan_compte/plan_cpt_message.js") }}"></script>
+    
+{% endblock %}
 
 
 {% block page_main_content %}
@@ -11,7 +23,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Le plan de compte</h4>
+                    <h4 class="card-title">Le plan de compte</h4>   
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -21,6 +33,7 @@
                                 <tr id="cols">
                                     <th id="isCol" scope="col">Numero du compte</th>
                                     <th id="isCol" scope="col">Intitulé du compte</th>
+                                    <th id="isCol" scope="col">Compte Mère</th>
                                     <th id="isCol" scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -28,6 +41,7 @@
                                 <tr>
                                     <th>numéro du compte</th>
                                     <th>intitulé du compte</th>
+                                    <th>compte mère</th>
                                     <th>actions</th>
                                 </tr>
                             </tfoot>
@@ -35,11 +49,12 @@
                             <tbody id="bodyList">
                                 {% for compte in data_plan_compte %}
                                 <tr id="{{compte.id}}">
-                                    <td id="">{{compte.CptNumero}}</td>
-                                    <td id="">{{compte.CptLibelle}}</td>
+                                    <td id="cpt_numero">{{compte.CptNumero}}</td>
+                                    <td id="cpt_libelle">{{compte.CptLibelle}}</td>
+                                    <td id="cpt_libelle_mere">{{compte.getCompteMere.getCptNumero}} {{compte.getCompteMere.getCptLibelle}}</td>
                                     <td>
-                                        <a href="" class="btn btn-dark btn-sm update">detail</a>
-                                        <a href="" class="btn btn-label-secondary btn-sm update">modifier</a>
+                                        <a href="" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
+                                        <a href="" class="btn btn-label-secondary btn-sm delete">suprimer</a>
                                     </td>
                                 </tr>     
                                 {% endfor %}                       
@@ -49,7 +64,6 @@
                 </div>
             </div>
         </div>
-
+        {{ include('plan_compte/_plan_compte_modal.html.twig') }}
     </div>    
 {% endblock %}
-

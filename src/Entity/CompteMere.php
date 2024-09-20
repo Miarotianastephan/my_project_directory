@@ -6,6 +6,7 @@ use App\Repository\CompteMereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: CompteMereRepository::class)]
 class CompteMere
@@ -24,6 +25,7 @@ class CompteMere
     /**
      * @var Collection<int, PlanCompte>
      */
+    #[Ignore]
     #[ORM\OneToMany(targetEntity: PlanCompte::class, mappedBy: 'compte_mere')]
     private Collection $planComptes;
 

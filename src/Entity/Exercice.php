@@ -15,7 +15,7 @@ class Exercice
     #[ORM\Column(name: 'exercice_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'customdate')]
+    #[ORM\Column(type: 'customdate', nullable:false)]
     private ?\DateTimeInterface $exercice_date_debut = null;
 
     #[ORM\Column(type: 'customdate', nullable: true)]

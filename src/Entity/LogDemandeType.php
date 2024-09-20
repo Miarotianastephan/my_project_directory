@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EtatDemandeRepository;
 use App\Repository\LogDemandeTypeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,6 +31,10 @@ class LogDemandeType
     #[ORM\ManyToOne(targetEntity: DemandeType::class, inversedBy: 'logDemandeTypes')]
     #[ORM\JoinColumn(name: "demande_type_id", referencedColumnName: "dm_type_id", nullable: false)]
     private ?DemandeType $demande_type = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: "etat_id", referencedColumnName: "etat_id", nullable: false)]
+    private ?EtatDemande $etat_log_demande_obj = null;
 
     public function getId(): ?int
     {
@@ -80,8 +85,11 @@ class LogDemandeType
         return $this->dm_etat;
     }
 
-    public function setDmEtat(int $dm_etat): static
+    public function setDmEtat(EtatDemandeRepository $etatDmRepo, int $dm_etat): static
     {
+        // Ajout de l'état du demande
+        $etat_demande = $this->findEtatDemande($etatDmRepo, $dm_etat);
+        $this->setEtatLogDemandeObj($etat_demande);
         $this->dm_etat = $dm_etat;
 
         return $this;
@@ -121,4 +129,24 @@ class LogDemandeType
         $this->demande_type = $demande_type;
         return $this;
     }
+
+    // Gestion du etat demande
+    public function findEtatDemande(EtatDemandeRepository $etatDmRepo, $codeEtat): EtatDemande{
+        return $etatDmRepo->findByEtatCode($codeEtat);
+    }
+
+    public function getEtatLogDemandeObj(): ?EtatDemande
+    {
+        return $this->etat_log_demande_obj;
+    }
+
+    public function setEtatLogDemandeObj(?EtatDemande $etat_log_demande_obj): static
+    {
+        $this->etat_log_demande_obj = $etat_log_demande_obj;
+
+        return $this;
+    }
+    
+
+
 }

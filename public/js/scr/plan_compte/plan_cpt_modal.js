@@ -27,6 +27,7 @@ $(document).ready(function () {
           delay: 0,
         });
     }
+    // pour créer le select pour les comptes mères
     var createSelectForGroupUtilisateur = (data) =>{
         console.log({
             '1' : 'createSelectForGroupUtilisateur',
@@ -34,20 +35,21 @@ $(document).ready(function () {
         })
         var options = '';
         // Bouclez sur le tableau et créez les options
+        options += `<option value="-1">Ne pas changer</option>`;
         data.forEach(obj => {
-            options += `<option value="${obj.id}">${obj.grp_libelle}</option>`;
+            options += `<option value="${obj.cpt_numero}">${obj.cpt_numero} ${obj.cpt_libelle}</option>`;
         });
         return options
     }
 
     // Variable nécessaire
-    var pathToControllerGetGroups = $('#getAllGroupeId').val();
+    var pathToControllerGetGroups = $('#getAllCptMere').val();
     var allGroupUtilisateur = null;
     var selectedRow = null;
     var selectedCol = null;
     var bodyList = $('#bodyList');
     var formModalUpdate = document.querySelector('#formModalUpdate');
-    var formModalDelete = document.querySelector('#formModalDelete');
+    // var formModalDelete = document.querySelector('#formModalDelete');
 
     // Pour avoir l'element mere => <tr>
     function getTrElement(theTargetElement){
@@ -89,27 +91,28 @@ $(document).ready(function () {
         return colNames;
     }
     var options_for_selected_row_html = null;
-    function getAllGroupOptions(pathToControllerGetGroup,currentGroupId){
+    function getAllGroupOptions(pathToControllerGetGroup){
         // Asynchrone with xhr
-        var grpID = {'usr_grp_id':currentGroupId};
         const xhr = new newXhr();
         xhr.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
                 allGroupUtilisateur = JSON.parse(xhr.responseText);
                 options_for_selected_row_html = createSelectForGroupUtilisateur(allGroupUtilisateur);
+                console.log(options_for_selected_row_html);
             }
             else if(this.readyState == 4){
                 appendAlert('Erreur de traitement de requete','danger');
             }
         }
-        xhr.open('POST', pathToControllerGetGroup, false)
-        xhr.send(JSON.stringify(grpID));
+        xhr.open('GET', pathToControllerGetGroup, false) // false pour que attendre la fin de l'opération
+        xhr.send();
     }
     function setSelectedRow(tr){
         const idOfTrElement = tr.id;
         selectedRow = document.getElementById(idOfTrElement);
         selectedCol = getSelectedRowChildrenWithIds();
         selectedCol = convertArrayToMap(selectedCol);
+        console.log(selectedCol);
     }
 
     // ---xxx--
@@ -118,39 +121,40 @@ $(document).ready(function () {
         const tr = getTrElement(target);
         if(tr.localName == "tr"){
             setSelectedRow(tr);
-            usr_grp_id = selectedCol['usr_grp_id'].label;
-            getAllGroupOptions(pathToControllerGetGroups,usr_grp_id);
+            // usr_grp_id = selectedCol['usr_grp_id'].label;
+            getAllGroupOptions(pathToControllerGetGroups);
             if( target.classList.contains('update') ){
                 var colNames = getAllColNames();
                 var sectionUpdate = document.querySelector('#sectionUpdate');
                 sectionUpdate.innerHTML = ''
                 // les ID des colonnes : 
-                    // 0: usr_matricule, 1:usr_grp_name, 2:usr_dt_ajoute, 3:usr_roles, 4:usr_grp_id
+                    // 0: cpt_numero, 1:cpt_libelle, 2:cpt_libelle_mere
                 // --------------------
                 sectionUpdate.innerHTML = 
                 `
-                <input name="usr_id" value="${selectedRow.id}" type="hidden" readonly />
-                <input name="${selectedCol['usr_grp_id'].id}_old" value="${selectedCol['usr_grp_id'].label}" type="hidden" readonly />
+                <input name="plan_cpt_id" value="${selectedRow.id}" type="hidden" readonly />
                 <div class="row gy-4 mb-3">
-                    <div class="col-md-6"> 
+                    <div class="col-md-12"> 
                         <label for="id-1" class="form-label">${colNames[0]} </label>
-                        <input type="text" id="id-1" class="form-control form-control-sm" name="${selectedCol['usr_matricule'].id}" value="${selectedCol['usr_matricule'].label}" />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="id-2" class="form-label">${colNames[1]}</label>
-                        <input type="text" id="id-2" class="form-control bg-primary-subtle form-control-sm" name="${selectedCol['usr_grp_name'].id}_old" value="${selectedCol['usr_grp_name'].label}" readonly/>
+                        <input type="text" id="id-1" class="form-control form-control-sm" name="${selectedCol['cpt_numero'].id}" value="${selectedCol['cpt_numero'].label}" />
                     </div>
                 </div> 
                 <div class="row gy-4 mb-3">
                     <div class="col-md-12">
-                        <label for="id-3" class="form-label">${colNames[2]} </label>
-                        <input type="text" id="id-3" class="form-control form-control-sm" name="${selectedCol['usr_dt_ajout'].id}" value="${selectedCol['usr_dt_ajout'].label}" readonly/>
+                        <label for="id-2" class="form-label">${colNames[1]}</label>
+                        <input type="text" id="id-2" class="form-control bg-primary-subtle form-control-sm" name="${selectedCol['cpt_libelle'].id}_old" value="${selectedCol['cpt_libelle'].label}"/>
                     </div>
-                </div>
+                </div> 
                 <div class="row gy-4 mb-3">
                     <div class="col-md-12">
-                        <label for="selectOption" class="text-danger">Choix du nouveau groupe d'affecttation</label>
-                        <select name="${selectedCol['usr_grp_id'].id}" class="form-select" id="selectOption">
+                        <label for="id-3" class="form-label">${colNames[2]}</label>
+                        <input type="text" id="id-3" class="form-control bg-primary-subtle form-control-sm" name="${selectedCol['cpt_libelle_mere'].id}" value="${selectedCol['cpt_libelle_mere'].label}" readonly/>
+                    </div>
+                </div> 
+                <div class="row gy-4 mb-3">
+                    <div class="col-md-12">
+                        <label for="selectOption" class="text-danger">Nouveau compte d'attribution</label>
+                        <select name="compte_mere" class="form-select" id="selectOption">
                             ${options_for_selected_row_html}
                         </select>
                     </div>
@@ -180,7 +184,7 @@ $(document).ready(function () {
         for (let [key, value] of formUp.entries()) {
             console.log(`${key}: ${value}`);
         }
-        console.log();
+        console.log(selectedCol);
         // Asynchrone with xhr
         const xhr = new newXhr();
         xhr.onreadystatechange = function(){
@@ -191,12 +195,14 @@ $(document).ready(function () {
                     appendAlert(rep.message, 'danger');
                 }
                 else if (rep.status == true){
-                    appendAlert(rep.message, 'success');
-                    const new_group_selected = $('#selectOption');
-                    selectedCol['usr_matricule'].elem.innerText = formUp.get(selectedCol['usr_matricule'].id);
-                    selectedCol['usr_grp_id'].elem.innerText = new_group_selected.val();
-                    selectedCol['usr_grp_name'].elem.innerText = new_group_selected.find("option:selected").text();
-                    selectedCol['usr_dt_ajout'].elem.innerText = formUp.get(selectedCol['usr_dt_ajout'].id);
+                    if(rep.update == true){
+                        appendAlert(rep.message, 'success');
+                        selectedCol['cpt_numero'].elem.innerText = formUp.get('cpt_numero');
+                        selectedCol['cpt_libelle'].elem.innerText = formUp.get('cpt_libelle_old');
+                        selectedCol['cpt_libelle_mere'].elem.innerText = $('#selectOption').find("option:selected").text();;
+                    }else if(rep.update == false){
+                        appendAlert(rep.message, 'warning');
+                    }
                 }
             }
             else if(this.readyState == 4){
@@ -208,13 +214,13 @@ $(document).ready(function () {
         xhr.send(formUp);
     })
     // SUBMIT DELETE
-    formModalDelete.addEventListener('submit', (e)=> {
-        e.preventDefault();
-        var data = new FormData(formModalDelete);
-        // Ajout XHR pour requete vrai delete
-        console.log(data);
-        selectedRow.remove();
-    })
+    // formModalDelete.addEventListener('submit', (e)=> {
+    //     e.preventDefault();
+    //     var data = new FormData(formModalDelete);
+    //     // Ajout XHR pour requete vrai delete
+    //     console.log(data);
+    //     selectedRow.remove();
+    // })
 
 
   });

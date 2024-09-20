@@ -18,8 +18,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class LogDemandeTypeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    private $etatDmRepository;
+
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo)
     {
+        $this->etatDmRepository = $etatDmRepo;
         parent::__construct($registry, LogDemandeType::class);
     }
 
@@ -69,7 +73,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             }
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($dm_type->getDmEtat());
+            $log_dm->setDmEtat($this->etatDmRepository , $dm_type->getDmEtat()); // OK_ETAT
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
             $log_dm->setLogDmDate(new \DateTime());
@@ -78,7 +82,8 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $entityManager->persist($log_dm);
                 $entityManager->flush();
 
-                $dm_type->setDmEtat(20);
+                // Mise à jour de l'entité `DemandeType`
+                $dm_type->setDmEtat($this->etatDmRepository , 200); 
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -139,7 +144,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($dm_type->getDmEtat());
+            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setLogDmObservation($commentaire_data);
             $log_dm->setDemandeType($dm_type);
@@ -166,7 +171,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 //$connection->commit();
 
                 // MAJ de dm_type la base de données
-                $dm_type->setDmEtat(30);
+                $dm_type->setDmEtat($this->etatDmRepository , 300); // OK_ETAT
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setLogDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -279,14 +284,15 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         if (!$dm_type) {
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Demande de type introuvable'
+                'message' => 'Déblocage impossible car demande introuvable'
             ]);
         }
+        // mila atao vérification hoe tena trésorier ve no manao ilay déblocage
         $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
         if (!$user_tresorier) {
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Utilisateur tresorier introuvable.'
+                'message' => 'Utilisateur trésorier introuvable.'
             ]);
         }
         $user_sg = $dm_type->getUtilisateur();
@@ -297,20 +303,21 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ]);
         }
         $log_dm = new LogDemandeType();
-        $log_dm->setDmEtat($dm_type->getDmEtat());
+        $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
         $log_dm->setUserMatricule($user_sg->getUserMatricule());
         $log_dm->setDemandeType($dm_type);
 
+        $connection = $entityManager->getConnection();
         try {
             $entityManager->persist($log_dm);
             $entityManager->flush();
 
-            // MAJ de dm_type la base de données
-            $dm_type->setDmEtat(40);
+            $dm_type->setDmEtat($this->etatDmRepository, 40); // OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setLogDmDate($log_dm->getLogDmDate());
             $entityManager->persist($dm_type);
-            $entityManager->flush();
+            $entityManager->flush();                    // MAJ de dm_type la base de données
+
         } catch (\Exception $e) {
             //$connection->rollBack();
             return new JsonResponse([
@@ -323,30 +330,4 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             'message' => 'Le fond a été remis'
         ]);
     }
-
-
-    //    /**
-    //     * @return LogDemandeType[] Returns an array of LogDemandeType objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?LogDemandeType
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

@@ -6,6 +6,7 @@ use App\Entity\Banque;
 use App\Entity\CompteMere;
 use App\Entity\DemandeType;
 use App\Entity\PlanCompte;
+use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +30,7 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
+    
     public function ajout_approvisionnement(int                $entite_id,
                                             int                $banque_id,
                                             int                $chequier_numero,
@@ -61,30 +62,29 @@ class DemandeTypeRepository extends ServiceEntityRepository
         );
     }
 
+    public function insertDemandeType(DemandeType $demandeType){
+        try {
+            $em = $this->getEntityManager();
+            $em->persist($demandeType);
+            $em->flush();
+            return [
+                "status" => true,
+                "message" => 'Demande insérer avec succes',
+            ];
+        } catch (\Throwable $th) {
+            return [
+                "status" => false,
+                "message" => $th->getMessage(),
+            ];
+        }
+    }
 
-
-//    /**
-//     * @return DemandeType[] Returns an array of DemandeType objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?DemandeType
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByUtilisateur(Utilisateur $utilisateur){
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.utilisateur', 'u')
+            ->andWhere('u = :utilisateur')
+            ->setParameter('utilisateur', $utilisateur)
+            ->getQuery()
+            ->getResult();
+    }
 }

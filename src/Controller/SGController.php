@@ -33,7 +33,7 @@ class SGController extends AbstractController
     {
         return $this->render('sg/index.html.twig', [
             //'demande_types' => $dm_Repository->findAll()->where($dm_Repository == 10)
-            'demande_types' => $dm_Repository->findByEtat(10)
+            'demande_types' => $dm_Repository->findByEtat(100)
         ]);
     }
 

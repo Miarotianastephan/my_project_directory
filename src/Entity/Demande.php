@@ -16,8 +16,11 @@ class Demande
     #[ORM\Column(name: 'dm_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,unique: true, nullable: false)]
     private ?string $libelle = null;
+
+    #[ORM\Column(unique: true, nullable: false)]
+    private ?int $dm_code = null;
 
     public function __construct(){ }
 
@@ -34,6 +37,18 @@ class Demande
     public function setLibelle(string $libelle): static
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getDmCode(): ?int
+    {
+        return $this->dm_code;
+    }
+
+    public function setDmCode(int $dm_code): static
+    {
+        $this->dm_code = $dm_code;
 
         return $this;
     }

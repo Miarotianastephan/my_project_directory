@@ -332,3 +332,100 @@ VALUES (
 select * from exercice where EXERCICE_DATE_DEBUT > TO_DATE('01-08-2024','DD-MM-YYYY') and EXERCICE_DATE_FIN is null ;
 
 
+
+CREATE OR REPLACE TRIGGER trg_generate_reference
+BEFORE INSERT ON demande_type
+FOR EACH ROW
+DECLARE
+  v_year VARCHAR2(4);   
+  v_sequence NUMBER;    
+  v_prefix VARCHAR2(3); 
+  v_code_dm NUMBER;   
+BEGIN
+ 
+  SELECT TO_CHAR(SYSDATE, 'YYYY') INTO v_year FROM DUAL;
+  SELECT :NEW.dm_type_id INTO v_sequence FROM DUAL;
+
+  SELECT dm_code INTO v_code_dm 
+  FROM demande
+  WHERE dm_id = :NEW.dm_id;
+
+  IF v_code_dm = 10 THEN
+    v_prefix := 'DEC';
+  ELSE
+    v_prefix := 'APR';
+  END IF;
+
+  :NEW.REF_DEMANDE := v_prefix || '_' || v_year || '_' || v_sequence;
+END;
+/
+
+insert into demande_type
+(DM_TYPE_ID,ENTITY_CODE_ID,UTILISATEUR_ID,PLAN_COMPTE_ID,EXERCICE_ID,DM_ID,DM_DATE,DM_MONTANT,DM_MODE_PAIEMENT,DM_ETAT,DM_DATE_OPERATION) 
+values (
+    demande_type_seq.NEXTVAL,
+    (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero='510001'),
+    (select u.user_id from utilisateur u where u.user_matricule='tesla'),
+    (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero='611000'),
+    (select e.exercice_id from exercice e where e.exercice_date_debut=TO_DATE('01-01-2004','DD-MM-YYYY')),
+    (select d.dm_id from demande d where d.libelle='Decaissement'),
+    TO_DATE('16-09-2024','DD-MM-YYYY'),25000,'Espece',10,TO_DATE('16-09-2024','DD-MM-YYYY'))
+    ;
+
+
+-- Insertion de transaction 
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-001','Encaissement Subvention BFM');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-002','Approvisionnement petite caissse Siège');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-003','Approvisionnement petite caissse RT');
+-- Les paiements
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-004','Paiement facture par chèque');
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-005','Paiement facture en espèces sièges');
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-006','Paiement facture en espèces RT');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-010','Encaissement interêt opération');
+
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-011','Comptabilisation des frais bancaires');
+
+-- améliorations des états xxx
+-- ETAT INITIEE 1xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,100, 'Initié');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,101, 'Modifié');
+
+-- ETAT ATTENTES 2xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,200, 'Attente fonds');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,201, 'Attente modification');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,202, 'Attente versement');
+
+-- ETAT REFUS 3xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,300, 'Refusé');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,301, 'Débloqué');
+
+-- ETAT AVANT FIN 4xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,400, 'Justifié');
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,401, 'Reversé');
+
+-- ETAT FIN 5xx
+insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,500, 'Comptabilisé');
+
+-- FREE DEMANDE
+-- delete from log_demande_type;
+-- delete from demande_type;
+-- commit;

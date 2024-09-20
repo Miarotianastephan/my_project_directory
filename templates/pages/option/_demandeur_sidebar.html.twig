@@ -1,0 +1,43 @@
+<li class="nav-section">
+    <span class="sidebar-mini-icon">
+    <i class="fa fa-ellipsis-h"></i>
+    </span>
+    <h4 class="text-section">Demandeur</h4>
+</li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#demande">
+        <i class="fas fa-money-check"></i>
+        <p>Gestion des demandes</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="demande">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('demandeur.liste_demande') }}">
+                    <span class="sub-item">Mes demandes</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('demandeur.nouveau_demande') }}">
+                    <span class="sub-item">Nouveau demande</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#piece">
+        <i class="fas fa-file-upload"></i>
+        <p>Gestion de pièce jointe</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="piece">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('dm_piece.liste_demande') }}">
+                    <span class="sub-item">Importer</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>

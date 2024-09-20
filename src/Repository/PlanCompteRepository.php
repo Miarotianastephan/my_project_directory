@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\PlanCompte;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -26,51 +27,56 @@ class PlanCompteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    //    /**
-    //     * @return PlanCompte[] Returns an array of PlanCompte objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?PlanCompte
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-
-    public function insertUtilisateur(string $user_matricule, int $groupeId, string $roles): void
+    public function findCompteDepense(): array
     {
-        // Requête SQL Oracle
-        $sql = "INSERT INTO utilisateur (user_id,user_matricule, grp_id, roles) 
-                VALUES (user_seq.NEXTVAL,:user_matricule, :grp_id, :roles)";
-        // Récupérer la connexion Doctrine
-        $conn = $this->getEntityManager()->getConnection();
-        // Démarrer la transaction
-        $conn->beginTransaction();
+        return $this->createQueryBuilder('p')
+            ->where('p.cpt_numero LIKE :numStart61')
+            ->orWhere('p.cpt_numero LIKE :numStart62')
+            ->orWhere('p.cpt_numero LIKE :numStart63')
+            ->orWhere('p.cpt_numero LIKE :numStart64')
+            ->orWhere('p.cpt_numero LIKE :numStart65')
+            ->orWhere('p.cpt_numero LIKE :numStart66')
+            ->andWhere('LENGTH(p.cpt_numero) = 6')  // Vérification que le numéro fait bien 6 chiffres
+            ->setParameter('numStart61', '61%')
+            ->setParameter('numStart62', '62%')
+            ->setParameter('numStart63', '63%')
+            ->setParameter('numStart64', '64%')
+            ->setParameter('numStart65', '65%')
+            ->setParameter('numStart66', '66%')
+            ->getQuery()
+            ->getResult();
+    }
+    public function findEntityCode(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.cpt_numero LIKE :caisse')
+            ->andWhere('LENGTH(p.cpt_numero) = 6')
+            ->setParameter('caisse', '51%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function updatePlanCompte(PlanCompte $pl){
         try {
-            // Préparer et exécuter la requête SQL
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('user_matricule', $user_matricule);
-            $stmt->bindValue('grp_id', $groupeId);
-            $stmt->bindValue('roles', $roles);
-            $stmt->executeQuery();
-            $conn->commit();
-        } catch (Exception $e) {
-            $conn->rollBack();
-            throw $e; // Re-throw
+            $em = $this->getEntityManager();
+            $em->persist($pl);
+            $em->flush();
+            return [
+                "status" => true,
+                "update" => true,
+                "message" => sprintf('%s modifié avec succès',$pl->getCptLibelle()),
+            ];
+        } catch (UniqueConstraintViolationException $exc_unique) { // En cas d'erreur
+            return $reponse_data = [
+                'status' => false,
+                'message' => 'Modification non validée, unicité des numéros de comptes !'
+            ];
+        } catch (\Exception $except) {
+            return [
+                "status" => false,
+                "message" => $except->getMessage(),
+            ];
         }
     }
+
 }

@@ -3,11 +3,11 @@
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}Section Demandeur{% endblock %}
 {% block page_subtitle %}Enregistrement de demande de fonds{% endblock %}
-{# {% block javascripts %}
+{% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/xhr.js') }}" ></script>
-    <script src="{{ asset('js/scr/scr_admin_add_user.js') }}" ></script>
-{% endblock %} #}
+    {# <script src="{{ asset('js/xhr.js') }}" ></script> #}
+    <script src="{{ asset('js/scr/demande/scr_demande.js') }}" ></script>
+{% endblock %}
 
 {% block page_main_content %}
 <div class="row">
@@ -16,59 +16,70 @@
             <div class="card-header">
                 <div class="card-title">Remplissez ce formulaire de demande</div>
             </div>
-            <form id="add_user_form" action="" method="post">
+            <form id="add_demande_form" action="{{ path('demandeur.save_nouveau_demande') }}" method="post">
                 <div class="card-body">
                     <div class="row">
                         
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="matricule">Numéro matricule</label>
-                                <input type="text" name="user_matricule" class="form-control" id="matricule" value="MATRICULE A CHANGER" readonly/>
+                                <input type="text" name="user_matricule" class="form-control" id="matricule" value="{{app.user.userMatricule}}" readonly/><!-- Champ de saisie affiché -->
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_operation">Date d'opération</label>
+                                <input type="date" name="date_operation" class="form-control" id="date_operation"/>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_saisie">Date de saisie</label>
+                                <input type="date" name="date_saisie" class="form-control" id="date_saisie" readonly/>
+                            </div>
+                        </div>
+                        
+                        <div class="row form-group  gy-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="Motif">Motif du demande</label>
+                                <select name="id_plan_comptable_motif" class="form-select" id="Motif"> 
+                                {% for depense in data_compte_depense %}
+                                    <option value="{{depense.Id}}">{{depense.getCptNumero}} {{depense.getCptLibelle}}</option>
+                                {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="date_input">Date d'opération</label>
-                                <input type="date" name="dm_date" class="form-control" id="date_input"/>
+                                <label for="EntityCode">Entité pour l'opération</label>
+                                <select name="id_plan_comptable_entity" class="form-select" id="EntityCode">
+                                {% for entity in data_entity %}
+                                    <option value="{{entity.Id}}">{{entity.getCptNumero}} {{entity.getCptLibelle}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row form-group gy-3 mb-3">
+                            <div class="col-md-12">
+                                <label for="dm_montant">Insérer le montant à demander</label>
+                                <input type="text" name="dm_montant" class="form-control" id="dm_montant" placeholder="montant du demande"/>
                             </div>
                         </div>
 
                         <div class="row form-group gy-3 mb-3">
                             <div class="col-md-6">
-                                <label for="dm_montant">Insérer le montant à demander</label>
-                                <input type="text" name="dm_montant" class="form-control" id="dm_montant" placeholder="montant du demande"/>
-                            </div>
-                            <div class="col-md-6">
                                 <label>Mode de paiement</label><br />
                                 <div class="d-flex">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
+                                        <input class="form-check-input" type="radio" name="mode_paiement" id="flexRadioDefault1" value="0"/>
                                         <label class="form-check-label" for="flexRadioDefault1">En éspèces</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                        <input class="form-check-input" type="radio" name="mode_paiement" id="flexRadioDefault2" checked value="1"/>
                                         <label class="form-check-label" for="flexRadioDefault2" >Par chèques</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mode_paiement" id="flexRadioDefault3" disabled  value="2"/>
+                                        <label class="form-check-label" for="flexRadioDefault3" >Subvention BFM</label>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="formSelectGroupeAffectation">Motif du demande</label>
-                            <select name="id_plan_comptable" class="form-select" id="formSelectGroupeAffectation"> 
-                                    <option value="1">Boisson Foot</option>
-                                    <option value="2">Achat maillot basket</option>
-                                    <option value="3">Location terrain synthetique</option>
-                            </select>
-                        </div>
-                        
-                        <div class="row form-group gy-3 mb-3">
-                            <div class="col-md-6">
-                                <label for="formSelectGroupeAffectation">Entité pour l'opération</label>
-                                <select name="id_plan_comptable" class="form-select" id="formSelectGroupeAffectation"> 
-                                        <option value="1">Entité Siège</option>
-                                        <option value="2">Entité RT-TMS</option>
-                                        <option value="3">Entité RT-ATR</option>
-                                </select>
-                            </div>
+                            
                             <div class="col-md-6">
                                 <label for="dm_piece">Insérer une pièce jointe</label>
                                 <input type="file" name="dm_piece" class="form-control" id="dm_piece"/>

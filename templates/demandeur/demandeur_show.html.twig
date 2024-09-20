@@ -14,16 +14,11 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">À propos de la demande</h4>
-                    <div class="text-end">
-                        <h3>
-                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
-                        </h3>
-                    </div>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
                         <button style="border: none; background-color: transparent; text-align: start">
-                            <a href="{{ path('SG.liste_demande_en_attente') }}">
+                            <a href="{{ path('demandeur.liste_demande') }}">
                                 {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%', color:'#2a2f5b'}) }}
                             </a>
                         </button>
@@ -35,7 +30,7 @@
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Remettant:</label>
-                            <div class="col form-control">{{ demande_type.utilisateur.UserMatricule }}</div>
+                            <div class="col form-control" >{{ demande_type.utilisateur.UserMatricule }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Date de la demande:</label>
@@ -52,8 +47,7 @@
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Montant de la demande:</label>
-                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }}Ar
-                            </div>
+                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Type de paiement:</label>
@@ -66,28 +60,21 @@
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->
                             {% if images|length  != 0 %}
-                                <div class="col">
-                                    <!-- Bouton pour ouvrir le modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#fileModal">
-                                        Voir les pièces jointes
-                                    </button>
-                                </div>
+                            <div class="col">
+                                <!-- Bouton pour ouvrir le modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#fileModal">
+                                    Voir les pièces jointes
+                                </button>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-                <form id="formulaire" data-update="{{ path('SG.modifier_en_attente', {'id': demande_type.Id}) }}"
-                      data-refuser="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
-                      data-valider="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}">
-                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button id="refuser" name="refuser" value="refuser" class="btn btn-danger btn">REFUSER</button>
-                        <button id="modifier" name="modifier" value="modifier" class="btn btn-primary btn">MODIFIER
-                        </button>
-                        <button id="valider" name="valider" value="valider" class="btn btn-success btn">VALIDER</button>
-                    </div>
-                </form>
-
+                <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
+                       class="btn btn-warning btn">MODIFIER</a>
+                </div>
             </div>
         </div>
     </div>
@@ -194,8 +181,43 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset("js/scr/sg/show.js") }}"></script>
+
+
+    <script>
+        // Fonction pour charger le contenu d'un fichier texte
+        function loadTextFile(filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    // Affiche le contenu du fichier texte dans le modal
+                    var textModal = new bootstrap.Modal(document.getElementById('textModal'));
+
+                    document.getElementById('text-preview').textContent = data;
+                    textModal.show();
+                })
+                .catch(error => console.error('Erreur lors du chargement du fichier texte :', error));
+        }
+
+
+        // Fonction pour charger un aperçu d'un fichier Excel
+        function loadExcelPreview(filePath) {
+            fetch(filePath)
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    var workbook = XLSX.read(data, {type: 'array'});
+                    var sheetName = workbook.SheetNames[0];
+                    var sheet = workbook.Sheets[sheetName];
+                    var html = XLSX.utils.sheet_to_html(sheet);
+                    // Mettre à jour le contenu du modal avec l'aperçu
+                    document.getElementById('excel-preview').innerHTML = html;
+                })
+                .catch(error => console.error('Erreur lors du chargement du fichier Excel :', error));
+        }
+
+        function loadPdfFile(filePath) {
+            document.getElementById('pdf-preview').src = filePath;
+            var pdfModal = new bootstrap.Modal(document.getElementById('pdfModal'));
+            pdfModal.show();
+        }
+    </script>
 {% endblock %}

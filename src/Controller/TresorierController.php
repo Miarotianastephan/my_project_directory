@@ -39,7 +39,7 @@ class TresorierController extends AbstractController
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
         return $this->render('tresorier/index.html.twig', [
-            'demande_types' => $dm_Repository->findByEtat(20)
+            'demande_types' => $dm_Repository->findByEtat(200)
         ]);
 
     }
@@ -66,7 +66,11 @@ class TresorierController extends AbstractController
     public function remettre_fond($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $id_user_tresorier = $this->user->getId();
-        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier);
+        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier); // Déblocage du fonds demandée
+        // Comptabilisation de l'opération de décaissement
+            // à compléter
+        // fin comptabilisation
+        
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {
             return new JsonResponse([
