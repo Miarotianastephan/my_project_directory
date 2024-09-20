@@ -48,7 +48,7 @@ class DemandeTypeService
     public function insertDemandeType($exercice, $planCptEntityId, $planCptMotifId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation){
         // createReferenceDemande : gérer dans la base de donnée par un trigger 
         // createTypeDeDemande : toujours de type demande de décaissement
-        $demande = $this->demandeRepository->findDemandeByCode(10);
+        $demande = $this->demandeRepository->findDemandeByCode(10);//Code demande 10 => Décaissement
 
         $demande_type = new DemandeType();
         $demande_type->setDmMontant($montantDemande);

@@ -5,34 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/my_project_directory.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/my_project_directory.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/LogDemandeType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LogDemandeType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ChequierRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ChequierRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/GroupeUtilisateurRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/GroupeUtilisateurRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/show_comptabilisation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/show_comptabilisation.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/suivi_comptabilisation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/suivi_comptabilisation.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demande_piece/_form_pj.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/demande_piece/ajout_piece_justificative.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demande_piece/ajout_piece_justificative.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/exercice/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/modifier_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/modifier_demande.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/refuser_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/refuser_demande.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/sg/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/show.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/demande_approvisionnement.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/demande_approvisionnement.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/show.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,27 +198,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;PHP Script.AdminController.php.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;integration__v2__2&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "PHP Script.AdminController.php.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "integration__v3__Randy",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.completion",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;oracle&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "oracle"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />

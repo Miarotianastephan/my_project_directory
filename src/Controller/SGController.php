@@ -103,7 +103,7 @@ class SGController extends AbstractController
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
         $exercice = $data->getExercice();
-        $cpt = $compteMereRepository->find(2);
+        $cpt = $compteMereRepository->find(41);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
@@ -132,7 +132,13 @@ class SGController extends AbstractController
         }
 
         $exercice = $data->getExercice();
-        $cpt = $compteMereRepository->find(2);
+        $cpt = $compteMereRepository->find(41);
+        if (!$cpt) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Compte mère introuvable',
+            ]);
+        }
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
