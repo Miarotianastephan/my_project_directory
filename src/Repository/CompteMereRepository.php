@@ -43,11 +43,11 @@ class CompteMereRepository extends ServiceEntityRepository
        }
 
        public function findByPlanCompte(PlanCompte $planCompte): ?CompteMere{
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.planComptes = :val')
-            ->setParameter('val', $planCompte)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.planComptes = :val')
+                ->setParameter('val', $planCompte)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
        }
 }

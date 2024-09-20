@@ -49,7 +49,7 @@ class SGController extends AbstractController
 
         $exercice = $data->getExercice();
         // $cpt = $compteMereRepository->find(2);
-        $cpt = $compteMereRepository->findByPlanCompte($data->getPlanCompte());
+        $cpt = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
@@ -105,7 +105,7 @@ class SGController extends AbstractController
 
         $exercice = $data->getExercice();
         // $cpt = $compteMereRepository->find(2);
-        $cpt = $compteMereRepository->findByPlanCompte($data->getPlanCompte());
+        $cpt = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
@@ -135,7 +135,7 @@ class SGController extends AbstractController
 
         $exercice = $data->getExercice();
         // $cpt = $compteMereRepository->find(2);
-        $cpt = $compteMereRepository->findByPlanCompte($data->getPlanCompte());
+        $cpt = $data->getPlanCompte()->getCompteMere();
         dump($cpt);
         dump($data);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
@@ -213,7 +213,7 @@ class SGController extends AbstractController
     {
         $exercice = $exerciceRepository->find(21);
         // $cpt = $compteMereRepository->find(2);
-        $cpt = $compteMereRepository->findByPlanCompte($data->getPlanCompte());
+        // $cpt = $data->getPlanCompte()->getCompteMere();
         $detail = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         dump($detail);
         return new JsonResponse([
