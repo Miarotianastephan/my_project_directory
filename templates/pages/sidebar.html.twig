@@ -58,10 +58,10 @@
                 {% elseif is_granted('ROLE_10') %}
                     {{ include('pages/option/_demandeur_sidebar.html.twig') }}
 
-                {% elseif is_granted('ROLE_20') %}
+                {% elseif is_granted('ROLE_30') %}
                     {{ include('pages/option/_tresorier_sidebar.html.twig') }}
 
-                {% elseif is_granted('ROLE_30') %}
+                {% elseif is_granted('ROLE_20') %}
                     {{ include('pages/option/_sg_sidebar.html.twig') }}
 
                 {% elseif is_granted('ROLE_40') %}

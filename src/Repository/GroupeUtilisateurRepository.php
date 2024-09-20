@@ -31,15 +31,15 @@ class GroupeUtilisateurRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?GroupeUtilisateur
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+       public function findByLibelle($libelle): ?GroupeUtilisateur
+       {
+           return $this->createQueryBuilder('g')
+               ->andWhere('g.grp_libelle = :val')
+               ->setParameter('val', $libelle)
+               ->getQuery()
+               ->getOneOrNullResult()
+           ;
+       }
     
         /**
      * Récupère la liste des groupes où l'utilisateur n'est pas concerné.

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CompteMere;
+use App\Entity\PlanCompte;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,5 +40,14 @@ class CompteMereRepository extends ServiceEntityRepository
                ->getQuery()
                ->getOneOrNullResult()
            ;
+       }
+
+       public function findByPlanCompte(PlanCompte $planCompte): ?CompteMere{
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.planComptes = :val')
+            ->setParameter('val', $planCompte)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
        }
 }
