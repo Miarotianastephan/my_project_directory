@@ -125,22 +125,17 @@ class SGController extends AbstractController
                             DetailBudgetRepository $detailBudgetRepository,
                             CompteMereRepository $compteMereRepository): Response
     {
-        $data = $dm_Repository->find($id);
+        $data = $dm_Repository->find($id);          // Find demandeType by this ID
         if (!$data) {
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Demande introuvable',
             ]);
         }
-
-        $exercice = $data->getExercice();
-        // $cpt = $compteMereRepository->find(2);
-        $cpt = $data->getPlanCompte()->getCompteMere();
-        dump($cpt);
-        dump($data);
+        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $cpt = $data->getPlanCompte()->getCompteMere();     // Avoir le compteMere du Motif liéé au DemandeType
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
-        //$solde_reste = $budget->getBudgetMontant() - $solde;
         $solde_reste =  $solde;
         return $this->render('sg/valider_demande.html.twig',
             [
@@ -157,9 +152,11 @@ class SGController extends AbstractController
         return $this->render('sg/refuser_demande.html.twig', ['demande_type' => $data]);
     }
 
+    // A DEBUGGUER
     #[Route('/valider_demande/{id}', name: 'valider_demande', methods: ['POST'])]
     public function valider_demande($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
+
         $id_user_sg = $this->user->getId(); // mandeha io 
 
         $rep = $logDemandeTypeRepository->ajoutValidationDemande($id, $id_user_sg);

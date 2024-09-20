@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\DemandeType;
 use App\Entity\LogDemandeType;
 use App\Entity\Utilisateur;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -64,20 +65,12 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Utilisateur associé à la demande introuvable.'
                 ]);
             }
-            $list_historique = $this->findByDemandeType($dm_type);
-            if ($this->count($list_historique) == 0 || $list_historique == null) {
-                return new JsonResponse([
-                    'success' => false,
-                    'message' => 'Historique de demande introuvable.'
-                ]);
-            }
             // Création du log
             $log_dm = new LogDemandeType();
             $log_dm->setDmEtat($this->etatDmRepository , $dm_type->getDmEtat()); // OK_ETAT
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
             $log_dm->setLogDmDate(new \DateTime());
-
             try {
                 $entityManager->persist($log_dm);
                 $entityManager->flush();
@@ -98,6 +91,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Erreur lors de la validation de la demande : ' . $e->getMessage()
             ]);
         }
+        dump($dm_type_id);
 
         // Si tout se passe bien, retour d'une réponse JSON de succès
         return new JsonResponse([
@@ -237,19 +231,20 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($dm_type->getDmEtat());
+            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setLogDmObservation($commentaire_data);
             $log_dm->setDemandeType($dm_type);
+            $log_dm->setLogDmDate(new DateTime());
 
             try {
                 $entityManager->persist($log_dm);
                 $entityManager->flush();
 
                 // MAJ de dm_type la base de données
-                $dm_type->setDmEtat(31);
+                $dm_type->setDmEtat($this->etatDmRepository, 201);
                 $dm_type->setUtilisateur($user_sg);
-                $dm_type->setLogDmDate(new \DateTime());
+                $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
                 $entityManager->flush();
 
