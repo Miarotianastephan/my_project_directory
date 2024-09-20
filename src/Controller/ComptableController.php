@@ -167,7 +167,7 @@ class ComptableController extends AbstractController
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]
     public function suivi_comptabilisation(DemandeTypeRepository $dm_rep): Response
     {
-        $demande_types = $dm_rep->findByEtat(70);
+        $demande_types = $dm_rep->findByEtat(401);
         return $this->render('comptable/suivi_comptabilisation.html.twig', ['demande_types' => $demande_types]);
     }
 

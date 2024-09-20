@@ -30,7 +30,7 @@ class TresorierController extends AbstractController
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
         return $this->render('tresorier/index.html.twig', [
-            'demande_types' => $dm_Repository->findByEtat(20)
+            'demande_types' => $dm_Repository->findByEtat(200)
         ]);
 
     }
