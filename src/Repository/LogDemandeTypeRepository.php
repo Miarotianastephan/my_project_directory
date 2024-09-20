@@ -312,7 +312,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $entityManager->persist($log_dm);
             $entityManager->flush();
 
-            $dm_type->setDmEtat($this->etatDmRepository, 40); // OK_ETAT
+            $dm_type->setDmEtat($this->etatDmRepository, 301); // OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setLogDmDate($log_dm->getLogDmDate());
             $entityManager->persist($dm_type);
