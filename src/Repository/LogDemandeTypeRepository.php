@@ -235,7 +235,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $statement->executeQuery();
             $connection->commit();                      // Ajout dans log_etat_demande 
 
-            $dm_type->setDmEtat($this->etatDmRepository, 40); // OK_ETAT
+            $dm_type->setDmEtat($this->etatDmRepository, 301); // OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $entityManager->persist($dm_type);
             $entityManager->flush();                    // MAJ de dm_type la base de données
