@@ -31,11 +31,14 @@ class SGController extends AbstractController
     #[Route(path: '/', name: 'SG.liste_demande_en_attente', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
+
+        $liste_demande_a_modifier = $dm_Repository->findByEtat(100);
         return $this->render('sg/index.html.twig', [
             //'demande_types' => $dm_Repository->findAll()->where($dm_Repository == 10)
             'demande_types' => $dm_Repository->findByEtat(100)
         ]);
     }
+
 
     #[Route('/demande/modifier/{id}', name: 'SG.modifier_en_attente', methods: ['GET'])]
     public function modifier($id,
@@ -48,11 +51,11 @@ class SGController extends AbstractController
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
         $exercice = $data->getExercice();
-        $cpt = $compteMereRepository->find(2);
+        $cpt = $compteMereRepository->find(41);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
-        $solde_reste =  $solde;
+        $solde_reste = $solde;
 
         return $this->render('sg/modifier_demande.html.twig',
             [
@@ -108,6 +111,14 @@ class SGController extends AbstractController
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
         $solde_reste = $solde;
+
+        $mode_paiement = $data->getDmModePaiement();
+        if ($mode_paiement == 0) {
+            $data->setDmModePaiement("éspèce");
+        } else if ($mode_paiement == 1) {
+            $data->setDmModePaiement("Chèque");
+        }
+        $data->setDmModePaiement($mode_paiement);
         return $this->render('sg/show.html.twig',
             [
                 'demande_type' => $data,
@@ -142,7 +153,7 @@ class SGController extends AbstractController
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
         //$solde_reste = $budget->getBudgetMontant() - $solde;
-        $solde_reste =  $solde;
+        $solde_reste = $solde;
         return $this->render('sg/valider_demande.html.twig',
             [
                 'demande_type' => $data,
@@ -213,7 +224,7 @@ class SGController extends AbstractController
                                 CompteMereRepository   $compteMereRepository): JsonResponse
     {
         $exercice = $exerciceRepository->find(21);
-        $cpt = $compteMereRepository->find(2);
+        $cpt = $compteMereRepository->find(41);
         $detail = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         dump($detail);
         return new JsonResponse([

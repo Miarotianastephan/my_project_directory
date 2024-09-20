@@ -76,7 +76,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $log_dm->setDmEtat($this->etatDmRepository , $dm_type->getDmEtat()); // OK_ETAT
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
-            $log_dm->setLogDmDate(new \DateTime());
+            //$log_dm->setDate($dm_type)
 
             try {
                 $entityManager->persist($log_dm);

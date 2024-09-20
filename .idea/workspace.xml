@@ -7,12 +7,7 @@
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/GroupeUtilisateurRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/GroupeUtilisateurRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/sidebar.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/show.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
