@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\DemandeType;
 use App\Repository\BanqueRepository;
 use App\Repository\BudgetTypeRepository;
+use App\Repository\ChequierRepository;
 use App\Repository\CompteMereRepository;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailBudgetRepository;
@@ -64,7 +65,6 @@ class TresorierController extends AbstractController
     #[Route('/remettre_fond/{id}', name: 'tresorier.remettre_fond', methods: ['POST'])]
     public function remettre_fond($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-
         $id_user_tresorier = $this->user->getId();
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier);
         $data = json_decode($rep->getContent(), true);
@@ -173,7 +173,7 @@ class TresorierController extends AbstractController
                                            BanqueRepository     $banqueRepository): Response
     {
 
-        $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011","611000"];
+        $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011", "611000"];
         $liste_entite = array_filter(array_map(
             fn($code) => $planCompteRepository->findByNumero($code),
             $list_cpt_numero
@@ -191,12 +191,13 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/ajout_approvisionnement', name: 'tresorier.ajout_approvisionnement', methods: ['POST'])]
-    public function ajout_approvisionnement(Request $request): JsonResponse
+    public function ajout_approvisionnement(Request               $request,
+                                            DemandeTypeRepository $demandeTypeRepository,
+                                            ChequierRepository    $chequierRepository): JsonResponse
     {
-        $data = $request->request->all();
-
+        $data = json_decode($request->getContent(), true);
         $date = $data['date_dm'] ?? null;
-        $caisse = $data['caisse'] ?? null;
+        $caisse = ['caisse'] ?? null;
         $entite = $data['entite'] ?? null;
         $montant = $data['montant'] ?? null;
         $banque = $data['banque'] ?? null;
@@ -222,12 +223,14 @@ class TresorierController extends AbstractController
             return new JsonResponse(['success' => false, 'message' => "Le choix de chéquier est nécessaire"]);
         }
 
-        // Si tout est correct
+        $reponse = $demandeTypeRepository->ajout_approvisionnement($entite, $banque, $chequier, $montant, $chequierRepository);
+        $reponse = json_decode($reponse->getContent(), true);
+
         return new JsonResponse(
             [
-                'success' => true,
-                'message' => "Votre demande a été enregistrée avec succès.",
-                'url' => "Voici un url" // Vous pouvez personnaliser cette partie
+                'success' => $reponse['success'],
+                'message' => $reponse['message'],
+                'url' => "Voici un url"
             ]
         );
     }

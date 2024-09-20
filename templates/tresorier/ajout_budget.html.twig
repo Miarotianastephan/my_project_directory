@@ -23,7 +23,7 @@
                     <h4 class="card-title">Ajout de budget</h4>
                 </div>
 
-                <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post">
+                <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post" data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
                     <div class="card-body col-12 d-flex flex-column gap-2">
                         <div class="form-group">
                             <label for="exercice">Exercice</label>
@@ -93,7 +93,6 @@
         <div class="modal-dialog">
             <form id="modifier" action="{{ path('tresorier.modifier_budget') }}" method="post">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h5 class="modal-title" id="updateAmountModalLabel">Voulez vous mettre à jour le montant?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -135,128 +134,8 @@
 
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var formulaire = document.getElementById("formulaire");
-            var modifier = document.getElementById("modifier");
-            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
-
-            document.getElementById('annuler').addEventListener('click', function (e) {
-                e.preventDefault();
-                window.location.href = '/tresorier';
-            });
-
-            // Fonction pour fermer la modal et rediriger
-            function closeModalAndRedirect() {
-                messageModal.hide();
-            }
-
-            // Gestionnaire pour le bouton "Close" dans la modale de message
-            document.querySelector('#messageModal .btn-secondary').addEventListener('click', closeModalAndRedirect);
-
-            // Gestionnaire pour le bouton "Close" (x) dans la modale de message
-            document.querySelector('#messageModal .btn-close').addEventListener('click', closeModalAndRedirect);
-
-            document.getElementById('oui').addEventListener('click', function (e) {
-                e.preventDefault();
-                /*exercice = document.getElementById('new-exercice-input').value;
-                plan_cpt = document.getElementById('new-cpt-input').value;
-                montant = document.getElementById('new-montant-input').value;
-                detailbudget = document.getElementById('detailbudget-input').value;
-                fetch(modifier.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        detail_budget: detailbudget,
-                        montant: montant
-                    })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erreur réseau : ' + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        var modalBody = document.querySelector('#messageModal .modal-body');
-                        if (!data.success) {
-                            modalBody.textContent = data.message;
-                            messageModal.show();
-                        } else {
-                            if (data.url) {
-                                alert(JSON.stringify(data.message));
-                                //window.location.href = data.url;
-                            } else {
-                                alert("impossible de trouver url");
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                        alert('Une erreur est survenue : ' + error.message);
-                    });*/
-            });
-
-            document.getElementById('valider').addEventListener('click', function (e) {
-                e.preventDefault();
-                var exercice = document.getElementById('exercice').value;
-                var plan_cpt = document.getElementById('plan_cpt').value;
-                var montant = document.getElementById('montant').value;
-                fetch(formulaire.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        exercice: exercice,
-                        plan_cpt: plan_cpt,
-                        montant: montant
-                    })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erreur réseau : ' + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        var modalBody = document.querySelector('#messageModal .modal-body');
-                        var updateAmountModal = new bootstrap.Modal(document.getElementById('updateAmountModal'));
-                        if (!data.success) {
-                            modalBody.textContent = data.message;
-                            messageModal.show();
-                        } else {
-                            if (data.url) {
-                                alert(JSON.stringify(data.message));
-                                //window.location.href = data.url;
-                            } else {
-                                // Mettre à jour les valeurs des champs input
-                                document.getElementById('new-exercice-input').value = data.exercice.id;
-                                document.getElementById('new-cpt-input').value = data.cpt.id;
-                                document.getElementById('old-montant-input').value = data.oldmontant;
-                                document.getElementById('new-montant-input').value = data.newmontant;
-                                document.getElementById('detailbudget-input').value = data.detailbudget;
-
-                                // Si vous voulez aussi mettre à jour le texte à côté des inputs
-                                document.getElementById('new-exercice').textContent = data.exercice.DateDebut;
-                                document.getElementById('new-cpt').textContent = data.cpt.CptLibelle;
-                                document.getElementById('old-montant').textContent = data.oldmontant + ' Ar';
-                                document.getElementById('new-montant').textContent = data.newmontant + ' Ar';
-                                updateAmountModal.show();
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                        alert('Une erreur est survenue : ' + error.message);
-                    });
-            });
-        });
-    </script>
 {% endblock %}
-
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/scr/tresorier/ajout_budget.js") }}"></script>
+{% endblock %}

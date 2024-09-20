@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Banque;
 use App\Entity\Chequier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,6 +16,23 @@ class ChequierRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Chequier::class);
     }
+
+    public function isExiste(string $numero, Banque $banque): bool
+    {
+        $count = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.chequier_numero_debut <= :numero')
+            ->andWhere('c.chequier_numero_fin >= :numero')
+            ->andWhere('c.banque = :banque')
+            ->setParameter('numero', $numero, \Doctrine\DBAL\Types\Types::STRING)
+            ->setParameter('banque', $banque)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Retourne true si au moins un résultat existe
+        return $count !== null && $count > 0;
+    }
+
 
     //    /**
     //     * @return Chequier[] Returns an array of Chequier objects

@@ -11,7 +11,8 @@
 {% block page_main_content %}
     <div class="row">
         <div class="col-md-12">
-            <form id="formulaire" action="{{ path('tresorier.remettre_fond', {'id': demande_type.Id}) }}">
+            <form id="formulaire" action="{{ path('tresorier.remettre_fond', {'id': demande_type.Id}) }}"
+                  data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">REMETTRE LE FOND?</h4>
@@ -63,46 +64,8 @@
             </form>
         </div>
     </div>
-
-
-    <script>
-        var form = document.getElementById('formulaire');
-        document.getElementById('valider').addEventListener('click', function (e) {
-            e.preventDefault()
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({
-                    "message":"tongasoa"
-                })
-            })
-                .then(response => {
-                    // Vérifie si la réponse est OK (status entre 200 et 299)
-                    if (!response.ok) {
-                        throw new Error('Erreur réseau : ' + response.status);
-                    }
-                    // Convertir la réponse en JSON
-                    return response.json();
-                })
-                .then(data => {
-                    // Affichez les données reçues du contrôleur
-                    //console.log(data); // Affiche tout l'objet de données reçu
-                    //console.log(data.message); // Affiche une propriété spécifique, si elle existe
-                    //alert(data.path); // Affiche un message reçu du contrôleur
-
-                    //Manao redirect makany amin'ny list demande en attente
-                    window.location.href = data.path;
-                })
-                .catch(error => console.error('Erreur:', error));
-        });
-
-        document.getElementById('annuler').addEventListener('click', function (e) {
-            e.preventDefault()
-            //window.location.href = '/tresorier';
-        });
-    </script>
-
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/scr/tresorier/deblocker_fond.js") }}"></script>
 {% endblock %}

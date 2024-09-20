@@ -65,6 +65,19 @@ values (demande_type_seq.NEXTVAL,
         TO_DATE('27-08-2024', 'DD-MM-YYYY'), 200000, 'Espece', 'REF_004', 10)
 ;
 
+insert into demande_type
+(DM_TYPE_ID, ENTITY_CODE_ID, UTILISATEUR_ID, PLAN_COMPTE_ID, EXERCICE_ID, DM_ID, DM_DATE, DM_MONTANT, DM_MODE_PAIEMENT,
+ REF_DEMANDE, DM_ETAT)
+values (demande_type_seq.NEXTVAL,
+        (select ENTITY.cpt_id from plan_compte ENTITY where ENTITY.cpt_numero = '510001'),
+        (select u.user_id from utilisateur u where u.user_matricule = 'tesla'),
+        (select PLAN_COMPTE.cpt_id from plan_compte PLAN_COMPTE where PLAN_COMPTE.cpt_numero = '611000'),
+        (select e.exercice_id from exercice e where e.exercice_date_debut = TO_DATE('01-01-2004', 'DD-MM-YYYY')),
+        (select d.dm_id from demande d where d.libelle = 'Decaissement'),
+        TO_DATE('01-01-2025', 'DD-MM-YYYY'), 200000, 'Espece', 'REF_008', 10)
+;
+
+
 insert into budget_type (BUDGET_TYPE_ID, LIBELLE)
 values (budget_type_seq.NEXTVAL, 'Depense');
 insert into budget_type (BUDGET_TYPE_ID, LIBELLE)

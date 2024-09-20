@@ -6,6 +6,8 @@ use App\Entity\DemandeType;
 use App\Entity\LogDemandeType;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
 use Monolog\DateTimeImmutable;
 use PHPUnit\Exception;
@@ -19,6 +21,15 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, LogDemandeType::class);
+    }
+
+    public function findByDemandeType(DemandeType $demandeType): array
+    {
+        return $this->createQueryBuilder('l')
+            ->Where('l.demande_type = :val')
+            ->setParameter('val', $demandeType)
+            ->getQuery()
+            ->getResult();
     }
 
     public function ajoutValidationDemande(int $dm_type_id, int $sg_user_id): JsonResponse
@@ -49,38 +60,30 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Utilisateur associé à la demande introuvable.'
                 ]);
             }
-
+            $list_historique = $this->findByDemandeType($dm_type);
+            if ($this->count($list_historique) == 0 || $list_historique == null) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Historique de demande introuvable.'
+                ]);
+            }
             // Création du log
             $log_dm = new LogDemandeType();
             $log_dm->setDmEtat($dm_type->getDmEtat());
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
+            $log_dm->setLogDmDate(new \DateTime());
 
-            // Script SQL pour l'insertion
-            $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) 
-                   VALUES (log_etat_demande_seq.NEXTVAL, :dm_type_id, DEFAULT, :etat, :user_matricule)";
-
-            $connection = $entityManager->getConnection();
-            $connection->beginTransaction();
             try {
-                // Préparation et exécution de la requête SQL
-                $statement = $connection->prepare($script);
-                $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
-                $statement->bindValue('etat', $log_dm->getDmEtat());
-                $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
-                $statement->executeQuery();
+                $entityManager->persist($log_dm);
+                $entityManager->flush();
 
-                // Validation de la transaction
-                $connection->commit();
-
-                // Mise à jour de l'entité `DemandeType`
                 $dm_type->setDmEtat(20);
                 $dm_type->setUtilisateur($user_sg);
-
+                $dm_type->setDmDate(new \DateTime());
+                $entityManager->persist($dm_type);
                 $entityManager->flush();
             } catch (\Exception $e) {
-                // En cas d'erreur, rollback de la transaction
-                $connection->rollBack();
                 throw new \Exception('Erreur lors de l\'insertion du log : ' . $e->getMessage());
             }
         } catch (\Exception $e) {
@@ -140,35 +143,38 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setLogDmObservation($commentaire_data);
             $log_dm->setDemandeType($dm_type);
+            $log_dm->setLogDmDate(new \DateTime());
 
             // Script SQL pour l'insertion
-            $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, LOG_DM_OBSERVATION, USER_MATRICULE) 
-                   VALUES (log_etat_demande_seq.NEXTVAL, :dm_type_id, DEFAULT, :etat, :observation, :user_matricule)";
+            //$script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, LOG_DM_OBSERVATION, USER_MATRICULE)
+            //       VALUES (log_etat_demande_seq.NEXTVAL, :dm_type_id, DEFAULT, :etat, :observation, :user_matricule)";
 
 
-            $connection = $entityManager->getConnection();
-            $connection->beginTransaction();
+            //$connection = $entityManager->getConnection();
+            //$connection->beginTransaction();
 
             try {
-
+                $entityManager->persist($log_dm);
+                $entityManager->flush();
                 // Préparation et exécution de la requête SQL
-                $statement = $connection->prepare($script);
-                $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
-                $statement->bindValue('observation', $log_dm->getLogDmObservation());
-                $statement->bindValue('etat', $log_dm->getDmEtat());
-                $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
-                $statement->executeQuery();
-                $connection->commit();
+                //$statement = $connection->prepare($script);
+                //$statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
+                //$statement->bindValue('observation', $log_dm->getLogDmObservation());
+                //$statement->bindValue('etat', $log_dm->getDmEtat());
+                //$statement->bindValue('user_matricule', $log_dm->getUserMatricule());
+                //$statement->executeQuery();
+                //$connection->commit();
 
                 // MAJ de dm_type la base de données
                 $dm_type->setDmEtat(30);
                 $dm_type->setUtilisateur($user_sg);
+                $dm_type->setLogDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
                 $entityManager->flush();
 
             } catch (\Exception $e) {
                 // En cas d'erreur, rollback de la transaction
-                $connection->rollBack();
+                //$connection->rollBack();
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Erreur lors de l\'insertion du log : ' . $e->getMessage()
@@ -231,33 +237,20 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $log_dm->setLogDmObservation($commentaire_data);
             $log_dm->setDemandeType($dm_type);
 
-            // Script SQL pour l'insertion
-            $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, LOG_DM_OBSERVATION, USER_MATRICULE) 
-                   VALUES (log_etat_demande_seq.NEXTVAL, :dm_type_id, DEFAULT, :etat, :observation, :user_matricule)";
-
-
-            $connection = $entityManager->getConnection();
-            $connection->beginTransaction();
-
             try {
-                // Préparation et exécution de la requête SQL
-                $statement = $connection->prepare($script);
-                $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
-                $statement->bindValue('observation', $log_dm->getLogDmObservation());
-                $statement->bindValue('etat', $log_dm->getDmEtat());
-                $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
-                $statement->executeQuery();
-                $connection->commit();
+                $entityManager->persist($log_dm);
+                $entityManager->flush();
 
                 // MAJ de dm_type la base de données
                 $dm_type->setDmEtat(31);
                 $dm_type->setUtilisateur($user_sg);
+                $dm_type->setLogDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
                 $entityManager->flush();
 
             } catch (\Exception $e) {
                 // En cas d'erreur, rollback de la transaction
-                $connection->rollBack();
+                //$connection->rollBack();
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Erreur lors de l insertion du log : ' . $e->getMessage()
@@ -278,7 +271,6 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
         ]);
     }
-
 
     public function ajoutDeblockageFond(int $dm_type_id, int $tresorier_user_id): JsonResponse
     {
@@ -308,26 +300,19 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         $log_dm->setDmEtat($dm_type->getDmEtat());
         $log_dm->setUserMatricule($user_sg->getUserMatricule());
         $log_dm->setDemandeType($dm_type);
-        $script = "INSERT INTO log_demande_type (LOG_DM_ID, DEMANDE_TYPE_ID, LOG_DM_DATE, DM_ETAT, USER_MATRICULE) VALUES (log_etat_demande_seq.NEXTVAL,:dm_type_id,DEFAULT,:etat,:user_matricule)";
 
         try {
-            $connection = $entityManager->getConnection();
-            $connection->beginTransaction();
-            $statement = $connection->prepare($script);
-            $statement->bindValue('dm_type_id', $log_dm->getDemandeType()->getId());
-            $statement->bindValue('etat', $log_dm->getDmEtat());
-            $statement->bindValue('user_matricule', $log_dm->getUserMatricule());
-
-            $statement->executeQuery();
-            $connection->commit();
+            $entityManager->persist($log_dm);
+            $entityManager->flush();
 
             // MAJ de dm_type la base de données
             $dm_type->setDmEtat(40);
             $dm_type->setUtilisateur($user_tresorier);
+            $dm_type->setLogDmDate($log_dm->getLogDmDate());
             $entityManager->persist($dm_type);
             $entityManager->flush();
         } catch (\Exception $e) {
-            $connection->rollBack();
+            //$connection->rollBack();
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Erreur lors du deblockage de fond : ' . $e->getMessage()

@@ -17,16 +17,28 @@
                 <div class="card-header">
                     <h4 class="card-title">Approvisionnement</h4>
                 </div>
-                <form id="formulaire" action="{{ path('tresorier.ajout_approvisionnement') }}" method="post">
+                <form id="formulaire" action="{{ path('tresorier.ajout_approvisionnement') }}" method="post"
+                      data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
                     <div class="card-body">
                         <div class="row form-group">
                             <div class="col">
                                 <label for="date_dm">Date de la demande</label>
-                                <input type="date" id="date_dm" name="date_dm" class="form-control" value="{{ 'now'|date('Y-m-d') }}">
+                                <input type="date" id="date_dm" name="date_dm" class="form-control"
+                                       value="{{ 'now'|date('Y-m-d') }}">
                             </div>
                             <div class="col">
                                 <label for="caisse">Situation de caisse</label>
-                                <input type="number" name="caisse" class="form-control" id="caisse" value="{{ situation_caisse }}" readonly/>
+                                <div class="input-group">
+                                    <span class="input-group-text">Ar</span>
+                                    <input
+                                            id="caisse"
+                                            name="caisse"
+                                            type="text"
+                                            class="form-control"
+                                            aria-label="caisse"
+                                            value="{{ situation_caisse|number_format(2, '.', ' ') }}" readonly
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -34,7 +46,8 @@
                                 <label for="entite">Entité concernée</label>
                                 <select name="entite" class="form-control" id="entite">
                                     {% for entite in entites %}
-                                        <option value="{{ entite.Id }}">{{ entite.CptNumero }} - {{ entite.CptLibelle }}</option>
+                                        <option value="{{ entite.Id }}">{{ entite.CptNumero }}
+                                            - {{ entite.CptLibelle }}</option>
                                     {% else %}
                                         <option disabled>Ajouter des données</option>
                                     {% endfor %}
@@ -42,7 +55,17 @@
                             </div>
                             <div class="col">
                                 <label for="montant">Montant</label>
-                                <input type="number" name="montant" class="form-control" id="montant"/>
+                                <div class="input-group">
+                                    <span class="input-group-text">Ar</span>
+                                    <input
+                                            id="montant"
+                                            name="montant"
+                                            type="number"
+                                            step="0.01"
+                                            class="form-control"
+                                            aria-label="montant"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -88,74 +111,8 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var formulaire = document.getElementById("formulaire");
-            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
-
-            // Interception de la soumission du formulaire
-            document.getElementById('valider').addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // Récupération des valeurs des champs
-                var date_dm = document.getElementById('date_dm').value;
-                var caisse = document.getElementById('caisse').value;
-                var entite = document.getElementById('entite').value;
-                var montant = document.getElementById('montant').value;
-                var banque = document.getElementById('banque').value;
-                var chequier = document.getElementById('chequier').value;
-
-                // Envoi de la requête avec Fetch API
-                fetch(formulaire.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        date_dm: date_dm,
-                        caisse: caisse,
-                        entite: entite,
-                        montant: montant,
-                        banque: banque,
-                        chequier: chequier
-                    })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erreur réseau : ' + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        //alert(JSON.stringify(data))
-                        var modalBody = document.querySelector('#messageModal .modal-body');
-                        if (!data.success) {
-                            modalBody.textContent = data.message;
-                            messageModal.show();
-                        } else {
-                            if (data.url) {
-                                alert(JSON.stringify(data.message));
-                                //window.location.href = data.url;
-                            } else {
-                                alert("impossible de trouver url");
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                        alert('Une erreur est survenue : ' + error.message);
-                    });
-            });
-
-            // Gestion de l'annulation
-            document.getElementById('annuler').addEventListener('click', function (e) {
-                e.preventDefault();
-                window.location.href = '{{ path('tresorier.liste_demande_en_attente') }}';
-            });
-        });
-    </script>
-
-
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/scr/tresorier/demande_approvisionnement.js") }}"></script>
 {% endblock %}

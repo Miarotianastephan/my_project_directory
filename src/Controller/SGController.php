@@ -51,8 +51,8 @@ class SGController extends AbstractController
         $cpt = $compteMereRepository->find(2);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
-        $solde_reste = $budget->getBudgetMontant() - $solde;
-
+        //$solde_reste = $budget->getBudgetMontant() - $solde;
+        $solde_reste =  $solde;
 
         return $this->render('sg/modifier_demande.html.twig',
             [
@@ -106,7 +106,8 @@ class SGController extends AbstractController
         $cpt = $compteMereRepository->find(2);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
-        $solde_reste = $budget->getBudgetMontant() - $solde;
+        //$solde_reste = $budget->getBudgetMontant() - $solde;
+        $solde_reste = $solde;
         return $this->render('sg/show.html.twig',
             [
                 'demande_type' => $data,
@@ -134,7 +135,8 @@ class SGController extends AbstractController
         $cpt = $compteMereRepository->find(2);
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
         $solde = 200;
-        $solde_reste = $budget->getBudgetMontant() - $solde;
+        //$solde_reste = $budget->getBudgetMontant() - $solde;
+        $solde_reste =  $solde;
         return $this->render('sg/valider_demande.html.twig',
             [
                 'demande_type' => $data,

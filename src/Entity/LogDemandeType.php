@@ -15,7 +15,7 @@ class LogDemandeType
     #[ORM\Column(name: 'log_dm_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: 'customdate')]
     private ?\DateTimeInterface $log_dm_date = null;
 
     #[ORM\Column]

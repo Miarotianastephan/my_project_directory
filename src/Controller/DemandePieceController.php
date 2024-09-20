@@ -2,22 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\DemandeType;
-use App\Entity\DetailDemandePiece;
-use App\Form\DetailDemandePieceType;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Service\DemandeTypeService;
-use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use function MongoDB\BSON\toJSON;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Route('/demande_piece')]
 class DemandePieceController extends AbstractController
@@ -41,12 +34,19 @@ class DemandePieceController extends AbstractController
     }
 
     #[Route(path: '/dm/{id}', name: 'dm_piece.show', methods: ['GET'])]
-    public function show($id, DemandeTypeRepository $dm_rep): Response
+    public function dm_piece($id, DemandeTypeRepository $dm_rep): Response
     {
-        $data = $dm_rep->find($id);
-        return $this->render('demande_piece/_form_pj.html.twig', [
-            'demande_type' => $data
-        ]);
+        // Vérifier si l'ID est un nombre
+        if (is_numeric($id)) {
+            $data = $dm_rep->find($id);
+            if (!$data) {
+                throw new NotFoundHttpException('Demande non trouvée');
+            }
+            return $this->render('demande_piece/_form_pj.html.twig', [
+                'demande_type' => $data
+            ]);
+        }
+        return $this->render("exercice/index.html.twig");
     }
 
     #[Route('/upload_file/{id}', name: 'dm.image')]
