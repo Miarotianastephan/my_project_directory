@@ -64,29 +64,26 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Utilisateur associé à la demande introuvable.'
                 ]);
             }
-            $list_historique = $this->findByDemandeType($dm_type);
-            if ($this->count($list_historique) == 0 || $list_historique == null) {
-                return new JsonResponse([
-                    'success' => false,
-                    'message' => 'Historique de demande introuvable.'
-                ]);
-            }
+
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($this->etatDmRepository , $dm_type->getDmEtat()); // OK_ETAT
+            $log_dm->setDmEtat( $this->etatDmRepository, $dm_type->getDmEtat());
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
-            //$log_dm->setDate($dm_type)
+            $log_dm->setLogDmDate(new \DateTime());
 
             try {
                 $entityManager->persist($log_dm);
                 $entityManager->flush();
 
                 // Mise à jour de l'entité `DemandeType`
-                $dm_type->setDmEtat($this->etatDmRepository , 200); 
+                $dm_type->setDmEtat($this->etatDmRepository , 200);
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
+                $entityManager->flush();
+
+                $entityManager->persist($log_dm);
                 $entityManager->flush();
             } catch (\Exception $e) {
                 throw new \Exception('Erreur lors de l\'insertion du log : ' . $e->getMessage());
