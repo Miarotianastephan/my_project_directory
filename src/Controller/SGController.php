@@ -172,7 +172,6 @@ class SGController extends AbstractController
     public function valider_demande($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $id_user_sg = $this->user->getId(); // mandeha io 
-
         $rep = $logDemandeTypeRepository->ajoutValidationDemande($id, $id_user_sg);
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {
@@ -192,7 +191,6 @@ class SGController extends AbstractController
     #[Route('/refuser_demande/{id}', name: 'refuser_demande', methods: ['POST', 'GET'])]
     public function refuser_demande($id, Request $request, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-
         $id_user_sg = $this->user->getId();
         $data = json_decode($request->getContent(), true);
         $commentaire_data = $data['commentaire'] ?? null;
@@ -214,24 +212,6 @@ class SGController extends AbstractController
             ]);
         }
 
-    }
-
-
-    #[Route('/test/test_budget', name: 'test_budget', methods: ['GET'])]
-    public function test_budget(DetailBudgetRepository $detailBudgetRepository,
-                                ExerciceRepository     $exerciceRepository,
-                                CompteMereRepository   $compteMereRepository): JsonResponse
-    {
-        $exercice = $exerciceRepository->find(21);
-        // $cpt = $compteMereRepository->find(41);
-        // $cpt = $data->getPlanCompte()->getCompteMere();
-        $detail = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
-        dump($detail);
-        return new JsonResponse([
-            'success' => true,
-            'message' => 'Pas de commentaire reçu ',
-            'detail' => $detail
-        ]);
     }
 }
 
