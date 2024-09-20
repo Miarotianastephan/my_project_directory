@@ -94,13 +94,11 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Erreur lors de la validation de la demande : ' . $e->getMessage()
             ]);
         }
-        dump($dm_type_id);
 
         // Si tout se passe bien, retour d'une réponse JSON de succès
         return new JsonResponse([
             'success' => true,
             'message' => 'La demande a été validée',
-
         ]);
     }
 

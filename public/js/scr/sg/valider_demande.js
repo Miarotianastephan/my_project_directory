@@ -4,19 +4,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const annulerBtn = document.getElementById('annuler');
     const modifierBtn = document.getElementById('modifier');
 
+    const SELECTORS = {messageModal: '#messageModal'}
+    const ELEMENTS = {messageModal: new bootstrap.Modal(document.querySelector(SELECTORS.messageModal)),}
+
     validerBtn.addEventListener('click', handleValidation);
     annulerBtn.addEventListener('click', handleAnnulation);
     modifierBtn.addEventListener('click', handleModification);
+    function closeModalAndRedirect() {
+        ELEMENTS.messageModal.hide();
+    }
+    function showMessage(message) {
+        const modalBody = document.querySelector(`${SELECTORS.messageModal} .modal-body`);
+        modalBody.textContent = message;
+        ELEMENTS.messageModal.show();
+    }
 
     function handleValidation(e) {
         e.preventDefault();
         fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({message: "tongasoa"})
+            method: 'POST', headers: {
+                'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
+            }, body: JSON.stringify({message: "tongasoa"})
         })
             .then(response => {
                 if (!response.ok) throw new Error('Erreur réseau : ' + response.status);
@@ -24,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 if (!data.success) {
-                    alert(data.message);
+                    showMessage(data.message);
                 } else {
                     window.location.href = data.path;
                 }

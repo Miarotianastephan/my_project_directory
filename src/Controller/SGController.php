@@ -163,11 +163,10 @@ class SGController extends AbstractController
         return $this->render('sg/refuser_demande.html.twig', ['demande_type' => $data]);
     }
 
-    // A DEBUGGUER
+
     #[Route('/valider_demande/{id}', name: 'valider_demande', methods: ['POST'])]
     public function valider_demande($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
-
         $id_user_sg = $this->user->getId(); // mandeha io 
         $rep = $logDemandeTypeRepository->ajoutValidationDemande($id, $id_user_sg);
         $data = json_decode($rep->getContent(), true);
@@ -179,7 +178,7 @@ class SGController extends AbstractController
             ]);
         } else {
             return new JsonResponse([
-                'success' => true,
+                'success' => false,
                 'message' => $data['message']
             ]);
         }
