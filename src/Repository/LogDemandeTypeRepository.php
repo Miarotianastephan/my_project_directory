@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\DemandeType;
+use App\Entity\Evenement;
 use App\Entity\LogDemandeType;
+use App\Entity\Mouvement;
 use App\Entity\Utilisateur;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -21,10 +23,14 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 {
 
     private $etatDmRepository;
+    private $trsTypeRepo;
+    private $detailTrsRepo;
 
-    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo)
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo)
     {
         $this->etatDmRepository = $etatDmRepo;
+        $this->trsTypeRepo = $trsTypeRepo;
+        $this->detailTrsRepo = $detailTrsRepo;
         parent::__construct($registry, LogDemandeType::class);
     }
 
@@ -282,34 +288,35 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Déblocage impossible car demande introuvable'
             ]);
         }
-        // mila atao vérification hoe tena trésorier ve no manao ilay déblocage
         $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
-        if (!$user_tresorier) {
+        if (!$user_tresorier) {                                 // Vérifier si non-trésorier
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Utilisateur trésorier introuvable.'
             ]);
         }
-        $user_sg = $dm_type->getUtilisateur();
+        $user_sg = $dm_type->getUtilisateur();                  // Vérifier si SG nanao validation
         if (!$user_sg) {
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Utilisateur SG introuvable.'
             ]);
-        }
+        } 
         $log_dm = new LogDemandeType();
+    // Insérer Validé dans Historique des demandes
         $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
         $log_dm->setUserMatricule($user_sg->getUserMatricule());
         $log_dm->setDemandeType($dm_type);
+        $log_dm->setLogDmDate(new DateTime());
 
         $connection = $entityManager->getConnection();
         try {
             $entityManager->persist($log_dm);
             $entityManager->flush();
-
+    // Update Validé => Débloqué dans les demandes
             $dm_type->setDmEtat($this->etatDmRepository, 301); // OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
-            $dm_type->setLogDmDate($log_dm->getLogDmDate());
+            $dm_type->setDmDate($log_dm->getLogDmDate());
             $entityManager->persist($dm_type);
             $entityManager->flush();                    // MAJ de dm_type la base de données
 
@@ -320,9 +327,60 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Erreur lors du deblockage de fond : ' . $e->getMessage()
             ]);
         }
+
+    // Comptabilisation
+        // les données à utiliser
+        $reference_demande = $dm_type->getRefDemande();
+        $exercice_demande = $dm_type->getExercice();
+        $montant_demande = $dm_type->getDmMontant();
+        $numero_compte_debit = $dm_type->getPlanCompte();
+        $mode_paiement_demande = $dm_type->getDmModePaiement();
+        // identifier le type de transaction à faire
+        $mode_paiement_demande = (int)$mode_paiement_demande;
+        $transaction_a_faire = $this->trsTypeRepo->findTransactionByModePaiement($mode_paiement_demande);
+        // identifier le mouvement à réaliser
+        $detail_transaction = $this->detailTrsRepo->findByTransaction($transaction_a_faire);
+        // $data_test_demande = [
+        //     'reference' => $reference_demande,
+        //     'montant' => $montant_demande,
+        //     'mode_paiement' => $mode_paiement_demande,
+        //     'transaction' => $transaction_a_faire,
+        //     'mouvement' => $detail_transaction
+        // ];
+        // dump($data_test_demande);
+        // Création evenement 
+        $evenement = new Evenement();
+        $evenement->setEvnTrsId($transaction_a_faire);
+        $evenement->setEvnResponsable($user_tresorier);
+        $evenement->setEvnExercice($dm_type->getExercice());
+        $evenement->setEvnCodeEntity($dm_type->getEntityCode()->getCptLibelle());
+        $evenement->setEvnMontant($montant_demande);
+        $evenement->setEvnReference($reference_demande);
+        $evenement->setEvnDateOperation(new DateTime());
+        $entityManager->persist($evenement);
+        $entityManager->flush();
+        // Création des mouvements
+        // DEBIT
+        $mv_debit = new Mouvement();
+        $mv_debit->setMvtEvenementId($evenement);
+        $mv_debit->setMvtMontant($montant_demande);
+        $mv_debit->setMvtDebit(true);
+        $mv_debit->setMvtCompteId($numero_compte_debit);
+        $entityManager->persist($mv_debit);
+        $entityManager->flush();
+        // CREDIT
+        $mv_credit = new Mouvement();
+        $mv_credit->setMvtEvenementId($evenement);
+        $mv_credit->setMvtMontant($montant_demande);
+        $mv_credit->setMvtDebit(false);
+        $mv_credit->setMvtCompteId($detail_transaction->getPlanCompte());
+        $entityManager->persist($mv_credit);
+        $entityManager->flush();
+
         return new JsonResponse([
             'success' => true,
             'message' => 'Le fond a été remis'
         ]);
+        
     }
 }

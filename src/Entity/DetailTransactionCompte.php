@@ -25,6 +25,9 @@ class DetailTransactionCompte
     #[ORM\JoinColumn(name: "plan_compte_id", referencedColumnName: "cpt_id", nullable: false)]
     private ?PlanCompte $plan_compte = null;
 
+    #[ORM\Column]
+    private ?bool $isTrsDebit = null; // TRUE : 1 , FALSE : 0
+
 
     public function setId(?int $id): void
     {
@@ -66,6 +69,18 @@ class DetailTransactionCompte
     public function setPlanCompte(?PlanCompte $plan_compte): void
     {
         $this->plan_compte = $plan_compte;
+    }
+
+    public function isTrsDebit(): ?bool
+    {
+        return $this->isTrsDebit;
+    }
+
+    public function setTrsDebit(bool $isTrsDebit): static
+    {
+        $this->isTrsDebit = $isTrsDebit;
+
+        return $this;
     }
 
 }

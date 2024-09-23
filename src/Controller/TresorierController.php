@@ -56,7 +56,7 @@ class TresorierController extends AbstractController
     public function valider_fond($id, DemandeTypeRepository $dm_type): Response
     {
         $data = $dm_type->find($id);
-        $montant = 20000;
+        $montant = 111;
         return $this->render('tresorier/deblocker_fond.html.twig',
             ['demande_type' => $data, 'montant' => $montant]
         );
@@ -66,10 +66,12 @@ class TresorierController extends AbstractController
     public function remettre_fond($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $id_user_tresorier = $this->user->getId();
+        // $id => ID du demande à débloqué de fonds 
+        // $id_user_tresorier = ID qui devrait être un tresorier A VERIFIER APRES
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier); // Déblocage du fonds demandée
-        // Comptabilisation de l'opération de décaissement
+        // O_COMPTA
             // à compléter
-        // fin comptabilisation
+        // fin O_COMPTA
         
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {

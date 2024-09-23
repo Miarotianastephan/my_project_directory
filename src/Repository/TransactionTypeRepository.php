@@ -25,6 +25,16 @@ class TransactionTypeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findTransactionByModePaiement($mode){
+        if($mode == 0){        // especes
+            return $this->findTransactionByCode('CE-005');
+        }elseif ($mode == 1) { // cheques
+            return $this->findTransactionByCode('CE-004');
+        }elseif ($mode == 2) { // subvention BFM
+            return $this->findTransactionByCode('CE-006');
+        }
+    }
+
     //    /**
     //     * @return TransactionType[] Returns an array of TransactionType objects
     //     */
@@ -40,7 +50,7 @@ class TransactionTypeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?TransactionType
+    //    public function findTransactionByModePaiement($value): ?TransactionType
     //    {
     //        return $this->createQueryBuilder('t')
     //            ->andWhere('t.exampleField = :val')
