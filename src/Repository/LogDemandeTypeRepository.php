@@ -299,88 +299,74 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         if (!$user_sg) {
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Utilisateur SG introuvable.'
+                'message' => 'Validateur du demande introuvable.'
             ]);
         } 
-        $log_dm = new LogDemandeType();
-    // Insérer Validé dans Historique des demandes
-        $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
-        $log_dm->setUserMatricule($user_sg->getUserMatricule());
-        $log_dm->setDemandeType($dm_type);
-        $log_dm->setLogDmDate(new DateTime());
-
-        $connection = $entityManager->getConnection();
+    // Debut de transaction de béblocages de fonds
+        $entityManager->beginTransaction();
         try {
+        // Insérer Validé dans Historique des demandes
+            $log_dm = new LogDemandeType();
+            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
+            $log_dm->setUserMatricule($user_sg->getUserMatricule());
+            $log_dm->setDemandeType($dm_type);
+            $log_dm->setLogDmDate(new DateTime());
             $entityManager->persist($log_dm);
-            $entityManager->flush();
-    // Update Validé => Débloqué dans les demandes
-            $dm_type->setDmEtat($this->etatDmRepository, 301); // OK_ETAT
-            $dm_type->setUtilisateur($user_tresorier);
-            $dm_type->setDmDate($log_dm->getLogDmDate());
-            $entityManager->persist($dm_type);
-            $entityManager->flush();                    // MAJ de dm_type la base de données
 
-        } catch (\Exception $e) {
-            //$connection->rollBack();
+        // Update Validé => Débloqué dans les demandes
+            $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
+            $dm_type->setUtilisateur($user_tresorier);
+            $dm_type->setDmDate($log_dm->getLogDmDate());                                           // MAJ de dm_type la base de données
+
+        // Comptabilisation
+            // les données à utiliser
+            $reference_demande = $dm_type->getRefDemande();
+            $exercice_demande = $dm_type->getExercice();
+            $montant_demande = $dm_type->getDmMontant();
+            $numero_compte_debit = $dm_type->getPlanCompte();
+            $mode_paiement_demande = (int)($dm_type->getDmModePaiement());
+            $transaction_a_faire = $this->trsTypeRepo->findTransactionByModePaiement($mode_paiement_demande);   // identifier le type de transaction à faire
+            $detail_transaction = $this->detailTrsRepo->findByTransaction($transaction_a_faire);                // identifier le mouvement à réaliser
+            // Création evenement 
+            $evenement = new Evenement();
+            $evenement->setEvnTrsId($transaction_a_faire);
+            $evenement->setEvnResponsable($user_tresorier);
+            $evenement->setEvnExercice($exercice_demande);
+            $evenement->setEvnCodeEntity($dm_type->getEntityCode()->getCptLibelle());
+            $evenement->setEvnMontant($montant_demande);
+            $evenement->setEvnReference($reference_demande);
+            $evenement->setEvnDateOperation(new DateTime());
+            $entityManager->persist($evenement);
+            // Création des mouvements
+            
+            $mv_debit = new Mouvement();                        // DEBIT
+            $mv_debit->setMvtEvenementId($evenement);
+            $mv_debit->setMvtMontant($montant_demande);
+            $mv_debit->setMvtDebit(true);
+            $mv_debit->setMvtCompteId($numero_compte_debit);
+            $entityManager->persist($mv_debit);
+            
+            $mv_credit = new Mouvement();                       // CREDIT
+            $mv_credit->setMvtEvenementId($evenement);
+            $mv_credit->setMvtMontant($montant_demande);
+            $mv_credit->setMvtDebit(false);
+            $mv_credit->setMvtCompteId($detail_transaction->getPlanCompte());
+            $entityManager->persist($mv_credit);
+
+            $entityManager->flush();
+            $entityManager->commit();                           // si tout OK 
+
+        } 
+        catch (\Exception $e) {
+            $entityManager->rollback();                         // si erreur opération 
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Erreur lors du deblockage de fond : ' . $e->getMessage()
+                'message' => 'Erreur transaction : ' . $e->getMessage()
             ]);
         }
-
-    // Comptabilisation
-        // les données à utiliser
-        $reference_demande = $dm_type->getRefDemande();
-        $exercice_demande = $dm_type->getExercice();
-        $montant_demande = $dm_type->getDmMontant();
-        $numero_compte_debit = $dm_type->getPlanCompte();
-        $mode_paiement_demande = $dm_type->getDmModePaiement();
-        // identifier le type de transaction à faire
-        $mode_paiement_demande = (int)$mode_paiement_demande;
-        $transaction_a_faire = $this->trsTypeRepo->findTransactionByModePaiement($mode_paiement_demande);
-        // identifier le mouvement à réaliser
-        $detail_transaction = $this->detailTrsRepo->findByTransaction($transaction_a_faire);
-        // $data_test_demande = [
-        //     'reference' => $reference_demande,
-        //     'montant' => $montant_demande,
-        //     'mode_paiement' => $mode_paiement_demande,
-        //     'transaction' => $transaction_a_faire,
-        //     'mouvement' => $detail_transaction
-        // ];
-        // dump($data_test_demande);
-        // Création evenement 
-        $evenement = new Evenement();
-        $evenement->setEvnTrsId($transaction_a_faire);
-        $evenement->setEvnResponsable($user_tresorier);
-        $evenement->setEvnExercice($dm_type->getExercice());
-        $evenement->setEvnCodeEntity($dm_type->getEntityCode()->getCptLibelle());
-        $evenement->setEvnMontant($montant_demande);
-        $evenement->setEvnReference($reference_demande);
-        $evenement->setEvnDateOperation(new DateTime());
-        $entityManager->persist($evenement);
-        $entityManager->flush();
-        // Création des mouvements
-        // DEBIT
-        $mv_debit = new Mouvement();
-        $mv_debit->setMvtEvenementId($evenement);
-        $mv_debit->setMvtMontant($montant_demande);
-        $mv_debit->setMvtDebit(true);
-        $mv_debit->setMvtCompteId($numero_compte_debit);
-        $entityManager->persist($mv_debit);
-        $entityManager->flush();
-        // CREDIT
-        $mv_credit = new Mouvement();
-        $mv_credit->setMvtEvenementId($evenement);
-        $mv_credit->setMvtMontant($montant_demande);
-        $mv_credit->setMvtDebit(false);
-        $mv_credit->setMvtCompteId($detail_transaction->getPlanCompte());
-        $entityManager->persist($mv_credit);
-        $entityManager->flush();
-
         return new JsonResponse([
             'success' => true,
-            'message' => 'Le fond a été remis'
+            'message' => 'Traitement de fonds : débloqué et comptabiliser'
         ]);
-        
     }
 }
