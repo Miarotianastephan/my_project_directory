@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Journal{% endblock %}
+{% block page_title %}
+    Journal de caisse {{ "2024" }}
+{% endblock %}
+{% block page_subtitle %}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <!--<div class="card-header">
+                    <h4 class="card-title">Le plan de compte</h4>
+                </div>-->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-hover">
+                            {# Column #}
+                            <thead>
+                                <tr id="cols">
+                                    <th id="isCol" scope="col">Date</th>
+                                    <th id="isCol" scope="col">N° compte</th>
+                                    <th id="isCol" scope="col">Intitulé du compte</th>
+                                    <th id="isCol" scope="col">Débit</th>
+                                    <th id="isCol" scope="col">Crédit</th>
+                                </tr>
+                            </thead>
+                            {# Data #}
+                            <tbody id="bodyList">
+                                <tr>
+                                    <td id="date">{{"date"}}</td>
+                                    <td id="compte">{{"compte."}}</td>
+                                    <td id="libelle">{{"Libelle"}}</td>
+                                    <td id="debit">10000</td>
+                                    <td id="credit">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script></script>
+{% endblock %}
