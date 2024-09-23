@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/my_project_directory.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/my_project_directory.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/phpspec.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phpspec.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/scr/sg/valider_demande.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/sg/valider_demande.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/sg/modifier_demande.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/sg/modifier_demande.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/tresorier/deblocker_fond.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/tresorier/deblocker_fond.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/modifier_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/modifier_demande.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,32 +198,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "PHP Script.AdminController.php.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "integration__v3__Randy",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.completion",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;PHP Script.AdminController.php.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;integration__v3__Randy&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "oracle"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;oracle&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
       <method v="2" />
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-php-predefined-ba97393d7c68-b4dcf6bb9de9-com.jetbrains.php.sharedIndexes-PS-233.13135.108" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -246,6 +255,7 @@
       <workItem from="1726463802581" duration="41704000" />
       <workItem from="1726706411576" duration="20885000" />
       <workItem from="1726749861039" duration="2740000" />
+      <workItem from="1727068354182" duration="2210000" />
     </task>
     <servers />
   </component>

@@ -21,20 +21,13 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 {
 
     private $etatDmRepository;
+    private $utilisateurRepository;
 
-    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo)
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo,UtilisateurRepository $utilisateurRepo)
     {
         $this->etatDmRepository = $etatDmRepo;
+        $this->utilisateurRepository=$utilisateurRepo;
         parent::__construct($registry, LogDemandeType::class);
-    }
-
-    public function findByDemandeType(DemandeType $demandeType): array
-    {
-        return $this->createQueryBuilder('l')
-            ->Where('l.demande_type = :val')
-            ->setParameter('val', $demandeType)
-            ->getQuery()
-            ->getResult();
     }
 
     public function ajoutValidationDemande(int $dm_type_id, int $sg_user_id): JsonResponse
@@ -67,7 +60,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             }
             // Création du log
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat( $this->etatDmRepository, $dm_type->getDmEtat());
+            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());
             $log_dm->setUserMatricule($user_demande->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
             $log_dm->setLogDmDate(new \DateTime());
@@ -76,7 +69,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $entityManager->flush();
 
                 // Mise à jour de l'entité `DemandeType`
-                $dm_type->setDmEtat($this->etatDmRepository , 200);
+                $dm_type->setDmEtat($this->etatDmRepository, 200);
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -101,7 +94,6 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             'message' => 'La demande a été validée',
         ]);
     }
-
 
     public function ajoutRefuserDemande(int $dm_type_id, int $sg_user_id, string $commentaire_data): JsonResponse
     {
@@ -166,7 +158,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 //$connection->commit();
 
                 // MAJ de dm_type la base de données
-                $dm_type->setDmEtat($this->etatDmRepository , 300); // OK_ETAT
+                $dm_type->setDmEtat($this->etatDmRepository, 300); // OK_ETAT
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setLogDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -298,18 +290,39 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Utilisateur SG introuvable.'
             ]);
         }
+
+        $list_historique_demande = $this->findByDemandeType($dm_type);
+        if (!$list_historique_demande or count($list_historique_demande)==0) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Historique de cette demande est introuvable'
+            ]);
+        }
+        dump(count($list_historique_demande));
+
         $log_dm = new LogDemandeType();
         $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
         $log_dm->setUserMatricule($user_sg->getUserMatricule());
         $log_dm->setDemandeType($dm_type);
 
-        $connection = $entityManager->getConnection();
+        /*return new JsonResponse([
+            'success' => false,
+            'message' => "Voici un message d'erreur"
+        ]);*/
+
+        $user_demandeur = $this->utilisateurRepository->findOneByUserMatricule($list_historique_demande[0]->getUserMatricule());
+        if (!$user_demandeur) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Utilisateur introuvable'
+            ]);
+        }
         try {
             $entityManager->persist($log_dm);
             $entityManager->flush();
 
             $dm_type->setDmEtat($this->etatDmRepository, 301); // OK_ETAT
-            $dm_type->setUtilisateur($user_tresorier);
+            $dm_type->setUtilisateur($user_demandeur);
             $dm_type->setLogDmDate($log_dm->getLogDmDate());
             $entityManager->persist($dm_type);
             $entityManager->flush();                    // MAJ de dm_type la base de données
@@ -325,5 +338,14 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             'success' => true,
             'message' => 'Le fond a été remis'
         ]);
+    }
+
+    public function findByDemandeType(DemandeType $demandeType): array
+    {
+        return $this->createQueryBuilder('l')
+            ->Where('l.demande_type = :val')
+            ->setParameter('val', $demandeType)
+            ->getQuery()
+            ->getResult();
     }
 }
