@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Constant\Roles;
 use App\Entity\Utilisateur;
 use App\Exception\InvalidDataUserException;
 use App\Exception\InvalidUserStatusException;
@@ -71,7 +72,23 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         // mila gestion des redirection selon ny rôle
-        return new RedirectResponse($this->router->generate('admin_users'));
+        $user = $token->getUser();
+        $user_roles = $user->getRoles();
+        if (in_array(Roles::ADMIN, $user_roles)) {
+            return new RedirectResponse($this->router->generate('admin_users'));
+        }
+        else if (in_array(Roles::DEMANDEUR, $user_roles)) {
+            return new RedirectResponse($this->router->generate('demandeur.liste_demande'));
+        }
+        else if (in_array(Roles::SG, $user_roles)) {
+            return new RedirectResponse($this->router->generate('SG.liste_demande_en_attente'));
+        }
+        else if (in_array(Roles::TRESORIER, $user_roles)) {
+            return new RedirectResponse($this->router->generate('tresorier.liste_demande_en_attente'));
+        }
+        else if (in_array(Roles::COMPTABLE, $user_roles)) {
+            return new RedirectResponse($this->router->generate('comptable.graphe'));
+        }
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

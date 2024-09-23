@@ -6,6 +6,14 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     uploads_directory: '%kernel.project_dir%/public/images/pieces'
+    # Enregistrement de l'extension Twig
+    App\Twig\AppExtension:
+        tags: ['twig.extension']
+    app.roles.admin: 'ROLE_0'
+    app.roles.demandeur: 'ROLE_10'
+    app.roles.sg: 'ROLE_20'
+    app.roles.tresorier: 'ROLE_30'
+    app.roles.comptable: 'ROLE_40'
 
 services:
     # configuration par défaut pour les services dans *ce* fichier

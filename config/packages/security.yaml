@@ -26,8 +26,17 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: '%app.roles.admin%' }
+        - { path: ^/groupe/utilisateur, roles: '%app.roles.admin%' }
+        - { path: ^/plan, roles: '%app.roles.admin%' }
+
+        - { path: ^/demandeur, roles: '%app.roles.demandeur%' }
+        - { path: ^/sg, roles: '%app.roles.sg%' }
+        - { path: ^/tresorier, roles: '%app.roles.tresorier%' }
+        - { path: ^/comptable, roles: '%app.roles.comptable%' }
+        
+        - { path: ^/demande_piece, roles: ['%app.roles.demandeur%', '%app.roles.tresorier%', '%app.roles.sg%'] }
+        - { path: ^/exercice, roles: ['%app.roles.admin%', '%app.roles.tresorier%', '%app.roles.sg%', '%app.roles.comptable%'] }
 
 when@test:
     security:
