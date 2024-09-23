@@ -371,13 +371,4 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    public function findByDemandeType(DemandeType $demandeType): array
-    {
-        return $this->createQueryBuilder('l')
-            ->Where('l.demande_type = :val')
-            ->setParameter('val', $demandeType)
-            ->getQuery()
-            ->getResult();
-    }
 }
