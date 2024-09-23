@@ -152,6 +152,9 @@ VALUES (trs_seq.NEXTVAL,'CE-005','Paiement facture en espèces sièges');
 insert into transaction_type
 (TRS_ID, TRS_CODE, TRS_LIBELLE)
 VALUES (trs_seq.NEXTVAL,'CE-006','Paiement facture en espèces RT');
+insert into transaction_type
+(TRS_ID, TRS_CODE, TRS_LIBELLE)
+VALUES (trs_seq.NEXTVAL,'CE-007','Dépense directe payée par BFM');
 
 insert into transaction_type
 (TRS_ID, TRS_CODE, TRS_LIBELLE)
@@ -186,3 +189,136 @@ insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.N
 -- delete from log_demande_type;
 -- delete from demande_type;
 -- commit;
+
+-- INSERTION Détails Transaction Comptes
+alter table detail_transaction_compte MODIFY is_trs_debit NUMBER(1) default 1;
+commit; -- par défaut Débit
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-001'),
+        (select cpt_id from plan_compte where cpt_numero='520000')
+);
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-001'),
+        (select cpt_id from plan_compte where cpt_numero='701000'),
+        0--Credit
+);
+
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-002'),
+        (select cpt_id from plan_compte where cpt_numero='510001')
+);
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-002'),
+        (select cpt_id from plan_compte where cpt_numero='520000'),
+        0--Credit
+);
+
+-- insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+-- (
+--         detail_trs_cpt_seq.NEXTVAL, 
+--         (select trs_id from transaction_type where trs_code='CE-003'),
+--         (select cpt_id from plan_compte where cpt_numero='5100xx')
+-- );
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-003'),
+        (select cpt_id from plan_compte where cpt_numero='701000'),
+        0--Credit
+);
+
+-- insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+-- (
+--         detail_trs_cpt_seq.NEXTVAL, 
+--         (select trs_id from transaction_type where trs_code='CE-004'),
+--         (select cpt_id from plan_compte where cpt_numero='4xxxxx ou 6xxxxx'),
+-- );
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-004'),
+        (select cpt_id from plan_compte where cpt_numero='520000'),
+        0--Credit
+);
+
+-- insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+-- (
+--         detail_trs_cpt_seq.NEXTVAL, 
+--         (select trs_id from transaction_type where trs_code='CE-005'),
+--         (select cpt_id from plan_compte where cpt_numero='4xxxxx ou 6xxxxx'),
+-- );
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-005'),
+        (select cpt_id from plan_compte where cpt_numero='510001'),
+        0--Credit
+);
+
+-- insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+-- (
+--         detail_trs_cpt_seq.NEXTVAL, 
+--         (select trs_id from transaction_type where trs_code='CE-006'),
+--         (select cpt_id from plan_compte where cpt_numero='4xxxxx ou 6xxxxx'),
+-- );
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-006'),
+        (select cpt_id from plan_compte where cpt_numero='701000'),
+        0--Credit
+);
+
+-- insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+-- (
+--         detail_trs_cpt_seq.NEXTVAL, 
+--         (select trs_id from transaction_type where trs_code='CE-007'),
+--         (select cpt_id from plan_compte where cpt_numero='4xxxxx ou 6xxxxx'),
+-- );
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-007'),
+        (select cpt_id from plan_compte where cpt_numero='701000'),
+        0--Credit
+);
+
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-010'),
+        (select cpt_id from plan_compte where cpt_numero='520000')
+);
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-010'),
+        (select cpt_id from plan_compte where cpt_numero='702000'),
+        0--Credit
+);
+
+-- insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID) values 
+-- (
+--         detail_trs_cpt_seq.NEXTVAL, 
+--         (select trs_id from transaction_type where trs_code='CE-011'),
+--         (select cpt_id from plan_compte where cpt_numero='67xxxx')
+-- );
+insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT) values 
+(
+        detail_trs_cpt_seq.NEXTVAL, 
+        (select trs_id from transaction_type where trs_code='CE-011'),
+        (select cpt_id from plan_compte where cpt_numero='520000'),
+        0--Credit
+);
+
+-- insertion des transaction détail fini :
+--      22/09/24 à 17:44
+--      lire les comptes commentée avant insertion des données et bien comprendre
