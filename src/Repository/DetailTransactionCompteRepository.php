@@ -17,13 +17,13 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
         parent::__construct($registry, DetailTransactionCompte::class);
     }
 
-    public function findByTransaction(TransactionType $transactionType): ?DetailTransactionCompte
+    public function findByTransaction(TransactionType $transactionType): array
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.transaction_type = :val')
+            ->Where('d.transaction_type = :val')
             ->setParameter('val', $transactionType)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
     }
 
     //    /**

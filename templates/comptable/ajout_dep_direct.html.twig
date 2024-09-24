@@ -18,7 +18,7 @@
                 <div class="card-header">
                     <h4 class="card-title">Ajout des dépenses directes</h4>
                 </div>
-                <form id="formulaire" action="{{ path('comptable.validation_depense_directe')}}" method="post">
+                <form id="formulaire" action="{{ path('comptable.validation_depense_directe') }}" method="post">
                     <div class="card-body d-flex flex-column gap-2 py-5 px-5">
                         <div class="col-12 d-flex flex-row ">
                             <label for="entite" class="col-3 form-control-lg">
@@ -40,7 +40,8 @@
                             <div class="col">
                                 <select name="transaction" id="transaction" class="form-select form-control">
                                     {% for opperation in list_opp %}
-                                        <option value="{{ opperation.Id }}">{{ opperation.TrsCode }} - {{ opperation.TrsLibelle }}</option>
+                                        <option value="{{ opperation.Id }}">{{ opperation.TrsCode }}
+                                            - {{ opperation.TrsLibelle }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -71,12 +72,12 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
-        function sendData (){
+        function sendData() {
             var form = document.getElementById('formulaire');
             document.getElementById('valider').addEventListener('click', function (e) {
                 e.preventDefault()

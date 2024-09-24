@@ -30,9 +30,9 @@ values (detail_budget_seq.NEXTVAL,
 
 */
 
-INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
+INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID,IS_TRS_DEBIT)
 VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
-        (select cpt_id from plan_compte where cpt_numero = '442750'));
+        (select cpt_id from plan_compte where cpt_numero = '442750'),1);
 INSERT INTO DETAIL_TRANSACTION_COMPTE (DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_COMPTE_ID)
 VALUES (detail_trs_cpt_seq.NEXTVAL, (select TRS_ID from TRANSACTION_TYPE where TRS_CODE = 'CE-007'),
         (select cpt_id from plan_compte where cpt_numero = '442710'));

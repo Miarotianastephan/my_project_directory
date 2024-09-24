@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Exercice;
 use App\Entity\Mouvement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,16 @@ class MouvementRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Mouvement::class);
+    }
+
+    public function findByExercice(Exercice $exercice): ?array
+    {
+        return $this->createQueryBuilder('m')
+            ->Where('m.mvt_evenement_id.evn_exercice = :ex')
+            ->setParameter('ex', $exercice)
+            ->orderBy('m.mvt_evenement_id.evn_date_operation', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

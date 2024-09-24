@@ -83,6 +83,7 @@ class ComptableController extends AbstractController
             $list_transaction_code
         ));
 
+
         $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011"];
         $liste_entite = array_filter(array_map(
             fn($code) => $planCompteRepository->findByNumero($code),
@@ -93,14 +94,18 @@ class ComptableController extends AbstractController
         $transactionCompteMap = [];
         foreach ($liste_transaction_type as $transaction) {
             $details = $detailTransactionCompteRepository->findByTransaction($transaction);
-            $transactionCompteMap[$transaction->getId()] = array_map(function ($detail) {
-                return [
-                    'id' => $detail->getPlanCompte()->getId(),
-                    'numero' => $detail->getPlanCompte()->getCptNumero(),
-                    'libelle' => $detail->getPlanCompte()->getCptLibelle(),
-                ];
-            }, $details);
+            if (!$details){ dump("vide");} else {
+                $transactionCompteMap[$transaction->getId()] = array_map(function ($detail) {
+                    return [
+                        'id' => $detail->getPlanCompte()->getId(),
+                        'numero' => $detail->getPlanCompte()->getCptNumero(),
+                        'libelle' => $detail->getPlanCompte()->getCptLibelle(),
+                    ];
+                }, $details);
+            }
+
         }
+
 
         return $this->render('comptable/ajout_dep_direct.html.twig', [
             'liste_entite' => $liste_entite,
@@ -116,6 +121,7 @@ class ComptableController extends AbstractController
         DetailTransactionCompteRepository $detailTransactionCompteRepository
     ): JsonResponse
     {
+        dump("changement effectuer");
         $transactionId = $request->query->get('transactionId');
         $transaction = $transactionTypeRepository->find($transactionId);
 

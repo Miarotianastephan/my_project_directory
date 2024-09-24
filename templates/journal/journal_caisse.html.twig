@@ -7,13 +7,21 @@
 {% block page_subtitle %}
 {% endblock %}
 
+{# Bouton d'action #}
+{% block page_options %}
+    <button class="btn btn-secondary">
+        <span style="color: transparent">Imprimer</span>
+        {{ ux_icon('flat-color-icons:print', {height: '60%'}) }}
+    </button>
+{% endblock %}
+
 {% block page_main_content %}
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <!--<div class="card-header">
-                    <h4 class="card-title">Le plan de compte</h4>
-                </div>-->
+                <div class="card-header">
+                    <h4 class="card-title">Journal de caisse</h4>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-hover">
@@ -29,13 +37,15 @@
                             </thead>
                             {# Data #}
                             <tbody id="bodyList">
-                                <tr>
-                                    <td id="date">{{"date"}}</td>
-                                    <td id="compte">{{"compte."}}</td>
-                                    <td id="libelle">{{"Libelle"}}</td>
-                                    <td id="debit">10000</td>
-                                    <td id="credit">0</td>
-                                </tr>
+                                {% for mouvement in mouvements %}
+                                    <tr>
+                                        <td id="date">{{mouvement.MvtEvenementId.EvnDateOperation|date('d/m/y')}}</td>
+                                        <td id="compte">{{mouvement.MvtCompteId.CptNumero}}</td>
+                                        <td id="libelle">{{mouvement.MvtCompteId.CptLibelle}}</td>
+                                        <td id="debit" class="text-end">{{ mouvement.IsMvtDebit ? mouvement.MvtMontant|number_format(2, '.', ' ') : 0 }}</td>
+                                        <td id="credit" class="text-end">{{ mouvement.IsMvtDebit ? 0 : mouvement.MvtMontant|number_format(2, '.', ' ') }}</td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

@@ -16,11 +16,11 @@ class Mouvement
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: "mvt_evenement_id", referencedColumnName: "evn_id",nullable: false)]
+    #[ORM\JoinColumn(name: "mvt_evenement_id", referencedColumnName: "evn_id", nullable: false)]
     private ?Evenement $mvt_evenement_id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: "mvt_compte_id", referencedColumnName: "cpt_id",nullable: false)]
+    #[ORM\JoinColumn(name: "mvt_compte_id", referencedColumnName: "cpt_id", nullable: false)]
     private ?PlanCompte $mvt_compte_id = null;
 
     #[ORM\Column]
@@ -28,11 +28,6 @@ class Mouvement
 
     #[ORM\Column]
     private ?bool $isMvtDebit = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getMvtEvenementId(): ?Evenement
     {
@@ -81,4 +76,26 @@ class Mouvement
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        $evenement = $this->mvt_evenement_id ? $this->mvt_evenement_id->getId() : 'N/A';
+        $compte = $this->mvt_compte_id ? $this->mvt_compte_id->getId() : 'N/A';
+        $montant = $this->mvt_montant ?? 'N/A';
+        $type = $this->isMvtDebit ? 'Débit' : 'Crédit';
+
+        return sprintf(
+            'Mouvement [Événement: %s, Compte: %s, Montant: %.2f, Type: %s]',
+            $evenement,
+            $compte,
+            $montant,
+            $type
+        );
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
 }

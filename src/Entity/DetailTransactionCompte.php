@@ -25,7 +25,7 @@ class DetailTransactionCompte
     #[ORM\JoinColumn(name: "plan_compte_id", referencedColumnName: "cpt_id", nullable: false)]
     private ?PlanCompte $plan_compte = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private ?bool $isTrsDebit = null; // TRUE : 1 , FALSE : 0
 
 
