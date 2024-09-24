@@ -1,68 +1,42 @@
-// depense_directe.js
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('formulaire');
+document.addEventListener('DOMContentLoaded', () => {
     const transactionSelect = document.getElementById('transaction');
     const planCompteSelect = document.getElementById('plan_compte');
-    const validerButton = document.getElementById('valider');
+    const loadingOption = document.createElement('option');
+    loadingOption.textContent = 'Chargement...';
 
-    if (!form || !transactionSelect || !planCompteSelect || !validerButton) {
-        console.error('One or more required elements not found');
-        return;
-    }
-
-    let transactionCompteMap = {};
-
-    function updatePlanCompteOptions() {
+    function getOptions() {
         const selectedTransactionId = transactionSelect.value;
-        planCompteSelect.innerHTML = '';
 
-        if (transactionCompteMap[selectedTransactionId]) {
-            populatePlanCompteOptions(transactionCompteMap[selectedTransactionId]);
-        } else {
-            fetch(`/get-transaction-details?transactionId=${selectedTransactionId}`)
-                .then(response => response.json())
-                .then(data => {
-                    transactionCompteMap[selectedTransactionId] = data;
-                    populatePlanCompteOptions(data);
-                })
-                .catch(error => console.error('Erreur:', error));
+        if (!selectedTransactionId) {
+            planCompteSelect.innerHTML = '<option value="">Sélectionnez un compte</option>';
+            return;
         }
-    }
 
-    function populatePlanCompteOptions(comptes) {
-        comptes.forEach(compte => {
-            const option = document.createElement('option');
-            option.value = compte.id;
-            option.textContent = `${compte.numero} - ${compte.libelle}`;
-            planCompteSelect.appendChild(option);
-        });
-    }
-
-    function sendData(e) {
-        e.preventDefault();
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new FormData(form)
-        })
+        planCompteSelect.innerHTML = '';
+        planCompteSelect.appendChild(loadingOption);
+        fetch(`/comptable/get-transaction-details?transactionId=${selectedTransactionId}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Erreur réseau : ' + response.status);
+                    throw new Error('Erreur réseau');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log(data.message);
-                // Handle successful response here
+                //planCompteSelect.innerHTML = '<option value="">Sélectionnez un compte</option>';
+                planCompteSelect.innerHTML = '';
+                data.forEach(compte => {
+                    const option = document.createElement('option');
+                    option.value = compte.id;
+                    option.textContent = `${compte.numero} - ${compte.libelle}`;
+                    planCompteSelect.appendChild(option);
+                });
             })
-            .catch(error => console.error('Erreur:', error));
+            .catch(error => {
+                console.error('Erreur:', error);
+                planCompteSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+            });
     }
 
-    transactionSelect.addEventListener('change', updatePlanCompteOptions);
-    validerButton.addEventListener('click', sendData);
-
-    // Initial population of plan_compte options
-    updatePlanCompteOptions();
+    transactionSelect.addEventListener('change', getOptions);
+    getOptions(); // Initial call to populate based on default selection
 });

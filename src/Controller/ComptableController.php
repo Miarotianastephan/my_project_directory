@@ -113,9 +113,10 @@ class ComptableController extends AbstractController
 
 
     #[Route('/valider/depense', name: 'comptable.validation_depense_directe', methods: ['POST'])]
-    public function validation_depense_directe(Request                   $request,
-                                               PlanCompteRepository      $planCompteRepository,
-                                               TransactionTypeRepository $transactionTypeRepository): Response
+    public function validation_depense_directe(Request                           $request,
+                                               PlanCompteRepository              $planCompteRepository,
+                                               TransactionTypeRepository         $transactionTypeRepository,
+                                               DetailTransactionCompteRepository $detailTransactionCompteRepository): Response
     {
         // Récupère les données du formulaire
         $entite_id = $request->request->get('entite');
@@ -125,17 +126,24 @@ class ComptableController extends AbstractController
         $transaction_id = $request->request->get('transaction');
         $transaction = $transactionTypeRepository->find($transaction_id);
 
-        $planCompte_id = $request->request->get('plan_compte');
+
         $planCompte = $planCompteRepository->find($entite_id);
 
         $montant = $request->request->get('montant');
         $date = new \DateTime();
+
+        $planCompte_id = $request->request->get('plan_compte');
+        $compte_debit = $planCompteRepository->find($planCompte_id);
+
+        $compte_credit = $detailTransactionCompteRepository->findPlanCompte_CreditByTransaction($transaction);
         return $this->render('comptable/validation_dep_direct.html.twig',
             [
                 'entite' => $entite,
                 'transaction' => $transaction,
                 'planCompte' => $planCompte,
                 'montant' => $montant,
+                'debit' => $compte_debit,
+                'credit' => $compte_credit,
                 'date' => $date,
             ]);
     }

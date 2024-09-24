@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DetailTransactionCompte;
+use App\Entity\PlanCompte;
 use App\Entity\TransactionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,6 +25,18 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
             ->setParameter('val', $transactionType)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findPlanCompte_CreditByTransaction(TransactionType $transactionType): ?PlanCompte
+    {
+        dump("transaction == ".$transactionType->getTrsLibelle());
+        $data = $this->createQueryBuilder('d')
+            ->Where('d.transaction_type = :val')
+            ->andWhere('d.isTrsDebit = 0')
+            ->setParameter('val', $transactionType)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if ($data){return $data->getPlanCompte();}else{return null;}
     }
 
     //    /**
