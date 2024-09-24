@@ -27,6 +27,17 @@ class PlanCompteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findCompteCaisse(): array
+    {
+        //$list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011"];
+        return $this->createQueryBuilder('p')
+            ->where('p.cpt_numero LIKE :numStart51')
+            ->andWhere('LENGTH(p.cpt_numero) = 6')  // Vérification que le numéro fait bien 6 chiffres
+            ->setParameter('numStart51', '51%')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findCompteDepense(): array
     {
         return $this->createQueryBuilder('p')

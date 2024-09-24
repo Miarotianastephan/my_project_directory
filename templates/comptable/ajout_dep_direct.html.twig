@@ -11,21 +11,21 @@
 {% endblock %}
 
 {% block page_main_content %}
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Ajout des dépenses directes</h4>
                 </div>
                 <form id="formulaire" action="{{ path('comptable.validation_depense_directe') }}" method="post">
                     <div class="card-body d-flex flex-column gap-2 py-5 px-5">
-                        <div class="col-12 d-flex flex-row ">
+                        <div class="col-12 d-flex flex-row">
                             <label for="entite" class="col-3 form-control-lg">
-                                Entitté concernée
+                                Entité concernée
                             </label>
                             <div class="col">
                                 <select name="entite" id="entite" class="form-select form-control">
+                                    <option value="">Sélectionnez une entité</option>
                                     {% for entite in liste_entite %}
                                         <option value="{{ entite.Id }}">{{ entite.CptLibelle }}</option>
                                     {% endfor %}
@@ -34,14 +34,13 @@
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label for="transaction" class="col-3 form-control-lg">
-                                Choix opération/
-                                type de transaction
+                                Choix opération/type de transaction
                             </label>
                             <div class="col">
                                 <select name="transaction" id="transaction" class="form-select form-control">
+                                    <option value="">Sélectionnez une opération</option>
                                     {% for opperation in list_opp %}
-                                        <option value="{{ opperation.Id }}">{{ opperation.TrsCode }}
-                                            - {{ opperation.TrsLibelle }}</option>
+                                        <option value="{{ opperation.Id }}">{{ opperation.TrsCode }} - {{ opperation.TrsLibelle }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -57,10 +56,9 @@
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label for="montant" class="col-3 form-control-lg"> Montant </label>
+                            <label for="montant" class="col-3 form-control-lg">Montant</label>
                             <div class="col">
-                                <input class="form-control form-control" type="number" id="montant" name="montant"
-                                       step="0.01">
+                                <input class="form-control" type="number" id="montant" name="montant" step="0.01" required>
                             </div>
                         </div>
                     </div>
@@ -77,7 +75,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        function sendData() {
+        /*function sendData() {
             var form = document.getElementById('formulaire');
             document.getElementById('valider').addEventListener('click', function (e) {
                 e.preventDefault()
@@ -102,13 +100,62 @@
                     })
                     .catch(error => console.error('Erreur:', error));
             });
-        }
-    </script>
-    <script>
+        }*/
         // Données PHP envoyées à JavaScript
-        const transactionCompteMap = {{ transactionCompteMap|raw }};
 
-        function updatePlanCompteOptions() {
+        /*
+        const transactionCompteMap = {
+        { transactionCompteMap|raw }};
+
+
+        const transactionCompteMap = {
+        { transactionCompteMap }};*/
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const transactionSelect = document.getElementById('transaction');
+            const planCompteSelect = document.getElementById('plan_compte');
+            const loadingOption = document.createElement('option');
+            loadingOption.textContent = 'Chargement...';
+
+            function getOptions() {
+                const selectedTransactionId = transactionSelect.value;
+
+                if (!selectedTransactionId) {
+                    planCompteSelect.innerHTML = '<option value="">Sélectionnez un compte</option>';
+                    return;
+                }
+
+                planCompteSelect.innerHTML = '';
+                planCompteSelect.appendChild(loadingOption);
+                fetch(`/comptable/get-transaction-details?transactionId=${selectedTransactionId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        //planCompteSelect.innerHTML = '<option value="">Sélectionnez un compte</option>';
+                        planCompteSelect.innerHTML = '';
+                        data.forEach(compte => {
+                            const option = document.createElement('option');
+                            option.value = compte.id;
+                            option.textContent = `${compte.numero} - ${compte.libelle}`;
+                            planCompteSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        planCompteSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+                    });
+            }
+
+            transactionSelect.addEventListener('change', getOptions);
+            getOptions(); // Initial call to populate based on default selection
+        });
+
+        /*function updatePlanCompteOptions() {
+
             const transactionSelect = document.getElementById('transaction');
             const planCompteSelect = document.getElementById('plan_compte');
             const selectedTransactionId = transactionSelect.value;
@@ -139,6 +186,7 @@
         }
 
         document.getElementById('transaction').addEventListener('change', updatePlanCompteOptions);
-        document.addEventListener('DOMContentLoaded', updatePlanCompteOptions);
+        document.addEventListener('DOMContentLoaded', updatePlanCompteOptions);*/
+
     </script>
 {% endblock %}

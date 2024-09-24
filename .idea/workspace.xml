@@ -7,17 +7,11 @@
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/JournalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/JournalController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Evenement.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Evenement.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Mouvement.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Mouvement.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/PlanCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PlanCompteRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/journal/journal_caisse.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/journal/journal_caisse.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +254,7 @@
       <workItem from="1726463802581" duration="41704000" />
       <workItem from="1726706411576" duration="20885000" />
       <workItem from="1726749861039" duration="2740000" />
-      <workItem from="1727068354182" duration="21038000" />
+      <workItem from="1727068354182" duration="28810000" />
     </task>
     <servers />
   </component>
