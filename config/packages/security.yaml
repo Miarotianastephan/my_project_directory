@@ -37,6 +37,8 @@ security:
         
         - { path: ^/demande_piece, roles: ['%app.roles.demandeur%', '%app.roles.tresorier%', '%app.roles.sg%'] }
         - { path: ^/exercice, roles: ['%app.roles.admin%', '%app.roles.tresorier%', '%app.roles.sg%', '%app.roles.comptable%'] }
+    access_denied_url: /error/403
+
 
 when@test:
     security:
