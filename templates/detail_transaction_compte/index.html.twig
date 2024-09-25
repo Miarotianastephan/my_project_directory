@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comptable{% endblock %}
+
+{% block page_title %}
+    Admin
+{% endblock %}
+
+{% block page_subtitle %}
+    {#  #}
+{% endblock %}
+{% block page_options %}
+    <a href="{{ path('app_detail_transaction_compte_new') }}" class="btn btn-secondary">Ajouter</a>
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des transactions</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr id="cols">
+                                <th id="isCol" scope="col">Transaction_type</th>
+                                <th id="isCol" scope="col">Plan_compte</th>
+                                <th id="isCol" scope="col">Type d'oppération</th>
+                                <th id="noCol" scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="bodyList">
+                            {% for detail_transaction_compte in detail_transaction_comptes %}
+                                <tr>
+                                    <td>{{ detail_transaction_compte.TransactionType.TrsCode }}
+                                        - {{ detail_transaction_compte.TransactionType.TrsLibelle }}</td>
+                                    <td>{{ detail_transaction_compte.PlanCompte.CptNumero }}
+                                        - {{ detail_transaction_compte.PlanCompte.CptLibelle }}</td>
+                                    <td>{{ detail_transaction_compte.isTrsDebit ? 'Débiteur' : 'Créditeur' }}</td>
+                                    <td>
+                                        <a href="{{ path('app_detail_transaction_compte_edit', {'id': detail_transaction_compte.id}) }}">{{ ux_icon('flowbite:edit-outline',{height : "20px"}) }}</a>
+                                        <a href="{{ path('app_detail_transaction_compte_show', {'id': detail_transaction_compte.id}) }}">{{ ux_icon('bi:info-circle',{height : "15px"}) }}</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

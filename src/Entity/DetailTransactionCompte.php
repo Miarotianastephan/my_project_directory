@@ -55,6 +55,20 @@ class DetailTransactionCompte
         $this->transaction_type = $transaction_type;
     }
 
+    // Getter
+    public function getIsTrsDebit(): ?bool
+    {
+        return $this->isTrsDebit;
+    }
+
+    // Setter
+    public function setIsTrsDebit(?bool $isTrsDebit): self
+    {
+        $this->isTrsDebit = $isTrsDebit;
+
+        return $this;
+    }
+
     /**
      * @return PlanCompte|null
      */

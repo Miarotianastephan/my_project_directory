@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/scr/comptable/scr_ajout_dep_direct.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/comptable/scr_ajout_dep_direct.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/validation_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/validation_dep_direct.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/option/_admin_sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/option/_admin_sidebar.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,7 +250,7 @@
       <workItem from="1726463802581" duration="41704000" />
       <workItem from="1726706411576" duration="20885000" />
       <workItem from="1726749861039" duration="2740000" />
-      <workItem from="1727068354182" duration="32495000" />
+      <workItem from="1727068354182" duration="48636000" />
     </task>
     <servers />
   </component>
