@@ -21,11 +21,13 @@ class Exercice
     #[ORM\Column(type: 'customdate', nullable: true)]
     private ?\DateTimeInterface $exercice_date_fin = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private ?bool $is_valid = false; // TRUE : 1 , FALSE : 0
+
     public function __toString(): string
     {
-        $debut = $this->exercice_date_debut ? $this->exercice_date_debut->format('d-m-Y') : 'N/A';
+        $debut = $this->exercice_date_debut ? $this->exercice_date_debut->format('d-M-Y') : 'N/A';
         $fin = $this->exercice_date_fin ? $this->exercice_date_fin->format('d-m-Y') : 'N/A';
-
         return sprintf('Exercice du %s au %s', $debut, $fin);
     }
 
@@ -54,6 +56,18 @@ class Exercice
     public function setExerciceDateFin(?\DateTimeInterface $exercice_date_fin): static
     {
         $this->exercice_date_fin = $exercice_date_fin;
+
+        return $this;
+    }
+
+    public function isValid(): ?bool
+    {
+        return $this->is_valid;
+    }
+
+    public function setValid(bool $is_valid): static
+    {
+        $this->is_valid = $is_valid;
 
         return $this;
     }

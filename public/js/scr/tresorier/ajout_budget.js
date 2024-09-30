@@ -1,4 +1,3 @@
-// public/js/budget_management.js
 document.addEventListener('DOMContentLoaded', function () {
     const SELECTORS = {
         formulaire: '#formulaire',
@@ -89,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!data.success) {
             showMessage(data.message);
         } else if (data.url) {
-            alert(JSON.stringify(data.message));
+            window.location.href = data.url;
         } else {
             updateModalFields(data);
             ELEMENTS.updateAmountModal.show();
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!data.success) {
             showMessage(data.message);
         } else if (data.url) {
-            alert(JSON.stringify(data.message));
+            window.location.href = data.url;
         } else {
             alert("impossible de trouver url");
         }
@@ -126,8 +125,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function handleError(error) {
-        console.error('Erreur:', error);
-        alert('Une erreur est survenue : ' + error.message);
+        //console.error('Erreur:', error);
+        //alert('Une erreur est survenue : ' + error.message);
+        showMessage(error.message)
     }
 
     setupEventListeners();

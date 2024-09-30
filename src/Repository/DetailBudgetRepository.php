@@ -16,8 +16,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class DetailBudgetRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $exerciceRepository;
+    private $compteMereRepository;
+    private $budgetTypeRepository;
+
+    public function __construct(ManagerRegistry      $registry,
+                                ExerciceRepository   $exerciceRepo,
+                                CompteMereRepository $compteMereRepo,
+                                BudgetTypeRepository $budgetTypeRepo,
+    )
     {
+        $this->budgetTypeRepository = $budgetTypeRepo;
+        $this->compteMereRepository = $compteMereRepo;
+        $this->exerciceRepository = $exerciceRepo;
         parent::__construct($registry, DetailBudget::class);
     }
 
@@ -33,6 +44,16 @@ class DetailBudgetRepository extends ServiceEntityRepository
         return $data;
     }
 
+    public function findByExercice(Exercice $exercice): array
+    {
+        $data = $this->createQueryBuilder('d')
+            ->andWhere('d.exercice = :ex')
+            ->setParameter('ex', $exercice)
+            ->getQuery()
+            ->getResult();
+        return $data;
+    }
+
     public function ajoutDetailBudget(int                    $exercice_id,
                                       int                    $compteMere_id,
                                       float                  $montant,
@@ -41,20 +62,24 @@ class DetailBudgetRepository extends ServiceEntityRepository
 
     {
         $entityManager = $this->getEntityManager();
-        $exercice = $entityManager->find(Exercice::class, $exercice_id);
+        $exercice = $this->exerciceRepository->find($exercice_id);
         if (!$exercice) {
-            return new JsonResponse(['success' => false, 'message' => "L\'exercice est introuvable"]);
+            return new JsonResponse(['success' => false, 'message' => "L'exercice est introuvable", 'isExiste' => false]);
         }
-        $compteMere = $entityManager->find(CompteMere::class, $compteMere_id);
+        $compteMere = $this->compteMereRepository->find($compteMere_id);
         if (!$compteMere) {
-            return new JsonResponse(['success' => false, 'message' => "Le compte mere est introuvable"]);
+            return new JsonResponse(['success' => false, 'message' => "Le compte mere est introuvable", 'isExiste' => false]);
         }
-        $budgetType = $entityManager->find(BudgetType::class, $budgetType_id);
+        $budgetType = $this->budgetTypeRepository->find($budgetType_id);
+        if (!$budgetType) {
+            return new JsonResponse(['success' => false, 'message' => "Le type de budget est introuvable", 'isExiste' => false]);
+        }
+        /*$budgetType = $this->budgetTypeRepository->find($budgetType_id);
         if (!$budgetType) {
             return new JsonResponse(['success' => false, 'message' => "Le budget type mere est introuvable"]);
-        }
+        }*/
 
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compteMere);
+        $budget = $this->findByExerciceEtCpt($exercice, $compteMere);
         if ($budget) {
             return new JsonResponse(
                 [
@@ -85,8 +110,7 @@ class DetailBudgetRepository extends ServiceEntityRepository
         try {
             $entityManager->persist($detail);
             $entityManager->flush();
-            return new JsonResponse(
-                ['success' => true, 'message' => "Insertion réussi", 'isExiste' => false]);
+            return new JsonResponse(['success' => true, 'message' => "Insertion réussi", 'isExiste' => false]);
         } catch (\Exception $exception) {
             return new JsonResponse(['success' => false, 'message' => $exception->getMessage()]);
         }
@@ -103,8 +127,7 @@ class DetailBudgetRepository extends ServiceEntityRepository
         try {
             $entityManager->persist($detail_budget);
             $entityManager->flush();
-            return new JsonResponse(
-                ['success' => true, 'message' => "Modification réussi"]);
+            return new JsonResponse(['success' => true, 'message' => "Modification réussi"]);
         } catch (\Exception $exception) {
             return new JsonResponse(['success' => false, 'message' => $exception->getMessage()]);
         }

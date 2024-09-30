@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste budget{% endblock %}
+
+{% block page_title %} Trésorier {% endblock %}
+{% block page_subtitle %}
+    {#  #}
+{% endblock %}
+
+
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des budgets</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr class="col-12">
+                                <th class="col">Date</th>
+                                <th class="col">Compte</th>
+                                <th class="col">Montant</th>
+                                <th class="col">Type</th>
+                                <th class="col">Exercice</th>
+                                <th class="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for budget in liste_budget %}
+                                <tr class="col-12">
+                                    <td class="col">{{ budget.BudgetDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col">{{ budget.CompteMere.CptNumero }}
+                                        - {{ budget.CompteMere.CptLibelle }} </td>
+                                    <td class="col text-end">{{ budget.BudgetMontant|number_format(0, '.', ' ') }} Ar
+                                    </td>
+                                    <td class="">{{ budget.BudgetType.Libelle }}   </td>
+                                    <td class="">{{ budget.Exercice.Id }}   </td>
+                                    <td class="col">
+                                        <div class="col-12 d-flex gap-2">
+                                            <div class="col">
+                                                <a class="btn btn-label-success btn-sm">Modifier</a>
+                                            </div>
+                                            <div class="col-4">
+                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
+                                                    {#
+                                                    <a>{{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}</a>
+                                                    #}
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">Aucun donnée inserer</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

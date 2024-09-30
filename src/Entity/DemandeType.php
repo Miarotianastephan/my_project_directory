@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Monolog\DateTimeImmutable;
+use Symfony\Component\Validator\Constraints\Date;
 
 #[ORM\Entity(repositoryClass: DemandeTypeRepository::class)]
 class DemandeType
@@ -18,7 +20,7 @@ class DemandeType
     #[ORM\Column(name: 'dm_type_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'customdate', nullable:false)]
+    #[ORM\Column(type: 'customdate', nullable:false,options: ['default' => 'SYSDATE'])]
     private ?\DateTimeInterface $dm_date = null;
 
     #[ORM\Column]

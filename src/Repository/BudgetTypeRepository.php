@@ -16,6 +16,15 @@ class BudgetTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, BudgetType::class);
     }
 
+    public function findOneByLibelle(string $libelle): ?BudgetType
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.libelle = :val')
+            ->setParameter('val', $libelle)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return BudgetType[] Returns an array of BudgetType objects
     //     */
