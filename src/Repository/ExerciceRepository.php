@@ -45,9 +45,18 @@ class ExerciceRepository extends ServiceEntityRepository
         }
     }
 
-    public function getExerciceValide(DateTime $date): array
+    public function getExerciceNext(DateTime $date): array
     {
         return $this->createQueryBuilder('e')->where('e.exercice_date_debut > :date')->andWhere('e.exercice_date_fin IS NULL')->setParameter('date', $date, 'customdate')->getQuery()->getResult();
+    }
+
+    public function  getExerciceValide() : ?Exercice
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.IS_VALID = true')
+            ->getQuery()
+            ->getOneOrNullResult();
+
     }
 
 

@@ -27,18 +27,16 @@ class ExerciceController extends AbstractController
     #[Route('/{id}', name: 'app_find_exercie', methods: ['GET'])]
     public function findExercice($id, ExerciceRepository $exerciceRepository): JsonResponse
     {
-        $rep = $exerciceRepository->find($id);
-        if (!$rep) {
-            return new JsonResponse(['success' => false, 'message' => "exercice introuvable"]);
+        $exercice = $exerciceRepository->find($id);
+        if (!$exercice) {
+            return new JsonResponse(['success' => false, 'message' => "Exercice introuvable"], 404);
         }
-
-        dump($rep);
 
         return new JsonResponse([
             'success' => true,
-            'id' => $rep->getId(),
-            'ExerciceDateDebut' => $rep->getExerciceDateDebut(),
-            'ExerciceDateFin' => $rep->getExerciceDateFin()
+            'id' => $exercice->getId(),
+            'ExerciceDateDebut' => $exercice->getExerciceDateDebut()->format('Y-m-d'),
+            'ExerciceDateFin' => $exercice->getExerciceDateFin() ? $exercice->getExerciceDateFin()->format('Y-m-d') : null
         ]);
     }
 

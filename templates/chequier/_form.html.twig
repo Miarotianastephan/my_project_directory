@@ -1,0 +1,27 @@
+{{ form_start(form) }}
+<div class="card-body col-12 d-flex flex-column gap-2">
+    <div class="form-group">
+        {{ form_label(form.chequier_date_arrivee) }}
+        {{ form_widget(form.chequier_date_arrivee, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.banque) }}
+        {{ form_widget(form.banque, {'attr': {'class': 'form-select'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.chequier_numero_debut) }}
+        {{ form_widget(form.chequier_numero_debut, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.chequier_numero_fin) }}
+        {{ form_widget(form.chequier_numero_fin, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+
+</div>
+<div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+    <button class="btn btn-success">{{ button_label|default('Ajouter') }}</button>
+</div>
+
+
+{{ form_end(form) }}

@@ -5,32 +5,26 @@
 {% block page_subtitle %}
     {# Enregistrement de demande de fonds #}
 {% endblock %}
-
-
 {% block page_main_content %}
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Ajouter un nouveau detail transaction compte</div>
+                    <div class="card-title">Ajouter une nouvelle banque</div>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
                         <button style="border: none;background-color: transparent; text-align: start">
-                            <a href="{{ path('app_detail_transaction_compte_index') }}">
+                            <a href="{{ path('app_banque_index') }}">
                                 {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
                             </a>
                         </button>
                     </div>
                     <div class="col px-3 d-flex flex-column gap-3">
-                        {{ include('detail_transaction_compte/_form.html.twig') }}
+                        {{ include('banque/_form.html.twig') }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/scr/banque/scr_form.js') }}"></script>
 {% endblock %}

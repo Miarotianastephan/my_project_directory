@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const SELECTORS = {
-        ouvrir: '#ouvrir', ouvertureModal: '#ouvertureModal', cloturer: '#cloturer', clotureModal: '#clotureModal',
+        ouvrir: '#ouvrir-btn',
+        cloturer: '#cloturer-btn',
+        ouvertureModal: '#ouvertureModal',
+        clotureModal: '#clotureModal'
     };
 
     const ELEMENTS = {
@@ -9,97 +12,37 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function setupEventListeners() {
-        // Ajouter un écouteur d'événements pour le bouton "Ouvrir"
-        document.getElementById("ouvrir-btn").addEventListener('click', showModalOuvrir);
-        document.getElementById("cloturer-btn").addEventListener('click', showModalCloturer);
-
-        document.querySelector(".btn-close").addEventListener('click', closeModalAndRedirect);
-
-        /*document.querySelectorAll(SELECTORS.ouvrir).forEach(button => {
-            console.log(button);
-            button.addEventListener('click', showModalOuvrir);
-        });
-        document.querySelectorAll(SELECTORS.cloturer).forEach(button => {
-            console.log(button);
-
-            button.addEventListener('click', showModalCloturer);
-        });*/
-
-        //console.log(`${SELECTORS.ouvertureModal} .btn-secondary`);
-        //document.querySelector(`${SELECTORS.ouvertureModal} .btn-secondary`).addEventListener('click', closeModalAndRedirect);
-        //document.querySelector(`${SELECTORS.ouvertureModal} .btn-close`).addEventListener('click', closeModalAndRedirect);
+        document.querySelector(SELECTORS.ouvrir).addEventListener('click', showModalOuvrir);
+        document.querySelector(SELECTORS.cloturer).addEventListener('click', showModalCloturer);
+        document.querySelector("#ouvertureModal .btn-close").addEventListener('click', closeModal);
+        document.querySelector("#ouvertureModal #non").addEventListener('click', closeModal);
+        document.querySelector("#ouvertureModal #oui").addEventListener('click', ouvrirExercice);
     }
 
-    function closeModalAndRedirect() {
+    function closeModal() {
         ELEMENTS.ouvertureModal.hide();
     }
 
     function showModalOuvrir(event) {
         const button = event.currentTarget;
-        const url = button.dataset.url; // Récupère l'URL à partir de l'attribut data-url
-        try {
-            const data = getDataController(url);
-            //console.log(data);
-
-            //updateModalFields(data);
-            ELEMENTS.ouvertureModal.show();
-        } catch (error) {
-            console.error('Erreur lors de l\'ouverture du modal :', error);
-        }
+        const url = button.dataset.url;
+        getDataController(url, ELEMENTS.ouvertureModal, updateOuvertureModalFields);
     }
 
     function showModalCloturer(event) {
         const button = event.currentTarget;
-        const url = button.dataset.url; // Récupère l'URL à partir de l'attribut data-url
-        try {
-            const data = getDataController(url);
-            //console.log(data);
-            //updateModalFields(data);
-            ELEMENTS.clotureModal.show();
-        } catch (error) {
-            console.error('Erreur lors de l\'ouverture du modal de clôture :', error);
-        }
-
+        const url = button.dataset.url;
+        getDataController(url, ELEMENTS.clotureModal, updateClotureModalFields);
+        // Implémentation similaire à showModalOuvrir si nécessaire
     }
 
-    function getDataController(url) {
+    function getDataController(url, modal, updateFunction) {
         fetch(url, {
-            method: 'GET', headers: {
-                'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur réseau : ' + response.status);
-                }
-                console.log(response);
-                //updateModalFields(response)
-                //return response;
-                //return response.json();
-            })
-            .then(data => {
-                //console.log(data);
-                return data
-            })
-            .catch(error => {
-                return error;
-                //console.error('Erreur lors de la récupération des données :', error);
-            });
-    }
-
-
-    function updateModalFields(donne) {
-        document.getElementById('id-input').value = donne.id;
-        document.getElementById('date-debut-input').value = donne.ExerciceDateDebut;
-        document.getElementById('date-debut-fin').value = donne.ExerciceDateFin;
-    }
-
-
-    function getDataOuvrir() {
-        fetch("url", {
-            method: 'get', headers: {
-                'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
-            }, body: JSON.stringify(data)
         })
             .then(response => {
                 if (!response.ok) {
@@ -108,11 +51,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                console.log(data)
+                updateFunction(data);
+                modal.show();
             })
-            .catch();
+            .catch(error => {
+                console.error('Erreur lors de la récupération des données :', error);
+            });
     }
 
-    // Appeler setupEventListeners pour initialiser les écouteurs d'événements
+    function updateOuvertureModalFields(data) {
+        document.querySelector('#ouvertureModal #id-input').value = data.id;
+        document.querySelector('#ouvertureModal #date-debut-input').value = data.ExerciceDateDebut;
+    }
+
+    function updateClotureModalFields(data) {
+        console.log(data);
+        document.querySelector('#clotureModal #id-input').value = data.id;
+        document.querySelector('#clotureModal #date-debut-input').value = data.ExerciceDateDebut;
+    }
+
+    function ouvrirExercice() {
+        const form = document.querySelector('#ouvertureModal form');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal();
+                    // Rafraîchir la page ou mettre à jour l'interface utilisateur
+                    location.reload();
+                } else {
+                    // Afficher un message d'erreur
+                    console.error('Erreur lors de l\'ouverture de l\'exercice:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'ouverture de l\'exercice:', error);
+            });
+    }
+
     setupEventListeners();
 });
