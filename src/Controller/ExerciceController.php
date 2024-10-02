@@ -64,4 +64,30 @@ class ExerciceController extends AbstractController
         );
 
     }
+
+    #[Route('/cloturer/{id}', name: 'app_cloturer_exercie', methods: ['POST'])]
+    public function cloturerExercice($id, Request $request, ExerciceRepository $exerciceRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        dump($data);
+        $date_fin = $data['date_fin'] ?? null;
+
+        $addbase = $exerciceRepository->cloturerExercice($id, $date_fin);
+        $addbase = json_decode($addbase->getContent(), true);
+
+        return new JsonResponse([
+            'success' => $addbase['success'],
+        ]);
+    }
+
+    #[Route('/ouverture/{id}', name: 'app_ouverture_exercie', methods: ['POST'])]
+    public function ouvertureExercice($id, Request $request, ExerciceRepository $exerciceRepository): JsonResponse
+    {
+        $addbase = $exerciceRepository->ouvertureExercice($id);
+        $addbase = json_decode($addbase->getContent(), true);
+
+        return new JsonResponse([
+            'success' => $addbase['success'],
+        ]);
+    }
 }

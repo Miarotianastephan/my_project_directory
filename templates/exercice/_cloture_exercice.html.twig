@@ -2,7 +2,7 @@
 <div class="modal fade" id="clotureModal" tabindex="-1" aria-labelledby="clotureModal"
      aria-hidden="true">
     <div class="modal-dialog">
-        <form id="cloturer" action="{{ path('tresorier.modifier_budget') }}" method="post">
+        <form id="cloturer" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="clotureModalLabel">Voullez vous vraiment cloturer cette exercice?</h5>
@@ -16,17 +16,19 @@
                     </div>
                     <div class="form-group col-10 d-flex flex-row">
                         <label class="col" for="date-debut-input"> Date de debut: </label>
-                        <input type="date" id="date-debut-input" name="date-debut" class="form-control col" readonly>
+                        <input type="date" id="date-debut-input" name="date_debut" class="form-control col" readonly>
                     </div>
                     <div class="form-group col-10 d-flex flex-row">
                         <label class="col" for="date-fin-input"> Date de fin: </label>
-                        <input type="date" id="date-fin-input" name="date-fin" class="form-control col" value="{{ "now"|date("Y-m-d") }}">
+                        <input type="date" id="date-fin-input" name="date_fin" class="form-control col"
+                               value="{{ "now"|date("Y-m-d") }}">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="non" name="non" data-bs-dismiss="modal" class="btn btn-danger">NON
                     </button>
-                    <button type="button" id="oui" name="oui" class="btn btn-success">Cloturer</button>
+                    <button type="button" id="oui-cloturer" name="oui-cloturer" class="btn btn-success">Cloturer
+                    </button>
                 </div>
             </div>
         </form>

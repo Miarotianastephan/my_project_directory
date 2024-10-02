@@ -7,14 +7,11 @@
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/scr/exercice/_modal_exercice.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/exercice/_modal_exercice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/BudgetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BudgetController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ExerciceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ExerciceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Banque.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Banque.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/ExerciceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ExerciceRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Type/CustomDateType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Type/CustomDateType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/detail_transaction_compte/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/detail_transaction_compte/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/detail_transaction_compte/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/detail_transaction_compte/new.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/exercice/_cloture_exercice.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/_cloture_exercice.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exercice/_ouverture_exercice.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/_ouverture_exercice.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exercice/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,7 +248,7 @@
       <workItem from="1726706411576" duration="20885000" />
       <workItem from="1726749861039" duration="2740000" />
       <workItem from="1727068354182" duration="50442000" />
-      <workItem from="1727320723613" duration="55120000" />
+      <workItem from="1727320723613" duration="63145000" />
     </task>
     <servers />
   </component>

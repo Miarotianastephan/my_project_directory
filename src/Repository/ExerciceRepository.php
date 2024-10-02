@@ -50,15 +50,82 @@ class ExerciceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')->where('e.exercice_date_debut > :date')->andWhere('e.exercice_date_fin IS NULL')->setParameter('date', $date, 'customdate')->getQuery()->getResult();
     }
 
-    public function  getExerciceValide() : ?Exercice
+    public function cloturerExercice(int $id_exercie,string $date_cloture): JsonResponse
+    {
+        $exercice_valide = $this->getExerciceValide();
+        $entityManager = $this->getEntityManager();
+
+        if (!$exercice_valide) {
+            return new JsonResponse(['success' => false, 'message' => 'Aucun exercice ouvert']);
+        }
+        $exercice = $this->find($id_exercie);
+        if (!$exercice || $exercice!= $exercice_valide){
+            return new JsonResponse(['success' => false, 'message' => 'Exercice invalide']);
+        }
+
+        // Commencer une transaction
+        $entityManager->beginTransaction();
+        try {
+
+            // Mettre à jour la date de fin et l'état de l'exercice
+            $date_fin = new \DateTimeImmutable($date_cloture);
+            $exercice->setExerciceDateFin($date_fin);
+            $exercice->setValid(false);
+
+
+            $entityManager->persist($exercice);
+            $entityManager->flush();
+
+            // Commit transaction
+            $entityManager->commit();
+            return new JsonResponse(['success' => true, 'message' => "L'exercice cloturer."]);
+        } catch (\Exception $e) {
+            $entityManager->rollback();
+            return new JsonResponse(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function ouvertureExercice(int $id_exercie): JsonResponse
+    {
+        $exercice_valide = $this->getExerciceValide();
+        $entityManager = $this->getEntityManager();
+        if ($exercice_valide) {
+            return new JsonResponse(['success' => false, 'message' => 'Fermez tous les exercice']);
+        }
+
+        $exercice = $this->find($id_exercie);
+        if (!$exercice ){
+            return new JsonResponse(['success' => false, 'message' => 'Exercice invalide']);
+        }
+
+        // Commencer une transaction
+        $entityManager->beginTransaction();
+        try {
+
+            // Mettre à jour la date de fin et l'état de l'exercice
+            $exercice->setValid(true);
+
+
+            $entityManager->persist($exercice);
+            $entityManager->flush();
+
+            // Commit transaction
+            $entityManager->commit();
+            return new JsonResponse(['success' => true, 'message' => "L'exercice ouvert."]);
+        } catch (\Exception $e) {
+            $entityManager->rollback();
+            return new JsonResponse(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function getExerciceValide(): ?Exercice
     {
         return $this->createQueryBuilder('e')
-            ->where('e.IS_VALID = true')
+            ->where('e.is_valid = true')
             ->getQuery()
             ->getOneOrNullResult();
 
     }
-
 
     public function findMostRecentOpenExercice(): ?Exercice
     {

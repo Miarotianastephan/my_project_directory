@@ -44,12 +44,12 @@
                                     <td class="col">{{ exercice.IsValid ? 'Valide' : 'À venir' }}</td>
                                     <td class="col text-center">
                                         {% if exercice.IsValid %}
-                                            <button data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
-                                                    class="col-7 btn btn-label-danger" id="cloturer-btn">Cloturer
+                                            <button data-id="{{ exercice.Id }}" data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
+                                                    class="col-7 btn btn-label-danger cloturer-btn" id="cloturer-btn">Cloturer
                                             </button>
                                         {% else %}
-                                            <button data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
-                                                    class="col-7 btn btn-label-success" id="ouvrir-btn">Ouvrir
+                                            <button data-id="{{ exercice.Id }}" data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
+                                                    class="col-7 btn btn-label-success ouvrir-btn" id="ouvrir-btn">Ouvrir
                                             </button>
                                         {% endif %}
                                     </td>

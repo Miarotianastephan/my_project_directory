@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let exercice_selected = "";
+
     const SELECTORS = {
-        ouvrir: '#ouvrir-btn',
-        cloturer: '#cloturer-btn',
+        ouvrir: '.ouvrir-btn',
+        cloturer: '.cloturer-btn',
         ouvertureModal: '#ouvertureModal',
         clotureModal: '#clotureModal'
     };
@@ -12,11 +14,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function setupEventListeners() {
-        document.querySelector(SELECTORS.ouvrir).addEventListener('click', showModalOuvrir);
-        document.querySelector(SELECTORS.cloturer).addEventListener('click', showModalCloturer);
+        //document.querySelector(SELECTORS.ouvrir).addEventListener('click', showModalOuvrir);
+        //document.querySelector(SELECTORS.cloturer).addEventListener('click', showModalCloturer);
+        document.querySelectorAll('.ouvrir-btn').forEach(function (button) {
+            button.addEventListener('click', showModalOuvrir);
+        });
+        document.querySelectorAll('.cloturer-btn').forEach(function (button) {
+            button.addEventListener('click', showModalCloturer);
+        });
+
         document.querySelector("#ouvertureModal .btn-close").addEventListener('click', closeModal);
         document.querySelector("#ouvertureModal #non").addEventListener('click', closeModal);
-        document.querySelector("#ouvertureModal #oui").addEventListener('click', ouvrirExercice);
+        //document.querySelector("#ouvertureModal #oui").addEventListener('click', ouvrirExercice);
+        document.getElementById("oui-ouverture").addEventListener('click', ouvrirExercice);
+        document.getElementById("oui-cloturer").addEventListener('click', cloturerExercice);
     }
 
     function closeModal() {
@@ -32,16 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function showModalCloturer(event) {
         const button = event.currentTarget;
         const url = button.dataset.url;
+        exercice_selected = button.getAttribute('data-id');
+
         getDataController(url, ELEMENTS.clotureModal, updateClotureModalFields);
-        // Implémentation similaire à showModalOuvrir si nécessaire
     }
 
     function getDataController(url, modal, updateFunction) {
         fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+            method: 'GET', headers: {
+                'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
             }
         })
             .then(response => {
@@ -60,23 +70,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateOuvertureModalFields(data) {
+        exercice_selected = data.id;
         document.querySelector('#ouvertureModal #id-input').value = data.id;
         document.querySelector('#ouvertureModal #date-debut-input').value = data.ExerciceDateDebut;
     }
 
     function updateClotureModalFields(data) {
-        console.log(data);
+        exercice_selected = data.id;
         document.querySelector('#clotureModal #id-input').value = data.id;
         document.querySelector('#clotureModal #date-debut-input').value = data.ExerciceDateDebut;
     }
 
     function ouvrirExercice() {
-        const form = document.querySelector('#ouvertureModal form');
-        const formData = new FormData(form);
+        const url = `/exercice/ouverture/${exercice_selected}`;
 
-        fetch(form.action, {
+        fetch(url, {
             method: 'POST',
-            body: formData,
+            //body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
@@ -94,6 +104,33 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Erreur lors de l\'ouverture de l\'exercice:', error);
+            });
+    }
+
+    function cloturerExercice() {
+        const url = `/exercice/cloturer/${exercice_selected}`;
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                'date_fin':document.querySelector('#date-fin-input').value
+            }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal();
+                    // Rafraîchir la page ou mettre à jour l'interface utilisateur
+                    location.reload();
+                } else {
+                    // Afficher un message d'erreur
+                    console.error('Erreur lors de la cloture de l\'exercice:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la cloture de l\'exercice:', error);
             });
     }
 
