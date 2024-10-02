@@ -44,12 +44,16 @@
                                     <td class="col">{{ exercice.IsValid ? 'Valide' : 'À venir' }}</td>
                                     <td class="col text-center">
                                         {% if exercice.IsValid %}
-                                            <button data-id="{{ exercice.Id }}" data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
-                                                    class="col-7 btn btn-label-danger cloturer-btn" id="cloturer-btn">Cloturer
+                                            <button data-id="{{ exercice.Id }}"
+                                                    data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
+                                                    class="col-7 btn btn-label-danger cloturer-btn" id="cloturer-btn">
+                                                Cloturer
                                             </button>
                                         {% else %}
-                                            <button data-id="{{ exercice.Id }}" data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
-                                                    class="col-7 btn btn-label-success ouvrir-btn" id="ouvrir-btn">Ouvrir
+                                            <button data-id="{{ exercice.Id }}"
+                                                    data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
+                                                    class="col-7 btn btn-label-success ouvrir-btn" id="ouvrir-btn">
+                                                Ouvrir
                                             </button>
                                         {% endif %}
                                     </td>
@@ -69,10 +73,13 @@
     </div>
     {{ include('exercice/_ouverture_exercice.html.twig') }}
     {{ include('exercice/_cloture_exercice.html.twig') }}
+    {{ include('include/_message_modal.html.twig') }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    {#
     <script src="{{ asset("js/scr/exercice/scr_form_ajout.js") }}"></script>
-    <!-- mbola tsy mande -->
+    #}
+
     <script src="{{ asset("js/scr/exercice/_modal_exercice.js") }}"></script>
 {% endblock %}

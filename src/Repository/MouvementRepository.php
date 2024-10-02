@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\CompteMere;
 use App\Entity\Exercice;
 use App\Entity\Mouvement;
-use App\Entity\PlanCompte;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,12 +20,15 @@ class MouvementRepository extends ServiceEntityRepository
 
     public function findByExercice(Exercice $exercice): ?array
     {
-        return $this->createQueryBuilder('m')
-            ->Where('m.mvt_evenement_id.evn_exercice = :ex')
-            ->setParameter('ex', $exercice)
-            ->orderBy('m.mvt_evenement_id.evn_date_operation', 'ASC')
+        $data = $this->createQueryBuilder('m')
+            ->join('m.mvt_evenement_id', 'ev')
+            ->where('ev.evn_exercice = :exercice')
+            ->setParameter('exercice', $exercice)
+            ->orderBy('ev.evn_date_operation', 'ASC')
             ->getQuery()
             ->getResult();
+        dump($data);
+        return $data;
     }
 
     public function soldeDebitByExerciceByCompteMere(Exercice $exercice, CompteMere $compte): float

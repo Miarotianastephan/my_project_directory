@@ -68,8 +68,8 @@ class ExerciceController extends AbstractController
     #[Route('/cloturer/{id}', name: 'app_cloturer_exercie', methods: ['POST'])]
     public function cloturerExercice($id, Request $request, ExerciceRepository $exerciceRepository): JsonResponse
     {
+
         $data = json_decode($request->getContent(), true);
-        dump($data);
         $date_fin = $data['date_fin'] ?? null;
 
         $addbase = $exerciceRepository->cloturerExercice($id, $date_fin);
@@ -77,12 +77,21 @@ class ExerciceController extends AbstractController
 
         return new JsonResponse([
             'success' => $addbase['success'],
+            'message' => $addbase['message'],
         ]);
     }
 
     #[Route('/ouverture/{id}', name: 'app_ouverture_exercie', methods: ['POST'])]
     public function ouvertureExercice($id, Request $request, ExerciceRepository $exerciceRepository): JsonResponse
     {
+
+        $exercice = $exerciceRepository->getExerciceValide();
+        if ($exercice) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Fermez tous les exercices avant d\'en ouvrir',
+            ]);
+        }
         $addbase = $exerciceRepository->ouvertureExercice($id);
         $addbase = json_decode($addbase->getContent(), true);
 

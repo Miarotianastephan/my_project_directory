@@ -2,15 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\CompteMere;
-use App\Entity\Evenement;
-use App\Entity\Exercice;
-use App\Entity\Mouvement;
-use App\Entity\PlanCompte;
-use App\Entity\TransactionType;
-use App\Entity\Utilisateur;
+use App\Repository\ExerciceRepository;
 use App\Repository\MouvementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -26,9 +21,29 @@ class JournalController extends AbstractController
     }
 
     #[Route('/livre_journal', name: 'livre-journal')]
-    public function livre_journal(MouvementRepository $mouvementRepository): Response
+    public function livre_journal(MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
-        $list_evenement = $mouvementRepository->findAll();
+        $exercice = $exerciceRepository->getExerciceValide();
+        if (!$exercice) {
+            return new Response("Aucun exercice ouvert");
+
+        }
+        //$list_evenement = $mouvementRepository->findAll();
+        $list_evenement = $mouvementRepository->findByExercice($exercice);
         return $this->render('journal/journal_caisse.html.twig', ['mouvements' => $list_evenement]);
+    }
+
+    #[Route('/exercice/journal', name: 'exercice-journal')]
+    public function livre_journal_exercice(MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): JsonResponse
+    {
+        $exercice = $exerciceRepository->getExerciceValide();
+        if (!$exercice) {
+            return new JsonResponse(['success' => false, 'message' => "Aucun exercice ouvert"]);
+
+        }
+        $list_evenement = $mouvementRepository->findByExercice($exercice);
+        return new JsonResponse(['success' => true, 'data' => $list_evenement]);
+
+
     }
 }

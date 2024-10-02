@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function setupEventListeners() {
-        document.querySelector(SELECTORS.annuler).addEventListener('click', handleCancel);
+        //document.querySelector(SELECTORS.annuler).addEventListener('click', handleCancel);
+        document.querySelector('#annuler').addEventListener('click', handleCancel);
         document.querySelector(SELECTORS.valider).addEventListener('click', handleSubmit);
         document.querySelector(`${SELECTORS.messageModal} .btn-secondary`).addEventListener('click', closeModalAndRedirect);
         document.querySelector(`${SELECTORS.messageModal} .btn-close`).addEventListener('click', closeModalAndRedirect);

@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let exercice_selected = "";
 
     const SELECTORS = {
+        messageModal: '#messageModal',
         ouvrir: '.ouvrir-btn',
         cloturer: '.cloturer-btn',
         ouvertureModal: '#ouvertureModal',
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ELEMENTS = {
         ouvertureModal: new bootstrap.Modal(document.querySelector(SELECTORS.ouvertureModal)),
         clotureModal: new bootstrap.Modal(document.querySelector(SELECTORS.clotureModal)),
+        messageModal: new bootstrap.Modal(document.querySelector(SELECTORS.messageModal)),
     };
 
     function setupEventListeners() {
@@ -32,6 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeModal() {
         ELEMENTS.ouvertureModal.hide();
+    }
+
+    function showMessage(message) {
+        const modalBody = document.querySelector(`${SELECTORS.messageModal} .modal-body`);
+        modalBody.textContent = message;
+        ELEMENTS.messageModal.show();
     }
 
     function showModalOuvrir(event) {
@@ -58,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error('Erreur réseau : ' + response.status);
                 }
+
                 return response.json();
             })
             .then(data => {
@@ -65,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.show();
             })
             .catch(error => {
+
                 console.error('Erreur lors de la récupération des données :', error);
             });
     }
@@ -85,8 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = `/exercice/ouverture/${exercice_selected}`;
 
         fetch(url, {
-            method: 'POST',
-            //body: formData,
+            method: 'POST', //body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
@@ -98,8 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Rafraîchir la page ou mettre à jour l'interface utilisateur
                     location.reload();
                 } else {
+                    showMessage(data.message);
+                    closeModal();
                     // Afficher un message d'erreur
-                    console.error('Erreur lors de l\'ouverture de l\'exercice:', data.message);
+                    //console.error('Erreur lors de l\'ouverture de l\'exercice:', data.message);
                 }
             })
             .catch(error => {
@@ -110,11 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function cloturerExercice() {
         const url = `/exercice/cloturer/${exercice_selected}`;
         fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                'date_fin':document.querySelector('#date-fin-input').value
-            }),
-            headers: {
+            method: 'POST', body: JSON.stringify({
+                'date_fin': document.querySelector('#date-fin-input').value
+            }), headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
@@ -125,8 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Rafraîchir la page ou mettre à jour l'interface utilisateur
                     location.reload();
                 } else {
+                    showMessage(data.message);
+                    closeModal();
                     // Afficher un message d'erreur
-                    console.error('Erreur lors de la cloture de l\'exercice:', data.message);
+                    //console.error('Erreur lors de la cloture de l\'exercice:', data.message);
                 }
             })
             .catch(error => {
