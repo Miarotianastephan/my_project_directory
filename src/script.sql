@@ -1,4 +1,4 @@
-insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau) values (grp_seq.NEXTVAL, 'Admin', 0);
++insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau) values (grp_seq.NEXTVAL, 'Admin', 0);
 insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau) values (grp_seq.NEXTVAL, 'Responsable Commission', 10);
 insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau) values (grp_seq.NEXTVAL, 'Secretaire Generale', 20);
 insert into groupe_utilisateur (grp_id, grp_libelle, grp_niveau) values (grp_seq.NEXTVAL, 'Tresorier', 30);
@@ -185,11 +185,6 @@ insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.N
 -- ETAT FIN 5xx
 insert into etat_demande(etat_id, etat_code, etat_libelle) VALUES (etat_dm_seq.NEXTVAL ,500, 'Comptabilisé');
 
--- FREE DEMANDE
--- delete from log_demande_type;
--- delete from demande_type;
--- commit;
-
 -- INSERTION Détails Transaction Comptes
 alter table detail_transaction_compte MODIFY is_trs_debit NUMBER(1) default 1;
 commit; -- par défaut Débit
@@ -322,3 +317,17 @@ insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_
 -- insertion des transaction détail fini :
 --      22/09/24 à 17:44
 --      lire les comptes commentée avant insertion des données et bien comprendre
+
+-- DATA
+delete from mouvement;
+delete from evenement;
+delete from log_demande_type;
+delete from demande_type;
+
+-- INFORMATION
+delete from detail_transaction_compte;
+delete from transaction_type;
+delete from plan_compte;
+delete from compte_mere;
+
+commit;

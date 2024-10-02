@@ -11,6 +11,10 @@ doctrine:
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
         schema_filter: ~^(?!t_)~
+        # charset: utf8
+        # default_table_options:
+        #     charset: utf8
+        #     collate: utf8_unicode_ci
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

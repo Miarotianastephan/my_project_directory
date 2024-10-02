@@ -20,3 +20,24 @@
         </ul>
     </div>
 </li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#etat_financier">
+        <i class="fas fa-th-list"></i>
+        <p>Etat financier</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="etat_financier">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('export.journal') }}">
+                    <span class="sub-item">Journal de caisse</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('export.etat') }}">
+                    <span class="sub-item">Etat financier</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>

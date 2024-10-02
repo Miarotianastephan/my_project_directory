@@ -22,3 +22,20 @@
 .title_font{
     font-family: 'lobster';
 }
+.title_pdf{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+#total_pdf > .total_journal_pdf{
+    background-color: #20252917;
+}
+.table_perso>tbody>tr>td,
+.table_perso>tbody>tr>th {
+    padding: 0px 0px !important;
+}
+.pdf_back {
+    border-radius: 12px;
+    background: #ffffff;
+    padding-top: 25px;
+}

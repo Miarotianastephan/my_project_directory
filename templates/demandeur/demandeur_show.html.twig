@@ -71,10 +71,12 @@
                         </div>
                     </div>
                 </div>
+                {% if demande_type.isAttenteModification() == true %}
                 <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
                        class="btn btn-warning btn">MODIFIER</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

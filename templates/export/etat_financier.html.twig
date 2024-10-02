@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('img/app_ico.ico') }}" type="image/x-icon" />
-    <title>Apperçue livre journal de caisse</title>
+    <title>Etat financier du comité d'entreprise</title>
     {% block stylesheets %}
         <link rel="stylesheet" href={{ asset("css/all.min.css") }} /><!-- Fonts and icons -->
         <link rel="stylesheet" href={{ asset("css/bootstrap.min.css") }} /><!-- CSS Files -->
@@ -47,65 +47,104 @@
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title title_font fw-bold mb-3">Apperçu du Journal sous format PDF</h3>
+                    <h3 class="card-title title_font fw-bold mb-3">Apperçu d'etat financier</h3>
                     <button id="generatePdfElement" class="btn btn-dark mb-4 btn-rounded">Imprimer en Pdf</button>
                     <a href="{{ path('tresorier.liste_demande_en_attente') }}" class="btn btn-label-secondary mb-4 btn-rounded">Retour</a>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="card">
-
-                <div id="contentTb">
+        <div class="row pdf_back" id="contentTb">
+            <div class="col-md-12">
+                <div class="card">
                     <div class="card-header text-center title_pdf">
-                        <h2 class="title_font fw-bold mb-3">Journal de Caisse année</h2>
-                        <h2 class="title_font fw-bold mb-3">Comité d'entreprise BFM</h2>
+                        <h2 class="title_font fw-bold mb-3">Etat financier du 2024</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+
+                    <div class="card-header text-center">
+                        <h2 class="fw-bold">Decaissement</h2>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="display table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Numéro Compte</th>
-                                        <th>Intitulé compte</th>
-                                        <th>Débit</th>
-                                        <th>Crédit</th>
-                                    </tr>
-                                </thead>
+                            <table class="table table_perso">
                                 <tbody>
-                                {% for mouvement in journal_caisse %}
-                                    <tr>
-                                        <td>{{mouvement.getMvtEvenementId().getEvnDateOperation()|date('d/m/y')|trans({}, 'fr')}}</td>
-                                        <td>{{mouvement.getMvtCompteId().getCptNumero()}}</td>
-                                        <td>{{mouvement.getMvtCompteId().getCptLibelle()}}</td>
-                                        {% set isDebit = mouvement.isMvtDebit() %}
-                                        <td>{{isDebit ? mouvement.getMvtMontant() : '' }}</td>
-                                        <td>{{(isDebit == false) ? mouvement.getMvtMontant() : '' }}</td>
+                                    <tr class="fw-bold">
+                                        <td>60</td>
+                                        <td></td>
+                                        <td>Accessoire</td>
+                                        <td>122000.00</td>
                                     </tr>
-                                {% endfor %}
+                                    <tr class="fw-bold">
+                                        <td>61</td>
+                                        <td></td>
+                                        <td>Social Primes Diverses</td>
+                                        <td>3506000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>611</td>
+                                        <td>Social Primes Diverses</td>
+                                        <td>1500000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>612</td>
+                                        <td>Social Primes de réussites</td>
+                                        <td>700000.00</td>
+                                    </tr>
                                     {# TOTAL #}
                                     <tr id="total_pdf" class="fw-bold">
+                                        <td class="total_journal_pdf">TOTAL</td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td class="total_journal_pdf">1000.0</td>
                                         <td class="total_journal_pdf">1000.0</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
 
-                    <div class="card-footer">
-                        <!-- Élément pour le numéro de page -->
-                        <div id="pageNumber" style="position: fixed; bottom: 10px; right: 10px; font-size: 12px;">
-                            Page <span class="page-number"></span>
+                    <div class="card-header text-center">
+                        <h2 class="fw-bold">Encaissement</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table_perso">
+                                <tbody>
+                                    <tr class="fw-bold">
+                                        <td>701</td>
+                                        <td></td>
+                                        <td>Trésorier debut période</td>
+                                        <td>122000.00</td>
+                                    </tr>
+                                    <tr class="fw-bold">
+                                        <td>702</td>
+                                        <td></td>
+                                        <td>Virement DRH sur emprunts</td>
+                                        <td>99531.00</td>
+                                    </tr>
+                                    {# TOTAL #}
+                                    <tr id="total_pdf" class="fw-bold">
+                                        <td class="total_journal_pdf">TOTAL</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="total_journal_pdf">1000.0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                    
                 </div>
-                
             </div>
         </div>
     </div>

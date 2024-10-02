@@ -182,8 +182,7 @@ class SGController extends AbstractController
         $id_user_sg = $this->user->getId();
         $data = json_decode($request->getContent(), true);
         $commentaire_data = $data['commentaire'] ?? null;
-
-        $rep = $logDemandeTypeRepository->ajoutRefuserDemande($id, $id_user_sg, $commentaire_data);
+        $rep = $logDemandeTypeRepository->ajoutRefuserDemande($id, $id_user_sg, $commentaire_data);     // Transactionnel
 
         $data = json_decode($rep->getContent(), true);
 

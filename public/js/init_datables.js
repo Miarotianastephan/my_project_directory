@@ -2,6 +2,7 @@
 $(document).ready(function () {
     $("#basic-datatables").DataTable({
             "pageLength": 5,
+            "lengthMenu": [5,10,15,20,25],
             "language": {
                     "lengthMenu": "Afficher _MENU_ éléments par page",
                     "zeroRecords": "Aucun élément trouvé",

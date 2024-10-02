@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Entity\DemandeType;
+use App\Entity\Utilisateur;
 use App\Repository\DemandeRepository;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\EtatDemandeRepository;
+use App\Repository\LogDemandeTypeRepository;
 use App\Repository\PlanCompteRepository;
 use App\Repository\UtilisateurRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -18,13 +20,22 @@ class DemandeTypeService
     public $planCompteRepo;
     private $user;
     private $etatDmRepo;
+    private $logDmRepository;
 
-    public function __construct(PlanCompteRepository $plan_compte_repo,DemandeRepository $demande_repo,DemandeTypeRepository $dm_typeRepo, EtatDemandeRepository $etatDemandeRepo , Security $security) {
+    public function __construct(
+        PlanCompteRepository $plan_compte_repo,
+        DemandeRepository $demande_repo,
+        DemandeTypeRepository $dm_typeRepo, 
+        EtatDemandeRepository $etatDemandeRepo , 
+        Security $security,
+        LogDemandeTypeRepository $logDemandeType) 
+    {
         $this->demandeTypeRepository = $dm_typeRepo;
         $this->user = $security->getUser(); 
         $this->demandeRepository = $demande_repo;
         $this->planCompteRepo = $plan_compte_repo;
         $this->etatDmRepo = $etatDemandeRepo;
+        $this->logDmRepository = $logDemandeType;
     }
 
     public function uploadImage($file , string $destination) :string
@@ -71,12 +82,38 @@ class DemandeTypeService
         return $response_data;
     }
 
-    public function findAllMyDemandeTypes(){
+    public function findAllMyDemandeTypesInit(){
         $data = $this->demandeTypeRepository->findByUtilisateur($this->user);
-        foreach ($data as $key => $value) {
-            # code...
-        }
         return $data;
+    }
+
+    public function findAllMyDemandeWithLog(){
+        $temp_user = new Utilisateur($this->user);
+        $user_matricule = $temp_user->getUserMatricule();
+        $logs_demande = $this->logDmRepository->findLogsForUserMatricule($user_matricule);
+        return $logs_demande;
+    }
+
+    public function findAllMyDemande(){
+        $all_demande = $this->demandeTypeRepository->findAll(); // toute les demandes
+        $user_matricule = $this->user->getUserMatricule();
+        $my_demande = [];
+
+        foreach ($all_demande as $dm) {
+            if($dm->getUtilisateur()->getUserMatricule() == $user_matricule){   // si anazy ilay demandes
+                array_push($my_demande, $dm);
+            }
+            else{                                                               //si tsia dia asesy ny log 
+                $dm_logs = $dm->getLogDemandeTypes();
+                foreach ($dm_logs as $log) {
+                    if($log->getUserMatricule() == $user_matricule){
+                        array_push($my_demande, $dm);
+                        // return;
+                    }
+                }
+            }
+        }
+        return $my_demande;
     }
 
 }

@@ -31,9 +31,11 @@ class DemandeurController extends AbstractController
     public function index(DemandeTypeService $dmService): Response
     {
         // Lister mes demandes
-        $mes_demandes = $dmService->findAllMyDemandeTypes();
+        $mes_demandes = $dmService->findAllMyDemandeTypesInit();
+        $mylogs = $dmService->findAllMyDemande();
         return $this->render('demandeur/demandeur.html.twig',[
-            'demandes' => $mes_demandes
+            'demandes' => $mes_demandes,
+            'logs_demandes' => $mylogs
         ]);
     }
 

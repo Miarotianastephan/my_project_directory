@@ -12,9 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CompteMereRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $planCompteRepository;
+    public function __construct(ManagerRegistry $registry, PlanCompteRepository $planCptRepo)
     {
         parent::__construct($registry, CompteMere::class);
+        $this->planCompteRepository = $planCptRepo;
     }
 
     //    /**
@@ -50,4 +52,19 @@ class CompteMereRepository extends ServiceEntityRepository
                 ->getOneOrNullResult()
             ;
        }
+
+       public function isMainCptMere(CompteMere $cptMere){
+            $temp_numero_compte = $cptMere->getCptNumero();
+            $temp_plan_compte = $this->planCompteRepository->findByNumero($temp_numero_compte);
+            // Vérifier si le compte mère est principale
+            if($temp_plan_compte == null){
+                // dump(['mere_num' => $temp_numero_compte,'enfant_num' => 'NON-ENFANT']);
+                return true;
+            }if( ($temp_plan_compte != null) && ($temp_numero_compte == $temp_plan_compte->getCompteMere()->getCptNumero()) ){
+                // dump(['mere_num' => $temp_numero_compte,'enfant_num' => $temp_plan_compte->getCptNumero()]);
+                return true;
+            }return false;
+       }
+
+       public function findAllChargeCompte(){}
 }

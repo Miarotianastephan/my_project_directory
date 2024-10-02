@@ -15,18 +15,15 @@ class PlanCompteService
 
     function insertHierarchy(EntityManagerInterface $entityManager, array $data, ?CompteMere $parent = null) {
         if ($parent === null) {
-            // Vérifier si le compte mère existe déjà
-            if ($this->accountExists($entityManager,$data['numero'], CompteMere::class)) {
-                return; // Ne pas insérer de doublon
+            if ($this->accountExists($entityManager,$data['numero'], CompteMere::class)) {  // Vérifier si le compte mère existe déjà
+                return;                                                                     // Ne pas insérer de doublon
             }
-            // Création de l'entité CompteMere pour la racine
-            $compteMere = new CompteMere();
+            $compteMere = new CompteMere();                                                 // Création de l'entité CompteMere pour la racine
             $compteMere->setCptNumero($data['numero']);
             $compteMere->setCptLibelle($data['libelle']);
             $entityManager->persist($compteMere);
-            $entityManager->flush(); // Flush pour obtenir l'ID du compte mère
-    
-            if (empty($data['enfants'])) { // On n'a pas de fils donc mère = fils
+            $entityManager->flush();
+            if (empty($data['enfants'])) {                                                  // Si fils vide donc mère = fils
                 $planCompte = new PlanCompte();
                 $planCompte->setCptNumero($data['numero']);
                 $planCompte->setCptLibelle($data['libelle']);
@@ -34,37 +31,31 @@ class PlanCompteService
                 $entityManager->persist($planCompte);
                 $entityManager->flush();
             }
-            // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
-            if (!empty($data['enfants'])) {
+            if (!empty($data['enfants'])) {                                                 // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
                 foreach ($data['enfants'] as $enfant) {
                     $this->insertHierarchy($entityManager, $enfant, $compteMere);
                 }
             }
-            
-        } else {
-            // Vérifier si le plan de compte existe déjà
-            if ($this->accountExists($entityManager ,$data['numero'], PlanCompte::class)) {
-                return; // Ne pas insérer de doublon
+        } 
+        else {  
+            if ($this->accountExists($entityManager ,$data['numero'], PlanCompte::class)) { // Vérifier si le plan de compte existe déjà
+                return;                                                                     // Ne pas insérer de doublon
             }
-            // Création de l'entité PlanCompte pour les enfants
-            $planCompte = new PlanCompte();
+            $planCompte = new PlanCompte();                                                 //661 Création de l'entité PlanCompte pour les enfants
             $planCompte->setCptNumero($data['numero']);
             $planCompte->setCptLibelle($data['libelle']);
-            $planCompte->setCompteMere($parent);
+            $planCompte->setCompteMere($parent);//66
             $entityManager->persist($planCompte);
-            $entityManager->flush(); // Flush pour enregistrer l'enfant dans la base
-    
-            // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
-            if (!empty($data['enfants'])) {
-                // Création de l'entité CompteMere pour la racine
-                $compteMere = new CompteMere();
+            $entityManager->flush();                                                        // Flush pour enregistrer l'enfant dans la base
+            if (!empty($data['enfants'])) {                                                 // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
+                $compteMere = new CompteMere();                                             //661 Création de l'entité CompteMere pour la racine
                 $compteMere->setCptNumero($data['numero']);
                 $compteMere->setCptLibelle($data['libelle']);
                 $entityManager->persist($compteMere);
-                $entityManager->flush(); // Flush pour obtenir l'ID du compte mère
+                $entityManager->flush();                                                    // Flush pour obtenir l'ID du compte mère
 
                 foreach ($data['enfants'] as $enfant) {
-                    $this->insertHierarchy($entityManager, $enfant, $parent); // Enfants des enfants
+                    $this->insertHierarchy($entityManager, $enfant, $compteMere);           // Enfants des enfants
                 }
             }
         }

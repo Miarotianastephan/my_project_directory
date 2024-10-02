@@ -328,4 +328,10 @@ class DemandeType
 
         return $this;
     }
+
+    public function isAttenteModification(){
+        if($this->getDmEtat() == '201'){
+            return true;
+        }return false;
+    }
 }

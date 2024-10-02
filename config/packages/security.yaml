@@ -33,6 +33,7 @@ security:
         - { path: ^/demandeur, roles: '%app.roles.demandeur%' }
         - { path: ^/sg, roles: '%app.roles.sg%' }
         - { path: ^/tresorier, roles: '%app.roles.tresorier%' }
+        - { path: ^/export, roles: '%app.roles.tresorier%' }
         - { path: ^/comptable, roles: '%app.roles.comptable%' }
         
         - { path: ^/demande_piece, roles: ['%app.roles.demandeur%', '%app.roles.tresorier%', '%app.roles.sg%'] }
