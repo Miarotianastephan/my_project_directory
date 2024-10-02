@@ -1,0 +1,34 @@
+{{ form_start(form, { 'attr': { 'id': 'formulaire', 'data-cancel': path('app_detail_transaction_compte_index') } }) }}
+<div class="card-body col-12 d-flex flex-column gap-2">
+    <div class="form-group">
+        {{ form_label(form.transaction_type) }}
+        {{ form_widget(form.transaction_type, {'attr': {'class': 'form-select'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.plan_compte) }}
+        {{ form_widget(form.plan_compte, {'attr': {'class': 'form-select'}}) }}
+    </div>
+    <div class="form-group">
+        <label class="form-label">{{ form_label(form.isTrsDebit) }}</label>
+        <div class="selectgroup selectgroup-pills">
+            {% for choice in form.isTrsDebit %}
+                <label class="selectgroup-item">
+                    {{ form_widget(choice, {'attr': {'class': 'selectgroup-input'}}) }}
+                    <span class="selectgroup-button">{{ choice.vars.label }}</span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+    <button id="annuler" name="annuler" value="annuler" class="btn btn-danger">
+        ANNULER
+    </button>
+    <button id="valider" name="valider" value="valider" class="btn btn-success">
+        VALIDER
+    </button>
+</div>
+{{ form_end(form) }}

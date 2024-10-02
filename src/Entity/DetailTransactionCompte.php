@@ -25,7 +25,7 @@ class DetailTransactionCompte
     #[ORM\JoinColumn(name: "plan_compte_id", referencedColumnName: "cpt_id", nullable: false)]
     private ?PlanCompte $plan_compte = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private ?bool $isTrsDebit = null; // TRUE : 1 , FALSE : 0
 
 
@@ -53,6 +53,20 @@ class DetailTransactionCompte
     public function setTransactionType(?TransactionType $transaction_type): void
     {
         $this->transaction_type = $transaction_type;
+    }
+
+    // Getter
+    public function getIsTrsDebit(): ?bool
+    {
+        return $this->isTrsDebit;
+    }
+
+    // Setter
+    public function setIsTrsDebit(?bool $isTrsDebit): self
+    {
+        $this->isTrsDebit = $isTrsDebit;
+
+        return $this;
     }
 
     /**

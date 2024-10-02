@@ -4,25 +4,19 @@ namespace App\Controller;
 
 use App\Entity\DemandeType;
 use App\Repository\BanqueRepository;
-use App\Repository\BudgetTypeRepository;
 use App\Repository\ChequierRepository;
-use App\Repository\CompteMereRepository;
 use App\Repository\DemandeTypeRepository;
-use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
-use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
+use App\Repository\MouvementRepository;
 use App\Repository\PlanCompteRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Monolog\DateTimeImmutable;
-use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints\Date;
 
 #[Route('/tresorier')]
 class TresorierController extends AbstractController
@@ -53,12 +47,20 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
-    public function valider_fond($id, DemandeTypeRepository $dm_type): Response
+    public function valider_fond($id, MouvementRepository $mouvementRepository, DemandeTypeRepository $dm_type): Response
     {
         $data = $dm_type->find($id);
-        $montant = 111;
+        //$montant = 111;
+
+        $exercice = $data->getExercice();
+        $cpt = $data->getPlanCompte()->getCompteMere();
+
+
+        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
+        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+
         return $this->render('tresorier/deblocker_fond.html.twig',
-            ['demande_type' => $data, 'montant' => $montant]
+            ['demande_type' => $data, 'montant' => ($solde_debit - $solde_CREDIT)]
         );
     }
 
@@ -70,9 +72,9 @@ class TresorierController extends AbstractController
         // $id_user_tresorier = ID qui devrait être un tresorier A VERIFIER APRES
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier); // Déblocage du fonds demandée
         // O_COMPTA
-            // à compléter
+        // à compléter
         // fin O_COMPTA
-        
+
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {
             return new JsonResponse([
@@ -88,111 +90,20 @@ class TresorierController extends AbstractController
         }
     }
 
-    #[Route('/ajout_budget', name: 'tresorier.form_budget', methods: ['GET'])]
-    public function form_budget(ExerciceRepository   $exerciceRepository,
-                                CompteMereRepository $compteMereRepository): Response
-    {
-        $date = new \DateTime();
-        return $this->render('tresorier/ajout_budget.html.twig',
-            [
-                'exercices' => $exerciceRepository->getExerciceValide($date),
-                'plan_comptes' => $compteMereRepository->findAll()
-            ]
-        );
-    }
-
-    #[Route('/ajout/budget', name: 'tresorier.ajout_budget', methods: ['POST'])]
-    public function ajout_budget(Request                $request,
-                                 DetailBudgetRepository $detailBudgetRepository,
-                                 BudgetTypeRepository   $budgetTypeRepository): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $montant = $data['montant'] ?? null;
-        $exercice = $data['exercice'] ?? null;
-        $plan_cpt = $data['plan_cpt'] ?? null;
-        $budgetType = 2;
-        //$budgetType = $budgetTypeRepository->find(2);
-        if (!$montant) {
-            return new JsonResponse(['success' => false, 'message' => "Le montant est obligatoire"]);
-        }
-        if (!$exercice) {
-            return new JsonResponse(['success' => false, 'message' => "L\'exercice est obligatoire"]);
-        }
-        if (!$plan_cpt) {
-            return new JsonResponse(['success' => false, 'message' => "Le plan de compte est obligatoire"]);
-        }
-
-        $addbase = $detailBudgetRepository->ajoutDetailBudget($exercice, $plan_cpt, $montant, $budgetType, $detailBudgetRepository);
-        $addbase = json_decode($addbase->getContent(), true);
-
-        if ($addbase['isExiste']) {
-            return new JsonResponse(
-                [
-                    'success' => $addbase['success'],
-                    'isExiste' => $addbase['success'],
-                    'message' => $addbase['message'],
-                    'exercice' => $addbase['exercice'],
-                    'cpt' => $addbase['cpt'],
-                    'oldmontant' => $addbase['oldmontant'],
-                    'newmontant' => $addbase['newmontant'],
-                    'detailbudget' => $addbase['detailbudget']
-                ]);
-        } else {
-            return new JsonResponse(
-                [
-                    'success' => $addbase['success'],
-                    'message' => $addbase['message'],
-                    'url' => "Voici un url"
-                ]);
-        }
-    }
-
-    #[Route('/modifier/budget', name: 'tresorier.modifier_budget', methods: ['POST'])]
-    public function modifier_budget(Request                $request,
-                                    DetailBudgetRepository $detailBudgetRepository): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $montant = $data['montant'] ?? null;
-        $detail_budget = $data['detail_budget'] ?? null;
-
-        //$budgetType = $budgetTypeRepository->find(2);
-        if (!$montant) {
-            return new JsonResponse(['success' => false, 'message' => "Le montant est obligatoire"]);
-        }
-        if (!$detail_budget) {
-            return new JsonResponse(['success' => false, 'message' => "Le detail_budget est obligatoire"]);
-        }
-
-        $addbase = $detailBudgetRepository->modifierDetailBudget($detail_budget, $montant);
-        $addbase = json_decode($addbase->getContent(), true);
-
-        return new JsonResponse(
-            [
-                'success' => $addbase['success'],
-                'message' => $addbase['message'],
-                'url' => "Voici un url"
-            ]);
-    }
 
     #[Route('/demande_approvisionnement', name: 'tresorier.form_approvisionnement', methods: ['GET'])]
     public function form_approvisionnement(PlanCompteRepository $planCompteRepository,
-                                           BanqueRepository     $banqueRepository): Response
+                                           MouvementRepository  $mouvementRepository, BanqueRepository $banqueRepository): Response
     {
+        $liste_entite = $planCompteRepository->findCompteCaisse();
 
-        $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011", "611000"];
-        $liste_entite = array_filter(array_map(
-            fn($code) => $planCompteRepository->findByNumero($code),
-            $list_cpt_numero
-        ));
-
-
-        $situation_caisse = 10000;
+        // $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
+        // $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
         $liste_banque = $banqueRepository->findAll();
 
         return $this->render('tresorier/demande_approvisionnement.html.twig', [
             'entites' => $liste_entite,
             'banques' => $liste_banque,
-            'situation_caisse' => $situation_caisse,
         ]);
     }
 
@@ -236,7 +147,7 @@ class TresorierController extends AbstractController
             [
                 'success' => $reponse['success'],
                 'message' => $reponse['message'],
-                'url' => "Voici un url"
+                'url' => $this->generateUrl('tresorier.form_approvisionnement')
             ]
         );
     }

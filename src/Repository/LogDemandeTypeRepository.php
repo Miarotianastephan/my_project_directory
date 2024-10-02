@@ -25,12 +25,14 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
     private $etatDmRepository;
     private $trsTypeRepo;
     private $detailTrsRepo;
+    private $utilisateurRepository;
 
-    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo)
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo,UtilisateurRepository $utilisateurRepo)
     {
         $this->etatDmRepository = $etatDmRepo;
         $this->trsTypeRepo = $trsTypeRepo;
         $this->detailTrsRepo = $detailTrsRepo;
+        $this->utilisateurRepository=$utilisateurRepo;
         parent::__construct($registry, LogDemandeType::class);
     }
 
@@ -84,7 +86,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $entityManager->persist($log_dm);
 
                 // Mise à jour de l'entité `DemandeType`
-                $dm_type->setDmEtat($this->etatDmRepository , 200); 
+                $dm_type->setDmEtat($this->etatDmRepository, 200);
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -105,11 +107,11 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Erreur lors de la validation de la demande : ' . $e->getMessage()
             ]);
         }
+
         // Si tout se passe bien, retour d'une réponse JSON de succès
         return new JsonResponse([
             'success' => true,
             'message' => 'La demande a été validée',
-
         ]);
     }
 
@@ -376,4 +378,5 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
 }

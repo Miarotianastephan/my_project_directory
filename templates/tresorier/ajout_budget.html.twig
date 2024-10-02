@@ -23,7 +23,8 @@
                     <h4 class="card-title">Ajout de budget</h4>
                 </div>
 
-                <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post" data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
+                <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post"
+                      data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
                     <div class="card-body col-12 d-flex flex-column gap-2">
                         <div class="form-group">
                             <label for="exercice">Exercice</label>
@@ -131,7 +132,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 {% endblock %}

@@ -42,6 +42,10 @@
                             <div class="col form-control">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Date de l'opération:</label>
+                            <div class="col form-control">{{ demande_type.DmDateOperation|date('d/m/y')|trans({}, 'fr') }}</div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Type de demande:</label>
                             <div class="col form-control">{{ demande_type.demande.libelle }}</div>
                         </div>

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block page_title %}
+    Admin
+{% endblock %}
+
+{% block page_subtitle %}
+    {#  #}
+{% endblock %}
+{% block page_options %}
+    <a title="Ajouter un chequier" href="{{ path('app_chequier_new') }}" class="btn btn-secondary">Ajouter</a>
+{% endblock %}
+
+{% block page_main_content %}
+    {% set locale = 'fr' %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des chequiers disponibles</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr id="cols">
+                                <th id="isCol" scope="col">Id</th>
+                                <th id="isCol" scope="col">Banque</th>
+                                <th id="isCol" scope="col">Numero de debut</th>
+                                <th id="isCol" scope="col">Numero de fin</th>
+                                <th id="isCol" scope="col">Date d'ajout</th>
+                                <th id="isCol" scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="bodyList">
+                            {% for chequier in chequiers %}
+                                <tr>
+                                    <td>{{ chequier.id }}</td>
+                                    <td>{{ chequier.banque.nomBanque }}</td>
+                                    <td>{{ chequier.chequierNumeroDebut }}</td>
+                                    <td>{{ chequier.chequierNumeroFin }}</td>
+                                    <td>{{ chequier.chequierDateArrivee|date('d/m/y')  }}</td>
+                                    <td class="d-flex flex-row gap-md-3">
+                                        <a title="Afficher les informations" href="{{ path('app_chequier_show', {'id': chequier.id}) }}">{{ ux_icon('bi:info-circle',{height : "15px"}) }}</a>
+                                        <a title="Modifier le chequier" href="{{ path('app_chequier_edit', {'id': chequier.id}) }}">{{ ux_icon('flowbite:edit-outline',{height : "20px"}) }}</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">Aucun donné</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#
+    <a href="{{ path('app_chequier_new') }}">Create new</a>
+    #}
+
+{% endblock %}

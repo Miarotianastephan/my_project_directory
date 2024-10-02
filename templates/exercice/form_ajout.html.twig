@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des rôles: listes{% endblock %}
+
+{# {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
+{% endblock %} #}
+
+{% block page_title %}
+    Section Comptable
+{% endblock %}
+{% block page_subtitle %}
+    {# #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Ajout execice</h4>
+                </div>
+                <form id="formulaire" action="{{ path('app_ajout') }}" method="post" data-cancel="{{ path('app_exercice') }}">
+                    <div class="card-body col-12 d-flex flex-column gap-2">
+                        <div class="form-group">
+                            <label for="date_debut">Date de debut</label>
+                            <input type="date" class="form-control" id="date_debut" name="date_debut">
+                        </div>
+                        <div class="form-group">
+                            <label for="date_fin">Prédiction de date de fin</label>
+                            <input class="form-control" type="date" id="date_fin" name="date_fin">
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="annuler" name="annuler" value="annuler" class="btn btn-danger">
+                            ANNULER
+                        </button>
+                        <button id="valider" name="valider" value="valider" class="btn btn-success">
+                            VALIDER
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{ include('include/_message_modal.html.twig') }}
+
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("js/scr/exercice/scr_form_ajout.js") }}"></script>
+{% endblock %}

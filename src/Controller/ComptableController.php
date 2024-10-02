@@ -77,35 +77,12 @@ class ComptableController extends AbstractController
         Request                           $request
     ): Response
     {
-        $list_transaction_code = ['CE-007', 'CE-011'];
-        $liste_transaction_type = array_filter(array_map(
-            fn($code) => $transactionTypeRepository->findTransactionByCode($code),
-            $list_transaction_code
-        ));
-
-        $list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011"];
-        $liste_entite = array_filter(array_map(
-            fn($code) => $planCompteRepository->findByNumero($code),
-            $list_cpt_numero
-        ));
-
-        // Préparer les données pour JavaScript
-        $transactionCompteMap = [];
-        foreach ($liste_transaction_type as $transaction) {
-            $details = $detailTransactionCompteRepository->findByTransaction($transaction);
-            $transactionCompteMap[$transaction->getId()] = array_map(function ($detail) {
-                return [
-                    'id' => $detail->getPlanCompte()->getId(),
-                    'numero' => $detail->getPlanCompte()->getCptNumero(),
-                    'libelle' => $detail->getPlanCompte()->getCptLibelle(),
-                ];
-            }, $details);
-        }
+        $liste_entite = $planCompteRepository->findCompteCaisse();
+        $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
 
         return $this->render('comptable/ajout_dep_direct.html.twig', [
             'liste_entite' => $liste_entite,
-            'list_opp' => $liste_transaction_type,
-            'transactionCompteMap' => json_encode($transactionCompteMap),
+            'list_opp' => $liste_transaction
         ]);
     }
 
@@ -122,7 +99,7 @@ class ComptableController extends AbstractController
         if (!$transaction) {
             return new JsonResponse(['error' => 'Transaction not found'], 404);
         }
-
+        //$transaction = $transactionTypeRepository->findTransactionByCode("CE-007");
         $details = $detailTransactionCompteRepository->findByTransaction($transaction);
         $formattedDetails = array_map(function ($detail) {
             return [
@@ -136,9 +113,10 @@ class ComptableController extends AbstractController
 
 
     #[Route('/valider/depense', name: 'comptable.validation_depense_directe', methods: ['POST'])]
-    public function validation_depense_directe(Request                   $request,
-                                               PlanCompteRepository      $planCompteRepository,
-                                               TransactionTypeRepository $transactionTypeRepository): Response
+    public function validation_depense_directe(Request                           $request,
+                                               PlanCompteRepository              $planCompteRepository,
+                                               TransactionTypeRepository         $transactionTypeRepository,
+                                               DetailTransactionCompteRepository $detailTransactionCompteRepository): Response
     {
         // Récupère les données du formulaire
         $entite_id = $request->request->get('entite');
@@ -148,17 +126,24 @@ class ComptableController extends AbstractController
         $transaction_id = $request->request->get('transaction');
         $transaction = $transactionTypeRepository->find($transaction_id);
 
-        $planCompte_id = $request->request->get('plan_compte');
+
         $planCompte = $planCompteRepository->find($entite_id);
 
         $montant = $request->request->get('montant');
         $date = new \DateTime();
+
+        $planCompte_id = $request->request->get('plan_compte');
+        $compte_debit = $planCompteRepository->find($planCompte_id);
+
+        $compte_credit = $detailTransactionCompteRepository->findPlanCompte_CreditByTransaction($transaction);
         return $this->render('comptable/validation_dep_direct.html.twig',
             [
                 'entite' => $entite,
                 'transaction' => $transaction,
                 'planCompte' => $planCompte,
                 'montant' => $montant,
+                'debit' => $compte_debit,
+                'credit' => $compte_credit,
                 'date' => $date,
             ]);
     }

@@ -1,25 +1,85 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ExerciceController!{% endblock %}
+{% block title %}Titre fotsiny{% endblock %}
 
-{% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
+{# {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
+{% endblock %} #}
 
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
+{% block page_title %}
+    Comptable
+{% endblock %}
+{% block page_subtitle %}
+    {#
+    Liste des exercices
+    #}
+{% endblock %}
+{% block page_options %}
+    <a href="{{ path('app_form_ajout') }}" class="btn btn-secondary">Ajouter un exercice</a>
+{% endblock %}
 
-    <h1>Tongasoa</h1>
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des exercices</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr class="col-12">
+                                <th class="col">Date de debut</th>
+                                <th class="col">Date fin</th>
+                                <th class="col">Etat</th>
+                                <th class="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for exercice in exercices %}
+                                <tr class="col-12">
+                                    <td class="col">{{ exercice.ExerciceDateDebut|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col">{{ exercice.ExerciceDateFin ? exercice.ExerciceDateFin|date('d/m/y')|trans({}, 'fr') : "indéfini" }}</td>
+                                    <td class="col">{{ exercice.IsValid ? 'Valide' : 'À venir' }}</td>
+                                    <td class="col text-center">
+                                        {% if exercice.IsValid %}
+                                            <button data-id="{{ exercice.Id }}"
+                                                    data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
+                                                    class="col-7 btn btn-label-danger cloturer-btn" id="cloturer-btn">
+                                                Cloturer
+                                            </button>
+                                        {% else %}
+                                            <button data-id="{{ exercice.Id }}"
+                                                    data-url="{{ path('app_find_exercie', {'id': exercice.Id}) }}"
+                                                    class="col-7 btn btn-label-success ouvrir-btn" id="ouvrir-btn">
+                                                Ouvrir
+                                            </button>
+                                        {% endif %}
+                                    </td>
 
-
-
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">Aucun donnée inserer</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    {{ include('exercice/_ouverture_exercice.html.twig') }}
+    {{ include('exercice/_cloture_exercice.html.twig') }}
+    {{ include('include/_message_modal.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {#
+    <script src="{{ asset("js/scr/exercice/scr_form_ajout.js") }}"></script>
+    #}
+
+    <script src="{{ asset("js/scr/exercice/_modal_exercice.js") }}"></script>
 {% endblock %}

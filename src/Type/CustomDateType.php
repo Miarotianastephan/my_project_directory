@@ -77,7 +77,8 @@ class CustomDateType extends DateType
             return $value;
         }
 
-        $dateTime = DateTime::createFromFormat('d-M-Y', $value);
+        //Pour avoir le format correct (01-janvier-2024)
+        $dateTime = DateTime::createFromFormat('d-M-y', $value);
         if ($dateTime !== false) {
             return $dateTime;
         }

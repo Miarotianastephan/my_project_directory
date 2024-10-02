@@ -27,6 +27,7 @@ class Evenement
     #[ORM\JoinColumn(name: "evn_exercice_id", referencedColumnName: "exercice_id",nullable: false)]
     private ?Exercice $evn_exercice = null;
 
+    //libelle entité
     #[ORM\Column(length: 255)]
     private ?string $evn_code_entity = null;
 

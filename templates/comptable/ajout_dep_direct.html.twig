@@ -11,21 +11,21 @@
 {% endblock %}
 
 {% block page_main_content %}
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Ajout des dépenses directes</h4>
                 </div>
-                <form id="formulaire" action="{{ path('comptable.validation_depense_directe')}}" method="post">
+                <form id="formulaire" action="{{ path('comptable.validation_depense_directe') }}" method="post">
                     <div class="card-body d-flex flex-column gap-2 py-5 px-5">
-                        <div class="col-12 d-flex flex-row ">
+                        <div class="col-12 d-flex flex-row">
                             <label for="entite" class="col-3 form-control-lg">
-                                Entitté concernée
+                                Entité concernée
                             </label>
                             <div class="col">
                                 <select name="entite" id="entite" class="form-select form-control">
+                                    <option value="">Sélectionnez une entité</option>
                                     {% for entite in liste_entite %}
                                         <option value="{{ entite.Id }}">{{ entite.CptLibelle }}</option>
                                     {% endfor %}
@@ -34,11 +34,11 @@
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label for="transaction" class="col-3 form-control-lg">
-                                Choix opération/
-                                type de transaction
+                                Choix opération/type de transaction
                             </label>
                             <div class="col">
                                 <select name="transaction" id="transaction" class="form-select form-control">
+                                    <option value="">Sélectionnez une opération</option>
                                     {% for opperation in list_opp %}
                                         <option value="{{ opperation.Id }}">{{ opperation.TrsCode }} - {{ opperation.TrsLibelle }}</option>
                                     {% endfor %}
@@ -56,10 +56,9 @@
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label for="montant" class="col-3 form-control-lg"> Montant </label>
+                            <label for="montant" class="col-3 form-control-lg">Montant</label>
                             <div class="col">
-                                <input class="form-control form-control" type="number" id="montant" name="montant"
-                                       step="0.01">
+                                <input class="form-control" type="number" id="montant" name="montant" step="0.01" required>
                             </div>
                         </div>
                     </div>
@@ -71,73 +70,9 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        function sendData (){
-            var form = document.getElementById('formulaire');
-            document.getElementById('valider').addEventListener('click', function (e) {
-                e.preventDefault()
-                fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: new FormData(form)
-                })
-                    .then(response => {
-                        // Vérifie si la réponse est OK (status entre 200 et 299)
-                        if (!response.ok) {
-                            throw new Error('Erreur réseau : ' + response.status);
-                        }
-                        // Convertir la réponse en JSON
-                        return response.json();
-                    })
-                    .then(data => {
-                        data.message
-
-                    })
-                    .catch(error => console.error('Erreur:', error));
-            });
-        }
-    </script>
-    <script>
-        // Données PHP envoyées à JavaScript
-        const transactionCompteMap = {{ transactionCompteMap|raw }};
-
-        function updatePlanCompteOptions() {
-            const transactionSelect = document.getElementById('transaction');
-            const planCompteSelect = document.getElementById('plan_compte');
-            const selectedTransactionId = transactionSelect.value;
-
-            planCompteSelect.innerHTML = '';
-
-            if (transactionCompteMap[selectedTransactionId]) {
-                transactionCompteMap[selectedTransactionId].forEach(compte => {
-                    const option = document.createElement('option');
-                    option.value = compte.id;
-                    option.textContent = `${compte.numero} - ${compte.libelle}`;
-                    planCompteSelect.appendChild(option);
-                });
-            } else {
-                // Si les détails ne sont pas dans transactionCompteMap, les récupérer via AJAX
-                fetch(`/get-transaction-details?transactionId=${selectedTransactionId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(compte => {
-                            const option = document.createElement('option');
-                            option.value = compte.id;
-                            option.textContent = `${compte.numero} - ${compte.libelle}`;
-                            planCompteSelect.appendChild(option);
-                        });
-                    })
-                    .catch(error => console.error('Erreur:', error));
-            }
-        }
-
-        document.getElementById('transaction').addEventListener('change', updatePlanCompteOptions);
-        document.addEventListener('DOMContentLoaded', updatePlanCompteOptions);
-    </script>
+    {{ parent() }}
+    <script src="{{ asset('js/scr/comptable/scr_ajout_dep_direct.js') }}"></script>
 {% endblock %}

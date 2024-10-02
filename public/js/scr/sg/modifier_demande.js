@@ -1,47 +1,83 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('formulaire');
-    const cancelUrl = form.dataset.cancel;
+document.addEventListener('DOMContentLoaded', () => {
+    const SELECTORS = {
+        messageModal: '#messageModal',
+        form: '#formulaire',
+        cancelButton: '#annuler',
+        modifyButton: '#modifier',
+        commentField: '#commentaire',
+        modalCloseButton: '#messageModal .btn-close',
+        modalSecondaryButton: '#messageModal .btn-secondary'
+    };
 
-    document.getElementById('annuler').addEventListener('click', function (e) {
-        e.preventDefault();
-        window.location.href = cancelUrl; // Redirige vers la page en cas d'annulation
-    });
-
-    document.getElementById('modifier').addEventListener('click', function (e) {
-        e.preventDefault();
-
-        // Récupérer la valeur du champ commentaire
-        const commentaire = document.getElementById('commentaire').value;
-
-        // Vérification simple si le champ commentaire est vide
-        if (commentaire.trim() === '') {
-            alert('Veuillez ajouter un commentaire.');
-            return;
+    class FormHandler {
+        constructor() {
+            this.form = document.querySelector(SELECTORS.form);
+            this.cancelUrl = this.form.dataset.cancel;
+            this.messageModal = new bootstrap.Modal(document.querySelector(SELECTORS.messageModal));
+            this.setupEventListeners();
         }
 
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                "commentaire": commentaire
-            })
-        })
-            .then(response => {
+        setupEventListeners() {
+            document.querySelector(SELECTORS.cancelButton).addEventListener('click', this.handleCancel.bind(this));
+            document.querySelector(SELECTORS.modifyButton).addEventListener('click', this.handleModify.bind(this));
+            document.querySelector(SELECTORS.modalCloseButton).addEventListener('click', this.closeModalAndRedirect.bind(this));
+            document.querySelector(SELECTORS.modalSecondaryButton).addEventListener('click', this.closeModalAndRedirect.bind(this));
+        }
+
+        handleCancel(e) {
+            e.preventDefault();
+            window.location.href = this.cancelUrl;
+        }
+
+        handleModify(e) {
+            e.preventDefault();
+            const commentaire = document.querySelector(SELECTORS.commentField).value;
+
+            if (commentaire.trim() === '') {
+                this.showMessage('Veuillez ajouter un commentaire.');
+                return;
+            }
+
+            this.submitForm(commentaire);
+        }
+
+        async submitForm(commentaire) {
+            try {
+                const response = await fetch(this.form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ commentaire })
+                });
+
                 if (!response.ok) {
                     throw new Error('Erreur réseau : ' + response.status);
                 }
-                return response.json();
-            })
-            .then(data => {
+
+                const data = await response.json();
+
                 if (!data.success) {
-                    alert(data.message);
+                    this.showMessage(data.message);
                 } else {
-                    window.location.href = data.path; // Redirection après modification réussie
+                    window.location.href = data.path;
                 }
-            })
-            .catch(error => console.error('Erreur:', error));
-    });
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        showMessage(message) {
+            const modalBody = document.querySelector(`${SELECTORS.messageModal} .modal-body`);
+            modalBody.textContent = message;
+            this.messageModal.show();
+        }
+
+        closeModalAndRedirect() {
+            this.messageModal.hide();
+        }
+    }
+
+    new FormHandler();
 });
