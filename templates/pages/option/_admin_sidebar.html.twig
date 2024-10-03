@@ -54,3 +54,22 @@
         </ul>
     </div>
 </li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#crud_transaction">
+        <i class="fas fa-th-list"></i>
+        <p>Gestion transaction crud</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="crud_transaction">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('app_detail_transaction_compte_index') }}">
+                    <span class="sub-item">Lister</span>
+                </a>
+                <a href="{{ path('app_detail_transaction_compte_new') }}">
+                    <span class="sub-item">Ajouter</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>

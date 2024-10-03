@@ -138,6 +138,16 @@ class MouvementRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getTotalMouvementGroupedByPlanCompte(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')
+            ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+            ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
+            ->getQuery()
+            ->getResult();
+    }
     
 
 }

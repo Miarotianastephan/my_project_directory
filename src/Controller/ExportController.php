@@ -33,8 +33,9 @@ class ExportController extends AbstractController
     #[Route(path: '/etat/financier', name: 'export.etat', methods: ['GET'])]
     public function etat_fi(EtatFinancierService $etatService, CompteMereRepository $mereRepository){
         $comptesMere = $mereRepository->findAll();
-        $etatMontant = $this->mvtRepository->getTotalMouvementGroupedByCompteMere();
-        $dataEtatComplet = $etatService->findMontantByCompteMere($etatMontant, $comptesMere, $mereRepository);
+        $etatMontant = $this->mvtRepository->getTotalMouvementGroupedByPlanCompte();
+        $dataEtatComplet = $etatService->findMontantByCompteMere2($etatMontant, $comptesMere, $mereRepository);
+        dump($dataEtatComplet);
         return $this->render('export/etat_financier.html.twig',[
             
         ]);

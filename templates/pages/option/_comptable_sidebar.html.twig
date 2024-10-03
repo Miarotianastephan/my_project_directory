@@ -30,3 +30,45 @@
         </ul>
     </div>
 </li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#exercice">
+        <i class="fas fa-th-list"></i>
+        <p>Gestion exercice</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="exercice">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('app_exercice') }}">
+                    <span class="sub-item">Lister</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_ajout') }}">
+                    <span class="sub-item">Nouveau</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#budget">
+        <i class="fas fa-th-list"></i>
+        <p>Gestion budget</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="budget">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('tresorier.liste_budget') }}">
+                    <span class="sub-item">Lister</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('tresorier.form_budget') }}">
+                    <span class="sub-item">Nouveau</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>

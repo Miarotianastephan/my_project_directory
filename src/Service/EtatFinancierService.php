@@ -8,15 +8,15 @@ use App\Repository\ExerciceRepository;
 
 class EtatFinancierService
 {
-    public CompteMere $compteMere;
+    public $compteMereNumero;
     public $detailsMontant = [];        // liste d'enfants avec chaque montant
     public $montantCompte = 0;          // montant total 
 
     public function __construct() {
     }
 
-    public function setCompteMere(CompteMere $compteMere){
-        $this->compteMere = $compteMere;
+    public function setCompteMere($compteMere){
+        $this->compteMereNumero = $compteMere;
         $this->montantCompte = 0;
     }
     public function addMontant($montant){
@@ -35,7 +35,7 @@ class EtatFinancierService
             $isMainCptMere = $mereRepository->isMainCptMere($cptmere);
             if($isMainCptMere){                                                                         // Si c'est une compte mere principale
                 $etatTemp = new EtatFinancierService();
-                $etatTemp->setCompteMere($cptmere);
+                $etatTemp->setCompteMere($cptmere->getCptNumero());
                 $montant = 0;
                 $montant = $this->searchCompteInTablo($cptmere,$tabloMontantMouvement);                 // vérifier d'abord le compte_mère
                 if($montant > 0){
@@ -55,12 +55,43 @@ class EtatFinancierService
         }
         return $dataEtatFinancier;
     }
-    public function searchCompteInTablo($cptEnfants, array $tablo){
+    
+    public function searchCompteInTablo($cptEnfants, array $tablo){ 
         foreach($tablo as $detailMontant){
             if($detailMontant["cpt_numero"] == $cptEnfants->getCptNumero()){
                 return $detailMontant["total_montant"];
             }
         }return 0;
+    }
+
+    public function createEtatFinancierByCompteMere(CompteMere $cptmere, array $tabloMontantMouvement){
+        $etatTemp = new EtatFinancierService();
+        $etatTemp->setCompteMere($cptmere->getCptNumero());
+        $montant = 0;
+        $montant = $this->searchCompteInTablo($cptmere,$tabloMontantMouvement);                 // vérifier d'abord le compte_mère
+        if($montant > 0){
+            $etatTemp->addMontant($montant);
+            $etatTemp->addDetailMontant($this->createDetailMontant($cptmere->getCptNumero(),$cptmere->getCptLibelle(), $montant));// ajout du detail pour le compte MERE 
+        }
+        else if($montant == 0){
+            foreach($cptmere->getPlanComptes() as $enfantsMere){                                // boucler les enfants
+                $montant = $this->searchCompteInTablo($enfantsMere,$tabloMontantMouvement);     // comparaison chaque enfants sur chaque data
+                $etatTemp->addMontant($montant);                                                // ajout du montant total
+                $etatTemp->addDetailMontant($this->createDetailMontant($enfantsMere->getCptNumero(), $enfantsMere->getCptLibelle(), $montant));    // ajout du detail pour compte ENF
+                // RECURSSIVE FONCTION 
+            }
+        }
+        return $etatTemp;                                                                       // Etat financier
+    }
+
+    public function findMontantByCompteMere2(array $tabloMontantMouvement, array $tabloCompteMere){
+        $dataEtatFinancier = [];
+        foreach ($tabloCompteMere as $cptmere) {
+            $etatTemp = $this->createEtatFinancierByCompteMere($cptmere, $tabloMontantMouvement);
+            // dump($etatTemp);
+            array_push($dataEtatFinancier, $etatTemp);                                          // Ajout de létat dans le tablo etat
+        }
+        return $dataEtatFinancier;
     }
 
 }

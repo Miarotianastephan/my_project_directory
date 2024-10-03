@@ -29,11 +29,11 @@ class BudgetController extends AbstractController
     #[Route('/', name: 'tresorier.liste_budget', methods: ['GET'])]
     public function liste_budget(DetailBudgetRepository $detailBudgetRepository, ExerciceRepository $exerciceRepository): Response
     {
-        $exercice = $exerciceRepository->find(61);
+        $exercice = $exerciceRepository->getExerciceNext(new DateTime());
         if (!$exercice) {
             return new Response("Budget introuvable", 404);
         }
-        $liste_budget = $detailBudgetRepository->findByExercice($exercice);
+        $liste_budget = $detailBudgetRepository->findByExercice($exercice[0]);
         return $this->render('budget/liste_budget.html.twig', ['liste_budget' => $liste_budget]);
     }
 
