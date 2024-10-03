@@ -27,7 +27,6 @@ class MouvementRepository extends ServiceEntityRepository
             ->orderBy('ev.evn_date_operation', 'ASC')
             ->getQuery()
             ->getResult();
-        dump($data);
         return $data;
     }
 
@@ -81,6 +80,27 @@ class MouvementRepository extends ServiceEntityRepository
         return $result !== null ? (float)$result : 0.0;
         //return $result;
     }
+
+    public function v_mouvement(): array
+    {
+        // Utiliser le gestionnaire d'entité pour créer une requête DQL
+        $em = $this->getEntityManager();
+
+        // Exécuter une requête DQL simple
+        $query = $em->createQuery('
+        SELECT u.id 
+        FROM App\Entity\Utilisateur u
+    ');
+
+        // Récupérer les résultats
+        $results = $query->getResult();
+
+        // Debug : Afficher les résultats
+        dump($results);
+
+        return $results;
+    }
+
 
     //    /**
     //     * @return Mouvement[] Returns an array of Mouvement objects
@@ -138,6 +158,6 @@ class MouvementRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
 
 }
