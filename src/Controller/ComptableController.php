@@ -100,7 +100,7 @@ class ComptableController extends AbstractController
             return new JsonResponse(['error' => 'Transaction not found'], 404);
         }
         //$transaction = $transactionTypeRepository->findTransactionByCode("CE-007");
-        $details = $detailTransactionCompteRepository->findByTransaction($transaction);
+        $details = $detailTransactionCompteRepository->findAllByTransaction($transaction);
         $formattedDetails = array_map(function ($detail) {
             return [
                 'id' => $detail->getPlanCompte()->getId(),

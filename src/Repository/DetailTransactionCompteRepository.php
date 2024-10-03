@@ -26,6 +26,14 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+    public function findAllByTransaction(TransactionType $transactionType): ?array
+    {
+        return $this->createQueryBuilder('d')
+            ->Where('d.transaction_type = :val')
+            ->setParameter('val', $transactionType)
+            ->getQuery()
+            ->getResult();
+    }
 
     public function findPlanCompte_CreditByTransaction(TransactionType $transactionType): ?PlanCompte
     {

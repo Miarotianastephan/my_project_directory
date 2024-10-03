@@ -114,6 +114,7 @@ class TresorierController extends AbstractController
         return $this->render('tresorier/demande_approvisionnement.html.twig', [
             'entites' => $liste_entite,
             'banques' => $liste_banque,
+            'situation_caisse' => 10
         ]);
     }
 
