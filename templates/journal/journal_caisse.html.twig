@@ -9,10 +9,10 @@
 
 {# Bouton d'action #}
 {% block page_options %}
-    <button class="btn btn-secondary">
+    <a href="{{ path('export.journal') }}" class="btn btn-secondary">
         <span style="color: transparent">Imprimer</span>
         {{ ux_icon('flat-color-icons:print', {height: '60%'}) }}
-    </button>
+    </a>
 {% endblock %}
 
 {% block page_main_content %}

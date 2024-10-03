@@ -2,7 +2,7 @@
 
 {% block title %}Demande{% endblock %}
 {% block page_title %}
-    SG
+    Tresorier
 {% endblock %}
 {% block page_subtitle %}
     {# Liste des demandes en attente de validation #}
@@ -16,7 +16,7 @@
                     <h4 class="card-title">A propos de la demande</h4>
                     <div class="text-end">
                         <h3>
-                            Montant restant : {{ "XXXX Ar" }}
+                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
                         </h3>
                     </div>
                 </div>
@@ -64,18 +64,16 @@
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de payement: </label>
-                            <div class="col form-control">
-                                {{ demande_type.DmModePaiement }}
-                            </div>
+                            <label class="col-4 form-control-lg">Type de paiement:</label>
+                            <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">
-                                Personne concernée:
-                            </label>
-                            <div class="col form-control">
-                                {{ demande_type.EntityCode.CptLibelle }}
-                            </div>
+                            <label class="col-4 form-control-lg">Personne concernée:</label>
+                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Observation:</label>
+                            <div class="col form-control">{{ 'Petite observation'  }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->

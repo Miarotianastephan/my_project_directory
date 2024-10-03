@@ -56,14 +56,18 @@
                                 <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }}Ar
                                 </div>
                             </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Type de paiement:</label>
-                                <div class="col form-control">{{ demande_type.DmModePaiement }}</div>
-                            </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Personne concernée:</label>
-                                <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
-                            </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Type de paiement:</label>
+                            <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Personne concernée:</label>
+                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Observation:</label>
+                            <div class="col form-control">{{ 'Petite observation'  }}</div>
+                        </div>
                             <div class="col-12 d-flex flex-row">
                                 <label for="commentaire" class="col-4 form-control-lg">
                                     Ajout de remarque:

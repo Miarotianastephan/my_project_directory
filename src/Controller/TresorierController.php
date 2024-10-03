@@ -6,6 +6,7 @@ use App\Entity\DemandeType;
 use App\Repository\BanqueRepository;
 use App\Repository\ChequierRepository;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\MouvementRepository;
@@ -39,18 +40,27 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
+    public function show($id, DetailBudgetRepository $detailBudgetRepository, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img]);
+        
+        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $cpt = $data->getPlanCompte()->getCompteMere();     // Avoir le compteMere du Motif liéé au DemandeType
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);        
+        $exercice = $data->getExercice();
+        $cpt = $data->getPlanCompte()->getCompteMere();
+
+        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
+        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+        $solde_reste = $solde_debit-$solde_CREDIT;
+        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
     public function valider_fond($id, MouvementRepository $mouvementRepository, DemandeTypeRepository $dm_type): Response
     {
         $data = $dm_type->find($id);
-        //$montant = 111;
 
         $exercice = $data->getExercice();
         $cpt = $data->getPlanCompte()->getCompteMere();

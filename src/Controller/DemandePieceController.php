@@ -77,7 +77,7 @@ class DemandePieceController extends AbstractController
                 // Récupérer la taille du fichier en octets
                 $fileSizeInBytes = $file->getSize() / $this->megaByte;
                 dump("La taille du fichier=" . $fileSizeInBytes . "Mb \n le nom du fichier=" . $file->getClientOriginalName());
-                if ($fileSizeInBytes > 1) {
+                if ($fileSizeInBytes > $this->megaByte) {
                     return $this->json([
                         'success' => false,
                         'message' => 'Le fichier ' . $file->getClientOriginalName() . ' est trop volimineux'

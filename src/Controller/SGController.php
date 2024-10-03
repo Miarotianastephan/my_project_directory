@@ -109,7 +109,7 @@ class SGController extends AbstractController
     }
 
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]
-    public function valider($id, DemandeTypeRepository $dm_Repository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
+    public function valider($id, MouvementRepository $mouvementRepository ,DemandeTypeRepository $dm_Repository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
     {
         $data = $dm_Repository->find($id);          // Find demandeType by this ID
         if (!$data) {
@@ -117,9 +117,13 @@ class SGController extends AbstractController
         }
         $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
         $cpt = $data->getPlanCompte()->getCompteMere();     // Avoir le compteMere du Motif liéé au DemandeType
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
-        $solde = 200;
-        $solde_reste = $solde;
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);        
+        $exercice = $data->getExercice();
+        $cpt = $data->getPlanCompte()->getCompteMere();
+
+        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
+        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+        $solde_reste = $solde_debit-$solde_CREDIT;
         return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste]);
     }
 

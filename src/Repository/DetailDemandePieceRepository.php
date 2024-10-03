@@ -60,7 +60,7 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             $detail_dm->setDemandeType($dm_type);
             $detail_dm->setDetDmTypeUrl($type);
             $detail_dm->setDetDmPieceUrl($newFilename);
-            $script = "INSERT INTO detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (detail_dm_type_seq.NEXTVAL,:dm_type_id,:det_dm_piece_url,:det_dm_type_url,DEFAULT)";
+            $script = "INSERT INTO detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (detail_dm_type_seq.NEXTVAL,:dm_type_id,:det_dm_piece_url,:det_dm_type_url,SYSDATE)";
 
             $statement = $connection->prepare($script);
             $statement->bindValue('dm_type_id', $dm_type->getId());
@@ -85,6 +85,8 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
                 'dm_type' => $dm_type
             ]);
         } catch (\Exception $e) {
+            dump($e->getMessage());
+
             $connection->rollBack();
             $entityManager->flush();
             // Gestion de l'erreur si le fichier ne peut pas être déplacé
@@ -96,8 +98,9 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
     }
 
 
-    public function findByDemandeType(DemandeType $dm_type): array
+    public function findByDemandeType(DemandeType $dm_type): ?array
     {
+        dump('TONGA');
         return $this->createQueryBuilder('d') // 'd' est l'alias pour l'entité DetailDemandePiece
         ->andWhere('d.demande_type = :val') // Utilisez l'alias 'd' et la propriété correcte
         ->setParameter('val', $dm_type) // Définir le paramètre de recherche

@@ -77,6 +77,7 @@ class DemandeurController extends AbstractController
     {
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
+        dump(count($list_img)); 
         return $this->render('/demandeur/demandeur_show.html.twig',
             ['demande_type' => $data, 'images' => $list_img]
         );

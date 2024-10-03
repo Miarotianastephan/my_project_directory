@@ -13,11 +13,11 @@
         <div class="col-md-12">
             <form id="formulaire"
                   action="{{ path('refuser_demande', {'id': demande_type.Id}) }}"
-                  data-cancel="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
+                  data-cancel="{{ path('SG.liste_demande_en_attente', {'id': demande_type.Id}) }}"
             >
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">REFUSER LA DEMANDE?</h4>
+                        <h4 class="card-title">REFUSER LA DEMANDE</h4>
                     </div>
                     <div class="card-body d-flex flex-column gap-4">
                         <div class="col-12 d-flex flex-row">

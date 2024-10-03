@@ -26,13 +26,15 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
     private $trsTypeRepo;
     private $detailTrsRepo;
     private $utilisateurRepository;
+    private $exercicerepository;
 
-    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo,UtilisateurRepository $utilisateurRepo)
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo,UtilisateurRepository $utilisateurRepo,ExerciceRepository $exoRepo)
     {
         $this->etatDmRepository = $etatDmRepo;
         $this->trsTypeRepo = $trsTypeRepo;
         $this->detailTrsRepo = $detailTrsRepo;
         $this->utilisateurRepository=$utilisateurRepo;
+        $this->exercicerepository=$exoRepo;
         parent::__construct($registry, LogDemandeType::class);
     }
 
@@ -317,12 +319,13 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         // Comptabilisation
             // les données à utiliser
             $reference_demande = $dm_type->getRefDemande();
-            $exercice_demande = $dm_type->getExercice();
+            $exercice_demande = $this->exercicerepository->getExerciceValide();
             $montant_demande = $dm_type->getDmMontant();
             $numero_compte_debit = $dm_type->getPlanCompte();
             $mode_paiement_demande = (int)($dm_type->getDmModePaiement());
             $transaction_a_faire = $this->trsTypeRepo->findTransactionByModePaiement($mode_paiement_demande);   // identifier le type de transaction à faire
             $detail_transaction = $this->detailTrsRepo->findByTransaction($transaction_a_faire);                // identifier le mouvement à réaliser
+            // dump($detail_transaction);
             // Création evenement 
             $evenement = new Evenement();
             $evenement->setEvnTrsId($transaction_a_faire);
