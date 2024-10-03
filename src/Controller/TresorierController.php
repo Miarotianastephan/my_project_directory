@@ -39,11 +39,19 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
+    public function show($id, EntityManagerInterface $entityManager,MouvementRepository $mouvementRepository, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img]);
+
+        $exercice = $data->getExercice();
+        $cpt = $data->getPlanCompte()->getCompteMere();
+
+
+        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
+        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+
+        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img,'montant' => ($solde_debit - $solde_CREDIT)]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]

@@ -16,7 +16,7 @@
                     <h4 class="card-title">A propos de la demande</h4>
                     <div class="text-end">
                         <h3>
-                            Montant restant : {{ "XXXX Ar" }}
+                            Montant restant : {{ montant|number_format(2, '.', ' ') }} Ar
                         </h3>
                     </div>
                 </div>
@@ -75,6 +75,14 @@
                             </label>
                             <div class="col form-control">
                                 {{ demande_type.EntityCode.CptLibelle }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">
+                                Observation:
+                            </label>
+                            <div class="col form-control">
+                                {{ "Observation" }}
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/my_project_directory.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/my_project_directory.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/show.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/show.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,7 +247,7 @@
       <workItem from="1726706411576" duration="20885000" />
       <workItem from="1726749861039" duration="2740000" />
       <workItem from="1727068354182" duration="50442000" />
-      <workItem from="1727320723613" duration="82392000" />
+      <workItem from="1727320723613" duration="83830000" />
     </task>
     <servers />
   </component>

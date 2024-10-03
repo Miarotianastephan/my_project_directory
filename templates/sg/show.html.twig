@@ -68,6 +68,10 @@
                             <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
+                            <label class="col-4 form-control-lg">Observation:</label>
+                            <div class="col form-control">{{ "Observation" }}</div>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->
                             {% if images|length  != 0 %}
                                 <div class="col">
