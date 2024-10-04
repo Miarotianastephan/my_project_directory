@@ -132,8 +132,7 @@ class DemandeTypeService
         return $my_demande;
     }
 
-    // Insertion d'appro
-    
+    // Insertion d'approvisionnement
     public function insertDemandeTypeAppro($exercice, $planCptEntityId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation, int $tresorier_user_id){
         // createReferenceDemande : gérer dans la base de donnée par un trigger 
         // createTypeDeDemande : toujours de type demande de décaissement
