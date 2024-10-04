@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailDemandePieceRepository;
+use App\Repository\ExerciceRepository;
 use App\Repository\PlanCompteRepository;
 use App\Service\CompteService;
 use App\Service\DemandeTypeService;
@@ -51,9 +52,9 @@ class DemandeurController extends AbstractController
     }
 
     #[Route(path: '/demandeur/add', name: 'demandeur.save_nouveau_demande', methods: ['POST'])]
-    public function addNewDemandeFormAction(Request $request, DemandeTypeService $dmService, ExerciceService $exoService){
+    public function addNewDemandeFormAction(Request $request, DemandeTypeService $dmService, ExerciceRepository $exoRepository){
         // getExerciceId 
-        $exercice = $exoService->getLastExercice();
+        $exercice = $exoRepository->getExerciceValide();
         $data_parametre = $request->request->all();
         
         // les données :

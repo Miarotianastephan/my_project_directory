@@ -328,6 +328,7 @@ insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_
 delete from mouvement;
 delete from evenement;
 delete from log_demande_type;
+delete from detail_demande_piece;
 delete from demande_type;
 
 -- INFORMATION
@@ -337,3 +338,31 @@ delete from plan_compte;
 delete from compte_mere;
 
 commit;
+
+insert into evenement(evn_id, evn_trs_id, evn_responsable_id,evn_exercice_id, evn_code_entity, evn_montant, evn_reference, evn_date_operation)
+values (
+        evn_seq.NEXTVAL,
+        42,
+        168,
+        41,
+        541,
+        1000000,
+        'APR/2024/115',
+        SYSDATE
+);
+
+insert into mouvement(mvn_id, mvt_evenement_id, mvt_compte_id, mvt_montant, is_mvt_debit)values(
+        mvn_seq.NEXTVAL,
+        49,
+        541,
+        1000000,
+        1
+);
+insert into mouvement(mvn_id, mvt_evenement_id, mvt_compte_id, mvt_montant, is_mvt_debit)values(
+        mvn_seq.NEXTVAL,
+        49,
+        643,
+        1000000,
+        0
+);
+

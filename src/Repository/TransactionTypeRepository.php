@@ -35,6 +35,11 @@ class TransactionTypeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findTransactionForApprovision(){
+        return $this->findTransactionByCode('CE-002');
+    }
+    
+
     public function findTransactionDepenseDirecte():array{
         $list_transaction_code = ['CE-007', 'CE-011'];
         return $this->createQueryBuilder('t')

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const formulaire = document.getElementById("formulaire");
     const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
 
-    document.getElementById('valider').addEventListener('click', handleSubmit);
+    // document.getElementById('valider').addEventListener('click', handleSubmit);
     document.getElementById('annuler').addEventListener('click', handleCancel);
 
     function handleSubmit(e) {

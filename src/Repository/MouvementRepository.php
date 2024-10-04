@@ -43,11 +43,11 @@ class MouvementRepository extends ServiceEntityRepository
             ->join('e.mvt_evenement_id', 'ev')
             ->where('ev.evn_exercice = :exercice')
             // Condition sur le compte mère
-            ->andWhere('cm = :compte')
+            // ->andWhere('cm = :compte')
             // Condition sur le mouvement débit
             ->andWhere('e.isMvtDebit = true')
             ->setParameter('exercice', $exercice)
-            ->setParameter('compte', $compte)
+            // ->setParameter('compte', $compte)
             ->getQuery()
             ->getSingleScalarResult();
 

@@ -26,6 +26,19 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    // Pour avoir le compte credit du details 
+    public function findByTransactionWithTypeOperation(TransactionType $transactionType, $isDebit = 0): ?DetailTransactionCompte
+    {
+        return $this->createQueryBuilder('d')
+            ->Where('d.transaction_type = :val')
+            ->andWhere('d.isTrsDebit = :val2')
+            ->setParameter('val', $transactionType)
+            ->setParameter('val2', $isDebit)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findAllByTransaction(TransactionType $transactionType): ?array
     {
         return $this->createQueryBuilder('d')

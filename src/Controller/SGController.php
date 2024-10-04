@@ -57,7 +57,7 @@ class SGController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
         $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
 
-        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => ($solde_debit - $solde_CREDIT)]);
+        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => (1000000)]);
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
@@ -105,7 +105,7 @@ class SGController extends AbstractController
             $data->setDmModePaiement("Chèque");
         }
         $data->setDmModePaiement($mode_paiement);
-        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => ($solde_debit - $solde_CREDIT)]);
+        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => (1000000)]);
     }
 
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]
@@ -124,7 +124,7 @@ class SGController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
         $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
         $solde_reste = $solde_debit-$solde_CREDIT;
-        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste]);
+        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => 1000000]);
     }
 
     #[Route('/demande/refuser/{id}', name: 'SG.refus_demande_en_attente', methods: ['GET'])]

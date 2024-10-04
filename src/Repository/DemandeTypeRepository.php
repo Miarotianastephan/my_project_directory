@@ -8,6 +8,7 @@ use App\Entity\DemandeType;
 use App\Entity\PlanCompte;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -63,10 +64,14 @@ class DemandeTypeRepository extends ServiceEntityRepository
     }
 
     public function insertDemandeType(DemandeType $demandeType){
-        try {
+        try {      
             $em = $this->getEntityManager();
             $em->persist($demandeType);
             $em->flush();
+            // $isActiveTransaction = $em->getConnection()->isTransactionActive();
+            // if ($isActiveTransaction) {
+            //     $em->flush();
+            // }
             return [
                 "status" => true,
                 "message" => 'Demande insérer avec succes',
@@ -86,5 +91,14 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->setParameter('utilisateur', $utilisateur)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findLastInsertedDemandeType(): ?DemandeType
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.id', 'DESC')  // Trie par ID décroissant
+            ->setMaxResults(1)         // Limite à un seul résultat
+            ->getQuery()
+            ->getOneOrNullResult();    // Renvoie null si aucun résultat
     }
 }
