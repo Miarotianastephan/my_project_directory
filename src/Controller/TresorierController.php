@@ -46,17 +46,17 @@ class TresorierController extends AbstractController
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
-        
-        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
-        $cpt = $data->getPlanCompte()->getCompteMere();     // Avoir le compteMere du Motif liéé au DemandeType
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);        
-        $exercice = $data->getExercice();
-        $cpt = $data->getPlanCompte()->getCompteMere();
 
-        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
-        $solde_reste = $solde_debit-$solde_CREDIT;
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => 1000000]);
+        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
+
+        if ($solde_debit == null || $solde_CREDIT == null) {
+            $solde_reste = 0;
+        } else {
+            $solde_reste = $solde_debit - $solde_CREDIT;
+        }
+        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
@@ -64,15 +64,18 @@ class TresorierController extends AbstractController
     {
         $data = $dm_type->find($id);
 
-        $exercice = $data->getExercice();
-        $cpt = $data->getPlanCompte()->getCompteMere();
+        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
-
-        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+        if ($solde_debit == null || $solde_CREDIT == null) {
+            $solde_reste = 0;
+        } else {
+            $solde_reste = $solde_debit - $solde_CREDIT;
+        }
 
         return $this->render('tresorier/deblocker_fond.html.twig',
-            ['demande_type' => $data, 'montant' => ($solde_debit - $solde_CREDIT)]
+            ['demande_type' => $data, 'montant' => $solde_reste]
         );
     }
 
@@ -164,17 +167,17 @@ class TresorierController extends AbstractController
             ]
         );
     }
-    
+
     #[Route('/save_approvisionnement', name: 'tresorier.save_approvisionnement', methods: ['POST'])]
-    public function save_approvisionnement(Request               $request,
-                                            ExerciceRepository $exoRepository,
-                                            DemandeTypeService $dmService)
+    public function save_approvisionnement(Request            $request,
+                                           ExerciceRepository $exoRepository,
+                                           DemandeTypeService $dmService)
     {
-        
+
         $id_user_tresorier = $this->user->getId();
         $exercice = $exoRepository->getExerciceValide();
         $data_parametre = $request->request->all();
-        
+
         // les données :
         $plan_cpt_debit_id = $data_parametre['id_plan_compte_debit'];
         // $plan_cpt_motif_id = $data_parametre['id_plan_comptable_motif'];
@@ -186,7 +189,7 @@ class TresorierController extends AbstractController
         $date_saisie = $data_parametre['date_saisie'];
         // insertion d'un approvisionnement
         // Ajout directe de la comptabilisation dans la partie d'insertion
-        $response_data = $dmService->insertDemandeTypeAppro($exercice, $plan_cpt_debit_id, $montant_demande, $paiement, $date_saisie , $date_operation, $id_user_tresorier);
+        $response_data = $dmService->insertDemandeTypeAppro($exercice, $plan_cpt_debit_id, $montant_demande, $paiement, $date_saisie, $date_operation, $id_user_tresorier);
         dump($response_data);
         return $this->redirectToRoute('tresorier.form_approvisionnement');
     }

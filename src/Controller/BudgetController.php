@@ -103,13 +103,13 @@ class BudgetController extends AbstractController
 
     //test controller suivi budgétaire
     #[Route('/suivi_budgetaire', name: 'tresorier.suivi_budgetaire', methods: ['GET'])]
-    public function suivi_budgetaire(Request $request, CompteMereRepository $compteMereRepository, ExerciceRepository $exerciceRepository, MouvementRepository $mouvementRepository): JsonResponse
+    public function suivi_budgetaire(Request $request,ExerciceRepository $exerciceRepository ,MouvementRepository $mouvementRepository): JsonResponse
     {
-        $exerice = $exerciceRepository->find(41);
-        $cpt_mere = $compteMereRepository->find(42);
-        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exerice, $cpt_mere);
-        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exerice, $cpt_mere);
+        $mode_paiement = 0;
+        $exercice = $exerciceRepository->getExerciceValide();
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $mode_paiement);
+        $solde_credit =  $mouvementRepository->soldeCreditParModePaiement($exercice, $mode_paiement);
 
-        return new JsonResponse(['success' => true, 'solde_debit' => $solde_debit, 'solde_credit' => $solde_CREDIT,]);
+        return new JsonResponse(['success' => true, 'solde_debit' => $solde_debit, 'solde_credit' => $solde_credit,]);
     }
 }

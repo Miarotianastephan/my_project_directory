@@ -20,67 +20,67 @@ class MouvementRepository extends ServiceEntityRepository
 
     public function findByExercice(Exercice $exercice): ?array
     {
-        $data = $this->createQueryBuilder('m')
-            ->join('m.mvt_evenement_id', 'ev')
-            ->where('ev.evn_exercice = :exercice')
-            ->setParameter('exercice', $exercice)
-            ->orderBy('ev.evn_date_operation', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $data = $this->createQueryBuilder('m')->join('m.mvt_evenement_id', 'ev')->where('ev.evn_exercice = :exercice')->setParameter('exercice', $exercice)->orderBy('ev.evn_date_operation', 'ASC')->getQuery()->getResult();
         dump($data);
         return $data;
     }
 
-    public function soldeDebitByExerciceByCompteMere(Exercice $exercice, CompteMere $compte): float
+    //mode paiement = 1 => chèque
+    //mode paiement = 2 => éspèce
+    public function soldeDebitParModePaiement(Exercice $exercice, string $mode_paiement): ?float
     {
-        $result = $this->createQueryBuilder('e')
-            ->select('SUM(e.mvt_montant)')
-            // Jointure avec PlanCompte (via mvt_compte_id)
-            ->join('e.mvt_compte_id', 'pc')
-            // Jointure avec CompteMere (via plan_compte_id.compte_mere)
-            ->join('pc.compte_mere', 'cm')
-            // Condition sur l'exercice
-            ->join('e.mvt_evenement_id', 'ev')
-            ->where('ev.evn_exercice = :exercice')
-            // Condition sur le compte mère
-            // ->andWhere('cm = :compte')
-            // Condition sur le mouvement débit
-            ->andWhere('e.isMvtDebit = true')
-            ->setParameter('exercice', $exercice)
-            // ->setParameter('compte', $compte)
-            ->getQuery()
-            ->getSingleScalarResult();
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
 
-        // Si le résultat est null, on retourne 0.0
-        return $result !== null ? (float)$result : 0.0;
-        //return $result;
+        $table = $mode_paiement == 1 ? "v_mouvement_debit_siege" : "v_mouvement_debit_banque";
+
+        $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
+
+        try {
+
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice_id', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+            $result = $resultSet->fetchAssociative();
+            if ($result && array_key_exists('TOTAL', $result)) {
+                return (float)$result['TOTAL'];
+            }
+            return null;
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+        }
+        return null;
+    }
+
+    public function soldeCreditParModePaiement(Exercice $exercice, string $mode_paiement) :?float
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+
+        $table = $mode_paiement == 1 ? "v_mouvement_credit_siege" : "v_mouvement_credit_banque";
+
+        $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
+
+        try {
+
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice_id', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+            $result = $resultSet->fetchAssociative();
+            if ($result && array_key_exists('TOTAL', $result)) {
+                return (float)$result['TOTAL'];
+            }
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+        }
+        return null;
     }
 
 
-    public function soldeCreditByExerciceByCompteMere(Exercice $exercice, CompteMere $compte): float
-    {
-        $result = $this->createQueryBuilder('e')
-            ->select('SUM(e.mvt_montant)')
-            // Jointure avec PlanCompte (via mvt_compte_id)
-            ->join('e.mvt_compte_id', 'pc')
-            // Jointure avec CompteMere (via plan_compte_id.compte_mere)
-            ->join('pc.compte_mere', 'cm')
-            // Condition sur l'exercice
-            ->join('e.mvt_evenement_id', 'ev')
-            ->where('ev.evn_exercice = :exercice')
-            // Condition sur le compte mère
-            ->andWhere('cm = :compte')
-            // Condition sur le mouvement débit
-            ->andWhere('e.isMvtDebit = false')
-            ->setParameter('exercice', $exercice)
-            ->setParameter('compte', $compte)
-            ->getQuery()
-            ->getSingleScalarResult();
 
-        // Si le résultat est null, on retourne 0.0
-        return $result !== null ? (float)$result : 0.0;
-        //return $result;
-    }
+
+
+
 
     //    /**
     //     * @return Mouvement[] Returns an array of Mouvement objects
@@ -112,42 +112,28 @@ class MouvementRepository extends ServiceEntityRepository
      */
     public function findAllOrderedByEventDateAndId(): array
     {
-        return $this->createQueryBuilder('m')
-            ->join('m.mvt_evenement_id', 'e')
-            ->orderBy('e.evn_date_operation', 'ASC')
-            ->addOrderBy('e.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->createQueryBuilder('m')->join('m.mvt_evenement_id', 'e')->orderBy('e.evn_date_operation', 'ASC')->addOrderBy('e.id', 'ASC')->getQuery()->getResult();
     }
 
     public function findAllMouvementById(): array
     {
-        return $this->createQueryBuilder('m')
-            ->orderBy('m.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->createQueryBuilder('m')->orderBy('m.id', 'ASC')->getQuery()->getResult();
     }
 
     public function getTotalMouvementGroupedByCompteMere(): array
     {
-        return $this->createQueryBuilder('m')
-            ->select('cm.cpt_numero, SUM(m.mvt_montant) as total_montant')
-            ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
-            ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
-            ->groupBy('cm.cpt_numero') // Groupement par le numéro de CompteMere
-            ->getQuery()
-            ->getResult();
+        return $this->createQueryBuilder('m')->select('cm.cpt_numero, SUM(m.mvt_montant) as total_montant')->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+        ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
+        ->groupBy('cm.cpt_numero') // Groupement par le numéro de CompteMere
+        ->getQuery()->getResult();
     }
 
     public function getTotalMouvementGroupedByPlanCompte(): array
     {
-        return $this->createQueryBuilder('m')
-            ->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')
-            ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
-            ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
-            ->getQuery()
-            ->getResult();
+        return $this->createQueryBuilder('m')->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+        ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
+        ->getQuery()->getResult();
     }
-    
+
 
 }

@@ -42,22 +42,17 @@ class SGController extends AbstractController
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
-        $exercice = $data->getExercice();
-        $cpt = $data->getPlanCompte()->getCompteMere();
+        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
-        // $cpt = $compteMereRepository->find(2);
-        //$budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
-        //$solde = 200;
-        //$solde_reste = $budget->getBudgetMontant() - $solde;
-        //$solde_reste = $solde;
-        //$exerice = $exerciceRepository->find(41);
-        //$cpt_mere = $compteMereRepository->find(42);
+        if ($solde_debit == null || $solde_CREDIT == null) {
+            $solde_reste = 0;
+        } else {
+            $solde_reste = $solde_debit - $solde_CREDIT;
+        }
 
-
-        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
-
-        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => (1000000)]);
+        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
@@ -85,46 +80,35 @@ class SGController extends AbstractController
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
-        $exercice = $data->getExercice();
-        $cpt = $data->getPlanCompte()->getCompteMere();
+        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement()) ;
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
-        // $cpt = $compteMereRepository->find(2);
-        //$budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);
-        //$solde = 200;
-        //$solde_reste = $budget->getBudgetMontant() - $solde;
-        //$solde_reste = $solde;
-
-        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
-
-
-        $mode_paiement = $data->getDmModePaiement();
-        if ($mode_paiement == 0) {
-            $data->setDmModePaiement("éspèce");
-        } else if ($mode_paiement == 1) {
-            $data->setDmModePaiement("Chèque");
+        if ($solde_debit == null || $solde_CREDIT == null) {
+            $solde_reste = 0;
+        } else {
+            $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        $data->setDmModePaiement($mode_paiement);
-        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => (1000000)]);
+        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
     }
 
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]
-    public function valider($id, MouvementRepository $mouvementRepository ,DemandeTypeRepository $dm_Repository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
+    public function valider($id, MouvementRepository $mouvementRepository, DemandeTypeRepository $dm_Repository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
     {
         $data = $dm_Repository->find($id);          // Find demandeType by this ID
         if (!$data) {
             return new JsonResponse(['success' => false, 'message' => 'Demande introuvable',]);
         }
         $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
-        $cpt = $data->getPlanCompte()->getCompteMere();     // Avoir le compteMere du Motif liéé au DemandeType
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $cpt);        
-        $exercice = $data->getExercice();
-        $cpt = $data->getPlanCompte()->getCompteMere();
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
-        $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
-        $solde_reste = $solde_debit-$solde_CREDIT;
-        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => 1000000]);
+        if ($solde_debit == null || $solde_CREDIT == null) {
+            $solde_reste = 0;
+        } else {
+            $solde_reste = $solde_debit - $solde_CREDIT;
+        }
+        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste]);
     }
 
     #[Route('/demande/refuser/{id}', name: 'SG.refus_demande_en_attente', methods: ['GET'])]
