@@ -6,14 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/BudgetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BudgetController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/BudgetTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/BudgetTypeRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -256,7 +249,7 @@
       <workItem from="1728195627875" duration="7648000" />
       <workItem from="1728215094617" duration="51000" />
       <workItem from="1728215170471" duration="7871000" />
-      <workItem from="1728225740588" duration="11265000" />
+      <workItem from="1728225740588" duration="11498000" />
     </task>
     <servers />
   </component>

@@ -36,13 +36,13 @@ class ComptableController extends AbstractController
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
-            $caisse = [$somme_debit_banque["01"],$somme_debit_banque["02"],$somme_debit_banque["03"],$somme_debit_banque["09"],$somme_debit_banque["05"],$somme_debit_banque["10"]];
+            $caisse = [$somme_debit_banque["01"],$somme_debit_banque["02"],$somme_debit_banque["03"],$somme_debit_banque["04"],$somme_debit_banque["05"],$somme_debit_banque["6"]];
             $sold = [130, 160, 210, 240, 290, 310];
         }
         if ($semestre == 2) {
             $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
             $fond = [];
-            $caisse = [];
+            $caisse = [$somme_debit_banque["07"],$somme_debit_banque["08"],$somme_debit_banque["09"],$somme_debit_banque["10"],$somme_debit_banque["11"],$somme_debit_banque["12"]];
             $sold = [];
 
             for ($i = 0; $i < 6; $i++) {
