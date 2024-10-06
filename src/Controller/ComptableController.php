@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\DetailTransactionCompte;
+use App\Entity\Exercice;
 use App\Entity\PlanCompte;
 use App\Entity\TransactionType;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailTransactionCompteRepository;
+use App\Repository\ExerciceRepository;
+use App\Repository\MouvementRepository;
 use App\Repository\PlanCompteRepository;
 use App\Repository\TransactionTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,17 +23,20 @@ use Symfony\Component\Routing\Attribute\Route;
 class ComptableController extends AbstractController
 {
     #[Route('/', name: 'comptable.graphe', methods: ['GET', 'POST'])]
-    public function index(Request $request): Response
+    public function index(Request $request,MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
         $annee = $request->query->get('annee', (int)date('Y'));
         $semestre = $request->query->get('semestre', (int)'1');
+        $exercice = $exerciceRepository->getExerciceValide();
+        $somme_debit_banque = $mouvementRepository->v_debit_banque_mensuel($exercice);
+        dump($somme_debit_banque);
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
         // Ceci est juste un exemple
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
-            $caisse = [120, 140, 180, 220, 260, 300];
+            $caisse = [$somme_debit_banque["01"],$somme_debit_banque["02"],$somme_debit_banque["03"],$somme_debit_banque["09"],$somme_debit_banque["05"],$somme_debit_banque["10"]];
             $sold = [130, 160, 210, 240, 290, 310];
         }
         if ($semestre == 2) {
@@ -72,9 +78,7 @@ class ComptableController extends AbstractController
     #[Route('/form/depense', name: 'comptable.form_depense_directe', methods: ['GET'])]
     public function form_depense_directe(
         PlanCompteRepository              $planCompteRepository,
-        TransactionTypeRepository         $transactionTypeRepository,
-        DetailTransactionCompteRepository $detailTransactionCompteRepository,
-        Request                           $request
+        TransactionTypeRepository         $transactionTypeRepository
     ): Response
     {
         $liste_entite = $planCompteRepository->findCompteCaisse();

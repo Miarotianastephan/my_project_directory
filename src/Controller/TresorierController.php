@@ -42,7 +42,7 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, DetailBudgetRepository $detailBudgetRepository, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
+    public function show($id, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);

@@ -76,6 +76,124 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
     }
 
+    /*public function v_debit_banque_mensuel(Exercice $exercice): ?float
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+
+        // Conversion de la date en chaîne (format 'Y-m-d')
+        $date = $exercice->getExerciceDateDebut()->format('Y-m-d');
+        dump($date);
+
+        // Script SQL
+        $script = "
+        WITH calendrier AS (
+            SELECT ADD_MONTHS(DATE '$date', LEVEL - 1) AS mois
+            FROM DUAL
+            CONNECT BY LEVEL <= 12
+        ), exercices AS (
+            SELECT DISTINCT evn_exercice_id
+            FROM v_debit_banque_mensuel
+        )
+        SELECT
+            e.evn_exercice_id,
+            TO_CHAR(c.mois, 'YYYY-MM') AS mois_operation,
+            COALESCE(v.total, 0) AS total
+        FROM calendrier c
+        CROSS JOIN exercices e
+        LEFT JOIN v_debit_banque_mensuel v
+            ON TO_CHAR(c.mois, 'YYYY-MM') = v.mois_operation
+            AND e.evn_exercice_id = v.evn_exercice_id
+        ORDER BY e.evn_exercice_id, c.mois
+    ";
+
+        try {
+            // Préparation et exécution de la requête
+            $statement = $connection->prepare($script);
+            $resultSet = $statement->executeQuery();
+
+            // Récupération de tous les résultats
+            $results = $resultSet->fetchAllAssociative();
+
+            // Vérification et traitement des résultats
+            if (!empty($results)) {
+                $total = 0.0;
+                foreach ($results as $result) {
+                    if (array_key_exists('total', $result)) {
+                        $total += (float) $result['total'];
+                    }
+                }
+                return $total;
+            }
+
+        } catch (\Exception $e) {
+            // Gestion des erreurs et affichage du message d'erreur
+            dump($e->getMessage());
+        }
+
+        // Retourne null en cas d'échec
+        return null;
+    }*/
+
+    public function v_debit_banque_mensuel(Exercice $exercice): ?array
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+
+        // Conversion de la date en chaîne (format 'Y-m-d')
+        //$date = $exercice->getExerciceDateDebut()->format('Y-m-d');
+        //dump($date);
+
+        // Script SQL
+        $script = "select total,mois_operation,EVN_EXERCICE_ID from v_debit_banque_mensuel where evn_exercice_id = :exercice";
+
+        try {
+            // Préparation et exécution de la requête
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+
+            // Récupération de tous les résultats
+            $results = $resultSet->fetchAllAssociative();
+
+            // Si on obtient des résultats
+            if (!empty($results)) {
+                // Initialisation du tableau des mois avec 0 comme valeur par défaut
+                $moisData = [
+                    '01' => 0.0,
+                    '02' => 0.0,
+                    '03' => 0.0,
+                    '04' => 0.0,
+                    '05' => 0.0,
+                    '06' => 0.0,
+                    '07' => 0.0,
+                    '08' => 0.0,
+                    '09' => 0.0,
+                    '10' => 0.0,
+                    '11' => 0.0,
+                    '12' => 0.0,
+                ];
+
+                // Parcourir les résultats pour affecter les valeurs aux mois correspondants
+                foreach ($results as $result) {
+                    $mois = substr($result['MOIS_OPERATION'], 5, 2); // Récupère le mois (par exemple "09")
+                    $total = (float) $result['TOTAL']; // Convertit le total en float
+                    $moisData[$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
+                }
+
+                return $moisData; // Retourne le tableau des totaux par mois
+            }
+
+        } catch (\Exception $e) {
+            // Gestion des erreurs et affichage du message d'erreur
+            dump($e->getMessage());
+        }
+
+        // Retourne null en cas d'échec
+        return null;
+    }
+
+
 
 
 
