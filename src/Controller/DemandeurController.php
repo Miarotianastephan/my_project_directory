@@ -67,7 +67,7 @@ class DemandeurController extends AbstractController
         $date_operation = $data_parametre['date_operation'];
         $date_saisie = $data_parametre['date_saisie'];
         
-        $response_data = $dmService->insertDemandeType($exercice, $plan_cpt_entity_id, $plan_cpt_motif_id, $montant_demande, $paiement,$date_saisie , $date_operation);
+        $response_data = $dmService->addDemandeFonds($exercice, $plan_cpt_entity_id, $plan_cpt_motif_id, $montant_demande, $paiement,$date_saisie , $date_operation);
         dump($response_data);
         return $this->redirectToRoute('demandeur.liste_demande');
     }

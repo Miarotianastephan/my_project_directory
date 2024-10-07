@@ -72,30 +72,50 @@ class DemandeTypeService
         }
     }
     
-    public function insertDemandeType($exercice, $planCptEntityId, $planCptMotifId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation){
-        // createReferenceDemande : gérer dans la base de donnée par un trigger 
-        // createTypeDeDemande : toujours de type demande de décaissement
-        $demande = $this->demandeRepository->findDemandeByCode(10);         // Code demande 10 => Decaissement
+    public function addDemandeFonds($exercice, $planCptEntityId, $planCptMotifId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation){
 
-        $demande_type = new DemandeType();
-        $demande_type->setDmMontant($montantDemande);
-
+        $entityManager = $this->demandeTypeRepository->getEntityManager();
+        $entityManager->beginTransaction();
         
-        $entity_code = $this->planCompteRepo->find($planCptEntityId);       // getPlanCompte ENTITE by ID
-        $plan_compte_motif = $this->planCompteRepo->find($planCptMotifId);  // getPlanCompteMotif by ID
+        try {
+            $demande = $this->demandeRepository->findDemandeByCode(10);             // Code demande 10 => Decaissement
 
-        $demande_type->setEntityCode($entity_code);
-        $demande_type->setDmModePaiement($modePaiement);
-        $demande_type->setDmEtat( $this->etatDmRepo, 100 );                 // 100 Initié OK_ETAT
-        $demande_type->setUtilisateur($this->user);
-        $demande_type->setPlanCompte($plan_compte_motif);
-        $demande_type->setExercice($exercice);
-        $demande_type->setDemande($demande);
-        $demande_type->setDmDate(new \DateTime($dateSaisie));
-        $demande_type->setDmDateOperation(new \DateTime($dateOperation));
+            $demande_type = new DemandeType();
+            $demande_type->setDmMontant($montantDemande);
+            
+            $entity_code = $this->planCompteRepo->find($planCptEntityId);       // getPlanCompte ENTITE by ID
+            $plan_compte_motif = $this->planCompteRepo->find($planCptMotifId);  // getPlanCompteMotif by ID
 
-        $response_data = $this->demandeTypeRepository->insertDecaissement($demande_type);
-        return $response_data;
+            $demande_type->setEntityCode($entity_code);
+            $demande_type->setDmModePaiement($modePaiement);
+            $demande_type->setDmEtat( $this->etatDmRepo, 100 );                 // 100 Initié OK_ETAT
+            $demande_type->setUtilisateur($this->user);
+            $demande_type->setPlanCompte($plan_compte_motif);
+            $demande_type->setExercice($exercice);
+            $demande_type->setDemande($demande);
+            $demande_type->setDmDate(new \DateTime($dateSaisie));
+            $demande_type->setDmDateOperation(new \DateTime($dateOperation));
+
+            $entityManager->persist($demande_type);                             // Ajout de demandes de fonds
+            $entityManager->flush();
+                        
+            $demande_type_reference = $this->createReferenceForId($demande->getDmCode(),$demande_type->getId());// reference demande
+            $demande_type->setRefDemande($demande_type_reference);                                              // update avec reference
+            
+            $entityManager->flush();
+            $entityManager->commit();
+
+        } catch (\Throwable $th) {
+            $entityManager->rollback();
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur de demande de fonds : ' . $th->getMessage()
+            ]);
+        }
+        return [
+            "status" => true,
+            "message" => 'Demande de fonds insérer',
+        ];
     }
 
     public function findAllMyDemandeTypesInit(){
@@ -202,13 +222,13 @@ class DemandeTypeService
             $entityManager->rollback();                         // si erreur opération 
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Erreur transaction : ' . $th->getMessage()
+                'message' => 'Erreur création approvisionnement : ' . $th->getMessage()
             ]);
         }
         return [
             "status" => true,
-            "message" => 'Demande insérer avec succes',
-        ];;
+            "message" => 'Approvisionnement insérer',
+        ];
     }
 
     public function createReferenceForId($typeReference, $Id){

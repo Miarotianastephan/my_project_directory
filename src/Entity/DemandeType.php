@@ -34,8 +34,8 @@ class DemandeType
     #[ORM\Column(length: 255)]
     private ?string $dm_mode_paiement = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $ref_demande = null;
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $ref_demande = 'ref_default';
 
     #[ORM\Column]
     private ?int $dm_etat = null;
