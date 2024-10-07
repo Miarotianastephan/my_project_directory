@@ -63,15 +63,11 @@ class DemandeTypeRepository extends ServiceEntityRepository
         );
     }
 
-    public function insertDemandeType(DemandeType $demandeType){
-        try {      
+    public function insertDecaissement(DemandeType $demandeType){
+        try {
             $em = $this->getEntityManager();
             $em->persist($demandeType);
             $em->flush();
-            // $isActiveTransaction = $em->getConnection()->isTransactionActive();
-            // if ($isActiveTransaction) {
-            //     $em->flush();
-            // }
             return [
                 "status" => true,
                 "message" => 'Demande insérer avec succes',

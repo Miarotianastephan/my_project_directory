@@ -75,7 +75,7 @@ class DemandeTypeService
     public function insertDemandeType($exercice, $planCptEntityId, $planCptMotifId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation){
         // createReferenceDemande : gérer dans la base de donnée par un trigger 
         // createTypeDeDemande : toujours de type demande de décaissement
-        $demande = $this->demandeRepository->findDemandeByCode(10);         // Code demande 10 => Decaissement 
+        $demande = $this->demandeRepository->findDemandeByCode(10);         // Code demande 10 => Decaissement
 
         $demande_type = new DemandeType();
         $demande_type->setDmMontant($montantDemande);
@@ -94,7 +94,7 @@ class DemandeTypeService
         $demande_type->setDmDate(new \DateTime($dateSaisie));
         $demande_type->setDmDateOperation(new \DateTime($dateOperation));
 
-        $response_data = $this->demandeTypeRepository->insertDemandeType($demande_type);
+        $response_data = $this->demandeTypeRepository->insertDecaissement($demande_type);
         return $response_data;
     }
 
@@ -134,47 +134,42 @@ class DemandeTypeService
 
     // Insertion d'approvisionnement
     public function insertDemandeTypeAppro($exercice, $planCptEntityId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation, int $tresorier_user_id){
-        // createReferenceDemande : gérer dans la base de donnée par un trigger 
-        // createTypeDeDemande : toujours de type demande de décaissement
-        $demande = $this->demandeRepository->findDemandeByCode(20);         // Code demande 20 => Approvisionnement 
+        $demande = $this->demandeRepository->findDemandeByCode(20);                                 // Code demande 20 => Approvisionnement 
 
-        $demande_type = new DemandeType();
-        $demande_type->setDmMontant($montantDemande);
-
-        
-        $entity_code_and_plan_compte_motif = $this->planCompteRepo->find($planCptEntityId);       // getPlanCompte ENTITE by ID
-
-        $demande_type->setEntityCode($entity_code_and_plan_compte_motif);
-        $demande_type->setDmModePaiement($modePaiement);
-        $demande_type->setDmEtat( $this->etatDmRepo, 500 );                 // 500 Comptabilisation OK_ETAT
-        $demande_type->setUtilisateur($this->user);
-        $demande_type->setPlanCompte($entity_code_and_plan_compte_motif);
-        $demande_type->setExercice($exercice);
-        $demande_type->setDemande($demande);
-        $demande_type->setDmDate(new \DateTime($dateSaisie));
-        $demande_type->setDmDateOperation(new \DateTime($dateOperation));
-
-        $response_data = $this->demandeTypeRepository->insertDemandeType($demande_type);
-        dump($response_data);
-        
-        // Find last insert approvisionnement
-        $demande_type = $this->demandeTypeRepository->findLastInsertedDemandeType();
-        dump($demande_type);
-        
         $entityManager = $this->demandeTypeRepository->getEntityManager();
         $entityManager->beginTransaction();
-        try {
-        // Comptabilisation 
-        $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
+
+        try { 
+            $demande_type = new DemandeType();
+            $demande_type->setDmMontant($montantDemande);
+            $entity_code_and_plan_compte_motif = $this->planCompteRepo->find($planCptEntityId);     // getPlanCompte ENTITE by ID
+            $demande_type->setEntityCode($entity_code_and_plan_compte_motif);
+            $demande_type->setDmModePaiement($modePaiement);
+            $demande_type->setDmEtat( $this->etatDmRepo, 500 );                                     // 500 Comptabilisation OK_ETAT
+            $demande_type->setUtilisateur($this->user);
+            $demande_type->setPlanCompte($entity_code_and_plan_compte_motif);
+            $demande_type->setExercice($exercice);
+            $demande_type->setDemande($demande);
+            $demande_type->setDmDate(new \DateTime($dateSaisie));
+            $demande_type->setDmDateOperation(new \DateTime($dateOperation));
+
+            $entityManager->persist($demande_type);
+            $entityManager->flush();
+            
+            $demande_type_reference = $this->createReferenceForId($demande->getDmCode(),$demande_type->getId());// reference demande
+            $demande_type->setRefDemande($demande_type_reference);                                              // update avec reference
+            $entityManager->flush();
+
+        // Comptabilisation de l'approvisionnement
             // les données à utiliser
+            $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
             $reference_demande = $demande_type->getRefDemande();
             $exercice_demande = $this->exercicerepository->getExerciceValide();
             $montant_demande = $demande_type->getDmMontant();
             $numero_compte_debit = $demande_type->getPlanCompte();
             // $mode_paiement_demande = (int)($demande_type->getDmModePaiement());
-            $transaction_a_faire = $this->trsTypeRepo->findTransactionForApprovision();   // identifier le type de transaction à faire
-            $detail_transaction = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);                // identifier le mouvement à créditer
-            // dump($detail_transaction);
+            $transaction_a_faire = $this->trsTypeRepo->findTransactionForApprovision();                                         // identifier le type de transaction à faire
+            $detail_transaction = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);            // identifier le mouvement à créditer
             // Création evenement 
             $evenement = new Evenement();
             $evenement->setEvnTrsId($transaction_a_faire);
@@ -210,7 +205,22 @@ class DemandeTypeService
                 'message' => 'Erreur transaction : ' . $th->getMessage()
             ]);
         }
-        return $response_data;
+        return [
+            "status" => true,
+            "message" => 'Demande insérer avec succes',
+        ];;
     }
+
+    public function createReferenceForId($typeReference, $Id){
+        switch ($typeReference) {
+            case 10:
+                return "DEC/".date('Y')."/".$Id;
+                break;
+            case 20:
+                return "APR/".date('Y')."/".$Id;
+                break;
+        }
+    }
+
 
 }
