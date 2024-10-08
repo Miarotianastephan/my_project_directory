@@ -2,12 +2,14 @@
 
 {% block title %}Liste budget{% endblock %}
 
-{% block page_title %} Trésorier {% endblock %}
+{% block page_title %} Section Trésorier {% endblock %}
 {% block page_subtitle %}
-    {#  #}
+    Les budgets qui ont été validés lors du dernier assemblé.
 {% endblock %}
 
-
+{% block page_options %}
+    <a href="{{ path('tresorier.form_budget') }}" class="btn btn-secondary">Ajouter un budget</a>
+{% endblock %}
 
 {% block page_main_content %}
     <div class="row">
@@ -38,12 +40,9 @@
                                     <td class="col text-end">{{ budget.BudgetMontant|number_format(0, '.', ' ') }} Ar
                                     </td>
                                     <td class="">{{ budget.BudgetType.Libelle }}   </td>
-                                    <td class="">{{ budget.Exercice.Id }}   </td>
+                                    <td class="">{{ budget.Exercice }}   </td>
                                     <td class="col">
                                         <div class="col-12 d-flex gap-2">
-                                            <div class="col">
-                                                <a class="btn btn-label-success btn-sm">Modifier</a>
-                                            </div>
                                             <div class="col-4">
                                                 <button style="width: 100%;height: 100%;border: none;background-color: transparent">
                                                     {#

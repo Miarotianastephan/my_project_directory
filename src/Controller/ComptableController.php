@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\DetailTransactionCompte;
+use App\Entity\Exercice;
 use App\Entity\PlanCompte;
 use App\Entity\TransactionType;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailTransactionCompteRepository;
+use App\Repository\ExerciceRepository;
+use App\Repository\MouvementRepository;
 use App\Repository\PlanCompteRepository;
 use App\Repository\TransactionTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,31 +23,32 @@ use Symfony\Component\Routing\Attribute\Route;
 class ComptableController extends AbstractController
 {
     #[Route('/', name: 'comptable.graphe', methods: ['GET', 'POST'])]
-    public function index(Request $request): Response
+    public function index(Request $request,MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
         $annee = $request->query->get('annee', (int)date('Y'));
         $semestre = $request->query->get('semestre', (int)'1');
+        $exercice = $exerciceRepository->getExerciceValide();
+        $somme_debit_banque = $mouvementRepository->v_debit_banque_mensuel($exercice);
+        $somme_debit_caisse = $mouvementRepository->v_debit_caisse_mensuel($exercice);
+        //dump($somme_debit_banque);
+        $message = null;
+        if ($exercice || $somme_debit_banque == null || $somme_debit_caisse == null) {
+            $message = "Dashboard invalide";
+        }
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
         // Ceci est juste un exemple
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
-            $caisse = [120, 140, 180, 220, 260, 300];
-            $sold = [130, 160, 210, 240, 290, 310];
+            $caisse = [$somme_debit_banque[0] ?? 0,$somme_debit_banque[1] ?? 0,$somme_debit_banque[3] ?? 0,$somme_debit_banque[4] ?? 0,$somme_debit_banque[5] ?? 0];
+            $sold = [$somme_debit_caisse[0] ?? 0,$somme_debit_caisse[1] ?? 0,$somme_debit_caisse[3] ?? 0,$somme_debit_caisse[4] ?? 0,$somme_debit_caisse[5] ?? 0];
         }
         if ($semestre == 2) {
             $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
             $fond = [];
-            $caisse = [];
-            $sold = [];
-
-            for ($i = 0; $i < 6; $i++) {
-                // Génère des valeurs aléatoires pour chaque tableau dans des plages similaires
-                $fond[] = rand(100, 350);    // Valeurs aléatoires entre 100 et 350
-                $caisse[] = rand(120, 300);  // Valeurs aléatoires entre 120 et 300
-                $sold[] = rand(130, 310);    // Valeurs aléatoires entre 130 et 310
-            }
+            $caisse = [$somme_debit_banque[6] ?? 0,$somme_debit_banque[7] ?? 0,$somme_debit_banque[8] ?? 0,$somme_debit_banque[9] ?? 0,$somme_debit_banque[10] ?? 0,$somme_debit_banque[11] ?? 0];
+            $sold = [$somme_debit_caisse[6] ?? 0,$somme_debit_caisse[7] ?? 0,$somme_debit_caisse[8] ?? 0,$somme_debit_caisse[9] ?? 0,$somme_debit_caisse[10] ?? 0,$somme_debit_caisse[11] ?? 0];
         }
 
 
@@ -65,16 +69,15 @@ class ComptableController extends AbstractController
             'caisse' => $caisse,
             'sold' => $sold,
             'annee' => $annee,
-            'semestre' => $semestre
+            'semestre' => $semestre,
+            'message' => $message
         ]);
     }
 
     #[Route('/form/depense', name: 'comptable.form_depense_directe', methods: ['GET'])]
     public function form_depense_directe(
         PlanCompteRepository              $planCompteRepository,
-        TransactionTypeRepository         $transactionTypeRepository,
-        DetailTransactionCompteRepository $detailTransactionCompteRepository,
-        Request                           $request
+        TransactionTypeRepository         $transactionTypeRepository
     ): Response
     {
         $liste_entite = $planCompteRepository->findCompteCaisse();

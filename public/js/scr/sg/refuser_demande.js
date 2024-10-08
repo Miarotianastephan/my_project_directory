@@ -3,12 +3,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const commentaire = document.getElementById('commentaire');
     document.getElementById('annuler').addEventListener('click', handleAnnuler);
 
+    const SELECTORS = {messageModal: '#messageModal'}
+    const ELEMENTS = {messageModal: new bootstrap.Modal(document.querySelector(SELECTORS.messageModal)),}
+
+    function showMessage(message) {
+        const modalBody = document.querySelector(`${SELECTORS.messageModal} .modal-body`);
+        modalBody.textContent = message;
+        ELEMENTS.messageModal.show();
+    }
+
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (!commentaire.value.trim()) {
-            alert('Veuillez saisir un motif de refus.');
-            return;
-        }
         submitForm();
     });
 
@@ -40,14 +45,14 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 if (!data.success) {
-                    alert(data.message);
+                    showMessage(data.message);
                 } else {
                     window.location.href = data.path;
                 }
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                alert('Une erreur est survenue. Veuillez réessayer.');
+                showMessage('Une erreur est survenue. Veuillez réessayer.');
             });
     }
 });

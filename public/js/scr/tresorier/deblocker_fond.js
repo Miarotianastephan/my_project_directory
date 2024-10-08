@@ -27,7 +27,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleSubmit(e) {
         e.preventDefault();
-        sendRequest(form.action, handleResponse);
+        const paiement = this.getAttribute('data-paiement');
+
+        //paiement = 1 -> chèque
+        //paiement = 0 -> espèce
+        if (paiement == 1) {
+            //alert("Paiement par chèque");
+            sendRequestCheque(form.action, handleResponse)
+        } else if (paiement == 0) {
+            //alert("Paiement par éspèce");
+            sendRequest(form.action, handleResponse);
+        } else {
+            alert("Mode de paiement inconnu");
+        }
+        //sendRequest(form.action, handleResponse);
     }
 
     function handleCancel(e) {
@@ -40,6 +53,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         // Uncomment the next line when you want to enable redirection
         // window.location.href = '/tresorier';
+    }
+
+
+    function getFormData() {
+        return {
+            banque: document.getElementById('banque').value,
+            numero_cheque: document.getElementById('numero_cheque').value,
+            beneficiaire: document.getElementById('beneficiaire').value,
+            remettant: document.getElementById('remettant').value,
+        };
+    }
+
+    function sendRequestCheque(url, callback) {
+        const formData = getFormData();
+        //console.log(formData);
+
+        fetch(url, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
+            }, body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau : ' + response.status);
+                }
+                return response.json();
+            })
+            .then(callback)
+            .catch(error => {
+                showMessage(error)
+                console.error('Erreur:', error)
+            });
     }
 
     function sendRequest(url, callback) {
@@ -67,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = data.path;
             } else {
 
-                alert("sfdghbvd");
                 console.error('Pas de chemin de redirection spécifié dans la réponse');
             }
         }

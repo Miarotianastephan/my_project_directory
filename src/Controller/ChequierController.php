@@ -78,4 +78,10 @@ final class ChequierController extends AbstractController
 
         return $this->redirectToRoute('app_chequier_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/utiliser/cheque', name: 'app_chequier_use', methods: ['GET'])]
+    public function utilisation_cheque(): Response
+    {
+        return $this->render('chequier/utiliser.html.twig');
+    }
 }

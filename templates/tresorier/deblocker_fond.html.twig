@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    Trésorier
+    Section Trésorier
 {% endblock %}
 {% block page_subtitle %}
     {# Liste des demandes en attente de validation #}
@@ -16,49 +16,58 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">REMETTRE LE FOND</h4>
-                        <div class="text-end">
-                            <h3>
-                                Montant restant : {{ montant|number_format(2, '.', ' ') }} Ar
-                            </h3>
-                        </div>
+                        {{ include('include/_budget_et_solde.html.twig') }}
                     </div>
                     <div class="card-body">
                         <div class="col px-3 d-flex flex-column gap-3">
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-3 form-control-lg"> Rérérence: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.RefDemande }}
+                            <div class="row form-group gy-3">
+                                <div class="col-md-6">
+                                    <label class="col-3 form-control-lg"> Remettant: </label>
+                                    <div class="col form-control">
+                                        {{ demande_type.utilisateur.UserMatricule }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-3 form-control-lg"> Rérérence: </label>
+                                    <div class="col form-control">
+                                        {{ demande_type.RefDemande }}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label class="col-3 form-control-lg">Type de paiement:</label>
+                                    <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-3 form-control-lg"> Montant de la demande: </label>
+                                    <div class="col form-control">
+                                        {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-3 form-control-lg"> Remettant: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.utilisateur.UserMatricule }}
+
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label class="col-3 form-control-lg"> Motif de la demande: </label>
+                                    <div class="col form-control">
+                                        {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-3 form-control-lg"> Type de demande: </label>
+                                    <div class="col form-control">
+                                        {{ demande_type.Demande.Libelle }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-3 form-control-lg"> Type de demande: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.Demande.Libelle }}
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-3 form-control-lg"> Motif de la demande: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-3 form-control-lg"> Montant de la demande: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
-                                </div>
-                            </div>
+                            {{ demande_type.DmModePaiement == 1 ? include('chequier/utiliser.html.twig'):"" }}
                         </div>
                     </div>
                     <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button id="annuler" type="button" class="btn btn-danger btn">Annuler</button>
-                        <button id="valider" type="submit" class="btn btn-success btn">Valider</button>
+                        <button id="annuler"  type="button" class="btn btn-danger btn">Annuler</button>
+                        <button id="valider" data-paiement="{{ demande_type.DmModePaiement }}" type="submit" class="btn btn-success btn">Valider</button>
                     </div>
                 </div>
             </form>

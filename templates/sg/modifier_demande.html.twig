@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    SG
+    Section SG
 {% endblock %}
 {% block page_subtitle %}
-    Liste des demandes en attente de validation
+    <label for="commentaire">
+        Veuillez saisir la modification attendue pour cette demande.
+    </label>
 {% endblock %}
 
 {% block page_main_content %}
@@ -13,12 +15,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">À propos de la demande {{ demande_type.Id }}</h4>
-                    <div class="text-end">
-                        <h3>
-                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
-                        </h3>
-                    </div>
+                    <h4 class="card-title">Demande de modification de la demande</h4>
+                    {{ include('include/_budget_et_solde.html.twig') }}
                 </div>
                 <form id="formulaire" action="{{ path('sg.modifier', {'id': demande_type.Id}) }}"
                       data-cancel="{{ path('SG.liste_demande_en_attente') }}" method="post">
@@ -56,18 +54,14 @@
                                 <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }}Ar
                                 </div>
                             </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de paiement:</label>
-                            <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Personne concernée:</label>
-                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Observation:</label>
-                            <div class="col form-control">{{ 'Petite observation'  }}</div>
-                        </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Type de paiement:</label>
+                                <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Personne concernée:</label>
+                                <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                            </div>
                             <div class="col-12 d-flex flex-row">
                                 <label for="commentaire" class="col-4 form-control-lg">
                                     Ajout de remarque:

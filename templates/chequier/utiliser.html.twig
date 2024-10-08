@@ -1,0 +1,29 @@
+<div style="color: rgba(104,2,12,0.95);font-size: xx-large;text-align: center;text-decoration: underline;text-decoration-style: dashed;">
+    Veuillez remplir ceci
+</div>
+<div class="row form-group gy-3 mb-3">
+    <div class="col-md-6">
+        <label for="banque">Banque</label>
+        <select id="banque" name="banque" class="form-control">
+            {% for banque in banques %}
+                <option value="{{ banque.id }}">{{ banque.NomBanque }}</option>
+            {% else %}
+                <option>Veuillez inséré une banque</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label for="numero_cheque">Numero de chèque</label>
+        <input type="text" name="numero_cheque" class="form-control" id="numero_cheque"/>
+    </div>
+</div>
+<div class="row form-group gy-3 mb-3">
+    <div class="col-md-6">
+        <label for="beneficiaire">Bénéficiaire</label>
+        <input type="text" name="beneficiaire" class="form-control" id="beneficiaire">
+    </div>
+    <div class="col-md-6">
+        <label for="remettant">Remettant</label>
+        <input type="text" name="remettant" class="form-control" id="remettant"/>
+    </div>
+</div>

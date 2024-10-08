@@ -1,18 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des rôles: listes{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {# {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
 {% endblock %} #}
 
 {% block page_title %}
-    Trésorier
+    Section Comptable
 {% endblock %}
 {% block page_subtitle %}
-    {#
-    Chaque budget est lié à un exercice et plan de compte. Veuillez bien vérifier.
-    #}
+    Veuillez ajouter les budgets pour chaque plan de compte pour chaque exercice
 {% endblock %}
 
 {% block page_main_content %}
@@ -28,9 +26,9 @@
                     <div class="card-body col-12 d-flex flex-column gap-2">
                         <div class="form-group">
                             <label for="exercice">Exercice</label>
-                            <select class="form-select" id="exercice" name="exercice">
+                            <select class="form-select" id="exercice_id" name="exercice_id">
                                 {% for exercice in exercices %}
-                                    <option value="{{ exercice.id }}">{{ exercice }}</option>
+                                    <option value="{{ exercice.id }}"> {{ exercice }}</option>
                                 {% endfor %}
                             </select>
                         </div>

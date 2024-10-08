@@ -118,6 +118,9 @@ class ExerciceRepository extends ServiceEntityRepository
         }
     }
 
+
+
+
     public function getExerciceValide(): ?Exercice
     {
         return $this->createQueryBuilder('e')
