@@ -48,10 +48,16 @@ class SGController extends AbstractController
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
-        if ($solde_debit == null || $solde_CREDIT == null) {
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        if ($budget != null) {
+            $budget = $budget->getBudgetMontant();
+        }
+        if ($solde_debit == null ) {
             $solde_reste = 0;
-        } else {
+        } else if($solde_CREDIT == null){
+            $solde_reste = $solde_debit;
+        }
+        else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
@@ -87,12 +93,19 @@ class SGController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement()) ;
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
         $compte_mere = $data->getPlanCompte()->getCompteMere();
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
-        if ($solde_debit == null || $solde_CREDIT == null) {
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        if ($budget != null) {
+            $budget = $budget->getBudgetMontant();
+        }
+        if ($solde_debit == null ) {
             $solde_reste = 0;
-        } else {
+        } else if($solde_CREDIT == null){
+            $solde_reste = $solde_debit;
+        }
+        else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
+        dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
     }
 
@@ -108,12 +121,19 @@ class SGController extends AbstractController
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
-        if ($solde_debit == null || $solde_CREDIT == null) {
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        if ($budget != null) {
+            $budget = $budget->getBudgetMontant();
+        }
+        if ($solde_debit == null ) {
             $solde_reste = 0;
-        } else {
+        } else if($solde_CREDIT == null){
+            $solde_reste = $solde_debit;
+        }
+        else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
+
         return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
     }
 

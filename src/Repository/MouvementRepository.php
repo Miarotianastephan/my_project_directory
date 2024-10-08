@@ -32,7 +32,10 @@ class MouvementRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        $table = $mode_paiement == 1 ? "v_mouvement_debit_siege" : "v_mouvement_debit_banque";
+        $table = $mode_paiement == 0 ? "v_mouvement_debit_siege" : "v_mouvement_debit_banque";
+        dump([
+            "TEZSTSET" => $table,
+        ]);
 
         $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
 
@@ -56,8 +59,8 @@ class MouvementRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
-
-        $table = $mode_paiement == 1 ? "v_mouvement_credit_siege" : "v_mouvement_credit_banque";
+        // 0 = paiement espèces 
+        $table = $mode_paiement == 0 ? "v_mouvement_credit_siege" : "v_mouvement_credit_banque";
 
         $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
 

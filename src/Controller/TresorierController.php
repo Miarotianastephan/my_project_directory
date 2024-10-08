@@ -52,10 +52,16 @@ class TresorierController extends AbstractController
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
-        if ($solde_debit == null || $solde_CREDIT == null) {
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        if($budget!=null){
+            $budget = $budget->getBudgetMontant();
+        }
+        if ($solde_debit == null ) {
             $solde_reste = 0;
-        } else {
+        } else if($solde_CREDIT == null){
+            $solde_reste = $solde_debit;
+        }
+        else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
         return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste,'budget'=>$budget]);
@@ -75,9 +81,12 @@ class TresorierController extends AbstractController
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
-        if ($solde_debit == null || $solde_CREDIT == null) {
+        if ($solde_debit == null ) {
             $solde_reste = 0;
-        } else {
+        } else if($solde_CREDIT == null){
+            $solde_reste = $solde_debit;
+        }
+        else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
         $liste_banque = $banqueRepository->findAll();

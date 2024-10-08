@@ -78,8 +78,8 @@
                     </div>
                 </div>
                 <form id="formulaire" data-update="{{ path('SG.modifier_en_attente', {'id': demande_type.Id}) }}"
-                      data-refuser="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
-                      data-valider="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}">
+                      data-refuser="{{ path('SG.liste_demande_en_attente', {'id': demande_type.Id}) }}"
+                      data-valider="{{ path('SG.liste_demande_en_attente', {'id': demande_type.Id}) }}">
                     <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
                         <button id="refuser" name="refuser" value="refuser" class="btn btn-danger btn">REFUSER</button>
                         <button id="modifier" name="modifier" value="modifier" class="btn btn-primary btn">MODIFIER
