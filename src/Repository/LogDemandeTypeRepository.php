@@ -2,18 +2,16 @@
 
 namespace App\Repository;
 
+use App\Entity\Banque;
 use App\Entity\DemandeType;
 use App\Entity\Evenement;
 use App\Entity\LogDemandeType;
 use App\Entity\Mouvement;
+use App\Entity\UsageCheque;
 use App\Entity\Utilisateur;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
-use Monolog\DateTimeImmutable;
-use PHPUnit\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -28,13 +26,13 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
     private $utilisateurRepository;
     private $exercicerepository;
 
-    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo,UtilisateurRepository $utilisateurRepo,ExerciceRepository $exoRepo)
+    public function __construct(ManagerRegistry $registry, EtatDemandeRepository $etatDmRepo, TransactionTypeRepository $trsTypeRepo, DetailTransactionCompteRepository $detailTrsRepo, UtilisateurRepository $utilisateurRepo, ExerciceRepository $exoRepo)
     {
         $this->etatDmRepository = $etatDmRepo;
         $this->trsTypeRepo = $trsTypeRepo;
         $this->detailTrsRepo = $detailTrsRepo;
-        $this->utilisateurRepository=$utilisateurRepo;
-        $this->exercicerepository=$exoRepo;
+        $this->utilisateurRepository = $utilisateurRepo;
+        $this->exercicerepository = $exoRepo;
         parent::__construct($registry, LogDemandeType::class);
     }
 
@@ -81,7 +79,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             try {
                 // Création du log
                 $log_dm = new LogDemandeType();
-                $log_dm->setDmEtat($this->etatDmRepository , $dm_type->getDmEtat()); // OK_ETAT
+                $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
                 $log_dm->setUserMatricule($user_demande->getUserMatricule());
                 $log_dm->setDemandeType($dm_type);
                 $log_dm->setLogDmDate(new \DateTime());
@@ -95,13 +93,11 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
                 $entityManager->flush();
                 $entityManager->commit();
-            } 
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $entityManager->rollback();
                 throw new \Exception('Erreur lors de l\'insertion du log : ' . $e->getMessage());
             }
-        } 
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             // Gestion de l'exception générale et retour d'une réponse JSON d'erreur
             $entityManager->rollback();
             return new JsonResponse([
@@ -164,7 +160,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $entityManager->persist($log_dm);
 
                 // Update de la ligne de demande
-                $dm_type->setDmEtat($this->etatDmRepository , 300);                 // OK_ETAT : Refuser
+                $dm_type->setDmEtat($this->etatDmRepository, 300);                 // OK_ETAT : Refuser
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -231,7 +227,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Le message ne peut pas être vide.'
                 ]);
             }
-            
+
             $entityManager->beginTransaction();
             try {
                 // Création du log
@@ -248,20 +244,18 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
-                
+
                 $entityManager->flush();
                 $entityManager->commit();
-                
-            } 
-            catch (\Exception $e) {
+
+            } catch (\Exception $e) {
                 $entityManager->rollback();
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Erreur lors de l insertion du log : ' . $e->getMessage()
                 ]);
             }
-        } 
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $entityManager->rollback();
             return new JsonResponse([
                 'success' => false,
@@ -276,7 +270,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
     }
 
     // Transactionnel
-    public function ajoutDeblockageFond(int $dm_type_id, int $tresorier_user_id): JsonResponse
+    public function ajoutDeblockageFond(int $dm_type_id, int $tresorier_user_id, int $banque_id = null, string $numero_cheque = null, string $remettant = null, string $beneficiaire = null): JsonResponse
     {
         $entityManager = $this->getEntityManager();
         $dm_type = $entityManager->find(DemandeType::class, $dm_type_id);
@@ -286,24 +280,68 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Déblocage impossible car demande introuvable'
             ]);
         }
-        $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
-        if (!$user_tresorier) {                                 // Vérifier si non-trésorier
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'Utilisateur trésorier introuvable.'
-            ]);
-        }
-        $user_sg = $dm_type->getUtilisateur();                  // Vérifier si SG nanao validation
-        if (!$user_sg) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'Validateur du demande introuvable.'
-            ]);
-        } 
-    // Debut de transaction de béblocages de fonds
+        // Debut de transaction de béblocages de fonds
         $entityManager->beginTransaction();
         try {
-        // Insérer Validé dans Historique des demandes
+
+            $dm_mode_paiement = $dm_type->getDmModePaiement();
+            //if == 1 -> payement par chèque
+            if ($dm_mode_paiement == 1) {
+                if ($banque_id === null) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'message' => 'Ajouter un choix de banque'
+                    ]);
+                } else if ($numero_cheque === null) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'message' => 'Ajouter un numero de chèque'
+                    ]);
+                } else if ($remettant === null) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'message' => 'Ajouter un remettant de chèque'
+                    ]);
+                } else if ($beneficiaire === null) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'message' => 'Ajouter un beneficiaire de chèque'
+                    ]);
+                }
+                $banque = $entityManager->find(Banque::class, $banque_id);
+                if ($banque === null) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'message' => 'Ajouter une banque valide'
+                    ]);
+                }
+                //Chèque
+                $cheque = new UsageCheque();
+                $cheque->setChqMontant($dm_type->getDmMontant());
+                $cheque->setIsValid(true);
+                $cheque->setChqBeneficiaire($beneficiaire);
+                $cheque->setChqRemettant($remettant);
+                $cheque->setChqNumero($numero_cheque);
+                $cheque->setDateUsage(new \DateTime());
+                $cheque->setBanque($banque);
+                $entityManager->persist($cheque);
+            }
+
+            $user_tresorier = $entityManager->find(Utilisateur::class, $tresorier_user_id);
+            if (!$user_tresorier) {                                 // Vérifier si non-trésorier
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Utilisateur trésorier introuvable.'
+                ]);
+            }
+            $user_sg = $dm_type->getUtilisateur();                  // Vérifier si SG nanao validation
+            if (!$user_sg) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Validateur du demande introuvable.'
+                ]);
+            }
+            // Insérer Validé dans Historique des demandes
             $log_dm = new LogDemandeType();
             $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
             $log_dm->setUserMatricule($user_sg->getUserMatricule());
@@ -311,12 +349,12 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $log_dm->setLogDmDate(new DateTime());
             $entityManager->persist($log_dm);
 
-        // Update Validé => Débloqué dans les demandes
+            // Update Validé => Débloqué dans les demandes
             $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setDmDate($log_dm->getLogDmDate());                                           // MAJ de dm_type la base de données
 
-        // Comptabilisation
+            // Comptabilisation
             // les données à utiliser
             $reference_demande = $dm_type->getRefDemande();
             $exercice_demande = $this->exercicerepository->getExerciceValide();
@@ -337,14 +375,14 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $evenement->setEvnDateOperation(new DateTime());
             $entityManager->persist($evenement);
             // Création des mouvements
-            
+
             $mv_debit = new Mouvement();                        // DEBIT
             $mv_debit->setMvtEvenementId($evenement);
             $mv_debit->setMvtMontant($montant_demande);
             $mv_debit->setMvtDebit(true);
             $mv_debit->setMvtCompteId($numero_compte_debit);
             $entityManager->persist($mv_debit);
-            
+
             $mv_credit = new Mouvement();                       // CREDIT
             $mv_credit->setMvtEvenementId($evenement);
             $mv_credit->setMvtMontant($montant_demande);
@@ -355,8 +393,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $entityManager->flush();
             $entityManager->commit();                           // si tout OK 
 
-        } 
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $entityManager->rollback();                         // si erreur opération 
             return new JsonResponse([
                 'success' => false,
@@ -378,8 +415,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ->andWhere('e.user_matricule = :val')
             ->setParameter('val', $userMatricule)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 }

@@ -12,10 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'VMouvementCreditCaisse',
-    description: 'Liste des mouvements de crédit en espèce ',
+    name: 'VDebitCaisseMensuel',
+    description: 'Liste des débit mensuel de caisse siege par exercice',
 )]
-class VMouvementCreditCaisseSiegeCommand extends Command
+class VDebitCaisseMensuelCommand extends Command
 {
     private EntityManagerInterface  $entityManager;
     public function __construct(EntityManagerInterface $entityManager)
@@ -32,34 +32,33 @@ class VMouvementCreditCaisseSiegeCommand extends Command
         ;*/
 
         $this
-            ->setDescription('Création de vues liste de mouvement')
-            ->setHelp('Liste des mouvements de credit en caisse');
+            ->setDescription('Création de vues liste de débit mensuel de caisse par exercice')
+            ->setHelp('à filtrer selon l\' exercice à rechercher');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connection = $this->entityManager->getConnection();
-
-        $sql = 'CREATE VIEW v_mouvement_credit_siege AS 
+        $sql = 'CREATE VIEW v_debit_caisse_mensuel AS
                 SELECT 
-                    m.mvn_id , 
-                    m.mvt_evenement_id , 
-                    m.mvt_compte_id ,
-                    m.mvt_montant , 
-                    m.is_mvt_debit
-                FROM mouvement m
-                LEFT JOIN plan_compte p
-                ON m.mvt_compte_id = p.cpt_id 
-                WHERE 
-                    LOWER(p.cpt_libelle) like \'caisse si%\'  
-                    AND m.is_mvt_debit = 0';
-
+                    COALESCE(SUM(vmdc.MVT_MONTANT), 0) AS total,
+                    TO_CHAR(e.evn_date_operation, \'YYYY-MM\') AS mois_operation,
+                    e.evn_exercice_id
+                FROM 
+                    v_mouvement_debit_siege vmdc
+                LEFT JOIN 
+                    evenement e ON vmdc.mvt_evenement_id = e.evn_id
+                GROUP BY 
+                    TO_CHAR(e.evn_date_operation, \'YYYY-MM\'),
+                    e.evn_exercice_id
+                ORDER BY 
+                    mois_operation';
         try {
             $stmt = $connection->prepare($sql);
             //$stmt->bindValue('libelle_compte', 'banque',\PDO::PARAM_STR);
 
             // Afficher un message d'information avant l'exécution
-            $output->writeln('<info>Création de la vue VMouvementCreditCaisseSiege en cours...</info>');
+            $output->writeln('<info>Création de la vue VDebitBanqueMensuel en cours...</info>');
 
             // Afficher la requête et le paramètre avant exécution (pour debug)
             //$output->writeln($stmt->getSQL());
@@ -67,7 +66,8 @@ class VMouvementCreditCaisseSiegeCommand extends Command
             // Exécuter la requête SQL
             $stmt->executeStatement();
             //$connection->commit();
-            $output->writeln('<info>La vue VMouvementCreditCaisseSiege a été créée avec succès !</info>');
+
+            $output->writeln('<info>La vue VDebitBanqueMensuel a été créée avec succès !</info>');
             return Command::SUCCESS;
         }catch (\Exception $e){
             $output->writeln('<error>' . $e->getMessage() . '</error>');

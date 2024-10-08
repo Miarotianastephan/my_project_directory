@@ -66,7 +66,7 @@ class VMouvementDebitBanqueCommand extends Command
 
             // Exécuter la requête SQL
             $stmt->executeStatement();
-
+            //$connection->commit();
             $output->writeln('<info>La vue VMouvementDebitBanque a été créée avec succès !</info>');
             return Command::SUCCESS;
         }catch (\Exception $e){

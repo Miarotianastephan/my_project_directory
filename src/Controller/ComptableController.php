@@ -29,28 +29,22 @@ class ComptableController extends AbstractController
         $semestre = $request->query->get('semestre', (int)'1');
         $exercice = $exerciceRepository->getExerciceValide();
         $somme_debit_banque = $mouvementRepository->v_debit_banque_mensuel($exercice);
-        dump($somme_debit_banque);
+        $somme_debit_caisse = $mouvementRepository->v_debit_caisse_mensuel($exercice);
+        //dump($somme_debit_banque);
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
         // Ceci est juste un exemple
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
-            $caisse = [$somme_debit_banque["01"],$somme_debit_banque["02"],$somme_debit_banque["03"],$somme_debit_banque["04"],$somme_debit_banque["05"],$somme_debit_banque["6"]];
-            $sold = [130, 160, 210, 240, 290, 310];
+            $caisse = [$somme_debit_banque[0],$somme_debit_banque[1],$somme_debit_banque[3],$somme_debit_banque[4],$somme_debit_banque[5]];
+            $sold = [$somme_debit_caisse[0],$somme_debit_caisse[1],$somme_debit_caisse[3],$somme_debit_caisse[4],$somme_debit_caisse[5]];
         }
         if ($semestre == 2) {
             $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
             $fond = [];
-            $caisse = [$somme_debit_banque["07"],$somme_debit_banque["08"],$somme_debit_banque["09"],$somme_debit_banque["10"],$somme_debit_banque["11"],$somme_debit_banque["12"]];
-            $sold = [];
-
-            for ($i = 0; $i < 6; $i++) {
-                // Génère des valeurs aléatoires pour chaque tableau dans des plages similaires
-                $fond[] = rand(100, 350);    // Valeurs aléatoires entre 100 et 350
-                $caisse[] = rand(120, 300);  // Valeurs aléatoires entre 120 et 300
-                $sold[] = rand(130, 310);    // Valeurs aléatoires entre 130 et 310
-            }
+            $caisse = [$somme_debit_banque[6],$somme_debit_banque[7],$somme_debit_banque[8],$somme_debit_banque[9],$somme_debit_banque[10],$somme_debit_banque[11]];
+            $sold = [$somme_debit_caisse[6],$somme_debit_caisse[7],$somme_debit_caisse[8],$somme_debit_caisse[9],$somme_debit_caisse[10],$somme_debit_caisse[11]];
         }
 
 

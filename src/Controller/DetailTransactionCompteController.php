@@ -25,8 +25,6 @@ final class DetailTransactionCompteController extends AbstractController
     #[Route('/new', name: 'app_detail_transaction_compte_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        //dump("tonga ato anaty controller");
-        //dump($request);
         dump($request);
         $detailTransactionCompte = new DetailTransactionCompte();
         $form = $this->createForm(DetailTransactionCompteType::class, $detailTransactionCompte);

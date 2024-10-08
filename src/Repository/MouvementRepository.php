@@ -135,6 +135,50 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
     }*/
 
+
+
+    public function v_debit_caisse_mensuel(Exercice $exercice): ?array
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+
+        // Script SQL
+        $script = "select total,mois_operation,EVN_EXERCICE_ID from v_debit_caisse_mensuel where evn_exercice_id = :exercice";
+        try {
+            // Préparation et exécution de la requête
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+
+            // Récupération de tous les résultats
+            $results = $resultSet->fetchAllAssociative();
+
+            // Si on obtient des résultats
+            if (!empty($results)) {
+                // Initialisation du tableau des mois avec 0 comme valeur par défaut
+                $moisData = [ 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+                // Parcourir les résultats pour affecter les valeurs aux mois correspondants
+                foreach ($results as $result) {
+                    $mois = substr($result['MOIS_OPERATION'], 5, 2); // Récupère le mois (par exemple "09")
+                    $total = (float) $result['TOTAL']; // Convertit le total en float
+                    //dump("Mois=".$mois );
+
+                    $moisData[(int)$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
+                }
+                dump($moisData);
+                return $moisData; // Retourne le tableau des totaux par mois
+            }
+
+        } catch (\Exception $e) {
+            // Gestion des erreurs et affichage du message d'erreur
+            dump($e->getMessage());
+        }
+
+        // Retourne null en cas d'échec
+        return null;
+
+    }
     public function v_debit_banque_mensuel(Exercice $exercice): ?array
     {
         $entityManager = $this->getEntityManager();
@@ -159,28 +203,17 @@ class MouvementRepository extends ServiceEntityRepository
             // Si on obtient des résultats
             if (!empty($results)) {
                 // Initialisation du tableau des mois avec 0 comme valeur par défaut
-                $moisData = [
-                    '01' => 0.0,
-                    '02' => 0.0,
-                    '03' => 0.0,
-                    '04' => 0.0,
-                    '05' => 0.0,
-                    '06' => 0.0,
-                    '07' => 0.0,
-                    '08' => 0.0,
-                    '09' => 0.0,
-                    '10' => 0.0,
-                    '11' => 0.0,
-                    '12' => 0.0,
-                ];
+                $moisData = [ 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
                 // Parcourir les résultats pour affecter les valeurs aux mois correspondants
                 foreach ($results as $result) {
                     $mois = substr($result['MOIS_OPERATION'], 5, 2); // Récupère le mois (par exemple "09")
                     $total = (float) $result['TOTAL']; // Convertit le total en float
-                    $moisData[$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
-                }
+                    //dump("Mois=".$mois );
 
+                    $moisData[(int)$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
+                }
+                dump($moisData);
                 return $moisData; // Retourne le tableau des totaux par mois
             }
 

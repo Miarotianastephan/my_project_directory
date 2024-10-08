@@ -6,7 +6,6 @@ use App\Entity\DemandeType;
 use App\Repository\BanqueRepository;
 use App\Repository\ChequierRepository;
 use App\Repository\DemandeTypeRepository;
-use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
@@ -60,7 +59,10 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
-    public function valider_fond($id, MouvementRepository $mouvementRepository, DemandeTypeRepository $dm_type): Response
+    public function valider_fond($id,
+                                 MouvementRepository $mouvementRepository,
+                                 BanqueRepository $banqueRepository,
+                                 DemandeTypeRepository $dm_type): Response
     {
         $data = $dm_type->find($id);
 
@@ -73,19 +75,30 @@ class TresorierController extends AbstractController
         } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
+        $liste_banque = $banqueRepository->findAll();
 
         return $this->render('tresorier/deblocker_fond.html.twig',
-            ['demande_type' => $data, 'montant' => $solde_reste]
+            [
+                'demande_type' => $data, 'montant' => $solde_reste,
+                'banques' => $liste_banque
+            ]
         );
     }
 
     #[Route('/remettre_fond/{id}', name: 'tresorier.remettre_fond', methods: ['POST'])]
-    public function remettre_fond($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
+    public function remettre_fond(Request                  $request,
+                                                           $id,
+                                  LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
+        $banque_id = $data['banque'] ?? null;
+        $numero_cheque = $data['numero_cheque'] ?? null;
+        $beneficiaire = $data['beneficiaire'] ?? null;
+        $remettant = $data['remettant'] ?? null;
         $id_user_tresorier = $this->user->getId();
         // $id => ID du demande à débloqué de fonds 
         // $id_user_tresorier = ID qui devrait être un tresorier A VERIFIER APRES
-        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier); // Déblocage du fonds demandée
+        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier,$banque_id,$numero_cheque,$remettant,$beneficiaire); // Déblocage du fonds demandée
         // O_COMPTA
         // à compléter
         // fin O_COMPTA
