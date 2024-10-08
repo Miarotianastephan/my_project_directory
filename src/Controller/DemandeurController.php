@@ -12,9 +12,11 @@ use App\Service\ExerciceService;
 use CompteHierarchyService;
 use CompteIndex;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DemandeurController extends AbstractController
 {
@@ -82,6 +84,26 @@ class DemandeurController extends AbstractController
         return $this->render('/demandeur/demandeur_show.html.twig',
             ['demande_type' => $data, 'images' => $list_img]
         );
+    }
+
+    // Avoir le plan compte
+    #[Route(path: '/demandeur/find/all', name: 'demandeur.findplan', methods: ['GET'])]
+    public function findAllCompteDepense(PlanCompteRepository $planCompteRepo, SerializerInterface $serializer){
+        $data_mere = $planCompteRepo->findCompteDepense();
+        $jsonContent = $serializer->serialize($data_mere, 'json');
+        return new JsonResponse($jsonContent, 200, [], true);
+    }
+
+
+    #[Route(path: 'demandeur/update/save', name: 'demandeur.update.save', methods: ['POST'])]
+    public function updateDemandeFonds(Request $request, DemandeTypeService $demandeTypeService){
+        $id_demande_fonds = $request->request->get('id_demande_fonds');
+        // $demande_date = $request->request->get('demande_date');
+        $demande_montant_nouveau = $request->request->get('demande_montant_nouveau');
+        $id_compte_depense = $request->request->get('id_compte_depense');
+        $response_data = $demandeTypeService->updateDemandeFonds($id_demande_fonds, $demande_montant_nouveau, $id_compte_depense);
+        dump($response_data);
+        return new JsonResponse($response_data);
     }
 
 }

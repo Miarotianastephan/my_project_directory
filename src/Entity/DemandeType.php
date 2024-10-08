@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Monolog\DateTimeImmutable;
 use Symfony\Component\Validator\Constraints\Date;
+use InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: DemandeTypeRepository::class)]
 class DemandeType
@@ -113,11 +114,20 @@ class DemandeType
         return $this->dm_montant;
     }
 
-    public function setDmMontant(float $dm_montant): static
+    public function setDmMontant(float $dm_montant)
     {
-        $this->dm_montant = $dm_montant;
-
-        return $this;
+        $dm_montant = trim($dm_montant);
+        if(($dm_montant == null) || (strlen($dm_montant)==0)){
+            throw new InvalidArgumentException("Le montant insérer est vide !");
+        }
+        if($dm_montant <= 0){
+            throw new InvalidArgumentException("Montant négatif ou nulle non valide !");
+        }
+        if($this->dm_montant != $dm_montant){
+            $this->dm_montant = $dm_montant;
+            return $this;
+        }
+        return false;
     }
 
     public function getEntityCode(): ?PlanCompte

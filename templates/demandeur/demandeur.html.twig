@@ -6,6 +6,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset("js/xhr.js") }}"></script>
+    <script src="{{ asset("js/scr/demande/scr_demande_modal.js") }}"></script>
 {% endblock %}
 
 
@@ -15,7 +16,7 @@
 {% endblock %}
 
 {% block page_main_content %}
-    <div class="row">
+    <div class="row">   
         
         <div class="col-md-12">
             <div class="card">
@@ -49,22 +50,22 @@
                             {# Data #}
                             <tbody id="bodyList">
                             {% for demande_type in logs_demandes %}
-                                <tr class="col-12">
-                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
-                                    <td class="col-1">{{ demande_type.RefDemande }}</td>
-                                    <td class="col-2">{{ demande_type.demande.libelle }}</td>
-                                    <td class="text-end col-2">
+                                <tr class="col-12" id="{{demande_type.id}}">
+                                    <td id="demande_date" class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td id="demande_ref" class="col-1">{{ demande_type.RefDemande }}</td>
+                                    <td id="demande_libelle" class="col-2">{{ demande_type.getPlanCompte.getCptLibelle }}</td>
+                                    <td id="demande_montant" class="text-end col-2">
                                         <div>
                                             {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                         </div>
                                     </td>
-                                    <td>{{ demande_type.getEtatDemandeObj().getEtatLibelle() }}</td>
+                                    <td id="demande_etat">{{ demande_type.getEtatDemandeObj().getEtatLibelle() }}</td>
                                     <td class="col-4">
                                         {% if demande_type.isAttenteModification() == true %}
                                         <div class="col-12 d-flex gap-5">
                                             <div class="col-8 text-center">
-                                                <a class="btn btn-label-warning btn-sm">Modifier</a>
-                                        </div>
+                                                <a class="btn btn-label-warning btn-sm update"  data-bs-toggle="modal" data-bs-target="#myModalUpdate">Modifier</a>
+                                            </div>
                                         {% endif %}
                                             <div class="col-3">
                                                 <button style="width: 100%;height: 100%;border: none;background-color: transparent">
@@ -88,6 +89,6 @@
                 </div>
             </div>
         </div>
-
+        {{ include('demandeur/_demandeur_modal.hmtl.twig') }}
     </div>    
 {% endblock %}

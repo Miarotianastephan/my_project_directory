@@ -127,7 +127,7 @@ class TresorierController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $date = $data['date_dm'] ?? null;
-        $caisse = ['caisse'] ?? null;
+        $caisse = $data['caisse'] ?? null;
         $entite = $data['entite'] ?? null;
         $montant = $data['montant'] ?? null;
         $banque = $data['banque'] ?? null;

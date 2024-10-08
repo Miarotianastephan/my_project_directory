@@ -4,8 +4,10 @@ namespace App\Service;
 
 use App\Entity\DemandeType;
 use App\Entity\Evenement;
+use App\Entity\LogDemandeType;
 use App\Entity\Mouvement;
 use App\Entity\Utilisateur;
+use App\Repository\CompteMereRepository;
 use App\Repository\DemandeRepository;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailTransactionCompteRepository;
@@ -16,12 +18,14 @@ use App\Repository\PlanCompteRepository;
 use App\Repository\TransactionTypeRepository;
 use App\Repository\UtilisateurRepository;
 use DateTime;
+use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DemandeTypeService
 {
 
+    public $cptMereRepo;
     public $demandeTypeRepository;
     public $demandeRepository;
     public $planCompteRepo;
@@ -33,6 +37,7 @@ class DemandeTypeService
     private $detailTrsRepo;
 
     public function __construct(
+        CompteMereRepository $compteMereRepo,
         PlanCompteRepository $plan_compte_repo,
         DemandeRepository $demande_repo,
         DemandeTypeRepository $dm_typeRepo, 
@@ -43,6 +48,7 @@ class DemandeTypeService
         TransactionTypeRepository $trsTypeRepo, 
         DetailTransactionCompteRepository $detailTrsRepo) 
     {
+        $this->cptMereRepo = $compteMereRepo;
         $this->demandeTypeRepository = $dm_typeRepo;
         $this->user = $security->getUser(); 
         $this->demandeRepository = $demande_repo;
@@ -240,6 +246,69 @@ class DemandeTypeService
                 return "APR/".date('Y')."/".$Id;
                 break;
         }
+    }
+
+    // Mis à jour de l'état d'une demande 
+    public function updateDemandeFonds($id_demande_fonds, $demande_montant_nouveau, $id_compte_depense){
+        $em = $this->demandeTypeRepository->getEntityManager();
+        $em->beginTransaction();
+        try {
+            $status_update_compte = false;
+
+            $demande_fonds = $this->demandeTypeRepository->find($id_demande_fonds);             // trouver le demande actuel
+            if($demande_montant_nouveau != "non"){
+                $demande_montant_nouveau = (float)$demande_montant_nouveau; // pour avoir un montant zéro ou null
+            }
+            if($demande_montant_nouveau == "non"){                          // on doit vérifier si la valeur du montant est non 
+                $demande_montant_nouveau = $demande_fonds->getDmMontant();
+            }
+            $status_update_montant = $demande_fonds->setDmMontant($demande_montant_nouveau);    // update nouveau montant
+            
+            if((int)($id_compte_depense) != -1){                                                // si on change
+                $compte_depense_nouveau = $this->planCompteRepo->find($id_compte_depense);      // nouveau compte dépense 
+                $demande_fonds->setPlanCompte($compte_depense_nouveau);
+                $status_update_compte = true;
+            }
+            
+            if($status_update_montant == false && $status_update_compte == false){
+                return [
+                    "status" => true,
+                    "update" => false,
+                    "message" => "Aucun changement effectué !",
+                ];
+            }
+            $user_sg = $demande_fonds->getUtilisateur();
+            // Insérer Attente modification dans Historique des demandes
+            $log_dm = new LogDemandeType();
+            $log_dm->setDmEtat($this->etatDmRepo, $demande_fonds->getDmEtat());                  // HIstorisation du demandes OK_ETAT
+            $log_dm->setUserMatricule($user_sg->getUserMatricule());
+            $log_dm->setDemandeType($demande_fonds);
+            $log_dm->setLogDmDate(new DateTime());
+            $em->persist($log_dm);
+
+            // update du demande
+            $demande_fonds->setDmEtat($this->etatDmRepo, 101);                                  // Modication de létat du demandes
+            $demande_fonds->setUtilisateur($this->user);                                        // ajout de l'utilisateur 
+            $demande_fonds->setDmDate($log_dm->getLogDmDate());                                       // MAJ de dm_type la base de données
+            
+            $em->flush();
+            $em->commit();
+
+            // Création de logs et
+
+            return [
+                "status" => true,
+                "update" => true,
+                "message" => sprintf('Modification réussi'),
+            ];
+        } catch (InvalidArgumentException $th) { // En cas d'erreur
+            $em->rollback();
+            return [
+                'status' => false,
+                'message' => $th->getMessage()
+            ];
+        }   
+        
     }
 
 
