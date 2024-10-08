@@ -120,51 +120,6 @@ class TresorierController extends AbstractController
         ]);
     }
 
-    #[Route('/ajout_approvisionnement', name: 'tresorier.ajout_approvisionnement', methods: ['POST'])]
-    public function ajout_approvisionnement(Request               $request,
-                                            DemandeTypeRepository $demandeTypeRepository,
-                                            ChequierRepository    $chequierRepository): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $date = $data['date_dm'] ?? null;
-        $caisse = $data['caisse'] ?? null;
-        $entite = $data['entite'] ?? null;
-        $montant = $data['montant'] ?? null;
-        $banque = $data['banque'] ?? null;
-        $chequier = $data['chequier'] ?? null;
-
-        // Validation des données
-        if (!$date) {
-            return new JsonResponse(['success' => false, 'message' => "La date est nécessaire"]);
-        }
-        if (!$caisse) {
-            return new JsonResponse(['success' => false, 'message' => "La situation de caisse est nécessaire"]);
-        }
-        if (!$entite) {
-            return new JsonResponse(['success' => false, 'message' => "Le choix d'entité est nécessaire"]);
-        }
-        if (!$montant) {
-            return new JsonResponse(['success' => false, 'message' => "Le montant est nécessaire"]);
-        }
-        if (!$banque) {
-            return new JsonResponse(['success' => false, 'message' => "Le choix de banque est nécessaire"]);
-        }
-        if (!$chequier) {
-            return new JsonResponse(['success' => false, 'message' => "Le choix de chéquier est nécessaire"]);
-        }
-
-        $reponse = $demandeTypeRepository->ajout_approvisionnement($entite, $banque, $chequier, $montant, $chequierRepository);
-        $reponse = json_decode($reponse->getContent(), true);
-
-        return new JsonResponse(
-            [
-                'success' => $reponse['success'],
-                'message' => $reponse['message'],
-                'url' => $this->generateUrl('tresorier.form_approvisionnement')
-            ]
-        );
-    }
-    
     #[Route('/save_approvisionnement', name: 'tresorier.save_approvisionnement', methods: ['POST'])]
     public function save_approvisionnement(Request               $request,
                                             ExerciceRepository $exoRepository,
@@ -177,7 +132,6 @@ class TresorierController extends AbstractController
         
         // les données :
         $plan_cpt_debit_id = $data_parametre['id_plan_compte_debit'];
-        // $plan_cpt_motif_id = $data_parametre['id_plan_comptable_motif'];
         $montant_demande = $data_parametre['dm_montant'];
         $paiement = $data_parametre['mode_paiement'];
 
@@ -190,5 +144,15 @@ class TresorierController extends AbstractController
         dump($response_data);
         return $this->redirectToRoute('tresorier.form_approvisionnement');
     }
+
+    #[Route('/liste_approvisionnement', name: 'tresorier.liste_approvisionnement', methods: ['GET'])]
+    public function liste_approvisionnement(DemandeTypeRepository $demandeRepository): Response
+    {
+        $liste_approvisio = $demandeRepository->findAllAppro();
+        return $this->render('tresorier/liste_approvisionnement.html.twig', [
+            'liste_approvisio' => $liste_approvisio,
+        ]);
+    }
+    
 
 }

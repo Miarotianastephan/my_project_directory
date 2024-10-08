@@ -97,4 +97,26 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();    // Renvoie null si aucun résultat
     }
+
+    // Pour avoir les demandes en atttentes de validation par le Secretaire Generale
+    public function findDemandeAttentes(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.dm_etat = :etat100')
+            ->orwhere('d.dm_etat = :etat101')
+            ->setParameter('etat100', 100)
+            ->setParameter('etat101', 101)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findAllAppro(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.demande', 'demande')
+            ->where('demande.dm_code = :codeDemande')
+            ->setParameter('codeDemande', 20)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

@@ -30,9 +30,10 @@ class SGController extends AbstractController
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
 
-        $liste_demande_a_modifier = $dm_Repository->findByEtat(100);
-        return $this->render('sg/index.html.twig', [//'demande_types' => $dm_Repository->findAll()->where($dm_Repository == 10)
-            'demande_types' => $dm_Repository->findByEtat(100)]);
+        $demandes_attente_validation = $dm_Repository->findDemandeAttentes();
+        return $this->render('sg/index.html.twig',[
+            'demande_types' => $demandes_attente_validation
+        ]);
     }
 
 

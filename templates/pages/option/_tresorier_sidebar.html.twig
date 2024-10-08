@@ -21,6 +21,27 @@
     </div>
 </li>
 <li class="nav-item">
+    <a data-bs-toggle="collapse" href="#appro">
+        <i class="fas fa-th-list"></i>
+        <p>Gestion encaissement</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="appro">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('tresorier.liste_approvisionnement') }}">
+                    <span class="sub-item">Lister</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('tresorier.form_approvisionnement') }}">
+                    <span class="sub-item">Approvisionner</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
     <a data-bs-toggle="collapse" href="#etat_financier">
         <i class="fas fa-th-list"></i>
         <p>Etat financier</p>
@@ -36,11 +57,6 @@
             <li>
                 <a href="{{ path('export.etat') }}">
                     <span class="sub-item">Etat financier</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ path('tresorier.form_approvisionnement') }}">
-                    <span class="sub-item">Approvisionnement</span>
                 </a>
             </li>
         </ul>

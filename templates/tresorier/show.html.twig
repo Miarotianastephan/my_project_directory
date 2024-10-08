@@ -23,7 +23,9 @@
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
                         <button style="border: none;background-color: transparent; text-align: start">
-                            <a href="{{ path('tresorier.liste_demande_en_attente') }}">
+                            <a href="{{ (demande_type.demande.getDmCode() == 10) ? 
+                                path('tresorier.liste_demande_en_attente') : 
+                                path('tresorier.liste_approvisionnement') }}">
                                 {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
                             </a>
                         </button>
@@ -89,12 +91,14 @@
                         </div>
                     </div>
                 </div>
+                {% if (demande_type.demande.getDmCode() == 10) %}
                 <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
                        class="btn btn-danger btn">Annuler</a>
                     <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
                        class="btn btn-success btn">Comptabiliser</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
