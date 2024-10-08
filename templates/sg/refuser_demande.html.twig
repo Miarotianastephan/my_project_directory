@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    SG
+    Section SG
 {% endblock %}
 {% block page_subtitle %}
-    {# Liste des demandes en attente de validation #}
+    <label for="commentaire">
+        Veuillez préciser le motif de refus de la demande.
+    </label>
 {% endblock %}
 
 {% block page_main_content %}
@@ -40,6 +42,7 @@
             </form>
         </div>
     </div>
+    {{ include('include/_message_modal.html.twig') }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

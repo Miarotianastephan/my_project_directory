@@ -141,7 +141,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Utilisateur associé à la demande introuvable.'
                 ]);
             }
-            if ($commentaire_data === null) {
+            if ($commentaire_data === null || empty(trim($commentaire_data))) {
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Le message ne peut pas être vide.'
@@ -221,7 +221,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Utilisateur associé à la demande introuvable.'
                 ]);
             }
-            if ($commentaire_data === null) {
+            if ($commentaire_data === null || empty(trim($commentaire_data))) {
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Le message ne peut pas être vide.'

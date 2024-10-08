@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    SG
+    Section SG
 {% endblock %}
 {% block page_subtitle %}
-    Détail demande de décaissemnt de fonds
+    Ceci est une demande en attente de décaissement de fonds.
 {% endblock %}
 
 {% block page_main_content %}
@@ -14,11 +14,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">À propos de la demande</h4>
-                    <div class="text-end">
-                        <h3>
-                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
-                        </h3>
-                    </div>
+                    {{ include('include/_budget_et_solde.html.twig') }}
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
@@ -66,10 +62,6 @@
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg">Personne concernée:</label>
                             <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Observation:</label>
-                            <div class="col form-control">{{ 'Petite observation'  }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->

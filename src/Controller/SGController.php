@@ -46,13 +46,15 @@ class SGController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
+        $compte_mere = $data->getPlanCompte()->getCompteMere();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
         if ($solde_debit == null || $solde_CREDIT == null) {
             $solde_reste = 0;
         } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
+        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste,'budget' => $budget]);
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
@@ -68,7 +70,7 @@ class SGController extends AbstractController
         $rep = $logDemandeTypeRepository->ajoutModifierDemande($id, $id_user_sg, $commentaire_data);
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {
-            return new JsonResponse(['success' => true, 'message' => 'Pas de commentaire reçu ', 'path' => $this->generateUrl('SG.liste_demande_en_attente')]);
+            return new JsonResponse(['success' => true, 'message' => $data['message'], 'path' => $this->generateUrl('SG.liste_demande_en_attente')]);
         } else {
             return new JsonResponse(['success' => false, 'message' => $data['message']]);
         }
@@ -83,13 +85,14 @@ class SGController extends AbstractController
         $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement()) ;
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
-
+        $compte_mere = $data->getPlanCompte()->getCompteMere();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
         if ($solde_debit == null || $solde_CREDIT == null) {
             $solde_reste = 0;
         } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
+        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
     }
 
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]
@@ -103,12 +106,14 @@ class SGController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
+        $compte_mere = $data->getPlanCompte()->getCompteMere();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
         if ($solde_debit == null || $solde_CREDIT == null) {
             $solde_reste = 0;
         } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste]);
+        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
     }
 
     #[Route('/demande/refuser/{id}', name: 'SG.refus_demande_en_attente', methods: ['GET'])]
@@ -145,7 +150,7 @@ class SGController extends AbstractController
         if ($data['success'] == true) {
             return new JsonResponse(['success' => true, 'message' => 'Pas de commentaire reçu ', 'path' => $this->generateUrl('SG.liste_demande_en_attente')]);
         } else {
-            return new JsonResponse(['success' => true, 'message' => 'Pas de commentaire reçu ']);
+            return new JsonResponse(['success' => false, 'message' => $data['message']]);
         }
 
     }

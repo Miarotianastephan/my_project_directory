@@ -44,6 +44,8 @@ class DetailBudgetRepository extends ServiceEntityRepository
         return $data;
     }
 
+
+
     public function findByExercice(Exercice $exercice): array
     {
         $data = $this->createQueryBuilder('d')

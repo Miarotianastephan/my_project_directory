@@ -31,20 +31,24 @@ class ComptableController extends AbstractController
         $somme_debit_banque = $mouvementRepository->v_debit_banque_mensuel($exercice);
         $somme_debit_caisse = $mouvementRepository->v_debit_caisse_mensuel($exercice);
         //dump($somme_debit_banque);
+        $message = null;
+        if ($exercice || $somme_debit_banque == null || $somme_debit_caisse == null) {
+            $message = "Dashboard invalide";
+        }
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
         // Ceci est juste un exemple
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
-            $caisse = [$somme_debit_banque[0],$somme_debit_banque[1],$somme_debit_banque[3],$somme_debit_banque[4],$somme_debit_banque[5]];
-            $sold = [$somme_debit_caisse[0],$somme_debit_caisse[1],$somme_debit_caisse[3],$somme_debit_caisse[4],$somme_debit_caisse[5]];
+            $caisse = [$somme_debit_banque[0] ?? 0,$somme_debit_banque[1] ?? 0,$somme_debit_banque[3] ?? 0,$somme_debit_banque[4] ?? 0,$somme_debit_banque[5] ?? 0];
+            $sold = [$somme_debit_caisse[0] ?? 0,$somme_debit_caisse[1] ?? 0,$somme_debit_caisse[3] ?? 0,$somme_debit_caisse[4] ?? 0,$somme_debit_caisse[5] ?? 0];
         }
         if ($semestre == 2) {
             $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
             $fond = [];
-            $caisse = [$somme_debit_banque[6],$somme_debit_banque[7],$somme_debit_banque[8],$somme_debit_banque[9],$somme_debit_banque[10],$somme_debit_banque[11]];
-            $sold = [$somme_debit_caisse[6],$somme_debit_caisse[7],$somme_debit_caisse[8],$somme_debit_caisse[9],$somme_debit_caisse[10],$somme_debit_caisse[11]];
+            $caisse = [$somme_debit_banque[6] ?? 0,$somme_debit_banque[7] ?? 0,$somme_debit_banque[8] ?? 0,$somme_debit_banque[9] ?? 0,$somme_debit_banque[10] ?? 0,$somme_debit_banque[11] ?? 0];
+            $sold = [$somme_debit_caisse[6] ?? 0,$somme_debit_caisse[7] ?? 0,$somme_debit_caisse[8] ?? 0,$somme_debit_caisse[9] ?? 0,$somme_debit_caisse[10] ?? 0,$somme_debit_caisse[11] ?? 0];
         }
 
 
@@ -65,7 +69,8 @@ class ComptableController extends AbstractController
             'caisse' => $caisse,
             'sold' => $sold,
             'annee' => $annee,
-            'semestre' => $semestre
+            'semestre' => $semestre,
+            'message' => $message
         ]);
     }
 

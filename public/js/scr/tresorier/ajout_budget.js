@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getFormData() {
         return {
-            exercice: document.getElementById('exercice').value,
+            exercice: document.getElementById('exercice_id').value,
             plan_cpt: document.getElementById('plan_cpt').value,
             montant: document.getElementById('montant').value
         };

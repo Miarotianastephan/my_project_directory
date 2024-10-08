@@ -335,6 +335,7 @@ delete from demande_type;
 delete from detail_transaction_compte;
 delete from transaction_type;
 delete from plan_compte;
+delete from detail_budget;
 delete from compte_mere;
 
 commit;
