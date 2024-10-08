@@ -74,7 +74,11 @@ class TresorierController extends AbstractController
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        if ($budget){
+            $budget = $budget->getBudgetMontant();
+        }
+
         if ($solde_debit == null || $solde_CREDIT == null) {
             $solde_reste = 0;
         } else {
