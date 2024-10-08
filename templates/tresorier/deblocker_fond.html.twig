@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    Trésorier
+    Section Trésorier
 {% endblock %}
 {% block page_subtitle %}
     {# Liste des demandes en attente de validation #}
@@ -16,11 +16,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">REMETTRE LE FOND</h4>
-                        <div class="text-end">
-                            <h3>
-                                Montant restant : {{ montant|number_format(2, '.', ' ') }} Ar
-                            </h3>
-                        </div>
+                        {{ include('include/_budget_et_solde.html.twig') }}
                     </div>
                     <div class="card-body">
                         <div class="col px-3 d-flex flex-column gap-3">

@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    Tresorier
+    Section Tresorier
 {% endblock %}
 {% block page_subtitle %}
-    {# Liste des demandes en attente de validation #}
+     Demande pour comptabilisation. Veuillez verifier chaque information.
 {% endblock %}
 
 {% block page_main_content %}
@@ -14,11 +14,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">A propos de la demande</h4>
-                    <div class="text-end">
-                        <h3>
-                            Montant restant : {{ solde_reste|number_format(2, '.', ' ') }} Ar
-                        </h3>
-                    </div>
+                    {{ include('include/_budget_et_solde.html.twig') }}
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">

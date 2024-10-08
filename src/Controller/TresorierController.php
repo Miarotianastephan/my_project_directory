@@ -6,6 +6,7 @@ use App\Entity\DemandeType;
 use App\Repository\BanqueRepository;
 use App\Repository\ChequierRepository;
 use App\Repository\DemandeTypeRepository;
+use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
@@ -41,7 +42,7 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager, DetailDemandePieceRepository $demandePieceRepository): Response
+    public function show($id, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager,DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
@@ -50,19 +51,21 @@ class TresorierController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
+        $compte_mere = $data->getPlanCompte()->getCompteMere();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
         if ($solde_debit == null || $solde_CREDIT == null) {
             $solde_reste = 0;
         } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste]);
+        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste,'budget'=>$budget]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
     public function valider_fond($id,
                                  MouvementRepository $mouvementRepository,
                                  BanqueRepository $banqueRepository,
-                                 DemandeTypeRepository $dm_type): Response
+                                 DemandeTypeRepository $dm_type,DetailBudgetRepository $detailBudgetRepository): Response
     {
         $data = $dm_type->find($id);
 
@@ -70,6 +73,8 @@ class TresorierController extends AbstractController
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
+        $compte_mere = $data->getPlanCompte()->getCompteMere();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
         if ($solde_debit == null || $solde_CREDIT == null) {
             $solde_reste = 0;
         } else {
@@ -79,8 +84,9 @@ class TresorierController extends AbstractController
 
         return $this->render('tresorier/deblocker_fond.html.twig',
             [
-                'demande_type' => $data, 'montant' => $solde_reste,
-                'banques' => $liste_banque
+                'demande_type' => $data, 'solde_reste' => $solde_reste,
+                'banques' => $liste_banque,
+                'budget' => $budget,
             ]
         );
     }

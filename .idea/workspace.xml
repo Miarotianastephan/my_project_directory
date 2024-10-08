@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tresorier/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/show.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,7 +264,7 @@
       <workItem from="1728275254184" duration="43000" />
       <workItem from="1728275313153" duration="4054000" />
       <workItem from="1728279407495" duration="15461000" />
-      <workItem from="1728360903295" duration="18124000" />
+      <workItem from="1728360903295" duration="18545000" />
     </task>
     <servers />
   </component>
