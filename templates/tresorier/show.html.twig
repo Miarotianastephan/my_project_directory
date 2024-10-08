@@ -67,10 +67,7 @@
                             <label class="col-4 form-control-lg">Personne concernée:</label>
                             <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
                         </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Observation:</label>
-                            <div class="col form-control">{{ 'Petite observation'  }}</div>
-                        </div>
+
                         <div class="col-12 d-flex flex-row">
                             <!-- <div class="col-3">Les pièces jointes:</div> -->
                             {% if images|length  != 0 %}
@@ -83,6 +80,8 @@
                                 </div>
                             {% endif %}
                         </div>
+                        <div class="btn btn-primary px-md-5" id="btn-observation"> Ajouter une observation</div>
+
                     </div>
                 </div>
                 <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
@@ -94,6 +93,8 @@
             </div>
         </div>
     </div>
+    <!-- Modal pour ajouter une observation -->
+    {{ include('include/_observation.html.twig') }}
 
     <!-- Modal pour les pièces jointes -->
     <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">

@@ -1,0 +1,30 @@
+<!-- Modal pour mise à jour du montant -->
+<div class="modal fade" id="observationtModal" tabindex="-1" aria-labelledby="observationModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="observation"  method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="observationModalLabel">Observation à faire à propos de la demande</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body col-12">
+                    <div class="col-10 d-flex flex-row">
+                        <label class="col"> Exercice: </label>
+                        <div class="col-6 form-control-sm" id="new-exercice">Reférence de l'exercice</div>
+                    </div>
+                    <div class="col-10 d-flex flex-row">
+                        <label class="col" for="observation"> Observation </label>
+                        <textarea class="form-control" rows="3" id="observation" name="observation" ></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="non" name="non" data-bs-dismiss="modal" class="btn btn-danger">Annuler
+                    </button>
+                    <button type="button" id="oui" name="oui" class="btn btn-success">Valider</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
