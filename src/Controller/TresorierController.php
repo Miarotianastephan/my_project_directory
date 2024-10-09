@@ -11,6 +11,7 @@ use App\Repository\DetailDemandePieceRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\MouvementRepository;
+use App\Repository\ObservationDemandeRepository;
 use App\Repository\PlanCompteRepository;
 use App\Service\DemandeTypeService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,7 +43,9 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager,DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
+    public function show($id,
+                         ObservationDemandeRepository $observationDemandeRepository,
+                         MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager,DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
@@ -64,12 +67,18 @@ class TresorierController extends AbstractController
         else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
+
+        $observations = $observationDemandeRepository->findByRefdemande($data->getRefDemande());
+        if ($observations == null) {
+            $observations = [];
+        }
         return $this->render('tresorier/show.html.twig', [
             'demande_type' => $data,
             'images' => $list_img,
             'solde_reste' => $solde_reste,
             'budget'=>$budget,
             'budget_reste' => $budget-$solde_debit,
+            'observations' =>$observations
         ]);
     }
 

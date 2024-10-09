@@ -32,3 +32,5 @@ function loadPdfFile(filePath) {
     var pdfModal = new bootstrap.Modal(document.getElementById('pdfModal'));
     pdfModal.show();
 }
+
+

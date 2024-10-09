@@ -8,6 +8,7 @@ use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\MouvementRepository;
+use App\Repository\ObservationDemandeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -83,7 +84,11 @@ class SGController extends AbstractController
     }
 
     #[Route('/{id}', name: 'SG.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, MouvementRepository $mouvementRepository, DemandeTypeRepository $dm_Repository, DetailDemandePieceRepository $demandePieceRepository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
+    public function show($id,
+                         MouvementRepository $mouvementRepository,
+                         DemandeTypeRepository $dm_Repository,
+                         DetailDemandePieceRepository $demandePieceRepository,
+                         DetailBudgetRepository $detailBudgetRepository): Response
     {
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
@@ -103,13 +108,15 @@ class SGController extends AbstractController
         } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
+
+
         //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         return $this->render('sg/show.html.twig', [
             'demande_type' => $data,
             'images' => $list_img,
             'solde_reste' => $solde_reste,
             'budget' => $budget,
-            'budget_reste' => $budget-$solde_debit,
+            'budget_reste' => $budget - $solde_debit,
         ]);
     }
 
@@ -141,7 +148,7 @@ class SGController extends AbstractController
             'demande_type' => $data,
             'solde_reste' => $solde_reste,
             'budget' => $budget,
-            'budget_reste' => $budget-$solde_debit,
+            'budget_reste' => $budget - $solde_debit,
         ]);
     }
 

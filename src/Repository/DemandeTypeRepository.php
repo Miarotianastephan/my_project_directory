@@ -31,6 +31,15 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByReference(string $reference): ?array
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.ref_demande = :ref')
+            ->setParameter('ref', $reference)
+            ->getQuery()
+            ->getResult();
+    }
     
     public function ajout_approvisionnement(int                $entite_id,
                                             int                $banque_id,

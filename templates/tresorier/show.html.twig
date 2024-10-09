@@ -5,7 +5,7 @@
     Section Tresorier
 {% endblock %}
 {% block page_subtitle %}
-     Demande pour comptabilisation. Veuillez verifier chaque information.
+    Demande pour comptabilisation. Veuillez verifier chaque information.
 {% endblock %}
 
 {% block page_main_content %}
@@ -16,86 +16,138 @@
                     <h4 class="card-title">A propos de la demande</h4>
                     {{ include('include/_budget_et_solde.html.twig') }}
                 </div>
-                <div class="card-body col-12 px-md-5 d-flex flex-row">
-                    <div class="col-1">
-                        <button style="border: none;background-color: transparent; text-align: start">
-                            <a href="{{ (demande_type.demande.getDmCode() == 10) ? 
-                                path('tresorier.liste_demande_en_attente') : 
+                <div class="card-body col-12 px-md-5 d-flex flex-column">
+                    <div class="col-12 px-md-5 d-flex flex-row">
+                        <div class="col-1">
+                            <button style="border: none;background-color: transparent; text-align: start">
+                                <a href="{{ (demande_type.demande.getDmCode() == 10) ?
+                                path('tresorier.liste_demande_en_attente') :
                                 path('tresorier.liste_approvisionnement') }}">
-                                {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
-                            </a>
-                        </button>
-                    </div>
-                    <div class="col px-3 d-flex flex-column gap-3">
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg"> Rérérence: </label>
-                            <div class="col form-control"> {{ demande_type.RefDemande }} </div>
+                                    {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
+                                </a>
+                            </button>
                         </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg"> Validateur demande </label>
-                            <div class="col form-control">
-                                {{ demande_type.utilisateur.UserMatricule }}
+                        <div class="col px-3 d-flex flex-column gap-3">
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg"> Rérérence: </label>
+                                <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Date de la demande: </label>
-                            <div class="col form-control">
-                                {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de demande: </label>
-                            <div class="col form-control">
-                                {{ demande_type.demande.libelle }}
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Motif de la demande: </label>
-                            <div class="col form-control">
-                                {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Montant de la demande: </label>
-                            <div class="col form-control">
-                                {{ demande_type.DmMontant|number_format(5, '.', ' ') }} Ar
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de paiement:</label>
-                            <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Personne concernée:</label>
-                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Observation:</label>
-                            <div class="col form-control">{{ 'Petite observation'  }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <!-- <div class="col-3">Les pièces jointes:</div> -->
-                            {% if images|length  != 0 %}
-                                <div class="col">
-                                    <!-- Bouton pour ouvrir le modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#fileModal">
-                                        Voir les pièces jointes
-                                    </button>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg"> Validateur demande </label>
+                                <div class="col form-control">
+                                    {{ demande_type.utilisateur.UserMatricule }}
                                 </div>
-                            {% endif %}
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Date de la demande: </label>
+                                <div class="col form-control">
+                                    {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Type de demande: </label>
+                                <div class="col form-control">
+                                    {{ demande_type.demande.libelle }}
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Motif de la demande: </label>
+                                <div class="col form-control">
+                                    {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Montant de la demande: </label>
+                                <div class="col form-control">
+                                    {{ demande_type.DmMontant|number_format(5, '.', ' ') }} Ar
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Type de paiement:</label>
+                                <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Personne concernée:</label>
+                                <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Observation:</label>
+                                <div class="col form-control">
+                                    <ul>
+
+                                        {% for observation in observations  %}
+                                            <li>
+                                                {{ observation }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <!-- <div class="col-3">Les pièces jointes:</div> -->
+                                {% if images|length  != 0 %}
+                                    <div class="col">
+                                        <!-- Bouton pour ouvrir le modal -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#fileModal">
+                                            Voir les pièces jointes
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
+                    <button id="btn-observation" class="btn px-md-5 col-12 btn-primary">Ajouter une observation</button>
+
                 </div>
                 {% if (demande_type.demande.getDmCode() == 10) %}
-                <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-danger btn">Annuler</a>
-                    <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
-                       class="btn btn-success btn">Comptabiliser</a>
-                </div>
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
+                           class="btn btn-danger btn">Annuler</a>
+                        <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
+                           class="btn btn-success btn">Comptabiliser</a>
+                    </div>
                 {% endif %}
             </div>
+        </div>
+    </div>
+
+    <!-- Modal ajout observation -->
+    <div class="modal fade" id="observationModal" tabindex="-1" aria-labelledby="observationModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="observation_form" action="{{ path('app_ajout_observation') }}"
+                  method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="observationModalLabel">Votre observation à propos de la demande</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body col-12">
+                        <div class="form-group col">
+                            <label for="ref_demande" class="col"> Référence de la demande: </label>
+                            <input type="text" id="ref_demande" name="ref_demande" class="col-6 form-control"
+                                   value="{{ demande_type.RefDemande }}" readonly>
+                        </div>
+                        <div class="form-group col">
+                            <label for="exercice" class="col"> Exercice: </label>
+                            <input id="exercice" name="exercice" class="col-6 form-control"
+                                   value="{{ demande_type.Exercice }}" readonly>
+                        </div>
+                        <div class="form-group col">
+                            <label for="observation" class="col">Observation:</label>
+                            <textarea id="observation" name="observation" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="annuler" name="non" data-bs-dismiss="modal" class="btn btn-danger">
+                            annuler
+                        </button>
+                        <button type="button" id="valider" name="valider" class="btn btn-success">valider</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -205,4 +257,88 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset("js/scr/tresorier/show.js") }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Récupération du formulaire
+            const formulaire = document.getElementById("observation_form");
+
+            // Récupération du bouton pour afficher le modal
+            const btnObservation = document.getElementById("btn-observation");
+
+            // Récupération du modal
+            const observationModal = new bootstrap.Modal(document.getElementById("observationModal"));
+
+            // Gestionnaire de clic sur le bouton "Ajouter une observation"
+            btnObservation.addEventListener("click", function () {
+                // Affichage du modal
+                observationModal.show();
+            });
+
+            // Gestion du bouton "Valider" dans le modal
+            const btnValider = document.getElementById("valider");
+            btnValider.addEventListener("click", function () {
+                // Récupération des données du formulaire
+                const refDemande = document.getElementById("ref_demande").value;
+                const exercice = document.getElementById("exercice").value;
+                const observation = document.getElementById("observation").value;
+
+
+                fetch(formulaire.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        ref_demande: refDemande,
+                        exercice: exercice,
+                        observation: observation,
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            // Gestion des erreurs réseau
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json(); // Convertir la réponse en JSON
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Cas où l'ajout s'est bien passé
+                            console.log("Observation ajoutée avec succès:", data.message);
+                            //alert("Observation ajoutée avec succès : " + data.message);
+                            window.location.reload(false);
+
+                            // Optionnel : Fermer le modal après le succès
+                            const observationModal = bootstrap.Modal.getInstance(document.getElementById("observationModal"));
+                            observationModal.hide();
+                        } else {
+                            // Cas où le serveur retourne une erreur métier
+                            console.log("Erreur serveur:", data.message);
+                            alert("Erreur lors de l'ajout de l'observation : " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        // Gestion des erreurs JavaScript (ex. réseau, serveur non joignable, etc.)
+                        console.error("Une erreur est survenue :", error);
+                        alert("Une erreur est survenue lors de l'ajout de l'observation.");
+                    });
+                // Traitement à effectuer ici (envoi des données au serveur ou autre)
+                //console.log("Référence Demande:", refDemande);
+                //console.log("Exercice:", exercice);
+                //console.log("Observation:", observation);
+
+                //alert(formulaire.action);
+                // Fermer le modal après validation
+                //observationModal.hide();
+            });
+
+            // Gestion du bouton "Annuler" dans le modal
+            const btnAnnuler = document.getElementById("annuler");
+            btnAnnuler.addEventListener("click", function () {
+                // Fermer le modal
+                observationModal.hide();
+            });
+        });
+    </script>
 {% endblock %}

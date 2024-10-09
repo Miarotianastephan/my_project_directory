@@ -1,0 +1,33 @@
+<!-- Modal ajout observation -->
+<div class="modal fade" id="observationModal" tabindex="-1" aria-labelledby="observationModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="modifier" action="{{ path('tresorier.modifier_budget') }}" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="observationModalLabel">Votre observation à propos de la demande</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body col-12">
+                    <div class="col-10 d-flex flex-row">
+                        <label for="ref_demande" class="col"> Référence de la demande: </label>
+                        <input id="ref_demande" name="ref_demande" class="form-control-sm">
+                    </div>
+                    <div class="col-10 d-flex flex-row">
+                        <label for="exercice" class="col"> Exercice: </label>
+                        <input id="exercice" name="exercice" class="col-6 form-control-sm">
+                    </div>
+                    <div class="col-10 d-flex flex-row">
+                        <label for="observation" class="col">Observation:</label>
+                        <input id="observation" name="observation" class="col-6 form-control-sm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="annuler" name="non" data-bs-dismiss="modal" class="btn btn-danger">annuler
+                    </button>
+                    <button type="button" id="valider" name="valider" class="btn btn-success">valider</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

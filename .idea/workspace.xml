@@ -6,12 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/tresorier/show.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/tresorier/show.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/include/_budget_et_solde.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/include/_budget_et_solde.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/ObservationDemande.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ObservationDemande.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ObservationDemandeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ObservationDemandeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/deblocker_fond.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/show.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
