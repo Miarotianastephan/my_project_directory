@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const formulaire = document.getElementById("formulaire");
     const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
 
-    // document.getElementById('valider').addEventListener('click', handleSubmit);
+    document.getElementById('valider').addEventListener('click', handleSubmit);
     document.getElementById('annuler').addEventListener('click', handleCancel);
 
     function handleSubmit(e) {
@@ -30,33 +30,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getFormData() {
         return {
-            date_dm: document.getElementById('date_dm').value,
-            caisse: document.getElementById('caisse').value,
-            entite: document.getElementById('entite').value,
-            montant: document.getElementById('montant').value,
-            banque: document.getElementById('banque').value,
-            chequier: document.getElementById('chequier').value
+            id_plan_compte_debit: document.getElementById('id_plan_compte_debit').value,
+            dm_montant: document.getElementById('dm_montant').value,
+            mode_paiement: document.getElementById('mode_paiement').value,
+            date_operation: document.getElementById('date_operation').value,
+            date_saisie: document.getElementById('date_saisie').value,
         };
     }
 
     function handleResponse(data) {
-        const modalBody = document.querySelector('#messageModal .modal-body');
-        if (!data.success) {
+        if(data.success){
+            window.location.href = data.path;
+        }else {
+            const modalBody = document.querySelector('#messageModal .modal-body');
             modalBody.textContent = data.message;
             messageModal.show();
-        } else {
-            if (data.url) {
-                alert(data.message);
-                // window.location.href = data.url;
-            } else {
-                alert("Impossible de trouver l'URL");
-            }
         }
     }
 
     function handleError(error) {
         console.error('Erreur:', error);
-        alert('Une erreur est survenue : ' + error.message);
+        //alert('Une erreur est survenue : ' + error.message);
+        const modalBody = document.querySelector('#messageModal .modal-body');
+        modalBody.textContent = error.message;
+        messageModal.show();
     }
 
     function handleCancel(e) {

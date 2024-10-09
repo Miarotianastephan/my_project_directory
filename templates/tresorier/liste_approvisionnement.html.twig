@@ -1,22 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Approvisionnement{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {% block page_title %}
-    Trésorier
+    Section Trésorier
 {% endblock %}
 {% block page_subtitle %}
-    Les opérations d'approvisionnements effectués
+    Les opérations d'approvisionnements effectués au cours cet exercice.
 {% endblock %}
 
-
+{% block page_options %}
+    <a href="{{ path('tresorier.form_approvisionnement') }}" class="btn btn-secondary">Ajout d'approvisionnement</a>
+{% endblock %}
 
 {% block page_main_content %}
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Les approvisionnements réalisées</h4>
+                    <h4 class="card-title">Les approvisionnements réalisés</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -27,7 +29,6 @@
                                 <th class="col-1">Référence</th>
                                 <th class="col-3">Type de demande</th>
                                 <th class="col-2 text-end px-3">Montant</th>
-                                <th class="text-end col"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,21 +42,11 @@
                                             {{ demande_type.DmMontant|number_format(0, '.', ' ') }} Ar
                                         </div>
                                     </td>
-                                    <td class="text-end col">
-                                        <div class="col-12 d-flex gap-2">
-                                            <div class="col-4">
-                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
-                                                    <a href="{{ path('tresorier.detail_demande_en_attente', {'id': demande_type.Id}) }}">
-                                                        {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
-                                                    </a>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
+
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="4">Aucun donnée inserer</td>
+                                    <td colspan="4">Aucunne donnée inserer</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
