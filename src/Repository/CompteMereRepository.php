@@ -12,7 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CompteMereRepository extends ServiceEntityRepository
 {
-    private $planCompteRepository;
+    private PlanCompteRepository $planCompteRepository;
+    public static $listCompteDep = ['60','61', '62', '63', '64', '65', '66', '67', '68'];
+    public static $listCompteDepPrefixe = ['4%','51%','68%', '7%'];
 
     public function __construct(ManagerRegistry $registry, PlanCompteRepository $planCptRepo)
     {
@@ -22,20 +24,19 @@ class CompteMereRepository extends ServiceEntityRepository
 
     public function findByCompteBudget(): ?array
     {
-        $listCompteDep = ['61', '62', '63', '64', '65', '66', '67', '68'];
-        $listCompteDepPrefixe = ['4%','51%','68%', '7%'];
+
 
         $queryBuilder = $this->createQueryBuilder('p');
 
         // Utilisation de 'IN' pour la liste des comptes avec un numéro exact
         $queryBuilder
             ->where($queryBuilder->expr()->in('p.cpt_numero', ':listCompteDep'))
-            ->setParameter('listCompteDep', $listCompteDep);
+            ->setParameter('listCompteDep',$this->listCompteDep);
 
         // Construction des clauses 'LIKE' pour chaque préfixe
         $orX = $queryBuilder->expr()->orX(); // Pour gérer plusieurs conditions OR
 
-        foreach ($listCompteDepPrefixe as $index => $prefix) {
+        foreach ($this->listCompteDepPrefixe as $index => $prefix) {
             $paramName = 'prefix' . $index;
             $orX->add($queryBuilder->expr()->like('p.cpt_numero', ':' . $paramName));
             $queryBuilder->setParameter($paramName, $prefix);

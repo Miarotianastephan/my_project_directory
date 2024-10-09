@@ -64,7 +64,13 @@ class TresorierController extends AbstractController
         else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste,'budget'=>$budget]);
+        return $this->render('tresorier/show.html.twig', [
+            'demande_type' => $data,
+            'images' => $list_img,
+            'solde_reste' => $solde_reste,
+            'budget'=>$budget,
+            'budget_reste' => $budget-$solde_debit,
+        ]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
@@ -90,12 +96,13 @@ class TresorierController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
         $liste_banque = $banqueRepository->findAll();
-
+        //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         return $this->render('tresorier/deblocker_fond.html.twig',
             [
                 'demande_type' => $data, 'solde_reste' => $solde_reste,
                 'banques' => $liste_banque,
                 'budget' => $budget,
+                'budget_reste' => $budget-$solde_debit,
             ]
         );
     }
@@ -136,18 +143,22 @@ class TresorierController extends AbstractController
 
     #[Route('/demande_approvisionnement', name: 'tresorier.form_approvisionnement', methods: ['GET'])]
     public function form_approvisionnement(PlanCompteRepository $planCompteRepository,
-                                           MouvementRepository  $mouvementRepository, BanqueRepository $banqueRepository): Response
+                                           MouvementRepository  $mouvementRepository,
+                                           ExerciceRepository $exerciceRepository,
+                                           BanqueRepository $banqueRepository): Response
     {
         $liste_entite = $planCompteRepository->findCompteCaisse();
 
-        // $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        // $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+        $exercice = $exerciceRepository->getExerciceValide();
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, "0");
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, "0");
+
         $liste_banque = $banqueRepository->findAll();
 
         return $this->render('tresorier/demande_approvisionnement.html.twig', [
             'entites' => $liste_entite,
             'banques' => $liste_banque,
-            'situation_caisse' => 10
+            'situation_caisse' => $solde_debit - $solde_CREDIT,
         ]);
     }
 

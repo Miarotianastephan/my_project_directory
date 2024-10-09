@@ -31,7 +31,7 @@ class SGController extends AbstractController
     {
 
         $demandes_attente_validation = $dm_Repository->findDemandeAttentes();
-        return $this->render('sg/index.html.twig',[
+        return $this->render('sg/index.html.twig', [
             'demande_types' => $demandes_attente_validation
         ]);
     }
@@ -52,16 +52,15 @@ class SGController extends AbstractController
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }
-        if ($solde_debit == null ) {
+        if ($solde_debit == null) {
             $solde_reste = 0;
-        } else if($solde_CREDIT == null){
+        } else if ($solde_CREDIT == null) {
             $solde_reste = $solde_debit;
-        }
-        else {
+        } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste,'budget' => $budget]);
+        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste, 'budget' => $budget]);
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
@@ -90,23 +89,28 @@ class SGController extends AbstractController
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
         $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
-        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement()) ;
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }
-        if ($solde_debit == null ) {
+        if ($solde_debit == null) {
             $solde_reste = 0;
-        } else if($solde_CREDIT == null){
+        } else if ($solde_CREDIT == null) {
             $solde_reste = $solde_debit;
-        }
-        else {
+        } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
-        return $this->render('sg/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
+        //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
+        return $this->render('sg/show.html.twig', [
+            'demande_type' => $data,
+            'images' => $list_img,
+            'solde_reste' => $solde_reste,
+            'budget' => $budget,
+            'budget_reste' => $budget-$solde_debit,
+        ]);
     }
 
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]
@@ -125,16 +129,20 @@ class SGController extends AbstractController
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }
-        if ($solde_debit == null ) {
+        if ($solde_debit == null) {
             $solde_reste = 0;
-        } else if($solde_CREDIT == null){
+        } else if ($solde_CREDIT == null) {
             $solde_reste = $solde_debit;
-        }
-        else {
+        } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-        return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
+        return $this->render('sg/valider_demande.html.twig', [
+            'demande_type' => $data,
+            'solde_reste' => $solde_reste,
+            'budget' => $budget,
+            'budget_reste' => $budget-$solde_debit,
+        ]);
     }
 
     #[Route('/demande/refuser/{id}', name: 'SG.refus_demande_en_attente', methods: ['GET'])]
@@ -169,7 +177,11 @@ class SGController extends AbstractController
         $data = json_decode($rep->getContent(), true);
 
         if ($data['success'] == true) {
-            return new JsonResponse(['success' => true, 'message' => 'Pas de commentaire reçu ', 'path' => $this->generateUrl('SG.liste_demande_en_attente')]);
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Pas de commentaire reçu ',
+                'path' => $this->generateUrl('SG.liste_demande_en_attente')
+            ]);
         } else {
             return new JsonResponse(['success' => false, 'message' => $data['message']]);
         }

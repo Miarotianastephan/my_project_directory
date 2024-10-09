@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\BudgetType;
 use App\Entity\CompteMere;
 use App\Entity\DetailBudget;
 use App\Entity\Exercice;
@@ -16,9 +15,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class DetailBudgetRepository extends ServiceEntityRepository
 {
-    private $exerciceRepository;
-    private $compteMereRepository;
-    private $budgetTypeRepository;
+    private ExerciceRepository $exerciceRepository;
+    private CompteMereRepository $compteMereRepository;
+    private BudgetTypeRepository $budgetTypeRepository;
 
     public function __construct(ManagerRegistry      $registry,
                                 ExerciceRepository   $exerciceRepo,
@@ -31,20 +30,6 @@ class DetailBudgetRepository extends ServiceEntityRepository
         $this->exerciceRepository = $exerciceRepo;
         parent::__construct($registry, DetailBudget::class);
     }
-
-    public function findByExerciceEtCpt(Exercice $exercice, CompteMere $compteMere): ?DetailBudget
-    {
-        $data = $this->createQueryBuilder('d')
-            ->andWhere('d.exercice = :ex')
-            ->andWhere('d.compte_mere = :cpt')
-            ->setParameter('ex', $exercice)
-            ->setParameter('cpt', $compteMere)
-            ->getQuery()
-            ->getOneOrNullResult();
-        return $data;
-    }
-
-
 
     public function findByExercice(Exercice $exercice): array
     {
@@ -117,6 +102,47 @@ class DetailBudgetRepository extends ServiceEntityRepository
             return new JsonResponse(['success' => false, 'message' => $exception->getMessage()]);
         }
 
+    }
+
+    public function findByExerciceEtCpt(Exercice $exercice, CompteMere $compteMere): ?DetailBudget
+    {
+        $data = null;
+        // Accès à l'attribut static $listCompteDep
+        $listCompteDep = CompteMereRepository::$listCompteDep;
+        // Accès à l'attribut static $listCompteDepPrefixe
+        $listCompteDepPrefixe = CompteMereRepository::$listCompteDepPrefixe;
+        $cpt_numero = $compteMere->getCptNumero();
+        // Vérifier si cpt_numero est présent dans listCompteDep
+        if (in_array($cpt_numero, $listCompteDep)) {
+            $data = $this->createQueryBuilder('d')
+                ->andWhere('d.exercice = :ex')
+                ->andWhere('d.compte_mere = :cpt')
+                ->setParameter('ex', $exercice)
+                ->setParameter('cpt', $compteMere)
+                ->getQuery()
+                ->getOneOrNullResult();
+            //return $data;
+        } else {
+            // Vérifier si cpt_numero commence par un des préfixes dans listCompteDepPrefixe
+            foreach ($listCompteDep as $prefixe) {
+                // Utiliser str_starts_with (PHP 8) ou strpos
+                if (str_starts_with($cpt_numero, $prefixe)) {
+                    $compteMere = $this->compteMereRepository->findByCptNumero($prefixe);
+                    if ($compteMere) {
+                        //dump('Correspond à un préfixe dans listCompteDepPrefixe'.$compteMere->getCptNumero());
+                        $data = $this->createQueryBuilder('d')
+                            ->andWhere('d.exercice = :ex')
+                            ->andWhere('d.compte_mere = :cpt')
+                            ->setParameter('ex', $exercice)
+                            ->setParameter('cpt', $compteMere)
+                            ->getQuery()
+                            ->getOneOrNullResult();
+                        return $data;
+                    }
+                }
+            }
+        }
+        return $data;
     }
 
     public function modifierDetailBudget(int   $detail_budget_id,
