@@ -7,10 +7,10 @@ use App\Repository\DetailDemandePieceRepository;
 use App\Service\DemandeTypeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/demande_piece')]
 class DemandePieceController extends AbstractController
@@ -34,7 +34,7 @@ class DemandePieceController extends AbstractController
     }
 
     #[Route(path: '/dm/{id}', name: 'dm_piece.show', methods: ['GET'])]
-    public function dm_piece($id, DemandeTypeRepository $dm_rep): Response
+    public function dm_piece($id, DemandeTypeRepository $dm_rep, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         // Vérifier si l'ID est un nombre
         if (is_numeric($id)) {
@@ -42,8 +42,14 @@ class DemandePieceController extends AbstractController
             if (!$data) {
                 throw new NotFoundHttpException('Demande non trouvée');
             }
+            $liste_piece = $demandePieceRepository->findByDemandeType($data);
+            $proformat_existe = false;
+            if ($liste_piece) {
+                $proformat_existe = true;
+            }
             return $this->render('demande_piece/_form_pj.html.twig', [
-                'demande_type' => $data
+                'demande_type' => $data,
+                'proformat_existe' => $proformat_existe
             ]);
         }
         return $this->render("exercice/index.html.twig");

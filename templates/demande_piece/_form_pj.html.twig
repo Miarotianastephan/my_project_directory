@@ -50,26 +50,33 @@
                                 <span class="input-group-text">Ar</span>
                             </div>
                         </div>
+
+
                         <div class="col-12 d-flex flex-row">
                             <label class="col-3 form-control-lg">
                                 Choix de fichier:
                             </label>
-                            <div class="col d-flex flex-column gap-1">
+                            <div class="col d-flex flex-column gap-3">
                                 <div class="col-12">
-                                    <!--
-                                    <label class="selectgroup-item">
-                                        <input class="selectgroup-input" type="radio" name="type" value="bon_livraison">
-                                        <span class="selectgroup-button">
-                                            Facture de payement ou bon de livraison
-                                        </span>
-                                    </label>
-                                    -->
 
                                     <label class="selectgroup-item">
-                                        <input class="selectgroup-input" type="radio" name="type"
-                                               value="bon_livraison" checked="checked">
-                                        <span class="selectgroup-button">PJ bon de livraison</span>
+                                        <input class="selectgroup-input" type="radio" name="type" value="proformat"
+                                               checked="checked">
+                                        <span class="selectgroup-button">
+                                           PJ Proformat
+                                        </span>
                                     </label>
+                                    {% if proformat_existe %}
+                                        <label class="selectgroup-item">
+                                            <input class="selectgroup-input" type="radio" name="type"
+                                                   value="bon_livraison">
+                                            <span class="selectgroup-button">PJ bon de livraison</span>
+                                        </label>
+                                    {% endif %}
+                                    {#
+                                    {{ proformat_existe ?  "true" : "false" }}
+                                    #}
+
                                 </div>
                             </div>
                         </div>
