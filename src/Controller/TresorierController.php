@@ -11,6 +11,7 @@ use App\Repository\DetailDemandePieceRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\MouvementRepository;
+use App\Repository\ObservationDemandeRepository;
 use App\Repository\PlanCompteRepository;
 use App\Service\DemandeTypeService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,7 +43,9 @@ class TresorierController extends AbstractController
     }
 
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
-    public function show($id, MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager,DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
+    public function show($id,
+                         ObservationDemandeRepository $observationDemandeRepository,
+                         MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager,DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
@@ -64,7 +67,19 @@ class TresorierController extends AbstractController
         else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-        return $this->render('tresorier/show.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste,'budget'=>$budget]);
+
+        $observations = $observationDemandeRepository->findByRefdemande($data->getRefDemande());
+        if ($observations == null) {
+            $observations = [];
+        }
+        return $this->render('tresorier/show.html.twig', [
+            'demande_type' => $data,
+            'images' => $list_img,
+            'solde_reste' => $solde_reste,
+            'budget'=>$budget,
+            'budget_reste' => $budget-$solde_debit,
+            'observations' =>$observations
+        ]);
     }
 
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
@@ -93,12 +108,13 @@ class TresorierController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
         $liste_banque = $banqueRepository->findAll();
-
+        //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         return $this->render('tresorier/deblocker_fond.html.twig',
             [
                 'demande_type' => $data, 'solde_reste' => $solde_reste,
                 'banques' => $liste_banque,
                 'budget' => $budget,
+                'budget_reste' => $budget-$solde_debit,
             ]
         );
     }
@@ -137,44 +153,58 @@ class TresorierController extends AbstractController
 
     #[Route('/demande_approvisionnement', name: 'tresorier.form_approvisionnement', methods: ['GET'])]
     public function form_approvisionnement(PlanCompteRepository $planCompteRepository,
-                                           MouvementRepository  $mouvementRepository, BanqueRepository $banqueRepository): Response
+                                           MouvementRepository  $mouvementRepository,
+                                           ExerciceRepository $exerciceRepository,
+                                           BanqueRepository $banqueRepository): Response
     {
         $liste_entite = $planCompteRepository->findCompteCaisse();
 
-        // $solde_debit = $mouvementRepository->soldeDebitByExerciceByCompteMere($exercice, $cpt);
-        // $solde_CREDIT = $mouvementRepository->soldeCreditByExerciceByCompteMere($exercice, $cpt);
+        $exercice = $exerciceRepository->getExerciceValide();
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, "0");
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, "0");
+
         $liste_banque = $banqueRepository->findAll();
 
         return $this->render('tresorier/demande_approvisionnement.html.twig', [
             'entites' => $liste_entite,
             'banques' => $liste_banque,
-            'situation_caisse' => 10
+            'situation_caisse' => $solde_debit - $solde_CREDIT,
         ]);
     }
 
     #[Route('/save_approvisionnement', name: 'tresorier.save_approvisionnement', methods: ['POST'])]
     public function save_approvisionnement(Request            $request,
                                            ExerciceRepository $exoRepository,
-                                           DemandeTypeService $dmService)
+                                           DemandeTypeService $dmService) : JsonResponse
     {
 
         $id_user_tresorier = $this->user->getId();
         $exercice = $exoRepository->getExerciceValide();
-        $data_parametre = $request->request->all();
+        //$data_parametre = $request->request->all();
+
+
+        $data_parametre = json_decode($request->getContent(), true);
 
         // les données :
-        $plan_cpt_debit_id = $data_parametre['id_plan_compte_debit'];
-        $montant_demande = $data_parametre['dm_montant'];
-        $paiement = $data_parametre['mode_paiement'];
+        $plan_cpt_debit_id = $data_parametre['id_plan_compte_debit'] ?? null;
+        $montant_demande = $data_parametre['dm_montant'] ?? null;
+        $paiement = $data_parametre['mode_paiement'] ?? null;
 
         // les dates :
-        $date_operation = $data_parametre['date_operation'];
-        $date_saisie = $data_parametre['date_saisie'];
+        $date_operation = $data_parametre['date_operation'] ?? null;
+        $date_saisie = $data_parametre['date_saisie'] ?? null;
         // insertion d'un approvisionnement
         // Ajout directe de la comptabilisation dans la partie d'insertion
         $response_data = $dmService->insertDemandeTypeAppro($exercice, $plan_cpt_debit_id, $montant_demande, $paiement, $date_saisie, $date_operation, $id_user_tresorier);
-        dump($response_data);
-        return $this->redirectToRoute('tresorier.form_approvisionnement');
+        //dump($response_data);
+
+        $response_data = json_decode($response_data->getContent(), true);
+        return new JsonResponse([
+            'success' => $response_data['success'],
+            'message' => $response_data['message'],
+            'path' => $this->generateUrl('tresorier.liste_approvisionnement')
+        ]);
+        //return $this->redirectToRoute('tresorier.form_approvisionnement');
     }
 
     #[Route('/liste_approvisionnement', name: 'tresorier.liste_approvisionnement', methods: ['GET'])]

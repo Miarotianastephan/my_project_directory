@@ -33,9 +33,9 @@ class MouvementRepository extends ServiceEntityRepository
         $connection = $entityManager->getConnection();
 
         $table = $mode_paiement == 0 ? "v_mouvement_debit_siege" : "v_mouvement_debit_banque";
-        dump([
+        /*dump([
             "TEZSTSET" => $table,
-        ]);
+        ]);*/
 
         $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
 

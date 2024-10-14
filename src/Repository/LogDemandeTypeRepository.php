@@ -36,7 +36,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, LogDemandeType::class);
     }
 
-    public function findByDemandeType(DemandeType $demandeType): array
+    public function findByDemandeType(DemandeType $demandeType): ?array
     {
         return $this->createQueryBuilder('l')
             ->Where('l.demande_type = :val')
@@ -292,7 +292,12 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                         'success' => false,
                         'message' => 'Ajouter un choix de banque'
                     ]);
-                } else if ($numero_cheque === null) {
+                } else if (!is_numeric($numero_cheque)) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'message' => 'Le numéro de chèque doit être un entier'
+                    ]);
+                } else if ($numero_cheque == null || empty(trim($numero_cheque))) {
                     return new JsonResponse([
                         'success' => false,
                         'message' => 'Ajouter un numero de chèque'
@@ -392,7 +397,11 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $entityManager->persist($mv_credit);
 
             $entityManager->flush();
-            $entityManager->commit();                           // si tout OK 
+            $entityManager->commit();
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Traitement de fonds : débloqué et comptabiliser'
+            ]);// si tout OK
 
         } catch (\Exception $e) {
             $entityManager->rollback();                         // si erreur opération 
@@ -401,10 +410,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Erreur transaction : ' . $e->getMessage()
             ]);
         }
-        return new JsonResponse([
-            'success' => true,
-            'message' => 'Traitement de fonds : débloqué et comptabiliser'
-        ]);
+
     }
 
     // Pour avoir la liste des log pour une utilisateur 

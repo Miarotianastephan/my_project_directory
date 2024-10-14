@@ -5,7 +5,7 @@
     Section Trésorier
 {% endblock %}
 {% block page_subtitle %}
-    {# Liste des demandes en attente de validation #}
+     En débloquant cette demande, elle sera comptabilisée. Verifier chaque information et les informations à saisir si usage de chèque.
 {% endblock %}
 
 {% block page_main_content %}
@@ -64,6 +64,7 @@
                             </div>
                             {{ demande_type.DmModePaiement == 1 ? include('chequier/utiliser.html.twig'):"" }}
                         </div>
+
                     </div>
                     <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
                         <button id="annuler"  type="button" class="btn btn-danger btn">Annuler</button>

@@ -2,10 +2,10 @@
 
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    Section Tresorier
+    Section Commissaire en compte
 {% endblock %}
 {% block page_subtitle %}
-    Demande pour comptabilisation. Veuillez verifier chaque information.
+    Information de la demande. Veuillez verifier chaque information.
 {% endblock %}
 
 {% block page_main_content %}
@@ -14,34 +14,37 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">A propos de la demande</h4>
-                    {{ include('include/_budget_et_solde.html.twig') }}
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-column">
                     <div class="col-12 px-md-5 d-flex flex-row">
                         <div class="col-1">
                             <button style="border: none;background-color: transparent; text-align: start">
-                                <a href="{{ (demande_type.demande.getDmCode() == 10) ?
-                                path('tresorier.liste_demande_en_attente') :
-                                path('tresorier.liste_approvisionnement') }}">
+                                <a href="{{ path('app_commisaire_compte') }}">
                                     {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
                                 </a>
                             </button>
                         </div>
                         <div class="col px-3 d-flex flex-column gap-3">
                             <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg">Date de l'action: </label>
+                                <div class="col form-control">
+                                    {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg"> Etat actuelle: </label>
+                                <div class="col form-control">
+                                    {{ demande_type.EtatDemandeObj.EtatLibelle }}
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex flex-row">
                                 <label class="col-4 form-control-lg"> Rérérence: </label>
                                 <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg"> Validateur demande </label>
+                                <label class="col-4 form-control-lg"> Utilisateur concerné: </label>
                                 <div class="col form-control">
                                     {{ demande_type.utilisateur.UserMatricule }}
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Date de la demande: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -70,20 +73,7 @@
                                 <label class="col-4 form-control-lg">Personne concernée:</label>
                                 <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
                             </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Observation:</label>
-                                <div class="col form-control">
-                                    <ul>
 
-                                        {% for observation in observations  %}
-                                            <li>
-                                                {{ observation }}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-
-                                </div>
-                            </div>
                             <div class="col-12 d-flex flex-row">
                                 <!-- <div class="col-3">Les pièces jointes:</div> -->
                                 {% if images|length  != 0 %}
@@ -98,17 +88,83 @@
                             </div>
                         </div>
                     </div>
-                    <button id="btn-observation" class="btn px-md-5 col-12 btn-primary">Ajouter une observation</button>
 
                 </div>
-                {% if (demande_type.demande.getDmCode() == 10) %}
-                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
-                           class="btn btn-danger btn">Annuler</a>
-                        <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
-                           class="btn btn-success btn">Comptabiliser</a>
+
+                <div class="card-header">
+                    <h4 class="card-title">Historique de cette demande</h4>
+                </div>
+
+                {% for historique in historiques %}
+                    <div class="card-body col-12 px-md-5 d-flex flex-column">
+                        <div class="col-12 px-md-5 d-flex flex-row">
+                            <div class="col-1">
+                                {#
+                                    <button style="border: none;background-color: transparent; text-align: start">
+                                        <a href="{{ path('app_commisaire_compte') }}">
+                                            {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
+                                        </a>
+                                    </button>
+                                #}
+
+                            </div>
+                            <div class="col px-3 d-flex flex-column gap-3">
+                                <div class="col-12 d-flex flex-row">
+                                    <label class="col-4 form-control-lg"> Utilisateur concerné: </label>
+                                    <div class="col form-control">
+                                        {{ historique.UserMatricule }}
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-row">
+                                    <label class="col-4 form-control-lg"> Date de l'action: </label>
+                                    <div class="col form-control">
+                                        {{ historique.LogDmDate|date('d/m/y')|trans({}, 'fr') }}
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-row">
+                                    <label class="col-4 form-control-lg"> Etat de la demande: </label>
+                                    <div class="col form-control">
+                                        {{ historique.EtatLogDemandeObj.EtatLibelle }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
+                {% endfor %}
+
+                <div class="card-header">
+                    <h4 class="card-title">Historique des observations de cette demande</h4>
+                </div>
+
+                <div class="card-body col-12 px-md-5 d-flex flex-column">
+                    <div class="col-12 d-flex flex-row">
+                        <div class="table-responsive">
+                            <table id="basic-datatables" class="display table table-striped table-hover">
+                                <thead>
+                                <tr class="col-12 text-start">
+                                    <th class="col-2">Date de l'observation</th>
+                                    <th class="col-2">Utilisateur</th>
+                                    <th class="col-2">Observation</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for observation in observations %}
+                                    <tr class="col-12">
+                                        <td class="col-2">{{ observation.DateObservation|date('d/m/y') }}</td>
+                                        <td class="col-2">{{ observation.MatriculeObservateur }}</td>
+                                        <td class="col-2">{{ observation.Observation }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4">Pas d'observation perceptible</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <button id="btn-observation" class="btn px-md-5 col-12 btn-primary">Ajouter une observation</button>
             </div>
         </div>
     </div>
@@ -254,91 +310,91 @@
         </div>
     </div>
 {% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset("js/scr/tresorier/show.js") }}"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Récupération du formulaire
-            const formulaire = document.getElementById("observation_form");
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset("js/scr/tresorier/show.js") }}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Récupération du formulaire
+                const formulaire = document.getElementById("observation_form");
 
-            // Récupération du bouton pour afficher le modal
-            const btnObservation = document.getElementById("btn-observation");
+                // Récupération du bouton pour afficher le modal
+                const btnObservation = document.getElementById("btn-observation");
 
-            // Récupération du modal
-            const observationModal = new bootstrap.Modal(document.getElementById("observationModal"));
+                // Récupération du modal
+                const observationModal = new bootstrap.Modal(document.getElementById("observationModal"));
 
-            // Gestionnaire de clic sur le bouton "Ajouter une observation"
-            btnObservation.addEventListener("click", function () {
-                // Affichage du modal
-                observationModal.show();
-            });
+                // Gestionnaire de clic sur le bouton "Ajouter une observation"
+                btnObservation.addEventListener("click", function () {
+                    // Affichage du modal
+                    observationModal.show();
+                });
 
-            // Gestion du bouton "Valider" dans le modal
-            const btnValider = document.getElementById("valider");
-            btnValider.addEventListener("click", function () {
-                // Récupération des données du formulaire
-                const refDemande = document.getElementById("ref_demande").value;
-                const exercice = document.getElementById("exercice").value;
-                const observation = document.getElementById("observation").value;
+                // Gestion du bouton "Valider" dans le modal
+                const btnValider = document.getElementById("valider");
+                btnValider.addEventListener("click", function () {
+                    // Récupération des données du formulaire
+                    const refDemande = document.getElementById("ref_demande").value;
+                    const exercice = document.getElementById("exercice").value;
+                    const observation = document.getElementById("observation").value;
 
 
-                fetch(formulaire.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        ref_demande: refDemande,
-                        exercice: exercice,
-                        observation: observation,
+                    fetch(formulaire.action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            ref_demande: refDemande,
+                            exercice: exercice,
+                            observation: observation,
+                        })
                     })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            // Gestion des erreurs réseau
-                            throw new Error('Erreur réseau : ' + response.status);
-                        }
-                        return response.json(); // Convertir la réponse en JSON
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            // Cas où l'ajout s'est bien passé
-                            console.log("Observation ajoutée avec succès:", data.message);
-                            //alert("Observation ajoutée avec succès : " + data.message);
-                            window.location.reload(false);
+                        .then(response => {
+                            if (!response.ok) {
+                                // Gestion des erreurs réseau
+                                throw new Error('Erreur réseau : ' + response.status);
+                            }
+                            return response.json(); // Convertir la réponse en JSON
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Cas où l'ajout s'est bien passé
+                                console.log("Observation ajoutée avec succès:", data.message);
+                                //alert("Observation ajoutée avec succès : " + data.message);
+                                window.location.reload(false);
 
-                            // Optionnel : Fermer le modal après le succès
-                            const observationModal = bootstrap.Modal.getInstance(document.getElementById("observationModal"));
-                            observationModal.hide();
-                        } else {
-                            // Cas où le serveur retourne une erreur métier
-                            console.log("Erreur serveur:", data.message);
-                            alert("Erreur lors de l'ajout de l'observation : " + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        // Gestion des erreurs JavaScript (ex. réseau, serveur non joignable, etc.)
-                        console.error("Une erreur est survenue :", error);
-                        alert("Une erreur est survenue lors de l'ajout de l'observation.");
-                    });
-                // Traitement à effectuer ici (envoi des données au serveur ou autre)
-                //console.log("Référence Demande:", refDemande);
-                //console.log("Exercice:", exercice);
-                //console.log("Observation:", observation);
+                                // Optionnel : Fermer le modal après le succès
+                                const observationModal = bootstrap.Modal.getInstance(document.getElementById("observationModal"));
+                                observationModal.hide();
+                            } else {
+                                // Cas où le serveur retourne une erreur métier
+                                console.log("Erreur serveur:", data.message);
+                                alert("Erreur lors de l'ajout de l'observation : " + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            // Gestion des erreurs JavaScript (ex. réseau, serveur non joignable, etc.)
+                            console.error("Une erreur est survenue :", error);
+                            alert("Une erreur est survenue lors de l'ajout de l'observation.");
+                        });
+                    // Traitement à effectuer ici (envoi des données au serveur ou autre)
+                    //console.log("Référence Demande:", refDemande);
+                    //console.log("Exercice:", exercice);
+                    //console.log("Observation:", observation);
 
-                //alert(formulaire.action);
-                // Fermer le modal après validation
-                //observationModal.hide();
+                    //alert(formulaire.action);
+                    // Fermer le modal après validation
+                    //observationModal.hide();
+                });
+
+                // Gestion du bouton "Annuler" dans le modal
+                const btnAnnuler = document.getElementById("annuler");
+                btnAnnuler.addEventListener("click", function () {
+                    // Fermer le modal
+                    observationModal.hide();
+                });
             });
-
-            // Gestion du bouton "Annuler" dans le modal
-            const btnAnnuler = document.getElementById("annuler");
-            btnAnnuler.addEventListener("click", function () {
-                // Fermer le modal
-                observationModal.hide();
-            });
-        });
-    </script>
-{% endblock %}
+        </script>
+    {% endblock %}

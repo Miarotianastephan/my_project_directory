@@ -100,12 +100,12 @@ class UsageCheque
         return $this;
     }
 
-    public function getDateUsage(): ?\DateTimeImmutable
+    public function getDateUsage(): ?\DateTimeInterface
     {
         return $this->date_usage;
     }
 
-    public function setDateUsage(\DateTimeImmutable $date_usage): static
+    public function setDateUsage(\DateTimeInterface $date_usage): static
     {
         $this->date_usage = $date_usage;
 

@@ -24,7 +24,7 @@ class ObservationDemande
     private ?string $ref_demande = null;
 
     #[ORM\Column(type: 'customdate', nullable: true)]
-    private ?\DateTimeImmutable $date_observation = null;
+    private ?\DateTimeInterface $date_observation = null;
 
     public function getId(): ?int
     {
@@ -67,15 +67,27 @@ class ObservationDemande
         return $this;
     }
 
-    public function getDateObservation(): ?\DateTimeImmutable
+    public function getDateObservation(): ?\DateTimeInterface
     {
         return $this->date_observation;
     }
 
-    public function setDateObservation(?\DateTimeImmutable $date_observation): static
+    public function setDateObservation(?\DateTimeInterface $date_observation): static
     {
         $this->date_observation = $date_observation;
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            ' [ RefDemande: %s, Matricule: %s, Observation: %s, Date: %s]',
+            $this->ref_demande,
+            $this->matricule_observateur,
+            $this->observation,
+            $this->date_observation ? $this->date_observation->format('Y-m-d H:i:s') : 'N/A'
+        );
+    }
+
 }

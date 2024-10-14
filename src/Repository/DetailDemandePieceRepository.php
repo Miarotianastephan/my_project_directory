@@ -70,7 +70,12 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             //MAJ demande_type
             //MAJ demande_type => mère sy fille avec demande réelle
 
-            $dm_type->setDmEtat($this->etatDmRepository, 400); // OK_ETAT
+            if ($type == "proformat"){
+                $dm_type->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
+            }else{
+                $dm_type->setDmEtat($this->etatDmRepository, 400); // OK_ETAT
+            }
+
             $dm_type->setMontantReel($montant_reel);
             $dm_type->setUtilisateur($user_demande);
 
