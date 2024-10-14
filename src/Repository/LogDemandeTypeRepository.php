@@ -36,7 +36,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, LogDemandeType::class);
     }
 
-    public function findByDemandeType(DemandeType $demandeType): array
+    public function findByDemandeType(DemandeType $demandeType): ?array
     {
         return $this->createQueryBuilder('l')
             ->Where('l.demande_type = :val')

@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+{% block page_title %}
+    Section Commissaire en Compte
+{% endblock %}
+
+{% block page_subtitle %}
+    Voici la liste des demandes de l'{{ exercice }}.
+{% endblock %}
+
+{% block page_main_content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des demandes</h4>
+                    <form action="{{ path("app_commisaire_compte") }}" id="formulaire" method="get">
+                        <div class="form-group">
+                            <label class="form-label">Filtre les demandes de l'{{ exercice }}.</label>
+                            <div class="selectgroup selectgroup-pills text-end">
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="Initié"
+                                            class="selectgroup-input"
+                                            checked
+                                    />
+                                    <span class="selectgroup-button">Initié</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="attente_modifier"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">À modifier</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="modifier"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">Modifié</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="attente_fond"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">Attente de fonds</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="attente_versement"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">Attente de versements</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="refuser"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">Refuser</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="debloquer"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">Débloquer</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="reverser"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">À reverser</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input
+                                            type="checkbox"
+                                            name="value"
+                                            value="comptabiliser"
+                                            class="selectgroup-input" checked
+                                    />
+                                    <span class="selectgroup-button">Comptabiliser</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr class="col-12 text-end">
+                                <th class="col-2">Date de demande</th>
+                                <th class="col-1">Référence</th>
+                                <th class="col-2">Type de demande</th>
+                                <th class="col-2">Montant</th>
+                                <th class="col-4">Etat de la demande</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for demande_type in demande_types %}
+                                <tr class="col-12">
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-1">{{ demande_type.RefDemande }}</td>
+                                    <td class="col-2">{{ demande_type.demande.libelle }}</td>
+                                    <td class="text-end col-2">
+                                        <div>
+                                            {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
+                                        </div>
+                                    </td>
+                                    <td class="col-4">
+                                        <div class="col-12 d-flex gap-5">
+                                            <div class="col-8 text-center">
+                                                {{ demande_type.EtatDemandeObj.EtatLibelle }}
+                                            </div>
+                                            <div class="col-3">
+                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
+                                                    <a href="{{ path('app_commisaire_show', {'id': demande_type.Id}) }}">
+                                                        {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
+                                                    </a>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">aucun donnée inserer</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.selectgroup-input'); // Sélectionne tous les checkbox
+            const formulaire = document.getElementById('formulaire');
+            // Ajoute un écouteur d'événements sur chaque checkbox
+            // Ajoute un écouteur d'événements sur chaque checkbox
+            filterButtons.forEach(button => {
+                button.addEventListener('change', function() {
+                    // Soumet le formulaire automatiquement lorsque l'état change
+                    formulaire.submit();
+                });
+            });
+        });
+    </script>
+{% endblock %}

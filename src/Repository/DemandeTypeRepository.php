@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Banque;
 use App\Entity\CompteMere;
 use App\Entity\DemandeType;
+use App\Entity\Exercice;
 use App\Entity\PlanCompte;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -21,6 +22,15 @@ class DemandeTypeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DemandeType::class);
+    }
+
+    public function findByExercice(Exercice $exercice): ?array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.exercice = :exercice')
+            ->setParameter('exercice', $exercice)
+            ->getQuery()
+            ->getResult();
     }
 
     public function findByEtat(int $etat): array
