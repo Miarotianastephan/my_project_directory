@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\DemandeType;
 use App\Entity\DetailDemandePiece;
+use App\Entity\LogDemandeType;
 use App\Entity\Utilisateur;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -71,19 +73,33 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             //MAJ demande_type => mère sy fille avec demande réelle
 
             if ($type == "proformat"){
-                $dm_type->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT
+                $dm_type->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT : 300 ihany ny 300 eto
             }else{
+                // Insérer Validé dans Historique des demandes
+                $log_dm = new LogDemandeType();
+                $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
+                $log_dm->setUserMatricule($user_tresorier->getUserMatricule());
+                $log_dm->setDemandeType($dm_type);
+                $log_dm->setLogDmDate(new DateTime());
+                $entityManager->persist($log_dm);
                 $dm_type->setDmEtat($this->etatDmRepository, 400); // OK_ETAT
+                // Vérification du montant réel insérer lors de l'ajout du pièce justificatif
+                $dm_type->setMontantReel($montant_reel);
+                $dm_type->setUtilisateur($user_demande);
+                if($montant_reel < $dm_type->getDmMontant()){
+                    // Atao état attente de veresement de fonds
+                }else if($montant_reel > $dm_type->getDmMontant()){
+                    // Nouveau demande 
+                    // Updatena ny champ an'ilay demande
+                }
             }
 
-            $dm_type->setMontantReel($montant_reel);
-            $dm_type->setUtilisateur($user_demande);
 
             $entityManager->persist($dm_type);
 
             $statement->executeQuery();
-            $connection->commit();
             $entityManager->flush();
+            $connection->commit();
             return new JsonResponse([
                 'success' => true,
                 'message' => 'Ajout de piece justificative réussie.',
@@ -91,9 +107,7 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             ]);
         } catch (\Exception $e) {
             dump($e->getMessage());
-
             $connection->rollBack();
-            $entityManager->flush();
             // Gestion de l'erreur si le fichier ne peut pas être déplacé
             return new JsonResponse([
                 'success' => false,

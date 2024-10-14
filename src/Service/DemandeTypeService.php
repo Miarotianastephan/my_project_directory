@@ -187,7 +187,8 @@ class DemandeTypeService
             $entity_code_and_plan_compte_motif = $this->planCompteRepo->find($planCptEntityId);     // getPlanCompte ENTITE by ID
             $demande_type->setEntityCode($entity_code_and_plan_compte_motif);
             $demande_type->setDmModePaiement($modePaiement);
-            $demande_type->setDmEtat($this->etatDmRepo, 500);                                     // 500 Comptabilisation OK_ETAT
+            // $demande_type->setDmEtat($this->etatDmRepo, 500);                                     // 500 Comptabilisation OK_ETAT
+            $demande_type->setDmEtat($this->etatDmRepo, 300);                                     // 500 Comptabilisation OK_ETAT
             $demande_type->setUtilisateur($this->user);
             $demande_type->setPlanCompte($entity_code_and_plan_compte_motif);
             $demande_type->setExercice($exercice);

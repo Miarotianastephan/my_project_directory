@@ -160,7 +160,8 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 $entityManager->persist($log_dm);
 
                 // Update de la ligne de demande
-                $dm_type->setDmEtat($this->etatDmRepository, 300);                 // OK_ETAT : Refuser
+                // $dm_type->setDmEtat($this->etatDmRepository, 300);                 // OK_ETAT : Refuser
+                $dm_type->setDmEtat($this->etatDmRepository, 301);                 // OK_ETAT : Refuser
                 $dm_type->setUtilisateur($user_sg);
                 $dm_type->setDmDate(new \DateTime());
                 $entityManager->persist($dm_type);
@@ -356,7 +357,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Update Validé => Débloqué dans les demandes
             // $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
-            $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
+            $dm_type->setDmEtat($this->etatDmRepository, 300);                                      // Débloquage du demandes OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setDmDate($log_dm->getLogDmDate());                                           // MAJ de dm_type la base de données
 

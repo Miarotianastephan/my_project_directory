@@ -33,11 +33,13 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByEtat(int $etat): array
+    public function findByEtat($userID, int $etat): array
     {
         return $this->createQueryBuilder('d')
+        // ->andWhere('d.utilisateur_id = :user_id')
             ->andWhere('d.dm_etat = :etat')
             ->setParameter('etat', $etat)
+            // ->setParameter('user_id', $userID)
             ->getQuery()
             ->getResult();
     }
