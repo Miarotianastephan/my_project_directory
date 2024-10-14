@@ -230,37 +230,6 @@ class MouvementRepository extends ServiceEntityRepository
     }
 
 
-
-
-
-
-
-
-    //    /**
-    //     * @return Mouvement[] Returns an array of Mouvement objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Mouvement
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-
     /**
      * @return Mouvement[] Returns an array of Mouvement objects
      */
@@ -270,13 +239,26 @@ class MouvementRepository extends ServiceEntityRepository
     }
 
     public function findAllMouvementById(): array
-    {
-        return $this->createQueryBuilder('m')->orderBy('m.id', 'ASC')->getQuery()->getResult();
+    {      
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Construction de la requête SQL
+        $sql = "SELECT 
+                m.mvn_id,m.mvt_evenement_id,m.mvt_compte_id,m.mvt_montant,m.is_mvt_debit,
+                ev.evn_date_operation,pc.cpt_numero,pc.cpt_libelle 
+                FROM MOUVEMENT m
+                JOIN PLAN_COMPTE pc ON m.mvt_compte_id = pc.cpt_id
+                JOIN EVENEMENT ev ON m.mvt_evenement_id = ev.evn_id
+                WHERE 1=1 ORDER BY m.mvn_id ASC";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
     }
 
     public function getTotalMouvementGroupedByCompteMere(): array
     {
-        return $this->createQueryBuilder('m')->select('cm.cpt_numero, SUM(m.mvt_montant) as total_montant')->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+        return $this->createQueryBuilder('m')->select('cm.cpt_numero, SUM(m.mvt_montant) as total_montant')
+        ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
         ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
         ->groupBy('cm.cpt_numero') // Groupement par le numéro de CompteMere
         ->getQuery()->getResult();
@@ -288,6 +270,104 @@ class MouvementRepository extends ServiceEntityRepository
         ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
         ->getQuery()->getResult();
     }
+
+    // public function searchDataMouvement($rech_numero=null, $rech_libelle=null, $date_inf=null, $date_sup=null):array{
+    //     if(is_null($rech_numero) && is_null($rech_libelle) && is_null($date_inf) && is_null($date_sup))
+    //     {
+    //         return $this->findAllMouvementById();
+    //     } 
+    //     $queryBuilder = $this->createQueryBuilder('m');
+    //     $queryBuilder->join('m.mvt_compte_id', 'pc');           // Jointure avec PlanCompte
+    //     $queryBuilder->join('m.mvt_evenement_id', 'ev');           // Jointure avec PlanCompte
+    //     if(!is_null($rech_numero)){
+    //         $queryBuilder->where('pc.cpt_numero LIKE :numero')
+    //         ->setParameter('numero', $rech_numero.'%');         // begin with %xxx%
+    //     }
+    //     if(!is_null($rech_libelle)){
+    //         $queryBuilder->andWhere('pc.cpt_libelle LIKE :libelle')
+    //         ->setParameter('libelle', '%'.$rech_libelle.'%');   // contient %xxx%
+    //     }
+    //     // Si les deux dates sont fournies
+    //     // Conversion des chaînes en objets DateTime
+    //     $dateInf = $date_inf ? \DateTime::createFromFormat('Y-m-d', $date_inf) : null;
+    //     $dateSup = $date_sup ? \DateTime::createFromFormat('Y-m-d', $date_sup) : null;
+    //     if (!is_null($date_inf) && !is_null($date_sup)) {
+    //         $queryBuilder->where('TRUNC(ev.evn_date_operation) BETWEEN TRUNC(:dateInf) AND TRUNC(:dateSup)')
+    //         ->setParameter('dateInf', $dateInf)
+    //         ->setParameter('dateSup', $dateSup);
+    //     } elseif (!is_null($date_inf)) {
+    //         // Si seulement la date inférieure est fournie
+    //         $queryBuilder->where('TRUNC(ev.evn_date_operation) >= TRUNC(:dateInf)')
+    //         ->setParameter('dateInf', $dateInf);
+    //     } elseif (!is_null($date_sup)) {
+    //         // Si seulement la date supérieure est fournie
+    //         $queryBuilder->where('TRUNC(ev.evn_date_operation) <= TRUNC(:dateSup)')
+    //         ->setParameter('dateSup', $dateSup);
+    //     }
+    //     return $queryBuilder->getQuery()->getResult();
+    // }
+    public function searchDataMouvement($rech_numero = null, $rech_libelle = null, $date_inf = null, $date_sup = null): array
+    {
+        // Si tous les paramètres sont null, on retourne tous les mouvements
+        if (is_null($rech_numero) && is_null($rech_libelle) && is_null($date_inf) && is_null($date_sup)) {
+            return $this->findAllMouvementById();
+        }
+
+        // Connexion à la base de données
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Construction de la requête SQL
+        $sql = "SELECT 
+                m.mvn_id,m.mvt_evenement_id,m.mvt_compte_id,m.mvt_montant,m.is_mvt_debit,
+                TO_CHAR(ev.evn_date_operation, 'DD/MM/YY') AS evn_date_operation,pc.cpt_numero,pc.cpt_libelle 
+                FROM MOUVEMENT m
+                JOIN PLAN_COMPTE pc ON m.mvt_compte_id = pc.cpt_id
+                JOIN EVENEMENT ev ON m.mvt_evenement_id = ev.evn_id
+                WHERE 1=1";
+
+        // Paramètres pour la requête
+        $params = [];
+
+        // Ajout de la condition pour le numéro de compte
+        if (!is_null($rech_numero)) {
+            $sql .= " AND pc.cpt_numero LIKE :numero";
+            $params['numero'] = $rech_numero . '%'; // Recherche commence par
+        }
+
+        // Ajout de la condition pour le libellé du compte
+        if (!is_null($rech_libelle)) {
+            $sql .= " AND pc.cpt_libelle LIKE :libelle";
+            $params['libelle'] = '%' . $rech_libelle . '%'; // Recherche contenant
+        }
+
+        // Conversion des dates inférieure et supérieure
+        $dateInf = $date_inf ? \DateTime::createFromFormat('Y-m-d', $date_inf) : null;
+        $dateSup = $date_sup ? \DateTime::createFromFormat('Y-m-d', $date_sup) : null;
+
+        // Ajout de la condition pour l'intervalle de dates
+        if (!is_null($dateInf) && !is_null($dateSup)) {
+            $sql .= " AND TRUNC(ev.evn_date_operation) BETWEEN TRUNC(TO_DATE(:dateInf, 'YYYY-MM-DD')) AND TRUNC(TO_DATE(:dateSup, 'YYYY-MM-DD'))";
+            $params['dateInf'] = $dateInf->format('Y-m-d');
+            $params['dateSup'] = $dateSup->format('Y-m-d');
+        } elseif (!is_null($dateInf)) {
+            $sql .= " AND TRUNC(ev.evn_date_operation) >= TRUNC(TO_DATE(:dateInf, 'YYYY-MM-DD'))";
+            $params['dateInf'] = $dateInf->format('Y-m-d');
+        } elseif (!is_null($dateSup)) {
+            $sql .= " AND TRUNC(ev.evn_date_operation) <= TRUNC(TO_DATE(:dateSup, 'YYYY-MM-DD'))";
+            $params['dateSup'] = $dateSup->format('Y-m-d');
+        }
+
+        // Préparation et exécution de la requête
+        dump($sql);
+        $sql .= " ORDER BY ev.evn_date_operation ASC";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery($params);
+
+        // Retourner les résultats
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 
 
 }

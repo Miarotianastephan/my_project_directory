@@ -80,7 +80,10 @@ class TresorierController extends AbstractController
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
-        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere)->getBudgetMontant();
+        $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        if ($budget != null) {
+            $budget = $budget->getBudgetMontant();
+        }
         if ($solde_debit == null ) {
             $solde_reste = 0;
         } else if($solde_CREDIT == null){
@@ -111,12 +114,10 @@ class TresorierController extends AbstractController
         $beneficiaire = $data['beneficiaire'] ?? null;
         $remettant = $data['remettant'] ?? null;
         $id_user_tresorier = $this->user->getId();
+        // PARAMETRES
         // $id => ID du demande à débloqué de fonds 
         // $id_user_tresorier = ID qui devrait être un tresorier A VERIFIER APRES
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier,$banque_id,$numero_cheque,$remettant,$beneficiaire); // Déblocage du fonds demandée
-        // O_COMPTA
-        // à compléter
-        // fin O_COMPTA
 
         $data = json_decode($rep->getContent(), true);
         if ($data['success'] == true) {

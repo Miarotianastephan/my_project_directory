@@ -7,7 +7,7 @@ class InvalidDataUserException extends CustomUserMessageAuthenticationException
 {
     public function __construct($default = "")
     {
-        $message = "Assurer que tout les champs sont remplis !";
+        $message = "Assurer que tous les champs soient remplis !";
         if( strlen($default) > 1 ){
             $message = $default;
         }

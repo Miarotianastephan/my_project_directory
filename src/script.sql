@@ -251,16 +251,16 @@ insert into detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PLAN_
 --      lire les comptes commentée avant insertion des données et bien comprendre
 
 -- DATA
--- delete from mouvement;
--- delete from evenement;
--- delete from log_demande_type;
--- delete from detail_demande_piece;
--- delete from demande_type;
+delete from mouvement;
+delete from evenement;
+delete from log_demande_type;
+delete from detail_demande_piece;
+delete from demande_type;
 
 -- INFORMATION
--- delete from detail_transaction_compte;
--- delete from transaction_type;
--- delete from plan_compte;
--- delete from compte_mere;
+delete from detail_transaction_compte;
+delete from transaction_type;
+delete from plan_compte;
+delete from compte_mere;
 
 commit; -- commit faharoa

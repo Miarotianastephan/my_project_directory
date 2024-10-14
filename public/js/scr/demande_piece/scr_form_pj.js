@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createFilePreview(file) {
         const preview = document.createElement('div');
-        preview.className = 'col-md-4 mb-3';
+        preview.className = 'col-md-3';
         preview.innerHTML = getPreviewContent(file);
         previewsContainer.appendChild(preview);
     }
@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function getPreviewContent(file) {
         const iconClass = getFileIconClass(file.type);
         return `
-            <div class="card">
+            <div class="card" style="width: 230px; height: 160px;">
                 <div class="card-body text-center">
                     <i class="${iconClass} fa-3x mb-2"></i>
-                    <p class="mb-0">${file.name}</p>
+                    <p class="mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${file.name}</p>
                     <small>${(file.size / 1024).toFixed(2)} KB</small>
                 </div>
             </div>

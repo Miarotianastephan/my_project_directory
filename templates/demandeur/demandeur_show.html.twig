@@ -24,54 +24,61 @@
                         </button>
                     </div>
                     <div class="col py-2 px-1 d-flex flex-column gap-3">
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Référence:</label>
-                            <div class="col form-control">{{ demande_type.RefDemande }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Remettant:</label>
-                            <div class="col form-control" >{{ demande_type.utilisateur.UserMatricule }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Date de la demande:</label>
-                            <div class="col form-control">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de demande:</label>
-                            <div class="col form-control">{{ demande_type.demande.libelle }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Motif de la demande:</label>
-                            <div class="col form-control">{{ demande_type.PlanCompte.CptNumero }}
-                                - {{ demande_type.PlanCompte.CptLibelle }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Montant de la demande:</label>
-                            <div class="col form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de paiement:</label>
-                            <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Personne concernée:</label>
-                            <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Observation:</label>
-                            <div class="col form-control">{{ 'Petite observation'  }}</div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <!-- <div class="col-3">Les pièces jointes:</div> -->
+                        <div class="row col-12 d-flex flex-row">
+                            <div class="col-4">
+                                <label class="form-label">Type de demande:</label>
+                                <div class="border border-dark form-control">{{ demande_type.demande.libelle }}</div>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label">Date de la demande:</label>
+                                <div class="border border-dark form-control">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</div>
+                            </div>
                             {% if images|length  != 0 %}
-                            <div class="col">
-                                <!-- Bouton pour ouvrir le modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            <div class="col-4">
+                                <label class="form-label">Les pièces jointes:</label>
+                                <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal"
                                         data-bs-target="#fileModal">
                                     Voir les pièces jointes
                                 </button>
                             </div>
                             {% endif %}
+                        </div>
+                        <div class="row col-12 d-flex flex-row">
+                            <div class="col-6">
+                                <label class="form-label">Référence:</label>
+                                <div class="border border-dark form-control">{{ demande_type.RefDemande }}</div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Demandeur:</label>
+                                <div class="border border-dark form-control" >{{ demande_type.utilisateur.UserMatricule }}</div>
+                            </div>
+                        </div>
+                        <div class="row col-12 d-flex flex-row mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Motif de la demande:</label>
+                                <div class="border border-dark form-control">{{ demande_type.PlanCompte.CptNumero }}
+                                    - {{ demande_type.PlanCompte.CptLibelle }}</div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Montant de la demande:</label>
+                                <div class="border border-dark form-control">{{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar</div>
+                            </div>
+                        </div>
+                        <div class="row col-12 d-flex flex-row">
+                            <div class="col-6">
+                                <label class="form-label">Type de paiement:</label>
+                                <div class="border border-dark form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Entité de demande:</label>
+                                <div class="border border-dark form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
+                            </div>
+                        </div>
+                        <div class="row col-12 d-flex flex-row">
+                            <div class="col-12">
+                                <label class="form-label">Remarques:</label>
+                                <textarea readonly class="form-control">{{'Vous verez des remarques si il sont disponibles'}}</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>

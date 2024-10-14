@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des rôles: listes{% endblock %}
-
-{# {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
-{% endblock %} #}
+{% block title %}Upload des documents justificatifs{% endblock %}
 
 {% block page_title %}
-    Demandeur
+   Section Demandeur
 {% endblock %}
 {% block page_subtitle %}
-    Information de la demande
+    Vérifier bien avant de valider : les pièces justificatifs et le montant réelle de la dépense
 {% endblock %}
 
 {% block page_main_content %}
@@ -18,79 +14,72 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Ajout de pièce justificative</h4>
+                    <h4 class="card-title">Formulaire d'upload et saisie du montant exacte de dépense</h4>
                 </div>
                 <form id="formulaire" action="{{ path('dm.image', {'id': demande_type.Id}) }}"
                       enctype="multipart/form-data"
                       data-cancel="{{ path('SG.liste_demande_en_attente') }}">
                     <div class="card-body d-flex flex-column gap-2">
-                        <div class="col-12 d-flex flex-row">
-                            <label class="form-control-lg col-3"> Référence: </label>
-                            <div class="col form-control">
-                                {{ demande_type.RefDemande }}
+                        <div class="row col-12 d-flex flex-row mb-4">
+                            <div class="col-6">
+                                <label class="form-label"> Référence: </label>
+                                <div class="border border-dark form-control">{{ demande_type.RefDemande }}</div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="form-control-lg col-3"> Montant reçu: </label>
-                            <div class="col form-control form-control">
-                                {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label for="montant_reel" class="col-3 form-control-lg"> Montant utilisé: </label>
-                            <div class="input-group mb-3">
-                                <input
-                                        type="number"
-                                        class="form-control"
-                                        step="0.01"
-                                        aria-label="Amount (to the nearest dollar)"
-                                        name="montant_reel"
-                                        value="{{ demande_type.DmMontant }}"
-                                />
-                                <span class="input-group-text">Ar</span>
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-3 form-control-lg">
-                                Choix de fichier:
-                            </label>
-                            <div class="col d-flex flex-column gap-1">
-                                <div class="col-12">
-                                    <!--
-                                    <label class="selectgroup-item">
-                                        <input class="selectgroup-input" type="radio" name="type" value="bon_livraison">
-                                        <span class="selectgroup-button">
-                                            Facture de payement ou bon de livraison
-                                        </span>
-                                    </label>
-                                    -->
-
-                                    <label class="selectgroup-item">
-                                        <input class="selectgroup-input" type="radio" name="type"
-                                               value="bon_livraison" checked="checked">
-                                        <span class="selectgroup-button">PJ bon de livraison</span>
-                                    </label>
+                            <div class="col-6">
+                                <label class="form-label"> Montant du déblocage: </label>
+                                <div class="border border-dark form-control form-control">
+                                    {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 input-group">
-                            <label class="col-3 form-control-lg" for="image">Choisisse le fichier :</label>
-                            <!--<input class="col form-control-file" type="file" id="image" name="image">-->
-                            <div class="col input-group">
-                                <label class="input-group-text" for="customFile">
-                                    <i class="bi bi-file-earmark-image">PJ</i>
-                                </label>
-                                <input type="file" class="form-control visually-hidden"
-                                       id="customFile" accept="image/*,.xls,.xlsx,.txt,.pdf"
-                                       onchange="showFiles(this)" name="image[]" multiple>
-                                <button class="btn bg-dark-subtle" type="button"
-                                        onclick="document.getElementById('customFile').click()">
-                                    parcourir les documents
-                                </button>
+                        <div class="row col-12 d-flex flex-row">
+                            <div class="col-12 d-flex flex-column">
+                                <label for="montantR" class="form-label fw-bold"> Montant dépensée </label>
+                                <div class="input-group mb-3">
+                                    <input
+                                            id="montantR"
+                                            type="number"
+                                            class="form-control"
+                                            step="0.01"
+                                            aria-label="Amount (to the nearest dollar)"
+                                            name="montant_reel"
+                                            value="{{ demande_type.DmMontant }}"
+                                    />
+                                    <span class="input-group-text">Ar</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="d-flex gap-4 py-5 px-4">
-                            <div class="row" id="imagePreviews"></div>
+                        <div class="row col-12 d-flex flex-row">
+                            <div class="col-6">
+                                <label class="form-label">Choix des fichiers</label>
+                                <div class="col input-group">
+                                    <label class="input-group-text" for="customFile">
+                                        <i class="bi bi-file-earmark-image">Pièces jointes</i>
+                                    </label>
+                                    <input type="file" class="form-control visually-hidden"
+                                        id="customFile" accept="image/*,.xls,.xlsx,.txt,.pdf"
+                                        onchange="showFiles(this)" name="image[]" multiple>
+                                    <button class="btn bg-dark-subtle" type="button"
+                                            onclick="document.getElementById('customFile').click()">
+                                        parcourir les documents
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Choix de fichier:</label>
+                                <div>
+                                    <div class="col-12">
+                                        <label class="selectgroup-item">
+                                            <input class="selectgroup-input" type="radio" name="type"
+                                                value="bon_livraison" checked="checked">
+                                            <span class="selectgroup-button">PJ bon de livraison</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" style="border-top: 1px solid #8f8d8d85; margin-top: 1rem;">
+                            <div class="row" id="imagePreviews"style="margin-top: 2rem;"></div>
                         </div>
                     </div>
                     <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">

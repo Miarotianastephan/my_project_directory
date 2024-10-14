@@ -350,6 +350,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $entityManager->persist($log_dm);
 
             // Update Validé => Débloqué dans les demandes
+            // $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
             $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setDmDate($log_dm->getLogDmDate());                                           // MAJ de dm_type la base de données

@@ -17,6 +17,41 @@
         <script src="{{ asset("js/core/popper.min.js") }}"></script>
         <script src="{{ asset("js/core/bootstrap.min.js") }}"></script>
         <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
+        <!-- Bootstrap Notify -->
+        <script src="{{ asset("js/plugin/bootstrap-notify/bootstrap-notify.min.js") }}"></script>
+        <script src="{{ asset('js/xhr.js') }}" ></script>
+        <script src="{{ asset('js/scr/exportpdf/scr_search_journal.js') }}" ></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const generatePdfButton = document.getElementById('generatePdfElement');
+            generatePdfButton.addEventListener('click', () => {
+                const contentTb = document.getElementById('contentTb');
+                const options = {
+                    margin: [15, 10, 25, 10], // Augmentation des marges supérieure et inférieure
+                    filename: 'testPDF.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+                    header: function(currentPage, pageCount) {
+                        return {
+                            table: { widths: ['*'], body: [[{ text: 'En-tête du tableau', style: 'tableHeader', alignment: 'center' }]] },
+                            margin: [30, 10, 30, 0]
+                        };
+                    },
+                    footer: function(currentPage, pageCount) {
+                        return {
+                            text: 'Page ' + currentPage.toString() + ' sur ' + pageCount.toString(),
+                            alignment: 'right',
+                            margin: [0, 0, 10, 10]
+                        };
+                    }
+                };
+
+                html2pdf().set(options).from(contentTb).save();
+            });
+        });
+        </script>
     {% endblock %}
     {# <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.tailwindcss.com"></script> #}
@@ -46,11 +81,55 @@
     <div class="container">
         <div class="row">
             <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title title_font fw-bold mb-3">Apperçu du Journal sous format PDF</h3>
+                <div class="card-header">
+                    <h4 class="card-title title_font fw-bold mb-3"> 
+                        Apperçu du Journal sous format PDF
+                    </h4>
                     <button id="generatePdfElement" class="btn btn-dark mb-4 btn-rounded">Imprimer en Pdf</button>
                     <a href="{{ path('tresorier.liste_demande_en_attente') }}" class="btn btn-label-secondary mb-4 btn-rounded">Retour</a>
                 </div>
+                <form id="formSearch" action="{{ path('export.journal.search') }}"  method="post">
+                    <div class="row card-body">
+                        <div class="col-md-4">
+                            <label class="form-label" for="rech_montant">Saisissez un numéro</label>
+                            <div class="input-group">
+                                <input
+                                        id="rech_numero"
+                                        name="rech_numero"
+                                        type="text"
+                                        class="form-control"
+                                        aria-label="rech_montant"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="rech_libelle">Saisissez un libelle</label>
+                            <div class="input-group">
+                                <input
+                                        id="rech_libelle"
+                                        name="rech_libelle"
+                                        type="text"
+                                        class="form-control"
+                                        aria-label="rech_libelle"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="date_inf">Date inférieur</label>
+                            <input type="date" id="date_inf" name="date_inf" class="form-control"
+                                    value="{{ 'now'|date('Y-m-d') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="date_sup">Date supérieur</label>
+                            <input type="date" id="date_sup" name="date_sup" class="form-control"
+                                    value="{{ 'now'|date('Y-m-d') }}">
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <button type="submit" id="valider" class="btn btn-secondary">Rechercher</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -59,7 +138,7 @@
 
                 <div id="contentTb">
                     <div class="card-header text-center title_pdf">
-                        <h2 class="title_font fw-bold mb-3">Journal de Caisse année</h2>
+                        <h2 class="title_font fw-bold mb-3">Livre journal année {{exercice_actuel}}</h2>
                         <h2 class="title_font fw-bold mb-3">Comité d'entreprise BFM</h2>
                     </div>
                     <div class="card-body">
@@ -74,15 +153,15 @@
                                         <th>Crédit</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="searchResultBody">
                                 {% for mouvement in journal_caisse %}
                                     <tr>
-                                        <td>{{mouvement.getMvtEvenementId().getEvnDateOperation()|date('d/m/y')|trans({}, 'fr')}}</td>
-                                        <td>{{mouvement.getMvtCompteId().getCptNumero()}}</td>
-                                        <td>{{mouvement.getMvtCompteId().getCptLibelle()}}</td>
-                                        {% set isDebit = mouvement.isMvtDebit() %}
-                                        <td>{{isDebit ? mouvement.getMvtMontant() : '' }}</td>
-                                        <td>{{(isDebit == false) ? mouvement.getMvtMontant() : '' }}</td>
+                                        <td>{{mouvement['EVN_DATE_OPERATION']|date('d/m/y')|trans({}, 'fr')}}</td>
+                                        <td>{{mouvement['CPT_NUMERO']}}</td>
+                                        <td>{{mouvement['CPT_LIBELLE']}}</td>
+                                        {% set isDebit = mouvement['IS_MVT_DEBIT'] %}
+                                        <td>{{isDebit ? mouvement['MVT_MONTANT'] : '' }}</td>
+                                        <td>{{(isDebit == false) ? mouvement['MVT_MONTANT'] : '' }}</td>
                                     </tr>
                                 {% endfor %}
                                     {# TOTAL #}
@@ -112,35 +191,4 @@
 </div>
     
 </body>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const generatePdfButton = document.getElementById('generatePdfElement');
-    generatePdfButton.addEventListener('click', () => {
-        const contentTb = document.getElementById('contentTb');
-        const options = {
-            margin: [15, 10, 25, 10], // Augmentation des marges supérieure et inférieure
-            filename: 'testPDF.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-            header: function(currentPage, pageCount) {
-                return {
-                    table: { widths: ['*'], body: [[{ text: 'En-tête du tableau', style: 'tableHeader', alignment: 'center' }]] },
-                    margin: [30, 10, 30, 0]
-                };
-            },
-            footer: function(currentPage, pageCount) {
-                return {
-                    text: 'Page ' + currentPage.toString() + ' sur ' + pageCount.toString(),
-                    alignment: 'right',
-                    margin: [0, 0, 10, 10]
-                };
-            }
-        };
-
-        html2pdf().set(options).from(contentTb).save();
-    });
-});
-</script>
 </html>

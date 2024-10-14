@@ -133,7 +133,6 @@ class SGController extends AbstractController
         else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
-
         return $this->render('sg/valider_demande.html.twig', ['demande_type' => $data, 'solde_reste' => $solde_reste, 'budget'=>$budget]);
     }
 
@@ -146,6 +145,7 @@ class SGController extends AbstractController
 
 
     #[Route('/valider_demande/{id}', name: 'valider_demande', methods: ['POST'])]
+    
     public function valider_demande($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $id_user_sg = $this->user->getId(); // mandeha io 
