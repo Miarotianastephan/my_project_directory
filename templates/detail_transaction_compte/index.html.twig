@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comptable{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {% block page_title %}
-    Admin
+    Section Admin
 {% endblock %}
 
 {% block page_subtitle %}
-    {#  #}
+    Voici la liste des transactions de compte.
 {% endblock %}
 {% block page_options %}
     <a href="{{ path('app_detail_transaction_compte_new') }}" class="btn btn-secondary">Ajouter</a>
@@ -28,7 +28,7 @@
                                 <th id="isCol" scope="col">Transaction_type</th>
                                 <th id="isCol" scope="col">Plan_compte</th>
                                 <th id="isCol" scope="col">Type d'oppération</th>
-                                <th id="noCol" scope="col"></th>
+                                <th id="noCol" scope="col" ></th>
                             </tr>
                             </thead>
                             <tbody id="bodyList">

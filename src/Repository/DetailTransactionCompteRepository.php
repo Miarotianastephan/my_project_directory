@@ -7,6 +7,7 @@ use App\Entity\PlanCompte;
 use App\Entity\TransactionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @extends ServiceEntityRepository<DetailTransactionCompte>
@@ -27,7 +28,6 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    // Pour avoir le compte credit du details 
     public function findByTransactionWithTypeOperation(TransactionType $transactionType, $isDebit = 0): ?DetailTransactionCompte
     {
         return $this->createQueryBuilder('d')
@@ -38,6 +38,8 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    // Pour avoir le compte credit du details 
 
     public function findAllByTransaction(TransactionType $transactionType): ?array
     {
@@ -50,14 +52,31 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
 
     public function findPlanCompte_CreditByTransaction(TransactionType $transactionType): ?PlanCompte
     {
-        dump("transaction == ".$transactionType->getTrsLibelle());
+        dump("transaction == " . $transactionType->getTrsLibelle());
         $data = $this->createQueryBuilder('d')
             ->Where('d.transaction_type = :val')
             ->andWhere('d.isTrsDebit = 0')
             ->setParameter('val', $transactionType)
             ->getQuery()
             ->getOneOrNullResult();
-        if ($data){return $data->getPlanCompte();}else{return null;}
+        if ($data) {
+            return $data->getPlanCompte();
+        } else {
+            return null;
+        }
+    }
+
+    public function findByTransactionAndPlanCompte(TransactionType $transactionType, PlanCompte $planCompte): ?array
+    {
+         $data = $this->createQueryBuilder('d')
+            ->Where('d.transaction_type = :trs')
+            ->andWhere('d.plan_compte = :plc')
+            ->setParameter('trs', $transactionType)
+            ->setParameter('plc', $planCompte)
+            ->getQuery()
+            ->getResult();
+         dump($data);
+        return $data;
     }
 
     //    /**

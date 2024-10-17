@@ -6,14 +6,11 @@ use App\Entity\Banque;
 use App\Entity\CompteMere;
 use App\Entity\DemandeType;
 use App\Entity\Exercice;
-use App\Entity\PlanCompte;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @extends ServiceEntityRepository<DemandeType>
  */
@@ -33,6 +30,63 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+
+    public function findActiveByExercice(Exercice $exercice, array $les_filtres): array
+    {
+        $queryBuilder = $this->createQueryBuilder('d')
+            ->where('d.exercice = :exercice')
+            ->setParameter('exercice', $exercice);
+
+        $conditions = [];
+        $parameters = new ArrayCollection();
+
+        if ($les_filtres['initie']) {
+            $conditions[] = 'd.dm_etat = :etat_initie';
+            $parameters->add(['key' => 'etat_initie', 'value' => 100]);
+        }
+        if ($les_filtres['attente_modif']) {
+            $conditions[] = 'd.dm_etat = :etat_attente_modif';
+            $parameters->add(['key' => 'etat_attente_modif', 'value' => 201]);
+        }
+        if ($les_filtres['modifier']) {
+            $conditions[] = 'd.dm_etat = :etat_modifie';
+            $parameters->add(['key' => 'etat_modifie', 'value' => 101]);
+        }
+        if ($les_filtres['attente_fond']) {
+            $conditions[] = 'd.dm_etat = :etat_attente_fond';
+            $parameters->add(['key' => 'etat_attente_fond', 'value' => 200]);
+        }
+        if ($les_filtres['attente_versement']) {
+            $conditions[] = 'd.dm_etat = :etat_attente_versement';
+            $parameters->add(['key' => 'etat_attente_versement', 'value' => 202]);
+        }
+        if ($les_filtres['refuser']) {
+            $conditions[] = 'd.dm_etat = :etat_refuse';
+            $parameters->add(['key' => 'etat_refuse', 'value' => 301]);
+        }
+        if ($les_filtres['reverser']) {
+            $conditions[] = 'd.dm_etat = :etat_reverse';
+            $parameters->add(['key' => 'etat_reverse', 'value' => 401]);
+        }
+        if ($les_filtres['comptabiliser']) {
+            $conditions[] = 'd.dm_etat = :etat_comptabilise';
+            $parameters->add(['key' => 'etat_comptabilise', 'value' => 300]);
+        }
+
+        if (!empty($conditions)) {
+            $queryBuilder->andWhere('(' . implode(' OR ', $conditions) . ')');
+
+            // Convert ArrayCollection to parameter array and set them individually
+            foreach ($parameters as $param) {
+                $queryBuilder->setParameter($param['key'], $param['value']);
+            }
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+
     public function findByEtat(int $etat): array
     {
         return $this->createQueryBuilder('d')
@@ -50,7 +104,7 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     public function ajout_approvisionnement(int                $entite_id,
                                             int                $banque_id,
                                             int                $chequier_numero,
@@ -82,7 +136,8 @@ class DemandeTypeRepository extends ServiceEntityRepository
         );
     }
 
-    public function insertDecaissement(DemandeType $demandeType){
+    public function insertDecaissement(DemandeType $demandeType)
+    {
         try {
             $em = $this->getEntityManager();
             $em->persist($demandeType);
@@ -99,7 +154,8 @@ class DemandeTypeRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByUtilisateur(Utilisateur $utilisateur){
+    public function findByUtilisateur(Utilisateur $utilisateur)
+    {
         return $this->createQueryBuilder('d')
             ->innerJoin('d.utilisateur', 'u')
             ->andWhere('u = :utilisateur')
@@ -128,6 +184,7 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function findAllAppro(): array
     {
         return $this->createQueryBuilder('d')

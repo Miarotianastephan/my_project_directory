@@ -1,5 +1,10 @@
 php bin/console ScriptAlterTable
 php bin/console ScriptAddGpUser
+php bin/console ScriptAddDemande
+php bin/console ScriptAddBudgetType
+php bin/console ScriptAddTransaction
+php bin/console ScriptAddEtatDemande
+php bin/console ScriptAddDetailTransactionCompte
 
 php bin/console VMouvementDebitCaisseSiege
 php bin/console VMouvementDebitBanque

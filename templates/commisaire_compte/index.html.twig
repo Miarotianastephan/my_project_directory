@@ -21,88 +21,18 @@
                         <div class="form-group">
                             <label class="form-label">Filtre les demandes de l'{{ exercice }}.</label>
                             <div class="selectgroup selectgroup-pills text-end">
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="Initié"
-                                            class="selectgroup-input"
-                                            checked
-                                    />
-                                    <span class="selectgroup-button">Initié</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="attente_modifier"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">À modifier</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="modifier"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">Modifié</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="attente_fond"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">Attente de fonds</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="attente_versement"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">Attente de versements</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="refuser"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">Refuser</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="debloquer"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">Débloquer</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="reverser"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">À reverser</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input
-                                            type="checkbox"
-                                            name="value"
-                                            value="comptabiliser"
-                                            class="selectgroup-input" checked
-                                    />
-                                    <span class="selectgroup-button">Comptabiliser</span>
-                                </label>
+                                {% for filter, active in filters %}
+                                    <label class="selectgroup-item">
+                                        <input
+                                                type="checkbox"
+                                                name="value"
+                                                value="{{ filter }}"
+                                                class="selectgroup-input"
+                                                {{ active ? 'checked' : "" }}
+                                        />
+                                        <span class="selectgroup-button">{{ filter|replace({'_': ' '})|title }}</span>
+                                    </label>
+                                {% endfor %}
                             </div>
                         </div>
                     </form>
@@ -163,13 +93,13 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const filterButtons = document.querySelectorAll('.selectgroup-input'); // Sélectionne tous les checkbox
             const formulaire = document.getElementById('formulaire');
             // Ajoute un écouteur d'événements sur chaque checkbox
             // Ajoute un écouteur d'événements sur chaque checkbox
             filterButtons.forEach(button => {
-                button.addEventListener('change', function() {
+                button.addEventListener('change', function () {
                     // Soumet le formulaire automatiquement lorsque l'état change
                     formulaire.submit();
                 });

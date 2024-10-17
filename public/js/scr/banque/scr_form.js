@@ -23,4 +23,4 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("Aucune URL d'annulation définie.");
         }
     }
-}
+});

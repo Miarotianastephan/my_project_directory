@@ -23,27 +23,36 @@ final class DetailTransactionCompteController extends AbstractController
     }
 
     #[Route('/new', name: 'app_detail_transaction_compte_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, DetailTransactionCompteRepository $detailTransactionCompteRepository): Response
     {
-        dump($request);
         $detailTransactionCompte = new DetailTransactionCompte();
         $form = $this->createForm(DetailTransactionCompteType::class, $detailTransactionCompte);
         $form->handleRequest($request);
 
-
-
         if ($form->isSubmitted()
             && $form->isValid()
         ) {
+            $is_existe = $detailTransactionCompteRepository->findByTransactionAndPlanCompte($detailTransactionCompte->getTransactionType(), $detailTransactionCompte->getPlanCompte());
+            dump($is_existe);
+            if ($is_existe !== null) {
+                return $this->render('detail_transaction_compte/new.html.twig', [
+                    'detail_transaction_compte' => $detailTransactionCompte,
+                    'form' => $form,
+                    'message' => "Cette information éxiste déjà",
+                ]);
+            } else {
+                $entityManager->persist($detailTransactionCompte);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_detail_transaction_compte_index', [], Response::HTTP_SEE_OTHER);
+            }
 
-            $entityManager->persist($detailTransactionCompte);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_detail_transaction_compte_index', [], Response::HTTP_SEE_OTHER);
+
         }
 
         return $this->render('detail_transaction_compte/new.html.twig', [
             'detail_transaction_compte' => $detailTransactionCompte,
             'form' => $form,
+            'message' => null,
         ]);
     }
 
@@ -76,7 +85,7 @@ final class DetailTransactionCompteController extends AbstractController
     #[Route('/{id}', name: 'app_detail_transaction_compte_delete', methods: ['POST'])]
     public function delete(Request $request, DetailTransactionCompte $detailTransactionCompte, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$detailTransactionCompte->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $detailTransactionCompte->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($detailTransactionCompte);
             $entityManager->flush();
         }

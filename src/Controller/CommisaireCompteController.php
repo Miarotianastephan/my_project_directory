@@ -7,6 +7,7 @@ use App\Repository\DetailDemandePieceRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\ObservationDemandeRepository;
+use phpDocumentor\Reflection\Element;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,11 +21,35 @@ class CommisaireCompteController extends AbstractController
                           ExerciceRepository    $exerciceRepository,
                           DemandeTypeRepository $demandeTypeRepository): Response
     {
+        dump($request->getRequestUri());
+        $requestURI = $request->getRequestUri();
+        $allFilters = [
+            'initie' => false,
+            'attente_modif' => false,
+            'modifier' => false,
+            'attente_fond' => false,
+            'attente_versement' => false,
+            'attente_refuser' => false,
+            'debloquer' => false,
+            'refuser' => false,
+            'reverser' => false,
+            'comptabiliser' => false
+        ];
+        if ($requestURI == "/commisaire/") {
+            $allFilters = array_fill_keys(array_keys($allFilters), true);
+        } else {
+            foreach ($allFilters as $filter => &$active) {
+                if (str_contains($requestURI, "value=$filter") || str_contains($requestURI, $filter)) {
+                    $active = true;
+                }
+            }
+        }
         $exercice_valide = $exerciceRepository->getExerciceValide();
-        $demande_types = $demandeTypeRepository->findByExercice($exercice_valide);
+        $demande_types = $demandeTypeRepository->findActiveByExercice($exercice_valide,$allFilters);
         return $this->render('commisaire_compte/index.html.twig', [
             'exercice' => $exercice_valide,
             'demande_types' => $demande_types,
+            'filters' => $allFilters,
         ]);
     }
 
