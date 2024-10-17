@@ -6,13 +6,47 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A_execute.bat" beforeDir="false" afterPath="$PROJECT_DIR$/A_execute.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/comptable/scr_ajout_dep_direct.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/comptable/scr_ajout_dep_direct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VDebitBanqueMensuelCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VDebitBanqueMensuelCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VDebitCaisseMensuelCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VDebitCaisseMensuelCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementCreditBanqueCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementCreditBanqueCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementCreditCaisseSiegeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementCreditCaisseSiegeCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementDebitBanqueCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementDebitBanqueCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementDebitCaisseSiegeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementDebitCaisseSiegeCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Banque.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Banque.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/BudgetType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/BudgetType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Chequier.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Chequier.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/CompteMere.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/CompteMere.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Demande.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Demande.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DemandeType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DemandeType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DetailBudget.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DetailBudget.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DetailDemandePiece.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DetailDemandePiece.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/DetailTransactionCompte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/EtatDemande.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/EtatDemande.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Evenement.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Evenement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Exercice.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Exercice.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeUtilisateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeUtilisateur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/LogDemandeType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LogDemandeType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Mouvement.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Mouvement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/ObservationDemande.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ObservationDemande.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/PlanCompte.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/PlanCompte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/TransactionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/TransactionType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/UsageCheque.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/UsageCheque.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Utilisateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Utilisateur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DetailDemandePieceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailDemandePieceRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UtilisateurRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UtilisateurRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/budget/liste_budget.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/budget/liste_budget.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/comptable/show_comptabilisation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/show_comptabilisation.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/journal/journal_caisse.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/journal/journal_caisse.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sg/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exercice/form_ajout.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/form_ajout.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exercice/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/liste_approvisionnement.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/liste_approvisionnement.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +239,7 @@
     &quot;PHP Script.AdminController.php.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;integration__v6__Randy&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;integration__v7__Randy&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -271,6 +305,11 @@
       <workItem from="1728360903295" duration="18545000" />
       <workItem from="1728803888577" duration="241000" />
       <workItem from="1728904154764" duration="1796000" />
+      <workItem from="1728907996653" duration="563000" />
+      <workItem from="1728909401292" duration="15711000" />
+      <workItem from="1728991336909" duration="2339000" />
+      <workItem from="1728996108349" duration="14438000" />
+      <workItem from="1729142918256" duration="7407000" />
     </task>
     <servers />
   </component>

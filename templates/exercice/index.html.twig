@@ -1,18 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Titre fotsiny{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {# {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
 {% endblock %} #}
 
 {% block page_title %}
-    Comptable
+    Section Comptable
 {% endblock %}
 {% block page_subtitle %}
-    {#
-    Liste des exercices
-    #}
+    Les exercices qui sont accéssibles. Pour ouvrir un nouvel exercice, veuillez cloturer tous les exercices ouverts.
 {% endblock %}
 {% block page_options %}
     <a href="{{ path('app_form_ajout') }}" class="btn btn-secondary">Ajouter un exercice</a>
@@ -41,7 +39,7 @@
                                 <tr class="col-12">
                                     <td class="col">{{ exercice.ExerciceDateDebut|date('d/m/y')|trans({}, 'fr') }}</td>
                                     <td class="col">{{ exercice.ExerciceDateFin ? exercice.ExerciceDateFin|date('d/m/y')|trans({}, 'fr') : "indéfini" }}</td>
-                                    <td class="col">{{ exercice.IsValid ? 'Valide' : 'À venir' }}</td>
+                                    <td class="col">{{ exercice.IsValid ? 'Valide' : exercice.ExerciceDateFin ? 'Ancien' : 'À venir' }}</td>
                                     <td class="col text-center">
                                         {% if exercice.IsValid %}
                                             <button data-id="{{ exercice.Id }}"

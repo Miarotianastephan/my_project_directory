@@ -6,6 +6,7 @@ use App\Repository\BanqueRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: BanqueRepository::class)]
+#[ORM\Table(name: "ce_banque")]
 class Banque
 {
     #[ORM\Id]

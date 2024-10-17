@@ -55,7 +55,7 @@ class UtilisateurRepository extends ServiceEntityRepository
     public function insertUtilisateur(string $user_matricule, int $groupeId, string $roles): void
     {
         // Requête SQL Oracle
-        $sql = "INSERT INTO utilisateur (user_id,user_matricule, grp_id, roles) 
+        $sql = "INSERT INTO ce_utilisateur (user_id,user_matricule, grp_id, roles) 
                 VALUES (user_seq.NEXTVAL,:user_matricule, :grp_id, :roles)";
         // Récupérer la connexion Doctrine
         $conn = $this->getEntityManager()->getConnection();

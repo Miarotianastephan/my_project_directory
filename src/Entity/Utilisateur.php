@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)] 
-#[ORM\Table(name: 'utilisateur')]
+#[ORM\Table(name: 'ce_utilisateur')]
 class Utilisateur implements UserInterface, \Serializable,PasswordAuthenticatedUserInterface
 {
     

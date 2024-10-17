@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: DetailDemandePieceRepository::class)]
+#[ORM\Table(name: "ce_detail_demande_piece")]
 class DetailDemandePiece
 {
     #[ORM\Id]

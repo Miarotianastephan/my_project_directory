@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: PlanCompteRepository::class)]
-#[ORM\Table(name: 'plan_compte')]
+#[ORM\Table(name: 'ce_plan_compte')]
 class PlanCompte
 {
     #[ORM\Id]

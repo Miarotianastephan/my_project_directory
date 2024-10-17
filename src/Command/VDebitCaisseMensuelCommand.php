@@ -39,15 +39,15 @@ class VDebitCaisseMensuelCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connection = $this->entityManager->getConnection();
-        $sql = 'CREATE VIEW v_debit_caisse_mensuel AS
+        $sql = 'CREATE VIEW ce_v_debit_caisse_mensuel AS
                 SELECT 
                     COALESCE(SUM(vmdc.MVT_MONTANT), 0) AS total,
                     TO_CHAR(e.evn_date_operation, \'YYYY-MM\') AS mois_operation,
                     e.evn_exercice_id
                 FROM 
-                    v_mouvement_debit_siege vmdc
+                    ce_v_mouvement_debit_siege vmdc
                 LEFT JOIN 
-                    evenement e ON vmdc.mvt_evenement_id = e.evn_id
+                    ce_evenement e ON vmdc.mvt_evenement_id = e.evn_id
                 GROUP BY 
                     TO_CHAR(e.evn_date_operation, \'YYYY-MM\'),
                     e.evn_exercice_id

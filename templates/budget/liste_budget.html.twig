@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste budget{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
-{% block page_title %} Section Trésorier {% endblock %}
+{% block page_title %} Section Comptable {% endblock %}
 {% block page_subtitle %}
-    Les budgets qui ont été validés lors du dernier assemblé.
+    Les budgets qui ont été validés lors du dernier assemblé pour l'exercice suivant.
 {% endblock %}
 
 {% block page_options %}
@@ -28,7 +28,6 @@
                                 <th class="col">Montant</th>
                                 <th class="col">Type</th>
                                 <th class="col">Exercice</th>
-                                <th class="col"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,22 +40,11 @@
                                     </td>
                                     <td class="">{{ budget.BudgetType.Libelle }}   </td>
                                     <td class="">{{ budget.Exercice }}   </td>
-                                    <td class="col">
-                                        <div class="col-12 d-flex gap-2">
-                                            <div class="col-4">
-                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
-                                                    {#
-                                                    <a>{{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}</a>
-                                                    #}
-                                                </button>
-                                            </div>
 
-                                        </div>
-                                    </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="4">Aucun donnée inserer</td>
+                                    <td colspan="4">Aucun donné inséré</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

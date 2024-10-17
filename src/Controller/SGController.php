@@ -61,7 +61,13 @@ class SGController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste, 'budget' => $budget]);
+        return $this->render('sg/modifier_demande.html.twig', [
+            'demande_type' => $data,
+            'images' => $list_img,
+            'solde_reste' => $solde_reste,
+            'budget_reste' => $budget - $solde_debit,
+            'budget' => $budget
+        ]);
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]

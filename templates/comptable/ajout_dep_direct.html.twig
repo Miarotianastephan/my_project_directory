@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_subtitle %}
-    Ajout de dépense directe
+    Les dépenses directement payées par le BFM seront ajoutées ici. À la validation de ce formulaire, l'événement sera comptabiliser.
 {% endblock %}
 
 {% block page_main_content %}
@@ -64,12 +64,13 @@
                     </div>
                     <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" id="annuler" class="btn btn-secondary">Annuler</button>
-                        <button type="submit" id="valider" class="btn btn-primary">Valider</button>
+                        <button type="button" id="valider" class="btn btn-primary">Valider</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    {{ include('include/_message_modal.html.twig') }}
 {% endblock %}
 
 {% block javascripts %}

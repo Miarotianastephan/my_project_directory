@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: CompteMereRepository::class)]
+#[ORM\Table(name: "ce_compte_mere")]
 class CompteMere
 {
     #[ORM\Id]

@@ -32,12 +32,12 @@ class MouvementRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        $table = $mode_paiement == 0 ? "v_mouvement_debit_siege" : "v_mouvement_debit_banque";
+        $table = $mode_paiement == 0 ? "ce_v_mouvement_debit_siege" : "ce_v_mouvement_debit_banque";
         /*dump([
             "TEZSTSET" => $table,
         ]);*/
 
-        $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
+        $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN ce_evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
 
         try {
 
@@ -60,9 +60,9 @@ class MouvementRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
         // 0 = paiement espèces 
-        $table = $mode_paiement == 0 ? "v_mouvement_credit_siege" : "v_mouvement_credit_banque";
+        $table = $mode_paiement == 0 ? "ce_v_mouvement_credit_siege" : "ce_v_mouvement_credit_banque";
 
-        $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
+        $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN ce_evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
 
         try {
 
@@ -146,7 +146,7 @@ class MouvementRepository extends ServiceEntityRepository
         $connection = $entityManager->getConnection();
 
         // Script SQL
-        $script = "select total,mois_operation,EVN_EXERCICE_ID from v_debit_caisse_mensuel where evn_exercice_id = :exercice";
+        $script = "select total,mois_operation,EVN_EXERCICE_ID from ce_v_debit_caisse_mensuel where evn_exercice_id = :exercice";
         try {
             // Préparation et exécution de la requête
             $statement = $connection->prepare($script);
@@ -192,7 +192,7 @@ class MouvementRepository extends ServiceEntityRepository
         //dump($date);
 
         // Script SQL
-        $script = "select total,mois_operation,EVN_EXERCICE_ID from v_debit_banque_mensuel where evn_exercice_id = :exercice";
+        $script = "select total,mois_operation,EVN_EXERCICE_ID from ce_v_debit_banque_mensuel where evn_exercice_id = :exercice";
 
         try {
             // Préparation et exécution de la requête
@@ -246,9 +246,9 @@ class MouvementRepository extends ServiceEntityRepository
         $sql = "SELECT 
                 m.mvn_id,m.mvt_evenement_id,m.mvt_compte_id,m.mvt_montant,m.is_mvt_debit,
                 ev.evn_date_operation,pc.cpt_numero,pc.cpt_libelle 
-                FROM MOUVEMENT m
-                JOIN PLAN_COMPTE pc ON m.mvt_compte_id = pc.cpt_id
-                JOIN EVENEMENT ev ON m.mvt_evenement_id = ev.evn_id
+                FROM ce_mouvement m
+                JOIN ce_plan_compte pc ON m.mvt_compte_id = pc.cpt_id
+                JOIN ce_evenement ev ON m.mvt_evenement_id = ev.evn_id
                 WHERE 1=1 ORDER BY m.mvn_id ASC";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
@@ -320,9 +320,9 @@ class MouvementRepository extends ServiceEntityRepository
         $sql = "SELECT 
                 m.mvn_id,m.mvt_evenement_id,m.mvt_compte_id,m.mvt_montant,m.is_mvt_debit,
                 TO_CHAR(ev.evn_date_operation, 'DD/MM/YY') AS evn_date_operation,pc.cpt_numero,pc.cpt_libelle 
-                FROM MOUVEMENT m
-                JOIN PLAN_COMPTE pc ON m.mvt_compte_id = pc.cpt_id
-                JOIN EVENEMENT ev ON m.mvt_evenement_id = ev.evn_id
+                FROM ce_mouvement m
+                JOIN ce_plan_compte pc ON m.mvt_compte_id = pc.cpt_id
+                JOIN ce_evenement ev ON m.mvt_evenement_id = ev.evn_id
                 WHERE 1=1";
 
         // Paramètres pour la requête
