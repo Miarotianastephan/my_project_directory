@@ -255,6 +255,7 @@ delete from mouvement;
 delete from evenement;
 delete from log_demande_type;
 delete from detail_demande_piece;
+delete from versements;
 delete from demande_type;
 
 -- INFORMATION

@@ -33,15 +33,17 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByEtat($userID, int $etat): array
+    public function findByEtat(Utilisateur $utilisateur = null,array $etats): array
     {
-        return $this->createQueryBuilder('d')
-        // ->andWhere('d.utilisateur_id = :user_id')
-            ->andWhere('d.dm_etat = :etat')
-            ->setParameter('etat', $etat)
-            // ->setParameter('user_id', $userID)
-            ->getQuery()
-            ->getResult();
+        $queryBuilder = $this->createQueryBuilder('d');
+            $queryBuilder->andWhere('d.dm_etat IN (:etats)')
+            ->setParameter('etats', $etats);
+            if($utilisateur != null){
+                $queryBuilder->innerJoin('d.logDemandeTypes', 'log')
+                ->andWhere('log.user_matricule = :user_matricule')
+                ->setParameter('user_matricule', $utilisateur->getUserMatricule());
+            }
+        return $queryBuilder->getQuery()->getResult();
     }
 
     public function findByReference(string $reference): ?array

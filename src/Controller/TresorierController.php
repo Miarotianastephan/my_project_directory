@@ -5,16 +5,25 @@ namespace App\Controller;
 use App\Entity\DemandeType;
 use App\Repository\BanqueRepository;
 use App\Repository\ChequierRepository;
+use App\Repository\DemandeRepository;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
+use App\Repository\EtatDemandeRepository;
+use App\Repository\EvenementRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\MouvementRepository;
 use App\Repository\ObservationDemandeRepository;
 use App\Repository\PlanCompteRepository;
+use App\Repository\VersementsRepository;
 use App\Service\DemandeTypeService;
+use App\Service\OperationInverseService;
+use App\Service\VersementService;
+use DateTime;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Proxies\__CG__\App\Entity\Evenement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,7 +46,7 @@ class TresorierController extends AbstractController
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
         return $this->render('tresorier/index.html.twig', [
-            'demande_types' => $dm_Repository->findByEtat(200)
+            'demande_types' => $dm_Repository->findByEtat(null,[200,202])
         ]);
 
     }
@@ -214,6 +223,61 @@ class TresorierController extends AbstractController
         return $this->render('tresorier/liste_approvisionnement.html.twig', [
             'liste_approvisio' => $liste_approvisio,
         ]);
+    }
+
+    // Versement de fonds
+    #[Route('/reverser/form/{id}', name: 'tresorier.reveser_demande_en_attente', methods: ['GET'])]
+    public function reversement($id, EntityManagerInterface $entityManager, EvenementRepository $evnRepository, MouvementRepository $mvtRepository): Response
+    {
+        $data = $entityManager->find(DemandeType::class, $id);
+        $ref_demande = $data->getRefDemande();
+        $evenement = $evnRepository->findByEvnReference($ref_demande);
+        $listMouvement = $mvtRepository->findAllMvtByEvenement($evenement);
+        // $listMouvement = $mvtRepository->findAllMvtByEvenement($evenement);
+        return $this->render('tresorier/versement_fond.html.twig', [
+            'info_demande' => $data,
+            'info_mouvement' => $listMouvement
+        ]);
+    }
+
+    #[Route('/reverser/save', name: 'tresorier.reverser_demande_en_attente_save', methods: ['POST'])]
+    public function reversementSave(Request $request, EtatDemandeRepository $etatDemandeRepository, OperationInverseService $operationInvService, VersementsRepository $versementRepository, VersementService $vrsmService, DemandeTypeRepository $demandeTypeRepository, EvenementRepository $evnRepository, MouvementRepository $mvtRepository)
+    {
+        $data = $request->request->all();
+        $demande = $demandeTypeRepository->find($data['dm_id']);
+        $utilisateur = $this->user;
+        $entityManager = $versementRepository->getEntityManager();
+        $entityManager->beginTransaction();
+        try {
+            $montant_verser = $data['dm_montant_verser'];
+            $vrsm = $versementRepository->persistVersement($entityManager, $data['nom_remettant'],new DateTime($data['date_operation']),$data['adresse'],$montant_verser,$demande,$utilisateur,$data['motif_versement']);
+            $vrsm_reference = $vrsmService->createReferenceForVersementId($vrsm->getId());
+            $vrsm->setVrsmReference($vrsm_reference); //creation reference
+            $entityManager->flush();
+
+            // findEvenementByReference 
+            dump("FIND VERSEMENT");
+            $ref_demande = $demande->getRefDemande();
+            $evenement = $evnRepository->findByEvnReference($ref_demande);
+            $vrsm_evenement = $evnRepository->persistEvenement($entityManager,$evenement->getEvnTrsId(),$utilisateur,$evenement->getEvnExercice(),$evenement->getEvnCodeEntity(),$montant_verser,$vrsm->getVrsmReference(),new DateTime());
+
+            $listMouvement = $mvtRepository->findAllMvtByEvenement($evenement);
+            // création des mouvements inverse
+            $operationInvService->inverseTransaction($vrsm_evenement,$entityManager,$listMouvement,$montant_verser);
+            
+            // mis à jour du demandes en etat versée
+            $demande->setDmEtat($etatDemandeRepository, 401);
+            $entityManager->flush();
+            $entityManager->commit();
+        } catch (\Throwable $th) {
+            $entityManager->rollback();
+            dump($th);
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur versement: ' . $th->getMessage()
+            ]);
+        }
+        return $this->redirectToRoute('tresorier.liste_demande_en_attente');
     }
     
 

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+{% block page_title %}Section Trésorier{% endblock %}
+{% block page_subtitle %}Enregistrement de versement de fonds en vue de remboursement du reste des fonds non-utilisés{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {# <script src="{{ asset('js/xhr.js') }}" ></script> #}
+    <script src="{{ asset('js/scr/demande/scr_demande.js') }}" ></script>
+{% endblock %}
+
+{% block page_main_content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Remplissez ce formulaire de versement en ligne</div>
+            </div>
+            <form id="add_demande_form" action="{{ path('tresorier.reverser_demande_en_attente_save') }}" method="post">
+                <div class="card-body">
+                    <div class="row">
+                        
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="nom_remettant">Nom du remettant</label>
+                                <input type="text" name="nom_remettant" class="form-control" id="nom_remettant" placeholder="Saisir le nom du remettant"/>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_operation">Date d'opération</label>
+                                <input type="date" name="date_operation" class="form-control" id="date_operation"/>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_saisie">Date de saisie</label>
+                                <input type="date" name="date_saisie" class="form-control" id="date_saisie" readonly/>
+                            </div>
+                        </div>
+                        
+                        <div class="row form-group  gy-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="dm_montant_verser">A verser</label>
+                                <input type="text" name="dm_montant_verser" class="form-control" id="dm_montant_verser" value="{{info_demande.getDmMontant - info_demande.getMontantReel}}" readonly/>
+                            </div>
+                            {% for mv in info_mouvement %}
+                                {% if (mv.isMvtDebit() == false) %}
+                                    <div class="col-md-3">
+                                        <label for="compte_debit">Numéro Compte à débiter</label>
+                                        <input type="text" name="compte_debit" class="form-control" id="compte_debit" value="{{mv.getMvtCompteId.getCptNumero}}" readonly/>
+                                    </div>
+                                {% elseif (mv.isMvtDebit() == true) %}
+                                    <div class="col-md-3">
+                                        <label for="compte_credit">Numéro Compte à crédit</label>
+                                        <input type="text" name="compte_credit" class="form-control" id="compte_credit" value="{{mv.getMvtCompteId.getCptNumero}}" readonly/>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="row form-group gy-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="dm_id">Reference du demandes</label>
+                                <input type="text" name="dm_id" class="form-control" id="dm_id" placeholder="{{info_demande.getRefDemande}}" value="{{info_demande.getId}}" readonly/>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="dm_montant">Montant débloqué</label>
+                                <input type="text" name="dm_montant" class="form-control" id="dm_montant" value="{{info_demande.getDmMontant}}" readonly/>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="dm_montant_reel">Montant dépensé</label>
+                                <input type="text" name="dm_montant_reel" class="form-control" id="dm_montant_reel" value="{{info_demande.getMontantReel}}" readonly/>
+                            </div>
+                        </div>
+
+                        <div class="row form-group gy-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="adresse">Adresse</label>
+                                <input type="text" name="adresse" class="form-control" id="adresse" placeholder="Saisir l'adresse"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="motif_versement">Motif</label>
+                                <textarea type="text" name="motif_versement" class="form-control" id="motif_versement" placeholder="Saisir le motif du versement"/></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-action text-end">
+                    <a href="{{ path('demandeur.liste_demande') }}" class="btn btn-dark">Annuler</a>
+                    <button id="displayNotif" type="submit" class="btn btn-secondary">Valider</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

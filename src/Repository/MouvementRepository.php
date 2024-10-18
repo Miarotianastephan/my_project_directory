@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CompteMere;
+use App\Entity\Evenement;
 use App\Entity\Exercice;
 use App\Entity\Mouvement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -264,48 +265,26 @@ class MouvementRepository extends ServiceEntityRepository
         ->getQuery()->getResult();
     }
 
+    // Fonction pour avoir la somme des montants
     public function getTotalMouvementGroupedByPlanCompte(): array
     {
-        return $this->createQueryBuilder('m')->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+        return $this->createQueryBuilder('m')
+        ->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')
+        ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
         ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
         ->getQuery()->getResult();
     }
+    // Ajustment de la fonction 
+    public function getSoldeRestantByMouvement(): array
+{
+    return $this->createQueryBuilder('m')
+        ->select('pc.cpt_numero, SUM(CASE WHEN m.isMvtDebit = 1 THEN m.mvt_montant ELSE 0 END) as total_debit, SUM(CASE WHEN m.isMvtDebit = 0 THEN m.mvt_montant ELSE 0 END) as total_credit, (SUM(CASE WHEN m.isMvtDebit = 1 THEN m.mvt_montant ELSE 0 END) - SUM(CASE WHEN m.isMvtDebit = 0 THEN m.mvt_montant ELSE 0 END)) as total_montant')
+        ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+        // ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
+        ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
+        ->getQuery()->getResult();
+}
 
-    // public function searchDataMouvement($rech_numero=null, $rech_libelle=null, $date_inf=null, $date_sup=null):array{
-    //     if(is_null($rech_numero) && is_null($rech_libelle) && is_null($date_inf) && is_null($date_sup))
-    //     {
-    //         return $this->findAllMouvementById();
-    //     } 
-    //     $queryBuilder = $this->createQueryBuilder('m');
-    //     $queryBuilder->join('m.mvt_compte_id', 'pc');           // Jointure avec PlanCompte
-    //     $queryBuilder->join('m.mvt_evenement_id', 'ev');           // Jointure avec PlanCompte
-    //     if(!is_null($rech_numero)){
-    //         $queryBuilder->where('pc.cpt_numero LIKE :numero')
-    //         ->setParameter('numero', $rech_numero.'%');         // begin with %xxx%
-    //     }
-    //     if(!is_null($rech_libelle)){
-    //         $queryBuilder->andWhere('pc.cpt_libelle LIKE :libelle')
-    //         ->setParameter('libelle', '%'.$rech_libelle.'%');   // contient %xxx%
-    //     }
-    //     // Si les deux dates sont fournies
-    //     // Conversion des chaînes en objets DateTime
-    //     $dateInf = $date_inf ? \DateTime::createFromFormat('Y-m-d', $date_inf) : null;
-    //     $dateSup = $date_sup ? \DateTime::createFromFormat('Y-m-d', $date_sup) : null;
-    //     if (!is_null($date_inf) && !is_null($date_sup)) {
-    //         $queryBuilder->where('TRUNC(ev.evn_date_operation) BETWEEN TRUNC(:dateInf) AND TRUNC(:dateSup)')
-    //         ->setParameter('dateInf', $dateInf)
-    //         ->setParameter('dateSup', $dateSup);
-    //     } elseif (!is_null($date_inf)) {
-    //         // Si seulement la date inférieure est fournie
-    //         $queryBuilder->where('TRUNC(ev.evn_date_operation) >= TRUNC(:dateInf)')
-    //         ->setParameter('dateInf', $dateInf);
-    //     } elseif (!is_null($date_sup)) {
-    //         // Si seulement la date supérieure est fournie
-    //         $queryBuilder->where('TRUNC(ev.evn_date_operation) <= TRUNC(:dateSup)')
-    //         ->setParameter('dateSup', $dateSup);
-    //     }
-    //     return $queryBuilder->getQuery()->getResult();
-    // }
     public function searchDataMouvement($rech_numero = null, $rech_libelle = null, $date_inf = null, $date_sup = null): array
     {
         // Si tous les paramètres sont null, on retourne tous les mouvements
@@ -367,6 +346,13 @@ class MouvementRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function findAllMvtByEvenement(Evenement $evn): ?array{
+        return $this->createQueryBuilder('mvt')
+        ->where('mvt.mvt_evenement_id = :evenement')
+        ->setParameter('evenement', $evn)
+        ->getQuery()
+        ->getResult();
+    }
 
 
 

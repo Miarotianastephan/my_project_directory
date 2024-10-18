@@ -214,29 +214,14 @@ class DemandeTypeService
             $transaction_a_faire = $this->trsTypeRepo->findTransactionForApprovision();                                         // identifier le type de transaction à faire
             $detail_transaction = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);            // identifier le mouvement à créditer
             // Création evenement
-            $evenement = new Evenement();
-            $evenement->setEvnTrsId($transaction_a_faire);
-            $evenement->setEvnResponsable($user_tresorier);
-            $evenement->setEvnExercice($exercice_demande);
-            $evenement->setEvnCodeEntity($demande_type->getEntityCode()->getCptLibelle());
-            $evenement->setEvnMontant($montant_demande);
-            $evenement->setEvnReference($reference_demande);
-            $evenement->setEvnDateOperation(new DateTime());
+            $evenement = new Evenement($transaction_a_faire,$user_tresorier,$exercice_demande,$demande_type->getEntityCode()->getCptLibelle(),$montant_demande,$reference_demande,new DateTime());
             $entityManager->persist($evenement);
             // Création des mouvements
 
-            $mv_debit = new Mouvement();                        // DEBIT
-            $mv_debit->setMvtEvenementId($evenement);
-            $mv_debit->setMvtMontant($montant_demande);
-            $mv_debit->setMvtDebit(true);
-            $mv_debit->setMvtCompteId($numero_compte_debit);
+            $mv_debit = new Mouvement($evenement,$numero_compte_debit,$montant_demande,true);                        // DEBIT
             $entityManager->persist($mv_debit);
 
-            $mv_credit = new Mouvement();                       // CREDIT
-            $mv_credit->setMvtEvenementId($evenement);
-            $mv_credit->setMvtMontant($montant_demande);
-            $mv_credit->setMvtDebit(false);
-            $mv_credit->setMvtCompteId($detail_transaction->getPlanCompte());
+            $mv_credit = new Mouvement($evenement,$detail_transaction->getPlanCompte(),$montant_demande,false);      // CREDIT
             $entityManager->persist($mv_credit);
 
             $entityManager->flush();

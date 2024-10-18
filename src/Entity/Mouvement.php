@@ -98,4 +98,17 @@ class Mouvement
         return $this->id;
     }
 
+    public function __construct(
+        Evenement $mvt_evenement_id,
+        PlanCompte $mvt_compte_id,
+        float $mvt_montant,
+        bool $isMvtDebit
+    ) {
+        $this->setMvtEvenementId($mvt_evenement_id);
+        $this->setMvtCompteId($mvt_compte_id);
+        $this->setMvtMontant($mvt_montant);
+        $this->setMvtDebit($isMvtDebit);
+    }
+    
+
 }

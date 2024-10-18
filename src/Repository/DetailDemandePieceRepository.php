@@ -82,14 +82,27 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
                 $log_dm->setDemandeType($dm_type);
                 $log_dm->setLogDmDate(new DateTime());
                 $entityManager->persist($log_dm);
-                $dm_type->setDmEtat($this->etatDmRepository, 400); // OK_ETAT
                 // Vérification du montant réel insérer lors de l'ajout du pièce justificatif
                 $dm_type->setMontantReel($montant_reel);
                 $dm_type->setUtilisateur($user_demande);
-                if($montant_reel < $dm_type->getDmMontant()){
+                $montant_deblocage = $dm_type->getDmMontant(); 
+
+                if($montant_reel == $montant_deblocage){
+                    $dm_type->setDmEtat($this->etatDmRepository, 400);  // de 300 -> 400(Justifié)
+                }else if($montant_reel < $montant_deblocage){
+                    // Ajoutena anaty Log vaovao hoe nandalo état 400 foana 
+                    $log_dm_vrsm = new LogDemandeType();
+                    $log_dm_vrsm->setDmEtat($this->etatDmRepository, 400);   // trace état 400(directe dans LOG)
+                    $log_dm_vrsm->setUserMatricule($user_tresorier->getUserMatricule());
+                    $log_dm_vrsm->setDemandeType($dm_type);
+                    $log_dm_vrsm->setLogDmDate(new DateTime());
+                    $entityManager->persist($log_dm_vrsm);
+                    $entityManager->flush();
                     // Atao état attente de veresement de fonds
-                }else if($montant_reel > $dm_type->getDmMontant()){
-                    // Nouveau demande 
+                    $dm_type->setDmEtat($this->etatDmRepository, 202);  // de 300 -> 202(Attente)
+                    dump("REVERSEMENT EN COURS !!");
+                }else if($montant_reel > $montant_deblocage){
+                    // Nouveau demande
                     // Updatena ny champ an'ilay demande
                 }
             }

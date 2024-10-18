@@ -128,4 +128,23 @@ class Evenement
 
         return $this;
     }
+    
+    public function __construct(
+        TransactionType $evn_trs_id,
+        Utilisateur $evn_responsable,
+        Exercice $evn_exercice,
+        string $evn_code_entity,
+        float $evn_montant,
+        string $evn_reference,
+        $evn_date_operation
+    ) {
+        $this->setEvnTrsId($evn_trs_id);
+        $this->setEvnResponsable($evn_responsable);
+        $this->setEvnExercice($evn_exercice);
+        $this->setEvnCodeEntity($evn_code_entity);
+        $this->setEvnMontant($evn_montant);
+        $this->setEvnReference($evn_reference);
+        $this->setEvnDateOperation($evn_date_operation);
+    }
+    
 }

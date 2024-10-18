@@ -34,8 +34,12 @@ class EtatFinancierService
         $this->detailMontantTotal[$compteNumero]['libelle'] =  $libelle;
         if(!isset($this->detailMontantTotal[$compteNumero]['montants'])){
             $this->detailMontantTotal[$compteNumero]['montants'] = $montants;
-        }if(isset($this->detailMontantTotal[$compteNumero]['montants'])){
+            // dump([ '.Nouveau ajout ' => $this->detailMontantTotal[$compteNumero] ]);
+        }
+        else{
+            // dump([ '       _Avant ajout ' => $this->detailMontantTotal[$compteNumero] ]);
             $this->detailMontantTotal[$compteNumero]['montants'] += $montants;
+            // dump([ '       _Apres ajout ' => $this->detailMontantTotal[$compteNumero] ]);
         }
     }
 
@@ -87,7 +91,7 @@ class EtatFinancierService
             else if($montant == 0){
                 foreach($cptmere->getPlanComptes() as $enfantsMere){                                // boucler les enfants
                     $montant = $this->searchCompteInTablo($enfantsMere,$tabloMontantMouvement);     // comparaison chaque enfants sur chaque data
-                    $etatEncours->addMontant($montant);                                             // ajout du montant total
+                    $etatEncours->addMontant($montant);
                     $etatEncours->addDetailMontant($this->createDetailMontant($enfantsMere->getCptNumero(), $enfantsMere->getCptLibelle(), $montant));    // ajout du detail pour compte ENF
                     // Jerene ao anaty mère aloha Find mère by ID 
                     $ctempCompteMere = $mereRepository->findByCptNumero($enfantsMere->getCptNumero());
@@ -100,7 +104,7 @@ class EtatFinancierService
         }else{
             foreach($cptmere->getPlanComptes() as $enfantsMere){                                // boucler les enfants
                 $montant = $this->searchCompteInTablo($enfantsMere,$tabloMontantMouvement);     // comparaison chaque enfants sur chaque data
-                $etatEncours->addMontant($montant);                                             // ajout du montant total
+                $etatEncours->addMontant($montant);         
                 $etatEncours->addDetailMontantTotal($cptmere->getCptNumero(), $cptmere->getCptNumero(), $enfantsMere->getCptLibelle(), $montant);    // ajout du detail pour compte ENF
             }
         }
