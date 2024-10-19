@@ -139,10 +139,6 @@ class ComptableController extends AbstractController
                 'liste_entite' => $liste_entite,
                 'list_opp' => $liste_transaction
             ]);
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "Le montant est nécessaire."
-            ]);*/
         } else if (!$transaction_id) {
             $liste_entite = $planCompteRepository->findCompteCaisse();
             $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
@@ -152,10 +148,6 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-            /*return new JsonResponse([
-                'success' => false,
-                'message' =>
-            ]);*/
         } else if (!$entite_id) {
             $liste_entite = $planCompteRepository->findCompteCaisse();
             $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
@@ -165,13 +157,15 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "Choix de l'entité est nécessaire"
-            ]);*/
+        }else if ($montant<=0){
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Le montant doit être un chiffre positif.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
         }
-
-
         $entite = $planCompteRepository->find($entite_id);
 
         if (!$entite) {
@@ -182,11 +176,6 @@ class ComptableController extends AbstractController
                 'liste_entite' => $liste_entite,
                 'list_opp' => $liste_transaction
             ]);
-
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "entite est introuvable"
-            ]);*/
         }
 
         $transaction = $transactionTypeRepository->find($transaction_id);
@@ -199,10 +188,6 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "Transaction introuvable."
-            ]);*/
         }
         $planCompte = $planCompteRepository->find($entite_id);
         if (!$planCompte) {
@@ -215,10 +200,6 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "Le plan de compte associé introuvable."
-            ]);*/
         }
         $date = new \DateTime();
 
@@ -233,10 +214,6 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "Compte de débit associé introuvale."
-            ]);*/
         }
         $compte_credit = $detailTransactionCompteRepository->findPlanCompte_CreditByTransaction($transaction);
         if (!$compte_credit) {
@@ -249,10 +226,6 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-            /*return new JsonResponse([
-                'success' => false,
-                'message' => "Compte de crédit associé introuvale."
-            ]);*/
         }
 
         return $this->render('comptable/validation_dep_direct.html.twig',
