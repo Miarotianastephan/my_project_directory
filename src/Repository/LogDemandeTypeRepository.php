@@ -280,6 +280,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Déblocage impossible car demande introuvable'
             ]);
         }
+
         // Debut de transaction de béblocages de fonds
         $entityManager->beginTransaction();
         try {
@@ -346,6 +347,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Validateur du demande introuvable.'
                 ]);
             }
+
             // Insérer Validé dans Historique des demandes
             $log_dm = new LogDemandeType();
             $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
@@ -356,7 +358,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Update Validé => Débloqué dans les demandes
             // $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
-            $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
+            $dm_type->setDmEtat($this->etatDmRepository, 300);                                      // Débloquage du demandes OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setDmDate($log_dm->getLogDmDate());                                           // MAJ de dm_type la base de données
 
@@ -368,7 +370,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $numero_compte_debit = $dm_type->getPlanCompte();
             $mode_paiement_demande = (int)($dm_type->getDmModePaiement());
             $transaction_a_faire = $this->trsTypeRepo->findTransactionByModePaiement($mode_paiement_demande);   // identifier le type de transaction à faire
-            $detail_transaction = $this->detailTrsRepo->findByTransaction($transaction_a_faire);                // identifier le mouvement à réaliser
+
             // dump($detail_transaction);
             // Création evenement 
             $evenement = new Evenement();
@@ -382,6 +384,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $entityManager->persist($evenement);
             // Création des mouvements
 
+
             $mv_debit = new Mouvement();                        // DEBIT
             $mv_debit->setMvtEvenementId($evenement);
             $mv_debit->setMvtMontant($montant_demande);
@@ -389,11 +392,20 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $mv_debit->setMvtCompteId($numero_compte_debit);
             $entityManager->persist($mv_debit);
 
-            $mv_credit = new Mouvement();                       // CREDIT
+            $mv_credit = new Mouvement();
+            // CREDIT
             $mv_credit->setMvtEvenementId($evenement);
             $mv_credit->setMvtMontant($montant_demande);
             $mv_credit->setMvtDebit(false);
-            $mv_credit->setMvtCompteId($detail_transaction->getPlanCompte());
+            $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire,0);                // identifier le mouvement à réaliser
+            if ($detail_transaction_credit === null) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Compte à créditer introuvable pour ' . $transaction_a_faire->getTrsCode()
+                ]);
+            }
+
+            $mv_credit->setMvtCompteId($detail_transaction_credit->getPlanCompte());
             $entityManager->persist($mv_credit);
 
             $entityManager->flush();
@@ -404,7 +416,8 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ]);// si tout OK
 
         } catch (\Exception $e) {
-            $entityManager->rollback();                         // si erreur opération 
+            dump($e->getMessage());
+            $entityManager->rollback();                         // si erreur opération
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Erreur transaction : ' . $e->getMessage()

@@ -10,4 +10,5 @@ class Roles
     public const SG = 'ROLE_20';
     public const TRESORIER = 'ROLE_30';
     public const COMPTABLE = 'ROLE_40';
+    public const COMMISSAIRE_COMPTE = 'ROLE_50';
 }

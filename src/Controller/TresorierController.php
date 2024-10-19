@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\DemandeType;
+use App\Repository\ApprovisionnementPieceRepository;
 use App\Repository\BanqueRepository;
 use App\Repository\ChequierRepository;
 use App\Repository\DemandeTypeRepository;
@@ -136,6 +137,7 @@ class TresorierController extends AbstractController
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier,$banque_id,$numero_cheque,$remettant,$beneficiaire); // Déblocage du fonds demandée
 
         $data = json_decode($rep->getContent(), true);
+
         if ($data['success'] == true) {
             return new JsonResponse([
                 'success' => true,
@@ -175,30 +177,47 @@ class TresorierController extends AbstractController
     #[Route('/save_approvisionnement', name: 'tresorier.save_approvisionnement', methods: ['POST'])]
     public function save_approvisionnement(Request            $request,
                                            ExerciceRepository $exoRepository,
-                                           DemandeTypeService $dmService) : JsonResponse
+                                           DemandeTypeService $dmService,
+                                            ApprovisionnementPieceRepository $approvisionnementPieceRepository) : JsonResponse
     {
+
 
         $id_user_tresorier = $this->user->getId();
         $exercice = $exoRepository->getExerciceValide();
-        //$data_parametre = $request->request->all();
 
 
-        $data_parametre = json_decode($request->getContent(), true);
+        //$data_parametre = json_decode($request->getContent(), true);
 
         // les données :
-        $plan_cpt_debit_id = $data_parametre['id_plan_compte_debit'] ?? null;
-        $montant_demande = $data_parametre['dm_montant'] ?? null;
-        $paiement = $data_parametre['mode_paiement'] ?? null;
+        $plan_cpt_debit_id = $request->request->get('id_plan_compte_debit') ?? null;
+        $montant_demande = $request->request->get('dm_montant') ?? null;
+        $paiement = $request->request->get('mode_paiement') ?? null;
 
         // les dates :
-        $date_operation = $data_parametre['date_operation'] ?? null;
-        $date_saisie = $data_parametre['date_saisie'] ?? null;
+        $date_operation = $request->request->get('date_operation') ?? null;
+        $date_saisie = $request->request->get('date_saisie') ?? null;
+
         // insertion d'un approvisionnement
         // Ajout directe de la comptabilisation dans la partie d'insertion
         $response_data = $dmService->insertDemandeTypeAppro($exercice, $plan_cpt_debit_id, $montant_demande, $paiement, $date_saisie, $date_operation, $id_user_tresorier);
-        //dump($response_data);
-
         $response_data = json_decode($response_data->getContent(), true);
+        if (!$response_data['success']){
+            return new JsonResponse([
+                'success' => $response_data['success'],
+                'message' => $response_data['message'],
+                'path' => $this->generateUrl('tresorier.liste_approvisionnement')
+            ]);
+        }
+        //dump($response_data);
+        $image = $request->files->get('image') ?? null;
+        $is_image = empty($image);
+        //dump($is_image);
+        if (!$is_image){
+            $ref_approvisionnement = $response_data['ref_approvisionnement'];
+            $ajout_image = $dmService->uploadImage($image,$this->getParameter('uploads_approvisionnement'));
+            $upload_file = $approvisionnementPieceRepository->AjoutPiece($ref_approvisionnement,$ajout_image);
+            $response_data = json_decode($upload_file->getContent(), true);
+        }
         return new JsonResponse([
             'success' => $response_data['success'],
             'message' => $response_data['message'],

@@ -95,6 +95,8 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
         }
         else if (in_array(Roles::COMPTABLE, $user_roles)) {
             return new RedirectResponse($this->router->generate('comptable.graphe'));
+        }else if (in_array(Roles::COMMISSAIRE_COMPTE, $user_roles)) {
+            return new RedirectResponse($this->router->generate('app_commisaire_compte'));
         }
     }
 

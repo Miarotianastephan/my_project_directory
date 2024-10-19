@@ -19,7 +19,7 @@ class BudgetTypeRepository extends ServiceEntityRepository
     public function findOneByLibelle(string $libelle): ?BudgetType
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('LOWER(b.libelle) = :val')
+            ->Where('LOWER(b.libelle) = :val')
             ->setParameter('val', $libelle)
             ->getQuery()
             ->getOneOrNullResult();

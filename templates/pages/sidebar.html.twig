@@ -62,6 +62,9 @@
 
                 {% elseif is_granted(get_role('comptable')) %}
                     {{ include('pages/option/_comptable_sidebar.html.twig') }}
+
+                {% elseif is_granted(get_role('commissaire_compte')) %}
+                    {{ include('pages/option/_commissaire_sidebar.html.twig') }}
                     
                 {% endif %}
             </ul>

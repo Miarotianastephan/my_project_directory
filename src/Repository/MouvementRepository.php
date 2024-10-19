@@ -26,16 +26,13 @@ class MouvementRepository extends ServiceEntityRepository
     }
 
     //mode paiement = 1 => chèque
-    //mode paiement = 2 => éspèce
+    //mode paiement = 0 => éspèce
     public function soldeDebitParModePaiement(Exercice $exercice, string $mode_paiement): ?float
     {
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
 
         $table = $mode_paiement == 0 ? "ce_v_mouvement_debit_siege" : "ce_v_mouvement_debit_banque";
-        /*dump([
-            "TEZSTSET" => $table,
-        ]);*/
 
         $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN ce_evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
 

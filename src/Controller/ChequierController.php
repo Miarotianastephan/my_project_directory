@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/chequier')]
-final class ChequierController extends AbstractController
+class ChequierController extends AbstractController
 {
     #[Route(name: 'app_chequier_index', methods: ['GET'])]
     public function index(ChequierRepository $chequierRepository): Response

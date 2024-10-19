@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/detail/transaction/compte')]
-final class DetailTransactionCompteController extends AbstractController
+class DetailTransactionCompteController extends AbstractController
 {
     #[Route(name: 'app_detail_transaction_compte_index', methods: ['GET'])]
     public function index(DetailTransactionCompteRepository $detailTransactionCompteRepository): Response

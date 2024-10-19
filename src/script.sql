@@ -220,16 +220,16 @@ insert into ce_detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PL
 --      lire les comptes commentée avant insertion des données et bien comprendre
 
 -- DATA
-delete from mouvement;
-delete from evenement;
-delete from log_demande_type;
-delete from detail_demande_piece;
-delete from demande_type;
+delete from ce_mouvement;
+delete from ce_evenement;
+delete from ce_log_demande_type;
+delete from ce_detail_demande_piece;
+delete from ce_demande_type;
 
 -- INFORMATION
 delete from ce_detail_transaction_compte;
-delete from transaction_type;
-delete from plan_compte;
-delete from compte_mere;
+delete from ce_transaction_type;
+delete from ce_plan_compte;
+delete from ce_compte_mere;
 
 commit; -- commit faharoa

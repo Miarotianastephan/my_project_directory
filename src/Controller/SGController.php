@@ -44,9 +44,13 @@ class SGController extends AbstractController
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
+        //debit = Mivoka
+        //credit = Miditra
+
         $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
+
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
@@ -139,6 +143,9 @@ class SGController extends AbstractController
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        dump("Solde nivoka".$solde_debit);
+        dump("Solde niditra".$solde_CREDIT);
+
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }
