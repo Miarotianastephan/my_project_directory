@@ -1,25 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     const transactionSelect = document.getElementById('transaction');
-    const formulaire = document.getElementById('formulaire');
     const planCompteSelect = document.getElementById('plan_compte');
     const loadingOption = document.createElement('option');
     loadingOption.textContent = 'Chargement...';
-    document.querySelector(`#valider`).addEventListener('click', handleSubmit);
     document.querySelector(`#messageModal .btn-close`).addEventListener('click', closeModalAndRedirect);
 
     function closeModalAndRedirect() {
         new bootstrap.Modal(document.querySelector("#messageModal")).hide();
     }
 
-    function handleSubmit(e) {
+    //const formulaire = document.getElementById('formulaire');
+    //document.querySelector(`#valider`).addEventListener('click', handleSubmit);
+
+    /*function handleSubmit(e) {
         e.preventDefault();
         sendRequest(formulaire.action);
-    }
+    }*/
 
-    function sendRequest(url) {
+    /*function sendRequest(url) {
         fetch(url, {
             method: 'POST', headers: {
-                'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json'
             }, body: JSON.stringify({
                 entite: document.getElementById("entite").value,
                 transaction: document.getElementById("transaction").value,
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(error);
                 showMessage(error.message);
             });
-    }
+    }*/
 
     function showMessage(message) {
         const modalBody = document.querySelector(`#messageModal .modal-body`);

@@ -76,7 +76,6 @@ class DemandeTypeRepository extends ServiceEntityRepository
 
         if (!empty($conditions)) {
             $queryBuilder->andWhere('(' . implode(' OR ', $conditions) . ')');
-
             // Convert ArrayCollection to parameter array and set them individually
             foreach ($parameters as $param) {
                 $queryBuilder->setParameter($param['key'], $param['value']);

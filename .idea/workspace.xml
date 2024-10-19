@@ -6,20 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/A_execute.bat" beforeDir="false" afterPath="$PROJECT_DIR$/A_execute.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/scr/banque/scr_form.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/banque/scr_form.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Command/ScriptAddDemandeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/ScriptAddDemandeCommand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Command/ScriptsCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/comptable/scr_ajout_dep_direct.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/comptable/scr_ajout_dep_direct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/ScriptAddDetailTransactionCompteCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/ScriptAddDetailTransactionCompteCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/ScriptAlterTableCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/ScriptAlterTableCommand.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/CommisaireCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommisaireCompteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/DetailTransactionCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DetailTransactionCompteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/UtilisateurFixture.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commisaire_compte/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commisaire_compte/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/detail_transaction_compte/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/detail_transaction_compte/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/detail_transaction_compte/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/detail_transaction_compte/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/pages/option/_commissaire_sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/option/_commissaire_sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/ajout_dep_direct.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/comptable/validation_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/validation_dep_direct.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,7 +282,8 @@
       <workItem from="1729152435672" duration="7569000" />
       <workItem from="1729170624674" duration="1145000" />
       <workItem from="1729171888184" duration="193000" />
-      <workItem from="1729182809758" duration="13157000" />
+      <workItem from="1729182809758" duration="13305000" />
+      <workItem from="1729226024689" duration="17037000" />
     </task>
     <servers />
   </component>

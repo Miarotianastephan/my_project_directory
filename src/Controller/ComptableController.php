@@ -77,6 +77,7 @@ class ComptableController extends AbstractController
         $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
 
         return $this->render('comptable/ajout_dep_direct.html.twig', [
+            'message' =>null,
             'liste_entite' => $liste_entite,
             'list_opp' => $liste_transaction
         ]);
@@ -115,87 +116,159 @@ class ComptableController extends AbstractController
                                                DetailTransactionCompteRepository $detailTransactionCompteRepository)
     {
         // Récupère les données du formulaire
-
-        $data = json_decode($request->getContent(), true);
+        //$data = json_decode($request->getContent(), true);
+        $data = $request->request->all();
         $entite_id = $data['entite'] ?? null;
         $transaction_id = $data['transaction'] ?? null;
         $montant = $data['montant'] ?? null;
         $planCompte_id = $data['plan_compte'] ?? null;
 
         if (!$planCompte_id) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => "Le plan de compte est nécessaire."
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Veuillez completer tous les champs.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
             ]);
         } else if (!$montant) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Le montant est nécessaire.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "Le montant est nécessaire."
-            ]);
+            ]);*/
         } else if (!$transaction_id) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => "Choix de transaction nécessaire."
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Choix de transaction nécessaire.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
             ]);
+
+            /*return new JsonResponse([
+                'success' => false,
+                'message' =>
+            ]);*/
         } else if (!$entite_id) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Choix de l'entité est nécessaire",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "Choix de l'entité est nécessaire"
-            ]);
+            ]);*/
         }
+
+
         $entite = $planCompteRepository->find($entite_id);
 
         if (!$entite) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Entité est introuvable",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "entite est introuvable"
-            ]);
+            ]);*/
         }
 
         $transaction = $transactionTypeRepository->find($transaction_id);
         if (!$transaction) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Transaction introuvable.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "Transaction introuvable."
-            ]);
+            ]);*/
         }
-
         $planCompte = $planCompteRepository->find($entite_id);
         if (!$planCompte) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "blabla",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "Le plan de compte associé introuvable."
-            ]);
+            ]);*/
         }
-
         $date = new \DateTime();
 
         $compte_debit = $planCompteRepository->find($planCompte_id);
         if (!$compte_debit) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Compte de débit associé introuvable.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "Compte de débit associé introuvale."
-            ]);
+            ]);*/
         }
-
         $compte_credit = $detailTransactionCompteRepository->findPlanCompte_CreditByTransaction($transaction);
         if (!$compte_credit) {
-            return new JsonResponse([
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Compte de crédit associé introuvale.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+            /*return new JsonResponse([
                 'success' => false,
                 'message' => "Compte de crédit associé introuvale."
-            ]);
+            ]);*/
         }
+
         return $this->render('comptable/validation_dep_direct.html.twig',
             [
+                'success' => true,
                 'entite' => $entite,
                 'transaction' => $transaction,
-                'planCompte' => $planCompte,
+                'plan_compte' => $planCompte,
                 'montant' => $montant,
                 'debit' => $compte_debit,
                 'credit' => $compte_credit,
                 'date' => $date,
+
             ]);
     }
+
 
 
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]

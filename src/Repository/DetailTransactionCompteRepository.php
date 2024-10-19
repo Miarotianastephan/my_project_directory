@@ -45,14 +45,17 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('d')
             ->Where('d.transaction_type = :val')
+            ->andWhere('d.isTrsDebit = 1')
             ->setParameter('val', $transactionType)
             ->getQuery()
             ->getResult();
     }
 
-    public function findPlanCompte_CreditByTransaction(TransactionType $transactionType): ?PlanCompte
+
+
+    public function findPlanCompte_CreditByTransaction(TransactionType $transactionType,): ?PlanCompte
     {
-        dump("transaction == " . $transactionType->getTrsLibelle());
+        //dump("transaction == " . $transactionType->getTrsLibelle());
         $data = $this->createQueryBuilder('d')
             ->Where('d.transaction_type = :val')
             ->andWhere('d.isTrsDebit = 0')

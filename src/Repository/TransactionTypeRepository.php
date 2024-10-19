@@ -41,12 +41,16 @@ class TransactionTypeRepository extends ServiceEntityRepository
     
 
     public function findTransactionDepenseDirecte():array{
-        $list_transaction_code = ['CE-007', 'CE-011'];
+        $list_transaction_code = ['CE-001','CE-007', 'CE-010','CE-011'];
         return $this->createQueryBuilder('t')
-            ->Where('t.trs_code = :dep_directe_paye_bfm')
+            ->Where('t.trs_code = :cencaissement_subvention')
+            ->orWhere('t.trs_code = :dep_directe_paye_bfm')
+            ->OrWhere('t.trs_code = :encaiseement_interet_operation')
             ->OrWhere('t.trs_code = :comptabilisation_frais_bancaire')
-            ->setParameter('dep_directe_paye_bfm',$list_transaction_code[0])
-            ->setParameter('comptabilisation_frais_bancaire',$list_transaction_code[1])
+            ->setParameter('cencaissement_subvention',$list_transaction_code[0])
+            ->setParameter('dep_directe_paye_bfm',$list_transaction_code[1])
+            ->setParameter('encaiseement_interet_operation',$list_transaction_code[2])
+            ->setParameter('comptabilisation_frais_bancaire',$list_transaction_code[3])
             ->getQuery()
             ->getResult();
     }
