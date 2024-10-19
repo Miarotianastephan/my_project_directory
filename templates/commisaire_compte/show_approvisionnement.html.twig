@@ -13,13 +13,13 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">A propos de la demande</h4>
+                    <h4 class="card-title">A propos de l'approvisionnement</h4>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-column">
                     <div class="col-12 px-md-5 d-flex flex-row">
                         <div class="col-1">
                             <button style="border: none;background-color: transparent; text-align: start">
-                                <a href="{{ path('app_commisaire_compte') }}">
+                                <a href="{{ path('app_commisaire_approvisionnement') }}">
                                     {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
                                 </a>
                             </button>
@@ -32,12 +32,6 @@
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg"> Etat actuelle: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.EtatDemandeObj.EtatLibelle }}
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex flex-row">
                                 <label class="col-4 form-control-lg"> Rérérence: </label>
                                 <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
@@ -45,12 +39,6 @@
                                 <label class="col-4 form-control-lg"> Utilisateur concerné: </label>
                                 <div class="col form-control">
                                     {{ demande_type.utilisateur.UserMatricule }}
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Type de demande: </label>
-                                <div class="col form-control">
-                                    {{ demande_type.demande.libelle }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -70,7 +58,7 @@
                                 <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Personne concernée:</label>
+                                <label class="col-4 form-control-lg">Entité concernée:</label>
                                 <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
                             </div>
 
@@ -90,54 +78,11 @@
                     </div>
                 </div>
 
-                <div class="card-header">
-                    <h4 class="card-title">Les pieces justificatives</h4>
-                </div>
 
                 <div class="card-header">
-                    <h4 class="card-title">Historique de cette demande</h4>
+                    <h4 class="card-title">Historique des observations de cette approvisionnement</h4>
                 </div>
 
-                {% for historique in historiques %}
-                    <div class="card-body col-12 px-md-5 d-flex flex-column">
-                        <div class="col-12 px-md-5 d-flex flex-row">
-                            <div class="col-1">
-                                {#
-                                    <button style="border: none;background-color: transparent; text-align: start">
-                                        <a href="{{ path('app_commisaire_compte') }}">
-                                            {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
-                                        </a>
-                                    </button>
-                                #}
-
-                            </div>
-                            <div class="col px-3 d-flex flex-column gap-3">
-                                <div class="col-12 d-flex flex-row">
-                                    <label class="col-4 form-control-lg"> Utilisateur concerné: </label>
-                                    <div class="col form-control">
-                                        {{ historique.UserMatricule }}
-                                    </div>
-                                </div>
-                                <div class="col-12 d-flex flex-row">
-                                    <label class="col-4 form-control-lg"> Date de l'action: </label>
-                                    <div class="col form-control">
-                                        {{ historique.LogDmDate|date('d/m/y')|trans({}, 'fr') }}
-                                    </div>
-                                </div>
-                                <div class="col-12 d-flex flex-row">
-                                    <label class="col-4 form-control-lg"> Etat de la demande: </label>
-                                    <div class="col form-control">
-                                        {{ historique.EtatLogDemandeObj.EtatLibelle }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-
-                <div class="card-header">
-                    <h4 class="card-title">Historique des observations de cette demande</h4>
-                </div>
 
                 <div class="card-body col-12 px-md-5 d-flex flex-column">
                     <div class="col-12 d-flex flex-row">
@@ -221,25 +166,25 @@
                 <div class="modal-body">
                     <ul>
                         {% for img in images %}
-                            {% set extension = img.detDmPieceUrl|split('.')|last %}
+                            {% set extension = img.NomFichier|split('.')|last %}
                             <li>
                                 {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
                                     <!-- Affichage de l'image -->
-                                    <img src="{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}" alt="Pièce jointe"
-                                         width="100">
+                                    <img src="{{ asset('images/approvisionnements/' ~ img.NomFichier) }}" alt="Pièce jointe"
+                                         width="100%">
                                 {% elseif extension == 'txt' %}
                                     <!-- Affichage du contenu d'un fichier texte -->
                                     <a href="#"
-                                       onclick="loadTextFile('{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}')">Voir
+                                       onclick="loadTextFile('{{ asset('images/approvisionnements/' ~ img.NomFichier) }}')">Voir
                                         le fichier texte</a>
                                 {% elseif extension in ['xls', 'xlsx'] %}
                                     <!-- Affichage d'un fichier Excel -->
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#excelModal"
-                                       onclick="loadExcelPreview('{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}')">Voir
+                                       onclick="loadExcelPreview('{{ asset('images/approvisionnements/' ~ img.NomFichier) }}')">Voir
                                         le fichier Excel</a>
                                 {% elseif extension == 'pdf' %}
                                     <a href="#"
-                                       onclick="loadPdfFile('{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}')">Voir
+                                       onclick="loadPdfFile('{{ asset('images/approvisionnements/' ~ img.NomFichier) }}')">Voir
                                         le fichier PDF</a>
                                 {% else %}
                                     <!-- Fichier non pris en charge -->

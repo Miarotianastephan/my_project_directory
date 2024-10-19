@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+{% block page_title %}
+    Section Commissaire aux comptes.
+{% endblock %}
+{% block page_subtitle %}
+    Les opérations d'approvisionnements effectués au cours cet exercice.
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Les approvisionnements réalisés</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr class="col-12">
+                                <th class="col-2">Validation de l'opération</th>
+                                <th class="col-1">Référence</th>
+                                <th class="col-3">Type de demande</th>
+                                <th class="col-2 text-end px-3">Montant</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for demande_type in liste_approvisio %}
+                                <tr class="col-12">
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-1">{{ demande_type.RefDemande }}</td>
+                                    <td class="col-3">{{ demande_type.Demande.Libelle }}</td>
+                                    <td class="text-end col-2">
+                                        <div>
+                                            {{ demande_type.DmMontant|number_format(0, '.', ' ') }} Ar
+                                        </div>
+                                    </td>
+                                    <td  class="text-end">
+                                        <div class="col-3">
+                                            <button style="width: 100%;height: 100%;border: none;background-color: transparent">
+                                                <a href="{{ path('app_commisaire_show_approvisionnement', {'id': demande_type.Id}) }}">
+                                                    {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">Aucune donnée insérée</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

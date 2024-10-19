@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Banque;
 use App\Entity\CompteMere;
+use App\Entity\Demande;
 use App\Entity\DemandeType;
 use App\Entity\Exercice;
 use App\Entity\Utilisateur;
@@ -21,22 +22,26 @@ class DemandeTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, DemandeType::class);
     }
 
-    public function findByExercice(Exercice $exercice): ?array
+    public function findByExerciceAndCode(Exercice $exercice,Demande $demande): ?array
     {
         return $this->createQueryBuilder('d')
             ->where('d.exercice = :exercice')
+            ->andWhere('d.demande = :demande')
             ->setParameter('exercice', $exercice)
+            ->setParameter('demande', $demande)
             ->getQuery()
             ->getResult();
     }
 
 
 
-    public function findActiveByExercice(Exercice $exercice, array $les_filtres): array
+    public function findActiveByExercice(Exercice $exercice, array $les_filtres,Demande $demande): array
     {
         $queryBuilder = $this->createQueryBuilder('d')
             ->where('d.exercice = :exercice')
-            ->setParameter('exercice', $exercice);
+            ->andWhere('d.demande = :demande')
+            ->setParameter('exercice', $exercice)
+            ->setParameter('demande', $demande);
 
         $conditions = [];
         $parameters = new ArrayCollection();

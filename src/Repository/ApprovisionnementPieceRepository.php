@@ -16,7 +16,13 @@ class ApprovisionnementPieceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ApprovisionnementPiece::class);
     }
-
+    public function findByRef(string $ref_approvisionnement): ?array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.ref_approvisionnement = :val')
+            ->setParameter('val', $ref_approvisionnement)
+            ->getQuery()->getResult();
+    }
     public function AjoutPiece(string $ref_approvisionnement, string $nomfichier): JsonResponse
     {
         $entityManager = $this->getEntityManager();
