@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: GroupeUtilisateurRepository::class)]
-#[ORM\Table(name: 'groupe_utilisateur')]
+#[ORM\Table(name: 'ce_groupe_utilisateur')]
 class GroupeUtilisateur
 {
     #[ORM\Id]

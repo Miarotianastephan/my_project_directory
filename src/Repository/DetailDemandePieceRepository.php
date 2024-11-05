@@ -62,7 +62,7 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             $detail_dm->setDemandeType($dm_type);
             $detail_dm->setDetDmTypeUrl($type);
             $detail_dm->setDetDmPieceUrl($newFilename);
-            $script = "INSERT INTO detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (detail_dm_type_seq.NEXTVAL,:dm_type_id,:det_dm_piece_url,:det_dm_type_url,SYSDATE)";
+            $script = "INSERT INTO ce_detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (detail_dm_type_seq.NEXTVAL,:dm_type_id,:det_dm_piece_url,:det_dm_type_url,SYSDATE)";
 
             $statement = $connection->prepare($script);
             $statement->bindValue('dm_type_id', $dm_type->getId());

@@ -37,6 +37,17 @@ class BudgetController extends AbstractController
         return $this->render('budget/liste_budget.html.twig', ['liste_budget' => $liste_budget]);
     }
 
+    #[Route('/liste/actuelle', name: 'tresorier.liste_budget_actuelle', methods: ['GET'])]
+    public function liste_budget_actuelle(DetailBudgetRepository $detailBudgetRepository, ExerciceRepository $exerciceRepository): Response
+    {
+        $exercice = $exerciceRepository->getExerciceValide();
+        if (!$exercice) {
+            return new Response("Veuillez ouvrir l'exercice d'abord", 404);
+        }
+        $liste_budget = $detailBudgetRepository->findByExercice($exercice);
+        return $this->render('budget/liste_budget.html.twig', ['liste_budget' => $liste_budget]);
+    }
+
     #[Route('/ajout_budget', name: 'tresorier.form_budget', methods: ['GET'])]
     public function form_budget(ExerciceRepository $exerciceRepository, CompteMereRepository $compteMereRepository): Response
     {

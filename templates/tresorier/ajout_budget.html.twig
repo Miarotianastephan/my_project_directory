@@ -10,7 +10,7 @@
     Section Comptable
 {% endblock %}
 {% block page_subtitle %}
-    Veuillez ajouter les budgets pour chaque plan de compte pour chaque exercice
+    Veuillez ajouter les budgets pour chaque plan de compte pour chaque exercice.
 {% endblock %}
 
 {% block page_main_content %}
@@ -22,10 +22,10 @@
                 </div>
 
                 <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post"
-                      data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
+                      data-cancel="{{ path('tresorier.liste_budget') }}">
                     <div class="card-body col-12 d-flex flex-column gap-2">
                         <div class="form-group">
-                            <label for="exercice">Exercice</label>
+                            <label for="exercice_id">Exercice</label>
                             <select class="form-select" id="exercice_id" name="exercice_id">
                                 {% for exercice in exercices %}
                                     <option value="{{ exercice.id }}"> {{ exercice }}</option>

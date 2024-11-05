@@ -40,15 +40,15 @@ class VDebitBanqueMensuelCommand extends Command
     {
         $connection = $this->entityManager->getConnection();
         /* réccuppération de la valeur brute */
-        $sql = 'CREATE VIEW v_debit_banque_mensuel AS
+        $sql = 'CREATE VIEW ce_v_debit_banque_mensuel AS
                 SELECT 
                     COALESCE(SUM(vmdb.MVT_MONTANT), 0) AS total,
                     TO_CHAR(e.evn_date_operation, \'YYYY-MM\') AS mois_operation,
                     e.evn_exercice_id
                 FROM 
-                    v_mouvement_debit_banque vmdb
+                    ce_v_mouvement_debit_banque vmdb
                 LEFT JOIN 
-                    evenement e ON vmdb.mvt_evenement_id = e.evn_id
+                    ce_evenement e ON vmdb.mvt_evenement_id = e.evn_id
                 GROUP BY 
                     TO_CHAR(e.evn_date_operation, \'YYYY-MM\'),
                     e.evn_exercice_id

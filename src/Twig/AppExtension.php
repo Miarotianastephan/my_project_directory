@@ -23,6 +23,7 @@ class AppExtension extends AbstractExtension
             'sg' => Roles::SG,
             'tresorier' => Roles::TRESORIER,
             'comptable' => Roles::COMPTABLE,
+            'commissaire_compte' => Roles::COMMISSAIRE_COMPTE,
         ];
 
         return $roles[$roleName] ?? 'UNKNOWN_ROLE';

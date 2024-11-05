@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/banque')]
-final class BanqueController extends AbstractController
+class BanqueController extends AbstractController
 {
     #[Route(name: 'app_banque_index', methods: ['GET'])]
     public function index(BanqueRepository $banqueRepository): Response

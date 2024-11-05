@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_subtitle %}
-    Ajout de dépense directe
+    Les dépenses directement payées par le BFM seront ajoutées ici. À la validation de ce formulaire, l'événement sera comptabilisé.
 {% endblock %}
 
 {% block page_main_content %}
@@ -15,9 +15,10 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Ajout des dépenses directes</h4>
+                    <h4 class="card-title">Ajout d'opération directe</h4>
+                    {{ message ? ('<div style="color: red;" class="alert alert-danger" role="alert">' ~ message ~ '</div>')|raw : '' }}
                 </div>
-                <form id="formulaire" action="{{ path('comptable.validation_depense_directe') }}" method="post">
+                <form id="formulaire" action="{{ path('comptable.validation_depense_directe') }}" method="POST">
                     <div class="card-body d-flex flex-column gap-2 py-5 px-5">
                         <div class="col-12 d-flex flex-row">
                             <label for="entite" class="col-3 form-control-lg">
@@ -39,26 +40,28 @@
                             <div class="col">
                                 <select name="transaction" id="transaction" class="form-select form-control">
                                     <option value="">Sélectionnez une opération</option>
-                                    {% for opperation in list_opp %}
-                                        <option value="{{ opperation.Id }}">{{ opperation.TrsCode }} - {{ opperation.TrsLibelle }}</option>
+                                    {% for operation in list_opp %}
+                                        <option value="{{ operation.Id }}">{{ operation.TrsCode }}
+                                            - {{ operation.TrsLibelle }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label for="plan_compte" class="col-3 form-control-lg">
-                                Compte n°
+                                Compte de débit n°
                             </label>
                             <div class="col">
                                 <select name="plan_compte" id="plan_compte" class="form-select form-control">
-                                    <!-- Options dynamiques insérées ici par JavaScript -->
+                                    <option value="">Sélectionnez un compte</option>
+                                    <!-- Options will be dynamically populated by JavaScript -->
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label for="montant" class="col-3 form-control-lg">Montant</label>
                             <div class="col">
-                                <input class="form-control" type="number" id="montant" name="montant" step="0.01" required>
+                                <input class="form-control" type="number" id="montant" name="montant" step="0.01">
                             </div>
                         </div>
                     </div>
@@ -70,9 +73,98 @@
             </div>
         </div>
     </div>
+    {{ include('include/_message_modal.html.twig') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/scr/comptable/scr_ajout_dep_direct.js') }}"></script>
+    <script src="{{ asset("js/scr/comptable/scr_ajout_dep_direct.js") }}">
+        /*document.addEventListener('DOMContentLoaded', () => {
+        const transactionSelect = document.getElementById('transaction');
+        const formulaire = document.getElementById('formulaire');
+        const planCompteSelect = document.getElementById('plan_compte');
+        const loadingOption = document.createElement('option');
+        loadingOption.textContent = 'Chargement...';
+
+        formulaire.addEventListener('submit', handleSubmit);
+        document.querySelector('#messageModal .btn-close').addEventListener('click', closeModalAndRedirect);
+
+            function closeModalAndRedirect() {
+                const modal = new bootstrap.Modal(document.querySelector("#messageModal"));
+                modal.hide();
+                // Add redirect logic here if needed
+            }
+
+            function handleSubmit(e) {
+                e.preventDefault();
+                sendRequest(formulaire.action);
+            }
+
+            function sendRequest(url) {
+                const formData = new FormData(formulaire);
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        showMessage(data.message);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        showMessage(error.message);
+                    });
+            }
+
+            function showMessage(message) {
+                const modalBody = document.querySelector('#messageModal .modal-body');
+                modalBody.textContent = message;
+                const messageModal = new bootstrap.Modal(document.querySelector("#messageModal"));
+                messageModal.show();
+            }
+
+        function getOptions() {
+            const selectedTransactionId = transactionSelect.value;
+
+            if (!selectedTransactionId) {
+                planCompteSelect.innerHTML = '<option value="">Sélectionnez un compte</option>';
+                return;
+            }
+
+            planCompteSelect.innerHTML = '';
+            planCompteSelect.appendChild(loadingOption);
+            fetch(`/comptable/get-transaction-details?transactionId=${selectedTransactionId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    planCompteSelect.innerHTML = '<option value="">Sélectionnez un compte</option>';
+                    data.forEach(compte => {
+                        const option = document.createElement('option');
+                        option.value = compte.id;
+                        option.textContent = `${compte.numero} - ${compte.libelle}`;
+                        planCompteSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    planCompteSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+                });
+        }
+
+        transactionSelect.addEventListener('change', getOptions);
+        getOptions(); // Initial call to populate based on default selection
+    });*/
+    </script>
 {% endblock %}

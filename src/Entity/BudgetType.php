@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BudgetTypeRepository::class)]
+#[ORM\Table(name: "ce_budget_type")]
 class BudgetType
 {
     #[ORM\Id]

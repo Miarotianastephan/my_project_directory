@@ -14,7 +14,9 @@ class CompteMereRepository extends ServiceEntityRepository
 {
     private PlanCompteRepository $planCompteRepository;
     public static $listCompteDep = ['60','61', '62', '63', '64', '65', '66', '67', '68'];
+    public $listCptDep = ['60','61', '62', '63', '64', '65', '66', '67', '68'];
     public static $listCompteDepPrefixe = ['4%','51%','68%', '7%'];
+    public  $listCptDepPrefixe = ['4%','51%','68%', '7%'];
 
     public function __construct(ManagerRegistry $registry, PlanCompteRepository $planCptRepo)
     {
@@ -31,12 +33,12 @@ class CompteMereRepository extends ServiceEntityRepository
         // Utilisation de 'IN' pour la liste des comptes avec un numéro exact
         $queryBuilder
             ->where($queryBuilder->expr()->in('p.cpt_numero', ':listCompteDep'))
-            ->setParameter('listCompteDep',$this->listCompteDep);
+            ->setParameter('listCompteDep',$this->listCptDep);
 
         // Construction des clauses 'LIKE' pour chaque préfixe
         $orX = $queryBuilder->expr()->orX(); // Pour gérer plusieurs conditions OR
 
-        foreach ($this->listCompteDepPrefixe as $index => $prefix) {
+        foreach ($this->listCptDepPrefixe as $index => $prefix) {
             $paramName = 'prefix' . $index;
             $orX->add($queryBuilder->expr()->like('p.cpt_numero', ':' . $paramName));
             $queryBuilder->setParameter($paramName, $prefix);

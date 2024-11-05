@@ -13,6 +13,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Ajouter un nouveau detail transaction compte</div>
+                    <div style="color: red">{{ message ? message : "" }}</div>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
@@ -32,5 +33,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    {#
     <script src="{{ asset('js/scr/banque/scr_form.js') }}"></script>
+    #}
 {% endblock %}

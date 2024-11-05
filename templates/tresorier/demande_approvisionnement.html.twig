@@ -3,7 +3,7 @@
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {% block page_title %}
-    Section Trésorier
+    Section Trésorierr
 {% endblock %}
 
 {% block page_subtitle %}
@@ -18,7 +18,7 @@
                     <h4 class="card-title">Remplissez ce formulaire d'approvisionnement</h4>
                 </div>
                 <form id="formulaire" action="{{ path('tresorier.save_approvisionnement') }}" method="post"
-                      data-cancel="{{ path('tresorier.liste_demande_en_attente') }}">
+                      data-cancel="{{ path('tresorier.liste_demande_en_attente') }}" enctype="multipart/form-data">
                     <div class="card-body">
                         <div class="row form-group">
                             <div class="col">
@@ -92,13 +92,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="dm_piece">Insérer une pièce jointe</label>
-                                    <input disabled type="file" name="dm_piece" class="form-control" id="dm_piece"/>
+                                    <input type="file" name="image" class="form-control" id="image"/>
                                 </div>
                         </div>
                     </div>
                     <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" id="annuler" class="btn btn-secondary">Annuler</button>
-                        <button type="submit" id="valider" class="btn btn-primary">Valider</button>
+                        <button type="button" id="valider" class="btn btn-primary">Valider</button>
                     </div>
                 </form>
             </div>

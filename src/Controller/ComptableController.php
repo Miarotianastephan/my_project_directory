@@ -2,17 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\DetailTransactionCompte;
-use App\Entity\Exercice;
-use App\Entity\PlanCompte;
-use App\Entity\TransactionType;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailTransactionCompteRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\MouvementRepository;
 use App\Repository\PlanCompteRepository;
 use App\Repository\TransactionTypeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ComptableController extends AbstractController
 {
     #[Route('/', name: 'comptable.graphe', methods: ['GET', 'POST'])]
-    public function index(Request $request,MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
+    public function index(Request $request, MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
         $annee = $request->query->get('annee', (int)date('Y'));
         $semestre = $request->query->get('semestre', (int)'1');
@@ -37,26 +32,18 @@ class ComptableController extends AbstractController
         }
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
-        // Ceci est juste un exemple
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
-            $fond = [5000000, 4800000, 4500000, 4200000, 4000000, 3800000];
-            $caisse = [500000, 480000, 450000, 420000, 400000, 380000];
-            $sold = [300000, 280000, 250000, 220000, 200000, 180000];
-            // $caisse = [$somme_debit_banque[0] ?? 0,$somme_debit_banque[1] ?? 0,$somme_debit_banque[3] ?? 0,$somme_debit_banque[4] ?? 0,$somme_debit_banque[5] ?? 0];
-            // $sold = [$somme_debit_caisse[0] ?? 0,$somme_debit_caisse[1] ?? 0,$somme_debit_caisse[3] ?? 0,$somme_debit_caisse[4] ?? 0,$somme_debit_caisse[5] ?? 0];
+            $fond = [100, 150, 200, 250, 300, 350];
+            $caisse = [$somme_debit_banque[0] ?? 0, $somme_debit_banque[1] ?? 0, $somme_debit_banque[3] ?? 0, $somme_debit_banque[4] ?? 0, $somme_debit_banque[5] ?? 0];
+            $sold = [$somme_debit_caisse[0] ?? 0, $somme_debit_caisse[1] ?? 0, $somme_debit_caisse[3] ?? 0, $somme_debit_caisse[4] ?? 0, $somme_debit_caisse[5] ?? 0];
         }
         if ($semestre == 2) {
-            $labels = ["Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-            $fond = [3200000, 3000000, 2800000, 2600000, 2400000, 2200000];
-            $caisse = [300000, 280000, 260000, 240000, 220000, 200000];
-            $sold = [120000, 100000, 90000, 80000, 70000, 60000];
-            // $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
-            // $fond = [];
-            // $caisse = [$somme_debit_banque[6] ?? 0,$somme_debit_banque[7] ?? 0,$somme_debit_banque[8] ?? 0,$somme_debit_banque[9] ?? 0,$somme_debit_banque[10] ?? 0,$somme_debit_banque[11] ?? 0];
-            // $sold = [$somme_debit_caisse[6] ?? 0,$somme_debit_caisse[7] ?? 0,$somme_debit_caisse[8] ?? 0,$somme_debit_caisse[9] ?? 0,$somme_debit_caisse[10] ?? 0,$somme_debit_caisse[11] ?? 0];
+            $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+            $fond = [];
+            $caisse = [$somme_debit_banque[6] ?? 0, $somme_debit_banque[7] ?? 0, $somme_debit_banque[8] ?? 0, $somme_debit_banque[9] ?? 0, $somme_debit_banque[10] ?? 0, $somme_debit_banque[11] ?? 0];
+            $sold = [$somme_debit_caisse[6] ?? 0, $somme_debit_caisse[7] ?? 0, $somme_debit_caisse[8] ?? 0, $somme_debit_caisse[9] ?? 0, $somme_debit_caisse[10] ?? 0, $somme_debit_caisse[11] ?? 0];
         }
-
 
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse([
@@ -82,14 +69,15 @@ class ComptableController extends AbstractController
 
     #[Route('/form/depense', name: 'comptable.form_depense_directe', methods: ['GET'])]
     public function form_depense_directe(
-        PlanCompteRepository              $planCompteRepository,
-        TransactionTypeRepository         $transactionTypeRepository
+        PlanCompteRepository      $planCompteRepository,
+        TransactionTypeRepository $transactionTypeRepository
     ): Response
     {
         $liste_entite = $planCompteRepository->findCompteCaisse();
         $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
 
         return $this->render('comptable/ajout_dep_direct.html.twig', [
+            'message' =>null,
             'liste_entite' => $liste_entite,
             'list_opp' => $liste_transaction
         ]);
@@ -125,37 +113,135 @@ class ComptableController extends AbstractController
     public function validation_depense_directe(Request                           $request,
                                                PlanCompteRepository              $planCompteRepository,
                                                TransactionTypeRepository         $transactionTypeRepository,
-                                               DetailTransactionCompteRepository $detailTransactionCompteRepository): Response
+                                               DetailTransactionCompteRepository $detailTransactionCompteRepository)
     {
         // Récupère les données du formulaire
-        $entite_id = $request->request->get('entite');
+        //$data = json_decode($request->getContent(), true);
+        $data = $request->request->all();
+        $entite_id = $data['entite'] ?? null;
+        $transaction_id = $data['transaction'] ?? null;
+        $montant = $data['montant'] ?? null;
+        $planCompte_id = $data['plan_compte'] ?? null;
+
+        if (!$planCompte_id) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Veuillez completer tous les champs.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+        } else if (!$montant) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Le montant est nécessaire.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+        } else if (!$transaction_id) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Choix de transaction nécessaire.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+        } else if (!$entite_id) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Choix de l'entité est nécessaire",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+        }else if ($montant<=0){
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Le montant doit être un chiffre positif.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+        }
         $entite = $planCompteRepository->find($entite_id);
 
+        if (!$entite) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Entité est introuvable",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+        }
 
-        $transaction_id = $request->request->get('transaction');
         $transaction = $transactionTypeRepository->find($transaction_id);
+        if (!$transaction) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Transaction introuvable.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
 
-
+        }
         $planCompte = $planCompteRepository->find($entite_id);
+        if (!$planCompte) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
 
-        $montant = $request->request->get('montant');
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "blabla",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+        }
         $date = new \DateTime();
 
-        $planCompte_id = $request->request->get('plan_compte');
         $compte_debit = $planCompteRepository->find($planCompte_id);
+        if (!$compte_debit) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
 
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Compte de débit associé introuvable.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+        }
         $compte_credit = $detailTransactionCompteRepository->findPlanCompte_CreditByTransaction($transaction);
+        if (!$compte_credit) {
+            $liste_entite = $planCompteRepository->findCompteCaisse();
+            $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
+
+            return $this->render('comptable/ajout_dep_direct.html.twig', [
+                'message' => "Compte de crédit associé introuvale.",
+                'liste_entite' => $liste_entite,
+                'list_opp' => $liste_transaction
+            ]);
+
+        }
+
         return $this->render('comptable/validation_dep_direct.html.twig',
             [
+                'success' => true,
                 'entite' => $entite,
                 'transaction' => $transaction,
-                'planCompte' => $planCompte,
+                'plan_compte' => $planCompte,
                 'montant' => $montant,
                 'debit' => $compte_debit,
                 'credit' => $compte_credit,
                 'date' => $date,
+
             ]);
     }
+
 
 
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]

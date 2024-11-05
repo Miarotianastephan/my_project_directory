@@ -31,10 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //paiement = 1 -> chèque
         //paiement = 0 -> espèce
-        if (paiement == 1) {
+        if (paiement == "1") {
             //alert("Paiement par chèque");
             sendRequestCheque(form.action, handleResponse)
-        } else if (paiement == 0) {
+        } else if (paiement == "0") {
             //alert("Paiement par éspèce");
             sendRequest(form.action, handleResponse);
         } else {
@@ -65,14 +65,15 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
+
     function sendRequestCheque(url, callback) {
         const formData = getFormData();
-        //console.log(formData);
+
 
         fetch(url, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
-            }, body: JSON.stringify(formData)
+            },
         })
             .then(response => {
                 if (!response.ok) {
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(url, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
-            }, //body: JSON.stringify(data)
+            }, body: JSON.stringify(data)
         })
             .then(response => {
                 if (!response.ok) {

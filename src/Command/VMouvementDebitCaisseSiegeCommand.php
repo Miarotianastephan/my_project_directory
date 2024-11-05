@@ -40,15 +40,15 @@ class VMouvementDebitCaisseSiegeCommand extends Command
     {
         $connection = $this->entityManager->getConnection();
 
-        $sql = 'CREATE VIEW v_mouvement_debit_siege AS 
+        $sql = 'CREATE VIEW ce_v_mouvement_debit_siege AS 
                 SELECT 
                     m.mvn_id , 
                     m.mvt_evenement_id , 
                     m.mvt_compte_id ,
                     m.mvt_montant , 
                     m.is_mvt_debit
-                FROM mouvement m
-                LEFT JOIN plan_compte p
+                FROM ce_mouvement m
+                LEFT JOIN ce_plan_compte p
                 ON m.mvt_compte_id = p.cpt_id 
                 WHERE 
                     LOWER(p.cpt_libelle) like \'caisse si%\'  

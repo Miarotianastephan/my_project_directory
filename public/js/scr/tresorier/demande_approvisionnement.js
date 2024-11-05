@@ -8,15 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleSubmit(e) {
         e.preventDefault();
-        const formData = getFormData();
+        const formData = new FormData(formulaire);
+
+        // Log form data for debugging
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
         fetch(formulaire.action, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify(formData)
+            body: formData
         })
             .then(response => {
                 if (!response.ok) {
@@ -26,16 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(handleResponse)
             .catch(handleError);
-    }
-
-    function getFormData() {
-        return {
-            id_plan_compte_debit: document.getElementById('id_plan_compte_debit').value,
-            dm_montant: document.getElementById('dm_montant').value,
-            mode_paiement: document.getElementById('mode_paiement').value,
-            date_operation: document.getElementById('date_operation').value,
-            date_saisie: document.getElementById('date_saisie').value,
-        };
     }
 
     function handleResponse(data) {

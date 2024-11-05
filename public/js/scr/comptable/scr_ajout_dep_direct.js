@@ -3,6 +3,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const planCompteSelect = document.getElementById('plan_compte');
     const loadingOption = document.createElement('option');
     loadingOption.textContent = 'Chargement...';
+    document.querySelector(`#messageModal .btn-close`).addEventListener('click', closeModalAndRedirect);
+
+    function closeModalAndRedirect() {
+        new bootstrap.Modal(document.querySelector("#messageModal")).hide();
+    }
+
+    //const formulaire = document.getElementById('formulaire');
+    //document.querySelector(`#valider`).addEventListener('click', handleSubmit);
+
+    /*function handleSubmit(e) {
+        e.preventDefault();
+        sendRequest(formulaire.action);
+    }*/
+
+    /*function sendRequest(url) {
+        fetch(url, {
+            method: 'POST', headers: {
+                'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json'
+            }, body: JSON.stringify({
+                entite: document.getElementById("entite").value,
+                transaction: document.getElementById("transaction").value,
+                plan_compte: document.getElementById("plan_compte").value,
+                montant: document.getElementById("montant").value,
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau : ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                showMessage(data.message);
+            })
+            .catch(error => {
+                console.error(error);
+                showMessage(error.message);
+            });
+    }*/
+
+    function showMessage(message) {
+        const modalBody = document.querySelector(`#messageModal .modal-body`);
+        modalBody.textContent = message;
+        messageModal: new bootstrap.Modal(document.querySelector("#messageModal")).show();
+    }
 
     function getOptions() {
         const selectedTransactionId = transactionSelect.value;

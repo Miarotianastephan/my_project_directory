@@ -44,9 +44,13 @@ class SGController extends AbstractController
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
+        //debit = Mivoka
+        //credit = Miditra
+
         $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
+
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
@@ -61,7 +65,13 @@ class SGController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-        return $this->render('sg/modifier_demande.html.twig', ['demande_type' => $data, 'images' => $list_img, 'solde_reste' => $solde_reste, 'budget' => $budget]);
+        return $this->render('sg/modifier_demande.html.twig', [
+            'demande_type' => $data,
+            'images' => $list_img,
+            'solde_reste' => $solde_reste,
+            'budget_reste' => $budget - $solde_debit,
+            'budget' => $budget
+        ]);
     }
 
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
@@ -133,6 +143,9 @@ class SGController extends AbstractController
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
+        dump("Solde nivoka".$solde_debit);
+        dump("Solde niditra".$solde_CREDIT);
+
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }

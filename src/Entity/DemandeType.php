@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Date;
 use InvalidArgumentException;
 
 #[ORM\Entity(repositoryClass: DemandeTypeRepository::class)]
+#[ORM\Table(name: "ce_demande_type")]
 class DemandeType
 {
     #[ORM\Id]
@@ -21,7 +22,7 @@ class DemandeType
     #[ORM\Column(name: 'dm_type_id', type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'customdate', nullable:false,options: ['default' => 'SYSDATE'])]
+    #[ORM\Column(type: 'customdate', nullable:false)]
     private ?\DateTimeInterface $dm_date = null;
 
     #[ORM\Column]

@@ -281,6 +281,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                 'message' => 'Déblocage impossible car demande introuvable'
             ]);
         }
+
         // Debut de transaction de béblocages de fonds
         $entityManager->beginTransaction();
         try {
@@ -347,6 +348,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Validateur du demande introuvable.'
                 ]);
             }
+
             // Insérer Validé dans Historique des demandes
             $log_dm = new LogDemandeType();
             $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
@@ -369,17 +371,31 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $numero_compte_debit = $dm_type->getPlanCompte();
             $mode_paiement_demande = (int)($dm_type->getDmModePaiement());
             $transaction_a_faire = $this->trsTypeRepo->findTransactionByModePaiement($mode_paiement_demande);   // identifier le type de transaction à faire
-            $detail_transaction = $this->detailTrsRepo->findByTransaction($transaction_a_faire);                // identifier le mouvement à réaliser
+
             // dump($detail_transaction);
             // Création evenement 
             $evenement = new Evenement($transaction_a_faire,$user_tresorier,$exercice_demande,$dm_type->getEntityCode()->getCptLibelle(),$montant_demande,$reference_demande,new DateTime());
             $entityManager->persist($evenement);
             // Création des mouvements
 
+
             $mv_debit = new Mouvement($evenement, $numero_compte_debit, $montant_demande, true);// DEBIT
             $entityManager->persist($mv_debit);
 
-            $mv_credit = new Mouvement($evenement, $detail_transaction->getPlanCompte(), $montant_demande, false);// CREDIT
+            $mv_credit = new Mouvement();
+            // CREDIT
+            $mv_credit->setMvtEvenementId($evenement);
+            $mv_credit->setMvtMontant($montant_demande);
+            $mv_credit->setMvtDebit(false);
+            $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire,0);                // identifier le mouvement à réaliser
+            if ($detail_transaction_credit === null) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Compte à créditer introuvable pour ' . $transaction_a_faire->getTrsCode()
+                ]);
+            }
+
+            $mv_credit->setMvtCompteId($detail_transaction_credit->getPlanCompte());
             $entityManager->persist($mv_credit);
 
             $entityManager->flush();
@@ -390,7 +406,8 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             ]);// si tout OK
 
         } catch (\Exception $e) {
-            $entityManager->rollback();                         // si erreur opération 
+            dump($e->getMessage());
+            $entityManager->rollback();                         // si erreur opération
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Erreur transaction : ' . $e->getMessage()

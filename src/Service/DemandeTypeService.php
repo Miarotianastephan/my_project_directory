@@ -226,17 +226,20 @@ class DemandeTypeService
 
             $entityManager->flush();
             $entityManager->commit();                           // si tout OK
+            return new JsonResponse([
+                "success" => true,
+                "message" => 'Approvisionnement insérer',
+                "ref_approvisionnement" => $evenement->getEvnReference()
+            ]);
         } catch (\Throwable $th) {
             $entityManager->rollback();                         // si erreur opération
             return new JsonResponse([
                 'success' => false,
-                'message' => 'Erreur création approvisionnement : ' . $th->getMessage()
+                'message' => 'Erreur création approvisionnement : ' . $th->getMessage(),
+                "ref_approvisionnement" => null
             ]);
         }
-        return new JsonResponse([
-            "success" => true,
-            "message" => 'Approvisionnement insérer',
-        ]);
+
     }
 
     // Mis à jour de l'état d'une demande 
