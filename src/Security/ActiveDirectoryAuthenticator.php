@@ -47,11 +47,6 @@ class ActiveDirectoryAuthenticator extends AbstractAuthenticator
     {
         // Replace
         $usrMatricule = $request->request->get('user_matricule');
-        $usrMatricule = str_replace('0000', 'gauss', $usrMatricule);    // Admin
-        $usrMatricule = str_replace('0001', 'tesla', $usrMatricule);    // demandeur
-        $usrMatricule = str_replace('0002', 'euclid', $usrMatricule);   // sg
-        $usrMatricule = str_replace('0003', 'euler', $usrMatricule);    // tresorier
-        $usrMatricule = str_replace('0004', 'newton', $usrMatricule);   // comptable
         $user_matricule = $usrMatricule;
         $user_password = $request->request->get('user_pass');
         // vérifier si non vide

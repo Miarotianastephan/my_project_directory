@@ -1,0 +1,2785 @@
+ALTER TABLE DEV_USR.BANQUE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.BANQUE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.BANQUE
+(
+  BANQUE_ID   NUMBER(10)                        NOT NULL,
+  NOM_BANQUE  VARCHAR2(255 BYTE)                NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.BUDGET_TYPE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.BUDGET_TYPE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.BUDGET_TYPE
+(
+  BUDGET_TYPE_ID  NUMBER(10)                    NOT NULL,
+  LIBELLE         VARCHAR2(255 BYTE)            NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.CHEQUIER
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.CHEQUIER CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.CHEQUIER
+(
+  CHEQUIER_ID            NUMBER(10)             NOT NULL,
+  BANQUE_ID              NUMBER(10)             NOT NULL,
+  CHEQUIER_NUMERO_DEBUT  VARCHAR2(255 BYTE)     NOT NULL,
+  CHEQUIER_NUMERO_FIN    VARCHAR2(255 BYTE)     NOT NULL,
+  CHEQUIER_DATE_ARRIVEE  DATE                   NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.COMPTE_MERE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.COMPTE_MERE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.COMPTE_MERE
+(
+  ID           NUMBER(10)                       NOT NULL,
+  CPT_NUMERO   VARCHAR2(255 BYTE)               NOT NULL,
+  CPT_LIBELLE  VARCHAR2(255 BYTE)               NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.DEMANDE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.DEMANDE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.DEMANDE
+(
+  DM_ID    NUMBER(10)                           NOT NULL,
+  LIBELLE  VARCHAR2(255 BYTE)                   NOT NULL,
+  DM_CODE  NUMBER(10)                           NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.DOCTRINE_MIGRATION_VERSIONS
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.DOCTRINE_MIGRATION_VERSIONS CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.DOCTRINE_MIGRATION_VERSIONS
+(
+  VERSION         VARCHAR2(191 BYTE)            NOT NULL,
+  EXECUTED_AT     TIMESTAMP(0)                  DEFAULT NULL,
+  EXECUTION_TIME  NUMBER(10)                    DEFAULT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.ETAT_DEMANDE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.ETAT_DEMANDE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.ETAT_DEMANDE
+(
+  ETAT_ID       NUMBER(10)                      NOT NULL,
+  ETAT_CODE     NUMBER(10)                      NOT NULL,
+  ETAT_LIBELLE  VARCHAR2(255 BYTE)              NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.EXERCICE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.EXERCICE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.EXERCICE
+(
+  EXERCICE_ID          NUMBER(10)               NOT NULL,
+  EXERCICE_DATE_DEBUT  DATE                     NOT NULL,
+  EXERCICE_DATE_FIN    DATE                     DEFAULT NULL,
+  IS_VALID             NUMBER(1)                DEFAULT 0                     NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.GROUPE_UTILISATEUR
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.GROUPE_UTILISATEUR CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.GROUPE_UTILISATEUR
+(
+  GRP_ID       NUMBER(10)                       NOT NULL,
+  GRP_LIBELLE  VARCHAR2(255 BYTE)               NOT NULL,
+  GRP_NIVEAU   NUMBER(10)                       NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.MESSENGER_MESSAGES
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.MESSENGER_MESSAGES CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.MESSENGER_MESSAGES
+(
+  ID            NUMBER(20)                      NOT NULL,
+  BODY          CLOB                            NOT NULL,
+  HEADERS       CLOB                            NOT NULL,
+  QUEUE_NAME    VARCHAR2(190 BYTE)              NOT NULL,
+  CREATED_AT    TIMESTAMP(0)                    NOT NULL,
+  AVAILABLE_AT  TIMESTAMP(0)                    NOT NULL,
+  DELIVERED_AT  TIMESTAMP(0)                    DEFAULT NULL
+)
+LOB (BODY) STORE AS (
+  TABLESPACE  SYSTEM
+  ENABLE      STORAGE IN ROW
+  CHUNK       8192
+  RETENTION
+  NOCACHE
+  LOGGING
+      STORAGE    (
+                  INITIAL          64K
+                  NEXT             1M
+                  MINEXTENTS       1
+                  MAXEXTENTS       UNLIMITED
+                  PCTINCREASE      0
+                  FREELISTS        1
+                  FREELIST GROUPS  1
+                  BUFFER_POOL      DEFAULT
+                  FLASH_CACHE      DEFAULT
+                  CELL_FLASH_CACHE DEFAULT
+                 ))
+LOB (HEADERS) STORE AS (
+  TABLESPACE  SYSTEM
+  ENABLE      STORAGE IN ROW
+  CHUNK       8192
+  RETENTION
+  NOCACHE
+  LOGGING
+      STORAGE    (
+                  INITIAL          64K
+                  NEXT             1M
+                  MINEXTENTS       1
+                  MAXEXTENTS       UNLIMITED
+                  PCTINCREASE      0
+                  FREELISTS        1
+                  FREELIST GROUPS  1
+                  BUFFER_POOL      DEFAULT
+                  FLASH_CACHE      DEFAULT
+                  CELL_FLASH_CACHE DEFAULT
+                 ))
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+COMMENT ON COLUMN DEV_USR.MESSENGER_MESSAGES.CREATED_AT IS '(DC2Type:datetime_immutable)';
+
+COMMENT ON COLUMN DEV_USR.MESSENGER_MESSAGES.AVAILABLE_AT IS '(DC2Type:datetime_immutable)';
+
+COMMENT ON COLUMN DEV_USR.MESSENGER_MESSAGES.DELIVERED_AT IS '(DC2Type:datetime_immutable)';
+
+
+
+ALTER TABLE DEV_USR.OBSERVATION_DEMANDE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.OBSERVATION_DEMANDE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.OBSERVATION_DEMANDE
+(
+  ID                     NUMBER(10)             NOT NULL,
+  MATRICULE_OBSERVATEUR  VARCHAR2(255 BYTE)     NOT NULL,
+  OBSERVATION            VARCHAR2(255 BYTE)     NOT NULL,
+  REF_DEMANDE            VARCHAR2(255 BYTE)     NOT NULL,
+  DATE_OBSERVATION       DATE                   DEFAULT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.PLAN_COMPTE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.PLAN_COMPTE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.PLAN_COMPTE
+(
+  CPT_ID          NUMBER(10)                    NOT NULL,
+  COMPTE_MERE_ID  NUMBER(10)                    NOT NULL,
+  CPT_NUMERO      VARCHAR2(255 BYTE)            NOT NULL,
+  CPT_LIBELLE     VARCHAR2(255 BYTE)            NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.TRANSACTION_TYPE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.TRANSACTION_TYPE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.TRANSACTION_TYPE
+(
+  TRS_ID          NUMBER(10)                    NOT NULL,
+  TRS_CODE        VARCHAR2(255 BYTE)            NOT NULL,
+  TRS_DEFINITION  CLOB                          DEFAULT NULL,
+  TRS_LIBELLE     VARCHAR2(255 BYTE)            NOT NULL
+)
+LOB (TRS_DEFINITION) STORE AS (
+  TABLESPACE  SYSTEM
+  ENABLE      STORAGE IN ROW
+  CHUNK       8192
+  RETENTION
+  NOCACHE
+  LOGGING
+      STORAGE    (
+                  INITIAL          64K
+                  NEXT             1M
+                  MINEXTENTS       1
+                  MAXEXTENTS       UNLIMITED
+                  PCTINCREASE      0
+                  FREELISTS        1
+                  FREELIST GROUPS  1
+                  BUFFER_POOL      DEFAULT
+                  FLASH_CACHE      DEFAULT
+                  CELL_FLASH_CACHE DEFAULT
+                 ))
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.USAGE_CHEQUE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.USAGE_CHEQUE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.USAGE_CHEQUE
+(
+  USAGE_CHQ_ID      NUMBER(10)                  NOT NULL,
+  BANQUE_ID         NUMBER(10)                  DEFAULT NULL,
+  CHQ_MONTANT       FLOAT(126)                  NOT NULL,
+  IS_VALID          NUMBER(1)                   DEFAULT 1                     NOT NULL,
+  CHQ_BENEFICIAIRE  VARCHAR2(255 BYTE)          DEFAULT NULL,
+  CHQ_REMETTANT     VARCHAR2(255 BYTE)          DEFAULT NULL,
+  CHQ_NUMERO        VARCHAR2(255 BYTE)          NOT NULL,
+  DATE_USAGE        DATE                        NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.UTILISATEUR
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.UTILISATEUR CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.UTILISATEUR
+(
+  USER_ID         NUMBER(10)                    NOT NULL,
+  GRP_ID          NUMBER(10)                    NOT NULL,
+  USER_MATRICULE  VARCHAR2(255 BYTE)            NOT NULL,
+  DT_AJOUT        DATE                          DEFAULT SYSDATE               NOT NULL,
+  ROLES           CLOB                          NOT NULL
+)
+LOB (ROLES) STORE AS (
+  TABLESPACE  SYSTEM
+  ENABLE      STORAGE IN ROW
+  CHUNK       8192
+  RETENTION
+  NOCACHE
+  LOGGING
+      STORAGE    (
+                  INITIAL          64K
+                  NEXT             1M
+                  MINEXTENTS       1
+                  MAXEXTENTS       UNLIMITED
+                  PCTINCREASE      0
+                  FREELISTS        1
+                  FREELIST GROUPS  1
+                  BUFFER_POOL      DEFAULT
+                  FLASH_CACHE      DEFAULT
+                  CELL_FLASH_CACHE DEFAULT
+                 ))
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+COMMENT ON COLUMN DEV_USR.UTILISATEUR.ROLES IS '(DC2Type:json)';
+
+
+
+--  There is no statement for index DEV_USR.SYS_C007255.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007258.
+--  The object is created when the parent object is created.
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_F61A5579A4D60759 ON DEV_USR.BUDGET_TYPE
+(LIBELLE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007264.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_A2F202D637E080D9 ON DEV_USR.CHEQUIER
+(BANQUE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007268.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007272.
+--  The object is created when the parent object is created.
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_2694D7A5A4D60759 ON DEV_USR.DEMANDE
+(LIBELLE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_2694D7A5BAED1C92 ON DEV_USR.DEMANDE
+(DM_CODE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007252.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007307.
+--  The object is created when the parent object is created.
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_214BE8208987F037 ON DEV_USR.ETAT_DEMANDE
+(ETAT_CODE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_214BE820A30938DC ON DEV_USR.ETAT_DEMANDE
+(ETAT_LIBELLE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007310.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007314.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007343.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_75EA56E0FB7336F0 ON DEV_USR.MESSENGER_MESSAGES
+(QUEUE_NAME)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_75EA56E0E3BD61CE ON DEV_USR.MESSENGER_MESSAGES
+(AVAILABLE_AT)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_75EA56E016BA31DB ON DEV_USR.MESSENGER_MESSAGES
+(DELIVERED_AT)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007484.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007326.
+--  The object is created when the parent object is created.
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_7BAE4A1290E652D9 ON DEV_USR.PLAN_COMPTE
+(CPT_NUMERO)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_7BAE4A124C0B6FD9 ON DEV_USR.PLAN_COMPTE
+(CPT_LIBELLE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_7BAE4A1281B9F858 ON DEV_USR.PLAN_COMPTE
+(COMPTE_MERE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007330.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007490.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_FA34EC9137E080D9 ON DEV_USR.USAGE_CHEQUE
+(BANQUE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007336.
+--  The object is created when the parent object is created.
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_1D1C63B312525178 ON DEV_USR.UTILISATEUR
+(USER_MATRICULE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_1D1C63B3D51E9150 ON DEV_USR.UTILISATEUR
+(GRP_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_B1F6CB3C3139546B ON DEV_USR.BANQUE
+(NOM_BANQUE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+/* Formatted on 05/11/2024 14:35:34 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE TRIGGER DEV_USR.MESSENGER_MESSAGES_AI_PK
+   BEFORE INSERT
+   ON DEV_USR.MESSENGER_MESSAGES
+   FOR EACH ROW
+DECLARE
+   last_Sequence   NUMBER;
+   last_InsertID   NUMBER;
+BEGIN
+   IF (:NEW.ID IS NULL OR :NEW.ID = 0)
+   THEN
+      SELECT MESSENGER_MESSAGES_SEQ.NEXTVAL INTO :NEW.ID FROM DUAL;
+   ELSE
+      SELECT NVL (Last_Number, 0)
+        INTO last_Sequence
+        FROM User_Sequences
+       WHERE Sequence_Name = 'MESSENGER_MESSAGES_SEQ';
+
+      SELECT :NEW.ID INTO last_InsertID FROM DUAL;
+
+      WHILE (last_InsertID > last_Sequence)
+      LOOP
+         SELECT MESSENGER_MESSAGES_SEQ.NEXTVAL INTO last_Sequence FROM DUAL;
+      END LOOP;
+
+      SELECT MESSENGER_MESSAGES_SEQ.NEXTVAL INTO last_Sequence FROM DUAL;
+   END IF;
+END;
+/
+
+
+ALTER TABLE DEV_USR.DEMANDE_TYPE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.DEMANDE_TYPE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.DEMANDE_TYPE
+(
+  DM_TYPE_ID         NUMBER(10)                 NOT NULL,
+  ENTITY_CODE_ID     NUMBER(10)                 NOT NULL,
+  UTILISATEUR_ID     NUMBER(10)                 NOT NULL,
+  PLAN_COMPTE_ID     NUMBER(10)                 NOT NULL,
+  EXERCICE_ID        NUMBER(10)                 NOT NULL,
+  DM_ID              NUMBER(10)                 NOT NULL,
+  ETAT_ID            NUMBER(10)                 NOT NULL,
+  DM_DATE            DATE                       NOT NULL,
+  DM_MONTANT         FLOAT(126)                 NOT NULL,
+  DM_MODE_PAIEMENT   VARCHAR2(255 BYTE)         NOT NULL,
+  REF_DEMANDE        VARCHAR2(255 BYTE)         NOT NULL,
+  DM_ETAT            NUMBER(10)                 NOT NULL,
+  MONTANT_REEL       FLOAT(126)                 DEFAULT '0'                   NOT NULL,
+  DM_DATE_OPERATION  DATE                       NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.DETAIL_BUDGET
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.DETAIL_BUDGET CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.DETAIL_BUDGET
+(
+  DETAIL_BUDGET_ID  NUMBER(10)                  NOT NULL,
+  BUDGET_TYPE_ID    NUMBER(10)                  NOT NULL,
+  EXERCICE_ID       NUMBER(10)                  NOT NULL,
+  COMPTE_MERE_ID    NUMBER(10)                  NOT NULL,
+  BUDGET_MONTANT    FLOAT(126)                  DEFAULT NULL,
+  BUDGET_DATE       DATE                        NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.DETAIL_DEMANDE_PIECE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.DETAIL_DEMANDE_PIECE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.DETAIL_DEMANDE_PIECE
+(
+  DETAIL_DM_TYPE_ID  NUMBER(10)                 NOT NULL,
+  DEMANDE_TYPE_ID    NUMBER(10)                 NOT NULL,
+  DET_DM_PIECE_URL   CLOB                       NOT NULL,
+  DET_DM_TYPE_URL    VARCHAR2(255 BYTE)         NOT NULL,
+  DET_DM_DATE        DATE                       NOT NULL
+)
+LOB (DET_DM_PIECE_URL) STORE AS (
+  TABLESPACE  SYSTEM
+  ENABLE      STORAGE IN ROW
+  CHUNK       8192
+  RETENTION
+  NOCACHE
+  LOGGING
+      STORAGE    (
+                  INITIAL          64K
+                  NEXT             1M
+                  MINEXTENTS       1
+                  MAXEXTENTS       UNLIMITED
+                  PCTINCREASE      0
+                  FREELISTS        1
+                  FREELIST GROUPS  1
+                  BUFFER_POOL      DEFAULT
+                  FLASH_CACHE      DEFAULT
+                  CELL_FLASH_CACHE DEFAULT
+                 ))
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.DETAIL_TRANSACTION_COMPTE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.DETAIL_TRANSACTION_COMPTE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.DETAIL_TRANSACTION_COMPTE
+(
+  DET_TRS_CPT_ID       NUMBER(10)               NOT NULL,
+  TRANSACTION_TYPE_ID  NUMBER(10)               NOT NULL,
+  PLAN_COMPTE_ID       NUMBER(10)               NOT NULL,
+  IS_TRS_DEBIT         NUMBER(1)                DEFAULT 1                     NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.EVENEMENT
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.EVENEMENT CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.EVENEMENT
+(
+  EVN_ID              NUMBER(10)                NOT NULL,
+  EVN_TRS_ID          NUMBER(10)                NOT NULL,
+  EVN_RESPONSABLE_ID  NUMBER(10)                NOT NULL,
+  EVN_EXERCICE_ID     NUMBER(10)                NOT NULL,
+  EVN_CODE_ENTITY     VARCHAR2(255 BYTE)        NOT NULL,
+  EVN_MONTANT         FLOAT(126)                NOT NULL,
+  EVN_REFERENCE       VARCHAR2(255 BYTE)        NOT NULL,
+  EVN_DATE_OPERATION  DATE                      NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.LOG_DEMANDE_TYPE
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.LOG_DEMANDE_TYPE CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.LOG_DEMANDE_TYPE
+(
+  LOG_DM_ID           NUMBER(10)                NOT NULL,
+  DEMANDE_TYPE_ID     NUMBER(10)                NOT NULL,
+  ETAT_ID             NUMBER(10)                NOT NULL,
+  LOG_DM_DATE         DATE                      NOT NULL,
+  DM_ETAT             NUMBER(10)                NOT NULL,
+  LOG_DM_OBSERVATION  VARCHAR2(255 BYTE)        DEFAULT NULL,
+  USER_MATRICULE      VARCHAR2(255 BYTE)        NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.MOUVEMENT
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.MOUVEMENT CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.MOUVEMENT
+(
+  MVN_ID            NUMBER(10)                  NOT NULL,
+  MVT_EVENEMENT_ID  NUMBER(10)                  NOT NULL,
+  MVT_COMPTE_ID     NUMBER(10)                  NOT NULL,
+  MVT_MONTANT       FLOAT(126)                  NOT NULL,
+  IS_MVT_DEBIT      NUMBER(1)                   NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE DEV_USR.VERSEMENTS
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DEV_USR.VERSEMENTS CASCADE CONSTRAINTS;
+
+CREATE TABLE DEV_USR.VERSEMENTS
+(
+  ID              NUMBER(10)                    NOT NULL,
+  NOM_REMETTANT   VARCHAR2(255 BYTE)            NOT NULL,
+  VRSM_DATE       DATE                          DEFAULT NULL                  NOT NULL,
+  ADRESSE         VARCHAR2(255 BYTE)            NOT NULL,
+  VRSM_MONTANT    FLOAT(126)                    NOT NULL,
+  VRSM_MOTIF      VARCHAR2(255 BYTE)            NOT NULL,
+  DEMANDE_ID      NUMBER(10)                    NOT NULL,
+  UTILISATEUR_ID  NUMBER(10)                    NOT NULL,
+  VRSM_REFERENCE  VARCHAR2(255 BYTE)            NOT NULL
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+CREATE INDEX DEV_USR.IDX_C8A95563FB88E14F ON DEV_USR.VERSEMENTS
+(UTILISATEUR_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_EB7B25FCE2808475 ON DEV_USR.DEMANDE_TYPE
+(REF_DEMANDE)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007287.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_EB7B25FCB417CC34 ON DEV_USR.DEMANDE_TYPE
+(ENTITY_CODE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_EB7B25FCFB88E14F ON DEV_USR.DEMANDE_TYPE
+(UTILISATEUR_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_EB7B25FC421B9B35 ON DEV_USR.DEMANDE_TYPE
+(PLAN_COMPTE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_EB7B25FC89D40298 ON DEV_USR.DEMANDE_TYPE
+(EXERCICE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_EB7B25FCFADC156C ON DEV_USR.DEMANDE_TYPE
+(DM_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_EB7B25FCD5E86FF ON DEV_USR.DEMANDE_TYPE
+(ETAT_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_6138EEE07CFC672 ON DEV_USR.DETAIL_BUDGET
+(BUDGET_TYPE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007293.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_6138EEE089D40298 ON DEV_USR.DETAIL_BUDGET
+(EXERCICE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_6138EEE081B9F858 ON DEV_USR.DETAIL_BUDGET
+(COMPTE_MERE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007299.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_22B796F1F5BB373C ON DEV_USR.DETAIL_DEMANDE_PIECE
+(DEMANDE_TYPE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_9CD608E3B3E6B071 ON DEV_USR.DETAIL_TRANSACTION_COMPTE
+(TRANSACTION_TYPE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_9CD608E3421B9B35 ON DEV_USR.DETAIL_TRANSACTION_COMPTE
+(PLAN_COMPTE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007303.
+--  The object is created when the parent object is created.
+
+--  There is no statement for index DEV_USR.SYS_C007393.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_B26681EB42AD9E2 ON DEV_USR.EVENEMENT
+(EVN_TRS_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_B26681EE606A7B7 ON DEV_USR.EVENEMENT
+(EVN_RESPONSABLE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_B26681EEC6EA09B ON DEV_USR.EVENEMENT
+(EVN_EXERCICE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007321.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_332AB75AF5BB373C ON DEV_USR.LOG_DEMANDE_TYPE
+(DEMANDE_TYPE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_332AB75AD5E86FF ON DEV_USR.LOG_DEMANDE_TYPE
+(ETAT_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007399.
+--  The object is created when the parent object is created.
+
+CREATE INDEX DEV_USR.IDX_5B51FC3E512ABDB3 ON DEV_USR.MOUVEMENT
+(MVT_EVENEMENT_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+CREATE INDEX DEV_USR.IDX_5B51FC3E9FF4568C ON DEV_USR.MOUVEMENT
+(MVT_COMPTE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+--  There is no statement for index DEV_USR.SYS_C007506.
+--  The object is created when the parent object is created.
+
+CREATE UNIQUE INDEX DEV_USR.UNIQ_C8A9556380E95E18 ON DEV_USR.VERSEMENTS
+(DEMANDE_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MAXSIZE          UNLIMITED
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+/* Formatted on 05/11/2024 14:35:34 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE TRIGGER DEV_USR.trg_generate_reference
+   BEFORE INSERT
+   ON DEV_USR.DEMANDE_TYPE
+   FOR EACH ROW
+   DISABLE
+DECLARE
+   v_year       VARCHAR2 (4);
+   v_sequence   NUMBER;
+   v_prefix     VARCHAR2 (3);
+   v_code_dm    NUMBER;
+BEGIN
+   SELECT TO_CHAR (SYSDATE, 'YYYY') INTO v_year FROM DUAL;
+
+   SELECT :NEW.dm_type_id INTO v_sequence FROM DUAL;
+
+   SELECT dm_code
+     INTO v_code_dm
+     FROM demande
+    WHERE dm_id = :NEW.dm_id;
+
+   IF v_code_dm = 10
+   THEN
+      v_prefix := 'DEC';
+   ELSE
+      v_prefix := 'APR';
+   END IF;
+
+   :NEW.REF_DEMANDE := v_prefix || '/' || v_year || '/' || v_sequence;
+END;
+/
+
+
+ALTER TABLE DEV_USR.BANQUE ADD (
+  PRIMARY KEY
+  (BANQUE_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.BUDGET_TYPE ADD (
+  PRIMARY KEY
+  (BUDGET_TYPE_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.CHEQUIER ADD (
+  PRIMARY KEY
+  (CHEQUIER_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.COMPTE_MERE ADD (
+  PRIMARY KEY
+  (ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DEMANDE ADD (
+  PRIMARY KEY
+  (DM_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DOCTRINE_MIGRATION_VERSIONS ADD (
+  PRIMARY KEY
+  (VERSION)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.ETAT_DEMANDE ADD (
+  PRIMARY KEY
+  (ETAT_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.EXERCICE ADD (
+  PRIMARY KEY
+  (EXERCICE_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.GROUPE_UTILISATEUR ADD (
+  PRIMARY KEY
+  (GRP_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.MESSENGER_MESSAGES ADD (
+  PRIMARY KEY
+  (ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.OBSERVATION_DEMANDE ADD (
+  PRIMARY KEY
+  (ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.PLAN_COMPTE ADD (
+  PRIMARY KEY
+  (CPT_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.TRANSACTION_TYPE ADD (
+  PRIMARY KEY
+  (TRS_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.USAGE_CHEQUE ADD (
+  PRIMARY KEY
+  (USAGE_CHQ_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.UTILISATEUR ADD (
+  PRIMARY KEY
+  (USER_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DEMANDE_TYPE ADD (
+  PRIMARY KEY
+  (DM_TYPE_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DETAIL_BUDGET ADD (
+  PRIMARY KEY
+  (DETAIL_BUDGET_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DETAIL_DEMANDE_PIECE ADD (
+  PRIMARY KEY
+  (DETAIL_DM_TYPE_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DETAIL_TRANSACTION_COMPTE ADD (
+  PRIMARY KEY
+  (DET_TRS_CPT_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.EVENEMENT ADD (
+  PRIMARY KEY
+  (EVN_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.LOG_DEMANDE_TYPE ADD (
+  PRIMARY KEY
+  (LOG_DM_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.MOUVEMENT ADD (
+  PRIMARY KEY
+  (MVN_ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.VERSEMENTS ADD (
+  PRIMARY KEY
+  (ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MAXSIZE          UNLIMITED
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.CHEQUIER ADD (
+  CONSTRAINT FK_A2F202D637E080D9 
+  FOREIGN KEY (BANQUE_ID) 
+  REFERENCES DEV_USR.BANQUE (BANQUE_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.PLAN_COMPTE ADD (
+  CONSTRAINT FK_7BAE4A1281B9F858 
+  FOREIGN KEY (COMPTE_MERE_ID) 
+  REFERENCES DEV_USR.COMPTE_MERE (ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.USAGE_CHEQUE ADD (
+  CONSTRAINT FK_FA34EC9137E080D9 
+  FOREIGN KEY (BANQUE_ID) 
+  REFERENCES DEV_USR.BANQUE (BANQUE_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.UTILISATEUR ADD (
+  CONSTRAINT FK_1D1C63B3D51E9150 
+  FOREIGN KEY (GRP_ID) 
+  REFERENCES DEV_USR.GROUPE_UTILISATEUR (GRP_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DEMANDE_TYPE ADD (
+  CONSTRAINT FK_EB7B25FCB417CC34 
+  FOREIGN KEY (ENTITY_CODE_ID) 
+  REFERENCES DEV_USR.PLAN_COMPTE (CPT_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_EB7B25FCD5E86FF 
+  FOREIGN KEY (ETAT_ID) 
+  REFERENCES DEV_USR.ETAT_DEMANDE (ETAT_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_EB7B25FCFADC156C 
+  FOREIGN KEY (DM_ID) 
+  REFERENCES DEV_USR.DEMANDE (DM_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_EB7B25FCFB88E14F 
+  FOREIGN KEY (UTILISATEUR_ID) 
+  REFERENCES DEV_USR.UTILISATEUR (USER_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_EB7B25FC421B9B35 
+  FOREIGN KEY (PLAN_COMPTE_ID) 
+  REFERENCES DEV_USR.PLAN_COMPTE (CPT_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_EB7B25FC89D40298 
+  FOREIGN KEY (EXERCICE_ID) 
+  REFERENCES DEV_USR.EXERCICE (EXERCICE_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DETAIL_BUDGET ADD (
+  CONSTRAINT FK_6138EEE07CFC672 
+  FOREIGN KEY (BUDGET_TYPE_ID) 
+  REFERENCES DEV_USR.BUDGET_TYPE (BUDGET_TYPE_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_6138EEE081B9F858 
+  FOREIGN KEY (COMPTE_MERE_ID) 
+  REFERENCES DEV_USR.COMPTE_MERE (ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_6138EEE089D40298 
+  FOREIGN KEY (EXERCICE_ID) 
+  REFERENCES DEV_USR.EXERCICE (EXERCICE_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DETAIL_DEMANDE_PIECE ADD (
+  CONSTRAINT FK_22B796F1F5BB373C 
+  FOREIGN KEY (DEMANDE_TYPE_ID) 
+  REFERENCES DEV_USR.DEMANDE_TYPE (DM_TYPE_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.DETAIL_TRANSACTION_COMPTE ADD (
+  CONSTRAINT FK_9CD608E3B3E6B071 
+  FOREIGN KEY (TRANSACTION_TYPE_ID) 
+  REFERENCES DEV_USR.TRANSACTION_TYPE (TRS_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_9CD608E3421B9B35 
+  FOREIGN KEY (PLAN_COMPTE_ID) 
+  REFERENCES DEV_USR.PLAN_COMPTE (CPT_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.EVENEMENT ADD (
+  CONSTRAINT FK_B26681EB42AD9E2 
+  FOREIGN KEY (EVN_TRS_ID) 
+  REFERENCES DEV_USR.TRANSACTION_TYPE (TRS_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_B26681EEC6EA09B 
+  FOREIGN KEY (EVN_EXERCICE_ID) 
+  REFERENCES DEV_USR.EXERCICE (EXERCICE_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_B26681EE606A7B7 
+  FOREIGN KEY (EVN_RESPONSABLE_ID) 
+  REFERENCES DEV_USR.UTILISATEUR (USER_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.LOG_DEMANDE_TYPE ADD (
+  CONSTRAINT FK_332AB75AD5E86FF 
+  FOREIGN KEY (ETAT_ID) 
+  REFERENCES DEV_USR.ETAT_DEMANDE (ETAT_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_332AB75AF5BB373C 
+  FOREIGN KEY (DEMANDE_TYPE_ID) 
+  REFERENCES DEV_USR.DEMANDE_TYPE (DM_TYPE_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.MOUVEMENT ADD (
+  CONSTRAINT FK_5B51FC3E512ABDB3 
+  FOREIGN KEY (MVT_EVENEMENT_ID) 
+  REFERENCES DEV_USR.EVENEMENT (EVN_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_5B51FC3E9FF4568C 
+  FOREIGN KEY (MVT_COMPTE_ID) 
+  REFERENCES DEV_USR.PLAN_COMPTE (CPT_ID)
+  ENABLE VALIDATE);
+
+ALTER TABLE DEV_USR.VERSEMENTS ADD (
+  CONSTRAINT FK_C8A95563FB88E14F 
+  FOREIGN KEY (UTILISATEUR_ID) 
+  REFERENCES DEV_USR.UTILISATEUR (USER_ID)
+  ENABLE VALIDATE,
+  CONSTRAINT FK_C8A9556380E95E18 
+  FOREIGN KEY (DEMANDE_ID) 
+  REFERENCES DEV_USR.DEMANDE_TYPE (DM_TYPE_ID)
+  ENABLE VALIDATE);
+DROP VIEW DEV_USR.V_MOUVEMENT_CREDIT_BANQUE;
+
+/* Formatted on 05/11/2024 14:35:39 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE FORCE VIEW DEV_USR.V_MOUVEMENT_CREDIT_BANQUE
+(
+   MVN_ID,
+   MVT_EVENEMENT_ID,
+   MVT_COMPTE_ID,
+   MVT_MONTANT,
+   IS_MVT_DEBIT
+)
+AS
+   SELECT m.mvn_id,
+          m.mvt_evenement_id,
+          m.mvt_compte_id,
+          m.mvt_montant,
+          m.is_mvt_debit
+     FROM mouvement m LEFT JOIN plan_compte p ON m.mvt_compte_id = p.cpt_id
+    WHERE LOWER (p.cpt_libelle) LIKE 'banque' AND m.is_mvt_debit = 0;
+
+
+DROP VIEW DEV_USR.V_MOUVEMENT_CREDIT_SIEGE;
+
+/* Formatted on 05/11/2024 14:35:39 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE FORCE VIEW DEV_USR.V_MOUVEMENT_CREDIT_SIEGE
+(
+   MVN_ID,
+   MVT_EVENEMENT_ID,
+   MVT_COMPTE_ID,
+   MVT_MONTANT,
+   IS_MVT_DEBIT
+)
+AS
+   SELECT m.mvn_id,
+          m.mvt_evenement_id,
+          m.mvt_compte_id,
+          m.mvt_montant,
+          m.is_mvt_debit
+     FROM mouvement m LEFT JOIN plan_compte p ON m.mvt_compte_id = p.cpt_id
+    WHERE LOWER (p.cpt_libelle) LIKE 'caisse si%' AND m.is_mvt_debit = 0;
+
+
+DROP VIEW DEV_USR.V_MOUVEMENT_DEBIT_BANQUE;
+
+/* Formatted on 05/11/2024 14:35:39 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE FORCE VIEW DEV_USR.V_MOUVEMENT_DEBIT_BANQUE
+(
+   MVN_ID,
+   MVT_EVENEMENT_ID,
+   MVT_COMPTE_ID,
+   MVT_MONTANT,
+   IS_MVT_DEBIT
+)
+AS
+   SELECT m.mvn_id,
+          m.mvt_evenement_id,
+          m.mvt_compte_id,
+          m.mvt_montant,
+          m.is_mvt_debit
+     FROM mouvement m LEFT JOIN plan_compte p ON m.mvt_compte_id = p.cpt_id
+    WHERE LOWER (p.cpt_libelle) LIKE 'banque' AND m.is_mvt_debit = 1;
+
+
+DROP VIEW DEV_USR.V_MOUVEMENT_DEBIT_SIEGE;
+
+/* Formatted on 05/11/2024 14:35:39 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE FORCE VIEW DEV_USR.V_MOUVEMENT_DEBIT_SIEGE
+(
+   MVN_ID,
+   MVT_EVENEMENT_ID,
+   MVT_COMPTE_ID,
+   MVT_MONTANT,
+   IS_MVT_DEBIT
+)
+AS
+   SELECT m.mvn_id,
+          m.mvt_evenement_id,
+          m.mvt_compte_id,
+          m.mvt_montant,
+          m.is_mvt_debit
+     FROM mouvement m LEFT JOIN plan_compte p ON m.mvt_compte_id = p.cpt_id
+    WHERE LOWER (p.cpt_libelle) LIKE 'caisse si%' AND m.is_mvt_debit = 1;
+
+
+DROP VIEW DEV_USR.V_DEBIT_BANQUE_MENSUEL;
+
+/* Formatted on 05/11/2024 14:35:39 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE FORCE VIEW DEV_USR.V_DEBIT_BANQUE_MENSUEL
+(
+   TOTAL,
+   MOIS_OPERATION,
+   EVN_EXERCICE_ID
+)
+AS
+     SELECT COALESCE (SUM (vmdb.MVT_MONTANT), 0) AS total,
+            TO_CHAR (e.evn_date_operation, 'YYYY-MM') AS mois_operation,
+            e.evn_exercice_id
+       FROM v_mouvement_debit_banque vmdb
+            LEFT JOIN evenement e ON vmdb.mvt_evenement_id = e.evn_id
+   GROUP BY TO_CHAR (e.evn_date_operation, 'YYYY-MM'), e.evn_exercice_id
+   ORDER BY mois_operation;
+
+
+DROP VIEW DEV_USR.V_DEBIT_CAISSE_MENSUEL;
+
+/* Formatted on 05/11/2024 14:35:39 (QP5 v5.256.13226.35538) */
+CREATE OR REPLACE FORCE VIEW DEV_USR.V_DEBIT_CAISSE_MENSUEL
+(
+   TOTAL,
+   MOIS_OPERATION,
+   EVN_EXERCICE_ID
+)
+AS
+     SELECT COALESCE (SUM (vmdc.MVT_MONTANT), 0) AS total,
+            TO_CHAR (e.evn_date_operation, 'YYYY-MM') AS mois_operation,
+            e.evn_exercice_id
+       FROM v_mouvement_debit_siege vmdc
+            LEFT JOIN evenement e ON vmdc.mvt_evenement_id = e.evn_id
+   GROUP BY TO_CHAR (e.evn_date_operation, 'YYYY-MM'), e.evn_exercice_id
+   ORDER BY mois_operation;

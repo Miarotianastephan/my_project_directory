@@ -20,7 +20,7 @@ class UtilisateurFixture extends Fixture
 
         // Création d'un utilisateur
         $utilisateur = new Utilisateur();
-        $utilisateur->setUserMatricule('galielelo'); // Assurez-vous que ce champ est unique
+        $utilisateur->setUserMatricule('90180'); // Assurez-vous que ce champ est unique
         $utilisateur->setDateAjout(new \DateTime()); // Format de date correspondant à votre configuration
         $utilisateur->setGroupUtilisateur($groupe); // Associer l'utilisateur au groupe créé
         $utilisateur->setRoles(['ROLE_0']); // Optionnel, car il est déjà défini dans le constructeur
