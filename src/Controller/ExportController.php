@@ -46,6 +46,7 @@ class ExportController extends AbstractController
             'etatComplet' => $dataEtatComplet,
         ]);
     }
+    
     #[Route('/journal/search', name: 'export.journal.search', methods: ['POST'])]
     public function searchInJournal(Request $request)
     {

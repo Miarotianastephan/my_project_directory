@@ -36,9 +36,9 @@ class PlanCompteController extends AbstractController
     #[Route(path: '/add', name: 'app_plan_compte.add', methods: ['GET'])]
     public function ajouterPlanCompte(PlanCompteService $planCompteService, PlanCompteRepository $planCompteRepo){
         $has_data_plan_compte = $planCompteService->hasDataPlanCompte($planCompteRepo); // sécurisation du page si le plan compte non vide
-        if($has_data_plan_compte == false){
+        // if($has_data_plan_compte == false){
             return $this->render('plan_compte/plan_compte_add.html.twig');
-        }
+        // }
         $this->addFlash('message', 'Page ajout plan compte non accessible.');
         return $this->redirectToRoute('app_plan_compte');
     }

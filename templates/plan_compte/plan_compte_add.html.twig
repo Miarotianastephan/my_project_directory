@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
-{% block page_title %}Ajouter un nouveau compte{% endblock %}
-{% block page_subtitle %}Gestion plan de compte{% endblock %}
+{% block page_title %}Parametrer le plan de comptes à utiliser{% endblock %}
+{% block page_subtitle %}Importer le fichier Excel contenant le plan de comptes du CE, modifier si besoin et vérifier avant l'insertion{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href={{ asset("css/plan_compte/plan_cpt.css") }} /> 
@@ -25,24 +25,26 @@
                                 <label for="compte-numero">Tapez le numéro du compte</label>
                                 <input type="text" name="cpt_numero" class="form-control" id="compte-numero" placeholder="Numéro du compte"/>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
                                 <label for="ompte-libelle">Tapez le libellé du compte</label>
                                 <input type="text" name="cpt_libelle" class="form-control" id="compte-libelle" placeholder="Libellé du compte"/>
                             </div>
+                            <div class="col-md-12">
+                                <button type="submit" id="add-compte" class="btn btn-sm btn-label-secondary">Ajouter compte</button>
+                            </div>
                         </div>
-                        <div class="form-group gy-3 mb-3">
-                            <div class="">
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3">
                                 <label for="file-input">Insérer une pièce jointe</label>
                                 <input class="form-control" type="file" id="file-input" accept=".xlsx" />
+                            </div>
+                            <div class="col-md-12">
+                                <a href="{{ path('app_plan_compte') }}" class="btn btn-sm btn-dark">Annuler</a>
+                                <button type="submit" id="add-plan" class="btn btn-sm btn-primary">Importer depuis Excel</button>
                             </div>
                         </div>
                         
                     </div>
-                </div>
-                <div class="card-action text-end">
-                    <a href="{{ path('demandeur.liste_demande') }}" class="btn btn-sm btn-dark">Annuler</a>
-                    <button type="submit" id="add-plan" class="btn btn-sm btn-label-primary">Importer depuis Excel</button>
-                    <button type="submit" id="add-compte" class="btn btn-sm btn-secondary">Ajouter Compte</button>
                 </div>
             </form>
         </div>

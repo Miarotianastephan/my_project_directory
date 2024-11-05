@@ -27,26 +27,15 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a
                             data-bs-toggle="collapse"
-                            href="#dashboard"
                             class="collapsed"
                             aria-expanded="false"
                     >
                         <i class="fas fa-home"></i>
                         <p>Bienvenue</p>
-                        <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="dashboard">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="../demo1/index.html">
-                                    <span class="sub-item">Dashboard 1</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 {% if is_granted(get_role('admin')) %}
                     {{ include('pages/option/_admin_sidebar.html.twig') }}

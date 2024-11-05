@@ -40,15 +40,21 @@ class ComptableController extends AbstractController
         // Ceci est juste un exemple
         if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
-            $fond = [100, 150, 200, 250, 300, 350];
-            $caisse = [$somme_debit_banque[0] ?? 0,$somme_debit_banque[1] ?? 0,$somme_debit_banque[3] ?? 0,$somme_debit_banque[4] ?? 0,$somme_debit_banque[5] ?? 0];
-            $sold = [$somme_debit_caisse[0] ?? 0,$somme_debit_caisse[1] ?? 0,$somme_debit_caisse[3] ?? 0,$somme_debit_caisse[4] ?? 0,$somme_debit_caisse[5] ?? 0];
+            $fond = [5000000, 4800000, 4500000, 4200000, 4000000, 3800000];
+            $caisse = [500000, 480000, 450000, 420000, 400000, 380000];
+            $sold = [300000, 280000, 250000, 220000, 200000, 180000];
+            // $caisse = [$somme_debit_banque[0] ?? 0,$somme_debit_banque[1] ?? 0,$somme_debit_banque[3] ?? 0,$somme_debit_banque[4] ?? 0,$somme_debit_banque[5] ?? 0];
+            // $sold = [$somme_debit_caisse[0] ?? 0,$somme_debit_caisse[1] ?? 0,$somme_debit_caisse[3] ?? 0,$somme_debit_caisse[4] ?? 0,$somme_debit_caisse[5] ?? 0];
         }
         if ($semestre == 2) {
-            $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
-            $fond = [];
-            $caisse = [$somme_debit_banque[6] ?? 0,$somme_debit_banque[7] ?? 0,$somme_debit_banque[8] ?? 0,$somme_debit_banque[9] ?? 0,$somme_debit_banque[10] ?? 0,$somme_debit_banque[11] ?? 0];
-            $sold = [$somme_debit_caisse[6] ?? 0,$somme_debit_caisse[7] ?? 0,$somme_debit_caisse[8] ?? 0,$somme_debit_caisse[9] ?? 0,$somme_debit_caisse[10] ?? 0,$somme_debit_caisse[11] ?? 0];
+            $labels = ["Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            $fond = [3200000, 3000000, 2800000, 2600000, 2400000, 2200000];
+            $caisse = [300000, 280000, 260000, 240000, 220000, 200000];
+            $sold = [120000, 100000, 90000, 80000, 70000, 60000];
+            // $labels = ["Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+            // $fond = [];
+            // $caisse = [$somme_debit_banque[6] ?? 0,$somme_debit_banque[7] ?? 0,$somme_debit_banque[8] ?? 0,$somme_debit_banque[9] ?? 0,$somme_debit_banque[10] ?? 0,$somme_debit_banque[11] ?? 0];
+            // $sold = [$somme_debit_caisse[6] ?? 0,$somme_debit_caisse[7] ?? 0,$somme_debit_caisse[8] ?? 0,$somme_debit_caisse[9] ?? 0,$somme_debit_caisse[10] ?? 0,$somme_debit_caisse[11] ?? 0];
         }
 
 

@@ -16,7 +16,7 @@ class PlanCompteService
     function insertHierarchy(EntityManagerInterface $entityManager, array $data, ?CompteMere $parent = null) {
         if ($parent === null) {
             if ($this->accountExists($entityManager,$data['numero'], CompteMere::class)) {  // Vérifier si le compte mère existe déjà
-                return;                                                                     // Ne pas insérer de doublon
+                return;
             }
             $compteMere = new CompteMere();                                                 // Création de l'entité CompteMere pour la racine
             $compteMere->setCptNumero($data['numero']);
@@ -31,7 +31,7 @@ class PlanCompteService
                 $entityManager->persist($planCompte);
                 $entityManager->flush();
             }
-            if (!empty($data['enfants'])) {                                                 // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
+            if (!empty($data['enfants'])) {                                                 // Si l'élément a des enfants, appelle insertHierarchie pour chaque enfant
                 foreach ($data['enfants'] as $enfant) {
                     $this->insertHierarchy($entityManager, $enfant, $compteMere);
                 }
@@ -47,7 +47,7 @@ class PlanCompteService
             $planCompte->setCompteMere($parent);//66
             $entityManager->persist($planCompte);
             $entityManager->flush();                                                        // Flush pour enregistrer l'enfant dans la base
-            if (!empty($data['enfants'])) {                                                 // Si l'élément a des enfants, on appelle la fonction récursivement pour chaque enfant
+            if (!empty($data['enfants'])) {                                                 // Si l'élément a des enfants, on appelle insertHierarchie pour chaque enfant
                 $compteMere = new CompteMere();                                             //661 Création de l'entité CompteMere pour la racine
                 $compteMere->setCptNumero($data['numero']);
                 $compteMere->setCptLibelle($data['libelle']);
