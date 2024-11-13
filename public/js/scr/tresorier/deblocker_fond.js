@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function getFormData() {
+        //alert(document.getElementById('banque').value)
         return {
             banque: document.getElementById('banque').value,
             numero_cheque: document.getElementById('numero_cheque').value,
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(url, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
-            },
+            }, body: JSON.stringify(formData)
         })
             .then(response => {
                 if (!response.ok) {
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(url, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
-            }, body: JSON.stringify(data)
+            }
         })
             .then(response => {
                 if (!response.ok) {

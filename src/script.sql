@@ -225,6 +225,9 @@ delete from ce_evenement;
 delete from ce_log_demande_type;
 delete from ce_detail_demande_piece;
 delete from ce_demande_type;
+delete from ce_approvisionnement_piece;
+delete from ce_detail_budget;
+delete from ce_exercice;
 
 -- INFORMATION
 delete from ce_detail_transaction_compte;

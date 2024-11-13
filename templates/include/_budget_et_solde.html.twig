@@ -2,13 +2,19 @@
     <div class="col-4">
         Budget:
         <h3>  {{ budget is not null ? budget|number_format(2, '.', ' ') : 0|number_format(2, '.', ' ') }} Ar </h3>
+        
+        {#
+        <h3>  {{ 6800000|number_format(2, '.', ' ') }} Ar </h3>
+        #}
     </div>
     <div class="col-4">
         Budget restant :
+
         <h3>{{ budget_reste|number_format(2, '.', ' ') }} Ar </h3>
+
     </div>
     <div class="col-4">
         Montant restant :
-        <h3> {{ solde_reste|number_format(2, '.', ' ') }} Ar </h3>
+        <h3> {{ (solde_reste)|number_format(2, '.', ' ') }} Ar </h3>
     </div>
 </div>

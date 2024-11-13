@@ -110,12 +110,19 @@ class TresorierController extends AbstractController
         }
         $liste_banque = $banqueRepository->findAll();
         //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
+        $solde_reste = 70000;
+        $budget = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;;
+        $depense = 70000 + 100000 + 30000 + 10000 + 50000 + 90000 +75000 +  200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
+        $budget_reste = $budget - $depense;
         return $this->render('tresorier/deblocker_fond.html.twig',
             [
-                'demande_type' => $data, 'solde_reste' => $solde_reste,
+                'demande_type' => $data,
+                'solde_reste' => $solde_reste,
                 'banques' => $liste_banque,
                 'budget' => $budget,
-                'budget_reste' => $budget-$solde_debit,
+                'budget_reste' => $budget_reste
+                //ALANA ITO RANDY
+                //'budget_reste' => $budget-$solde_debit,
             ]
         );
     }
@@ -126,6 +133,7 @@ class TresorierController extends AbstractController
                                   LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        //$data = $request->request->all();
         $banque_id = $data['banque'] ?? null;
         $numero_cheque = $data['numero_cheque'] ?? null;
         $beneficiaire = $data['beneficiaire'] ?? null;
@@ -134,6 +142,7 @@ class TresorierController extends AbstractController
         // PARAMETRES
         // $id => ID du demande à débloqué de fonds 
         // $id_user_tresorier = ID qui devrait être un tresorier A VERIFIER APRES
+        dump($data);
         $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier,$banque_id,$numero_cheque,$remettant,$beneficiaire); // Déblocage du fonds demandée
 
         $data = json_decode($rep->getContent(), true);
@@ -166,11 +175,13 @@ class TresorierController extends AbstractController
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, "0");
 
         $liste_banque = $banqueRepository->findAll();
-
+        $solde_reste = 70000;
         return $this->render('tresorier/demande_approvisionnement.html.twig', [
             'entites' => $liste_entite,
             'banques' => $liste_banque,
-            'situation_caisse' => $solde_debit - $solde_CREDIT,
+            //ALANA ITO RANDY
+            'situation_caisse' => 70000 - 25000 + 40000,
+            //'situation_caisse' => $solde_debit - $solde_CREDIT,
         ]);
     }
 
@@ -196,11 +207,12 @@ class TresorierController extends AbstractController
         // les dates :
         $date_operation = $request->request->get('date_operation') ?? null;
         $date_saisie = $request->request->get('date_saisie') ?? null;
-
         // insertion d'un approvisionnement
         // Ajout directe de la comptabilisation dans la partie d'insertion
         $response_data = $dmService->insertDemandeTypeAppro($exercice, $plan_cpt_debit_id, $montant_demande, $paiement, $date_saisie, $date_operation, $id_user_tresorier);
+
         $response_data = json_decode($response_data->getContent(), true);
+
         if (!$response_data['success']){
             return new JsonResponse([
                 'success' => $response_data['success'],
@@ -208,15 +220,27 @@ class TresorierController extends AbstractController
                 'path' => $this->generateUrl('tresorier.liste_approvisionnement')
             ]);
         }
+
         //dump($response_data);
         $image = $request->files->get('image') ?? null;
+
         $is_image = empty($image);
+
         //dump($is_image);
         if (!$is_image){
+            dump(0);
+
             $ref_approvisionnement = $response_data['ref_approvisionnement'];
             $ajout_image = $dmService->uploadImage($image,$this->getParameter('uploads_approvisionnement'));
+            dump(1);
+            dump($ajout_image);
             $upload_file = $approvisionnementPieceRepository->AjoutPiece($ref_approvisionnement,$ajout_image);
+            dump(2);
+            dump($upload_file);
             $response_data = json_decode($upload_file->getContent(), true);
+            dump(3);
+            dump($response_data['message']);
+
         }
         return new JsonResponse([
             'success' => $response_data['success'],

@@ -68,11 +68,11 @@ class DemandeTypeService
             // Générer un nom unique pour éviter les conflits
             $newFilename = uniqid() . '.' . $file->guessExtension();
 
-
             // Déplacer le fichier dans le répertoire de destination
             $file->move($destination, $newFilename);
             return $newFilename;
         } catch (\Exception $e) {
+            dump('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
             throw new ('Erreur lors du téléchargement du fichier : ' . $e->getMessage());
         }
     }

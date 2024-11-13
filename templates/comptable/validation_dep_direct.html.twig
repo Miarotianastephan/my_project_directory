@@ -1,65 +1,153 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demande{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    Comptable
+    Section Comptable
 {% endblock %}
 {% block page_subtitle %}
     {# Liste des demandes en attente de validation #}
 {% endblock %}
 
 {% block page_main_content %}
-    <div class="row align-items-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Validation de la dépense directe</h4>
-                </div>
-                <div class="card-body col-12 px-md-5 d-flex flex-row">
-                    <div class="col px-3 d-flex flex-column gap-3">
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Date: </label>
-                            <div class="col form-control">
-                                {{ date|date('d/m/y')|trans({}, 'fr') }}
+    <form id="formulaire" name="formulaire" method="post" action="{{ path('comptable.comptabilisation_directe') }}">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Validation de la dépense directe</h4>
+                    </div>
+                    <div class="card-body col-12 px-md-5 d-flex flex-row">
+                        <div class="col px-3 d-flex flex-column gap-3">
+                            <input id="date" type="hidden"
+                                   name="date" value="{{ date|date('d/m/y')|trans({}, 'fr') }}"/>
+                            <div class="col-12 d-flex flex-row">
+                                <label for="date" class="col-4 form-control-lg">Date: </label>
+                                <div class="col form-control">
+                                    {{ date|date('d/m/y')|trans({}, 'fr') }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg"> Entité concerné </label>
-                            <div class="col form-control">
-                                {{ entite.CptNumero }} - {{ entite.CptLibelle }}
+                            <input type="hidden" id="entite" name="entite" value="{{ entite.CptNumero }}"/>
+                            <div class="col-12 d-flex flex-row">
+                                <label class="col-4 form-control-lg" for="entite"> Entité concerné </label>
+                                <div class="col form-control">
+                                    {{ entite.CptNumero }} - {{ entite.CptLibelle }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de transaction: </label>
-                            <div class="col form-control">
-                                {{ transaction.TrsCode }} - {{ transaction.TrsLibelle }}
+                            <input type="hidden" id="transaction" name="transaction" value="{{ transaction.TrsCode }}"/>
+                            <div class="col-12 d-flex flex-row">
+                                <label for="transaction" class="col-4 form-control-lg">Type de transaction: </label>
+                                <div class="col form-control">
+                                    {{ transaction.TrsCode }} - {{ transaction.TrsLibelle }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Compte de debit: </label>
-                            <div class="col form-control">
-                                {{ debit.CptNumero }} - {{ debit.CptLibelle }}
+                            <input type="hidden" id="compte_debit" name="compte_debit"
+                                   value="{{ debit.CptNumero }}"/>
+                            <div class="col-12 d-flex flex-row">
+                                <label for="compte_debit" class="col-4 form-control-lg">Compte de debit: </label>
+                                <div class="col form-control">
+                                    {{ debit.CptNumero }} - {{ debit.CptLibelle }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Compte de crédit: </label>
-                            <div class="col form-control">
-                                {{ credit ? credit.CptNumero ~ ' - ' ~ credit.CptLibelle : 'introuvable' }}
+                            <input type="hidden" id="compte_credit" name="compte_credit"
+                                   value="{{ credit.CptNumero }}"/>
+                            <div class="col-12 d-flex flex-row">
+                                <label for="compte_credit" class="col-4 form-control-lg">Compte de crédit: </label>
+                                <div class="col form-control">
+                                    {{ credit ? credit.CptNumero ~ ' - ' ~ credit.CptLibelle : 'introuvable' }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg"> Montant: </label>
-                            <div class="col form-control"> {{ montant|number_format(2, '.', ' ') }} Ar </div>
+                            <input type="hidden" id="montant" name="montant"
+                                   value="{{ montant }}"/>
+                            <div class="col-12 d-flex flex-row">
+                                <label for="montant" class="col-4 form-control-lg"> Montant: </label>
+                                <div class="col form-control"> {{ montant|number_format(2, '.', ' ') }} Ar</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('comptable.form_depense_directe') }}"
-                       class="btn btn-danger btn">Annuler</a>
-                    <a href=""
-                       class="btn btn-success btn">Valider</a>
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('comptable.form_depense_directe') }}"
+                           class="btn btn-danger btn">Annuler</a>
+                        <a href=""
+                           class="btn btn-success btn" id="valider">Valider</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+    {{ include('include/_message_modal.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const formulaire = document.querySelector('#formulaire');
+            const valider = document.querySelector('#valider');
+            const messageModal = new bootstrap.Modal(document.querySelector('#messageModal'));
+
+            function showMessage(message) {
+                const modalBody = document.querySelector('#messageModal .modal-body');
+                modalBody.textContent = message;
+                messageModal.show();
+            }
+
+            function setupEventListeners() {
+                valider.addEventListener('click', handleSubmit);
+                document.querySelector('#messageModal .btn-secondary').addEventListener('click', closeModalAndRedirect);
+                document.querySelector('#messageModal .btn-close').addEventListener('click', closeModalAndRedirect);
+            }
+
+            function getFormData() {
+                return {
+                    date: document.getElementById('date').value,
+                    entite: document.getElementById('entite').value,
+                    transaction: document.getElementById('transaction').value,
+                    compte_debit: document.getElementById('compte_debit').value,
+                    compte_credit: document.getElementById('compte_credit').value,
+                    montant: document.getElementById('montant').value
+                };
+            }
+
+            function closeModalAndRedirect() {
+                messageModal.hide();
+                // Redirection logic can be added here if needed
+            }
+
+            function sendRequest(url, data) {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            //alert("Succès");
+                            window.location.href = data.url;
+                        } else {
+                            showMessage(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
+            }
+
+            function handleSubmit(e) {
+                e.preventDefault();
+                const formData = getFormData();
+                sendRequest(formulaire.action, formData);
+            }
+
+            setupEventListeners();
+        });
+
+    </script>
 {% endblock %}

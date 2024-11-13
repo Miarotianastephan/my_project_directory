@@ -18,7 +18,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Ajout execice</h4>
+                    <h4 class="card-title">Ajout exercice</h4>
                 </div>
                 <form id="formulaire" action="{{ path('app_ajout') }}" method="post" data-cancel="{{ path('app_exercice') }}">
                     <div class="card-body col-12 d-flex flex-column gap-2">
@@ -46,8 +46,6 @@
 
     {{ include('include/_message_modal.html.twig') }}
 
-
-    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

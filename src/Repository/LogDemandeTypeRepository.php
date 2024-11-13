@@ -288,7 +288,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $dm_mode_paiement = $dm_type->getDmModePaiement();
             //if == 1 -> payement par chèque
             if ($dm_mode_paiement == 1) {
-                if ($banque_id === null) {
+                if ($banque_id == null) {
                     return new JsonResponse([
                         'success' => false,
                         'message' => 'Ajouter un choix de banque'
@@ -366,6 +366,12 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             // les données à utiliser
             $reference_demande = $dm_type->getRefDemande();
             $exercice_demande = $this->exercicerepository->getExerciceValide();
+            if (!$exercice_demande) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Exercice invalide.'
+                ]);
+            }
             $montant_demande = $dm_type->getDmMontant();
             $numero_compte_debit = $dm_type->getPlanCompte();
             $mode_paiement_demande = (int)($dm_type->getDmModePaiement());
@@ -384,7 +390,6 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $entityManager->persist($evenement);
             // Création des mouvements
 
-
             $mv_debit = new Mouvement();                        // DEBIT
             $mv_debit->setMvtEvenementId($evenement);
             $mv_debit->setMvtMontant($montant_demande);
@@ -397,7 +402,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $mv_credit->setMvtEvenementId($evenement);
             $mv_credit->setMvtMontant($montant_demande);
             $mv_credit->setMvtDebit(false);
-            $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire,0);                // identifier le mouvement à réaliser
+            $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);                // identifier le mouvement à réaliser
             if ($detail_transaction_credit === null) {
                 return new JsonResponse([
                     'success' => false,
@@ -407,6 +412,9 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             $mv_credit->setMvtCompteId($detail_transaction_credit->getPlanCompte());
             $entityManager->persist($mv_credit);
+
+            dump("numero de debit = " . $numero_compte_debit->getCptNumero() . " libelle" . $numero_compte_debit->getCptLibelle());
+            dump("numero de credit = " . $detail_transaction_credit->getPlanCompte()->getCptNumero() . " libelle" . $detail_transaction_credit->getPlanCompte()->getCptLibelle());
 
             $entityManager->flush();
             $entityManager->commit();

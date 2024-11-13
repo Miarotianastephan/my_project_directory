@@ -118,7 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('new-montant-input').value = data.newmontant;
         document.getElementById('detailbudget-input').value = data.detailbudget;
 
-        document.getElementById('new-exercice').textContent = data.exercice.DateDebut;
+        console.log(data.exercice.DateDebut)
+        //document.getElementById('new-exercice').textContent = formattedDate.toLocaleDateString();
         document.getElementById('new-cpt').textContent = data.cpt.CptLibelle;
         document.getElementById('old-montant').textContent = data.oldmontant + ' Ar';
         document.getElementById('new-montant').textContent = data.newmontant + ' Ar';
