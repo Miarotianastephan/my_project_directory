@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(url, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
-            }, body: JSON.stringify(data)
+            }
         })
             .then(response => {
                 if (!response.ok) {

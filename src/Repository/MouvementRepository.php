@@ -6,17 +6,32 @@ use App\Entity\CompteMere;
 use App\Entity\Evenement;
 use App\Entity\Exercice;
 use App\Entity\Mouvement;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @extends ServiceEntityRepository<Mouvement>
  */
 class MouvementRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private TransactionTypeRepository $transactionTypeRepository;
+    private UtilisateurRepository $utilisateurRepository;
+    private ExerciceRepository $exerciceRepository;
+    private PlanCompteRepository $planCompteRepository;
+    public function __construct(ManagerRegistry           $registry,
+                                TransactionTypeRepository $trsTypeRepo,
+                                UtilisateurRepository     $utilisateurRepo,
+                                ExerciceRepository        $exerciceRepo,
+                                PlanCompteRepository      $plnCompteRepo)
     {
         parent::__construct($registry, Mouvement::class);
+        $this->transactionTypeRepository = $trsTypeRepo;
+        $this->utilisateurRepository = $utilisateurRepo;
+        $this->exerciceRepository = $exerciceRepo;
+        $this->planCompteRepository = $plnCompteRepo;
+
     }
 
     public function findByExercice(Exercice $exercice): ?array
@@ -351,6 +366,69 @@ class MouvementRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function comptabilisation_directe(string $date, string $entite,
+        string $transaction, string $compte_debit_numero,
+        string $compte_credit_numero, string $montant, int $user_responsable): JsonResponse
+    {
 
+        $transaction_a_faire = $this->transactionTypeRepository->findTransactionByCode($transaction);
+        $responsable = $this->utilisateurRepository->find($user_responsable);
+        $exercice = $this->exerciceRepository->getExerciceValide();
+        $compte_debit = $this->planCompteRepository->findByNumero($compte_debit_numero);
+        $compte_credit = $this->planCompteRepository->findByNumero($compte_credit_numero);
+        if (!$transaction_a_faire) {
+        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de transaction"]);
+        } elseif (!$responsable) {
+        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le responsable"]);
+        } elseif (!$exercice) {
+        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier l'exercice"]);
+        } elseif (!$compte_debit) {
+        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de debit"]);
+        } elseif (!$compte_credit) {
+        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de credit"]);
+        }
+
+
+        $entityManager = $this->getEntityManager();
+        $entityManager->beginTransaction();
+        try {
+        //création de l'evenement
+        $evenement = new Evenement($transaction_a_faire,$responsable,$exercice,$entite,(float)$montant,"default",new DateTime());
+        // $evenement->setEvnTrsId($transaction_a_faire);
+        // $evenement->setEvnResponsable($responsable);
+        // $evenement->setEvnExercice($exercice);
+        // $evenement->setEvnCodeEntity($entite);
+        // $evenement->setEvnMontant((float)$montant);
+        // $evenement->setEvnReference("DIR/2024/01");
+        // $evenement->setEvnDateOperation(new DateTime());
+        $entityManager->persist($evenement);
+        $ref_evn = "DIR/" . date('Y') . "/" . $evenement->getId();
+        $evenement->setEvnReference($ref_evn);
+
+        //CREATION DE MOUVEMENT
+        $mv_debit = new Mouvement($evenement,$compte_debit,(float)$montant,true);                        // DEBIT
+        // $mv_debit->setMvtEvenementId($evenement);
+        // $mv_debit->setMvtMontant((float)$montant);
+        // $mv_debit->setMvtDebit(true);
+        // $mv_debit->setMvtCompteId($compte_debit);
+        $entityManager->persist($mv_debit);
+
+        $mv_credit = new Mouvement($evenement,$compte_credit,(float)$montant,false);                        // DEBIT
+        // $mv_credit->setMvtEvenementId($evenement);
+        // $mv_credit->setMvtMontant((float)$montant);
+        // $mv_credit->setMvtDebit(false);
+        // $mv_credit->setMvtCompteId($compte_credit);
+        $entityManager->persist($mv_credit);
+        dump("MAND");
+        $entityManager->flush();
+        $entityManager->commit();
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+            $entityManager->rollback();
+            return new JsonResponse(['success' => false, 'message' => $e->getMessage()]);
+
+        }
+        return new JsonResponse(['success' => true, 'message' => 'comptabilisation réussi']);
+    }
 
 }

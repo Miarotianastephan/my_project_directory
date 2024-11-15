@@ -5,6 +5,8 @@ Symfony 6.4 ready to use webapp
 * télécharger de façon permanent :php bin/console ux:icons import [heroicons:information-circle]
 * téléchargé composer upload file : composer require vich/uploader-bundle 
 * php bin/console ux:icons:import flat-color-icons:print
+* php bin/console ux:icons:import heroicons:information-circle
+* php bin/console ux:icons:import heroicons:arrow-left-circle
 
 **Scénario de test**:
 1. Ajout utilisateur admin (Data fixture)

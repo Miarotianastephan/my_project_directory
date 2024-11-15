@@ -136,7 +136,7 @@ class Evenement
         Exercice $evn_exercice,
         string $evn_code_entity,
         float $evn_montant,
-        string $evn_reference,
+        $evn_reference,
         $evn_date_operation
     ) {
         $this->setEvnTrsId($evn_trs_id);

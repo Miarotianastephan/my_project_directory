@@ -213,6 +213,7 @@ class DemandeTypeService
             // $mode_paiement_demande = (int)($demande_type->getDmModePaiement());
             $transaction_a_faire = $this->trsTypeRepo->findTransactionForApprovision();                                         // identifier le type de transaction à faire
             $detail_transaction = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);            // identifier le mouvement à créditer
+            
             // Création evenement
             $evenement = new Evenement($transaction_a_faire,$user_tresorier,$exercice_demande,$demande_type->getEntityCode()->getCptLibelle(),$montant_demande,$reference_demande,new DateTime());
             $entityManager->persist($evenement);

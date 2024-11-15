@@ -9,6 +9,7 @@ use App\Repository\MouvementRepository;
 use App\Repository\PlanCompteRepository;
 use App\Repository\TransactionTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/comptable')]
 class ComptableController extends AbstractController
 {
+    private $user;
+    
+
+    public function __construct(Security $security)
+    {
+        // $this->security = $security;
+        $this->user = $security->getUser();
+    }
+
     #[Route('/', name: 'comptable.graphe', methods: ['GET', 'POST'])]
     public function index(Request $request, MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -32,7 +42,7 @@ class ComptableController extends AbstractController
         }
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
-        if ($semestre == 1) {
+        /*if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
             $caisse = [$somme_debit_banque[0] ?? 0, $somme_debit_banque[1] ?? 0, $somme_debit_banque[3] ?? 0, $somme_debit_banque[4] ?? 0, $somme_debit_banque[5] ?? 0];
@@ -43,7 +53,13 @@ class ComptableController extends AbstractController
             $fond = [];
             $caisse = [$somme_debit_banque[6] ?? 0, $somme_debit_banque[7] ?? 0, $somme_debit_banque[8] ?? 0, $somme_debit_banque[9] ?? 0, $somme_debit_banque[10] ?? 0, $somme_debit_banque[11] ?? 0];
             $sold = [$somme_debit_caisse[6] ?? 0, $somme_debit_caisse[7] ?? 0, $somme_debit_caisse[8] ?? 0, $somme_debit_caisse[9] ?? 0, $somme_debit_caisse[10] ?? 0, $somme_debit_caisse[11] ?? 0];
-        }
+        }*/
+
+        $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
+        $fond = [5000000, 4200000, 3500000, 3000000, 2500000, 2000000, 1000000];
+        $caisse = [500000, 200000, 150000, 80000, 50000, 6000];
+        $sold = [300000, 150000, 100000, 100000, 40000, 300000];
+
 
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse([
@@ -77,7 +93,7 @@ class ComptableController extends AbstractController
         $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
 
         return $this->render('comptable/ajout_dep_direct.html.twig', [
-            'message' =>null,
+            'message' => null,
             'liste_entite' => $liste_entite,
             'list_opp' => $liste_transaction
         ]);
@@ -157,7 +173,7 @@ class ComptableController extends AbstractController
                 'list_opp' => $liste_transaction
             ]);
 
-        }else if ($montant<=0){
+        } else if ($montant <= 0) {
             $liste_entite = $planCompteRepository->findCompteCaisse();
             $liste_transaction = $transactionTypeRepository->findTransactionDepenseDirecte();
             return $this->render('comptable/ajout_dep_direct.html.twig', [
@@ -242,7 +258,40 @@ class ComptableController extends AbstractController
             ]);
     }
 
+    #[Route('/comptabilisation_directe', name: 'comptable.comptabilisation_directe', methods: ['post'])]
+    public function comptabilisation_directe(Request             $request,
+                                             MouvementRepository $mouvementRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $date = $data['date'] ?? null;
+        $entite = $data['entite'] ?? null;
+        $transaction = $data['transaction'] ?? null;
+        $compte_debit = $data['compte_debit'] ?? null;
+        $compte_credit = $data['compte_credit'] ?? null;
+        $montant = $data['montant'] ?? null;
+        if (!$date) {
+            return new JsonResponse(['success' => false, 'message' => 'La date est invalide']);
+        } elseif (!$entite) {
+            return new JsonResponse(['success' => false, 'message' => 'L\'entite est invalide']);
+        } elseif (!$transaction) {
+            return new JsonResponse(['success' => false, 'message' => 'La transaction est invalide']);
+        } elseif (!$compte_debit) {
+            return new JsonResponse(['success' => false, 'message' => 'Le compte de debit est invalide']);
+        } elseif (!$compte_credit) {
+            return new JsonResponse(['success' => false, 'message' => 'Le compte de credit est invalide']);
+        } elseif (!$montant) {
+            return new JsonResponse(['success' => false, 'message' => 'Le montant de credit est invalide']);
+        }
 
+        $id_user_comptable = $this->user->getId();
+        $reponse = $mouvementRepository->comptabilisation_directe($date, $entite, $transaction, $compte_debit, $compte_credit, $montant, $id_user_comptable);
+        $reponse = json_decode($reponse->getContent(), true);
+        return new JsonResponse([
+            'success' => $reponse['success'],
+            'message' => $reponse['message'],
+            'url' => $this->generateUrl('comptable.form_depense_directe')
+        ]);
+    }
 
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]
     public function suivi_comptabilisation(DemandeTypeRepository $dm_rep): Response

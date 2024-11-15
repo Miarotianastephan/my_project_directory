@@ -382,11 +382,6 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $mv_debit = new Mouvement($evenement, $numero_compte_debit, $montant_demande, true);// DEBIT
             $entityManager->persist($mv_debit);
 
-            $mv_credit = new Mouvement();
-            // CREDIT
-            $mv_credit->setMvtEvenementId($evenement);
-            $mv_credit->setMvtMontant($montant_demande);
-            $mv_credit->setMvtDebit(false);
             $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire,0);                // identifier le mouvement à réaliser
             if ($detail_transaction_credit === null) {
                 return new JsonResponse([
@@ -394,9 +389,9 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
                     'message' => 'Compte à créditer introuvable pour ' . $transaction_a_faire->getTrsCode()
                 ]);
             }
-
-            $mv_credit->setMvtCompteId($detail_transaction_credit->getPlanCompte());
+            $mv_credit = new Mouvement($evenement,$detail_transaction_credit->getPlanCompte(),$montant_demande,false);// CREDIT
             $entityManager->persist($mv_credit);
+            
 
             $entityManager->flush();
             $entityManager->commit();

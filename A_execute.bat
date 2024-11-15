@@ -4,6 +4,7 @@ php bin/console ScriptAddDemande
 php bin/console ScriptAddBudgetType
 php bin/console ScriptAddTransaction
 php bin/console ScriptAddEtatDemande
+@REM Mila mi import PLAN COMPTE VAO MANDEHA NY APPRO
 @REM php bin/console ScriptAddDetailTransactionCompte
 
 php bin/console VMouvementDebitCaisseSiege
