@@ -13,12 +13,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">A propos de la demande</h4>
+                    <h4 class="card-title">A propos de la transaction directe</h4>
                 </div>
                 <div class="card-body col-12 px-md-5 d-flex flex-row">
                     <div class="col-1">
                         <button style="border: none;background-color: transparent; text-align: start">
-                            <a href="{{ path('tresorier.liste_demande_en_attente') }}">
+                            <a href="{{ path('comptable.suivi_comptabilisation') }}">
                                 {{ ux_icon('heroicons:arrow-left-circle', {height: '60%', width:'75%',color:'#2a2f5b'}) }}
                             </a>
                         </button>
@@ -26,178 +26,61 @@
                     <div class="col px-3 d-flex flex-column gap-3">
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg"> Rérérence: </label>
-                            <div class="col form-control"> {{ demande_type.RefDemande }} </div>
+                            <div class="col form-control"> {{ evenement.getEvnReference }} </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg"> Validateur demande </label>
+                            <label class="col-4 form-control-lg">Date d'opération: </label>
                             <div class="col form-control">
-                                {{ demande_type.utilisateur.UserMatricule }}
+                                {{ evenement.getEvnDateOperation|date('d/m/y')|trans({}, 'fr') }}
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Date de la demande: </label>
+                            <label class="col-4 form-control-lg"> Validateur de l'opération </label>
                             <div class="col form-control">
-                                {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                                {{ evenement.getEvnResponsable.UserMatricule }}
                             </div>
                         </div>
                         <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de demande: </label>
+                            <label class="col-4 form-control-lg">Type de transaction: </label>
                             <div class="col form-control">
-                                {{ demande_type.demande.libelle }}
+                                {{ evenement.getEvnTrsId.getTrsLibelle }}
                             </div>
                         </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Motif de la demande: </label>
-                            <div class="col form-control">
-                                {{ demande_type.PlanCompte.CptNumero }} - {{ demande_type.PlanCompte.CptLibelle }}
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Montant de la demande: </label>
-                            <div class="col form-control">
-                                {{ demande_type.DmMontant|number_format(5, '.', ' ') }} Ar
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">Type de payement: </label>
-                            <div class="col form-control">
-                                {{ demande_type.DmModePaiement }}
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <label class="col-4 form-control-lg">
-                                Personne concernée:
-                            </label>
-                            <div class="col form-control">
-                                {{ demande_type.EntityCode.CptLibelle }}
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex flex-row">
-                            <!-- <div class="col-3">Les pièces jointes:</div> -->
-                            {% if images|length  != 0 %}
-                                <div class="col">
-                                    <!-- Bouton pour ouvrir le modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#fileModal">
-                                        Voir les pièces jointes
-                                    </button>
+                        {# liste de comptes transactionnées #}
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="matricule">compte débité:</label>
+                                <div class="col form-control">
+                                    {{ list_mouvement[0].getMvtCompteId.CptNumero }} - {{ list_mouvement[0].getMvtCompteId.CptLibelle }}
                                 </div>
-                            {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="matricule">montant débité:</label>
+                                <div class="col form-control">
+                                    {{ list_mouvement[0].getMvtMontant|number_format(0, '.', ' ') }} Ar
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="matricule">compte crédité:</label>
+                                <div class="col form-control">
+                                    {{ list_mouvement[1].getMvtCompteId.CptNumero }} - {{ list_mouvement[1].getMvtCompteId.CptLibelle }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="matricule">montant crédité:</label>
+                                <div class="col form-control">
+                                    {{ list_mouvement[1].getMvtMontant|number_format(0, '.', ' ') }} Ar
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('tresorier.liste_demande_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-danger btn">Annuler</a>
-                    <a href="{{ path('tresorier.valider_fond', {'id': demande_type.Id}) }}"
-                       class="btn btn-success btn">Débloquer</a>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal pour les pièces jointes -->
-    <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="fileModalLabel">Liste des pièces jointes</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        {% for img in images %}
-                            {% set extension = img.detDmPieceUrl|split('.')|last %}
-                            <li>
-                                {% if extension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                    <!-- Affichage de l'image -->
-                                    <img src="{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}" alt="Pièce jointe"
-                                         width="100">
-                                {% elseif extension == 'txt' %}
-                                    <!-- Affichage du contenu d'un fichier texte -->
-                                    <a href="#"
-                                       onclick="loadTextFile('{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}')">Voir
-                                        le fichier texte</a>
-                                {% elseif extension in ['xls', 'xlsx'] %}
-                                    <!-- Affichage d'un fichier Excel -->
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#excelModal"
-                                       onclick="loadExcelPreview('{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}')">Voir
-                                        le fichier Excel</a>
-                                {% elseif extension == 'pdf' %}
-                                    <a href="#"
-                                       onclick="loadPdfFile('{{ asset('images/pieces/' ~ img.detDmPieceUrl) }}')">Voir
-                                        le fichier PDF</a>
-                                {% else %}
-                                    <!-- Fichier non pris en charge -->
-                                    <p>Type de fichier non pris en charge</p>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal pour les fichiers Excel -->
-    <div class="modal fade" id="excelModal" tabindex="-1" aria-labelledby="excelModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="excelModalLabel">Aperçu du fichier Excel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- L'aperçu sera chargé ici -->
-                    <div id="excel-preview"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Modal pour les fichiers texte -->
-    <div class="modal fade" id="textModal" tabindex="-1" aria-labelledby="textModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="textModalLabel">Aperçu du fichier texte</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <pre id="text-preview" style="color: black"></pre>
-                    <!-- Utilisez <pre> pour préserver le formatage du texte -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal pour les fichiers PDF -->
-    <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pdfModalLabel">Aperçu du fichier PDF</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <iframe id="pdf-preview" style="width: 100%; height: 70dvh;" frameborder="0"></iframe>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

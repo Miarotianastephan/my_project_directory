@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailTransactionCompteRepository;
+use App\Repository\EvenementRepository;
 use App\Repository\ExerciceRepository;
 use App\Repository\MouvementRepository;
 use App\Repository\PlanCompteRepository;
@@ -294,17 +295,22 @@ class ComptableController extends AbstractController
     }
 
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]
-    public function suivi_comptabilisation(DemandeTypeRepository $dm_rep): Response
+    public function suivi_comptabilisation(EvenementRepository $evn_repo): Response
     {
-        $demande_types = $dm_rep->findByEtat(null,[401]);
-        return $this->render('comptable/suivi_comptabilisation.html.twig', ['demande_types' => $demande_types]);
+        $list_operation_directe = $evn_repo->findEvnByResponsable($this->user);
+        return $this->render('comptable/suivi_comptabilisation.html.twig', ['list_operation_directe' => $list_operation_directe]);
     }
 
-    #[Route('/comptabilisation/{id}', name: 'comptable.comptabiliser', methods: ['GET'])]
-    public function compatbilisation(int $id, DemandeTypeRepository $dm_rep): Response
+    #[Route('/comptabilisation/{id}', name: 'comptable.suivi_comptabilisation_detail', methods: ['GET'])]
+    public function compatbilisation(int $id, EvenementRepository $evn_repo, MouvementRepository $mv_repo): Response
     {
-        $demande_types = $dm_rep->find($id);
-        return $this->render('comptable/show_comptabilisation.html.twig', ['demande_type' => $demande_types, 'images' => []]);
+        $evenement = $evn_repo->find($id);
+        $list_mouvement = $mv_repo->findAllMvtByEvenement($evenement);
+        return $this->render(
+            'comptable/show_comptabilisation.html.twig', 
+            ['evenement' => $evenement,
+            'list_mouvement' => $list_mouvement
+        ]);
     }
 
 

@@ -92,67 +92,6 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
     }
 
-    /*public function v_debit_banque_mensuel(Exercice $exercice): ?float
-    {
-        $entityManager = $this->getEntityManager();
-        $connection = $entityManager->getConnection();
-
-        // Conversion de la date en chaîne (format 'Y-m-d')
-        $date = $exercice->getExerciceDateDebut()->format('Y-m-d');
-        dump($date);
-
-        // Script SQL
-        $script = "
-        WITH calendrier AS (
-            SELECT ADD_MONTHS(DATE '$date', LEVEL - 1) AS mois
-            FROM DUAL
-            CONNECT BY LEVEL <= 12
-        ), exercices AS (
-            SELECT DISTINCT evn_exercice_id
-            FROM v_debit_banque_mensuel
-        )
-        SELECT
-            e.evn_exercice_id,
-            TO_CHAR(c.mois, 'YYYY-MM') AS mois_operation,
-            COALESCE(v.total, 0) AS total
-        FROM calendrier c
-        CROSS JOIN exercices e
-        LEFT JOIN v_debit_banque_mensuel v
-            ON TO_CHAR(c.mois, 'YYYY-MM') = v.mois_operation
-            AND e.evn_exercice_id = v.evn_exercice_id
-        ORDER BY e.evn_exercice_id, c.mois
-    ";
-
-        try {
-            // Préparation et exécution de la requête
-            $statement = $connection->prepare($script);
-            $resultSet = $statement->executeQuery();
-
-            // Récupération de tous les résultats
-            $results = $resultSet->fetchAllAssociative();
-
-            // Vérification et traitement des résultats
-            if (!empty($results)) {
-                $total = 0.0;
-                foreach ($results as $result) {
-                    if (array_key_exists('total', $result)) {
-                        $total += (float) $result['total'];
-                    }
-                }
-                return $total;
-            }
-
-        } catch (\Exception $e) {
-            // Gestion des erreurs et affichage du message d'erreur
-            dump($e->getMessage());
-        }
-
-        // Retourne null en cas d'échec
-        return null;
-    }*/
-
-
-
     public function v_debit_caisse_mensuel(Exercice $exercice): ?array
     {
         $entityManager = $this->getEntityManager();
@@ -242,7 +181,6 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
     }
 
-
     /**
      * @return Mouvement[] Returns an array of Mouvement objects
      */
@@ -288,14 +226,14 @@ class MouvementRepository extends ServiceEntityRepository
     }
     // Ajustment de la fonction 
     public function getSoldeRestantByMouvement(): array
-{
-    return $this->createQueryBuilder('m')
-        ->select('pc.cpt_numero, SUM(CASE WHEN m.isMvtDebit = 1 THEN m.mvt_montant ELSE 0 END) as total_debit, SUM(CASE WHEN m.isMvtDebit = 0 THEN m.mvt_montant ELSE 0 END) as total_credit, (SUM(CASE WHEN m.isMvtDebit = 1 THEN m.mvt_montant ELSE 0 END) - SUM(CASE WHEN m.isMvtDebit = 0 THEN m.mvt_montant ELSE 0 END)) as total_montant')
-        ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
-        // ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
-        ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
-        ->getQuery()->getResult();
-}
+    {
+        return $this->createQueryBuilder('m')
+            ->select('pc.cpt_numero, SUM(CASE WHEN m.isMvtDebit = 1 THEN m.mvt_montant ELSE 0 END) as total_debit, SUM(CASE WHEN m.isMvtDebit = 0 THEN m.mvt_montant ELSE 0 END) as total_credit, (SUM(CASE WHEN m.isMvtDebit = 1 THEN m.mvt_montant ELSE 0 END) - SUM(CASE WHEN m.isMvtDebit = 0 THEN m.mvt_montant ELSE 0 END)) as total_montant')
+            ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+            // ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
+            ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
+            ->getQuery()->getResult();
+    }
 
     public function searchDataMouvement($rech_numero = null, $rech_libelle = null, $date_inf = null, $date_sup = null): array
     {

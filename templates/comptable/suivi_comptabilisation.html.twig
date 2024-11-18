@@ -29,42 +29,34 @@
                             <tr class="col-12">
                                 <th class="col-3">Date</th>
                                 <th class="col-1">Référence</th>
-                                <th class="col-3">Type de demande</th>
+                                <th class="col-3">Type de transaction</th>
                                 <th class="col-2 text-center px-3">Montant</th>
                                 <th class="col"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for demande_type in demande_types %}
+                            {% for operation in list_operation_directe %}
                                 <tr class="col-12">
-                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
-                                    <td class="col-1">{{ demande_type.RefDemande }}</td>
-                                    <td class="col-2">{{ demande_type.Demande.Libelle }}</td>
+                                    <td class="col-2">{{ operation.getEvnDateOperation|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-1">{{ operation.getEvnReference }}</td>
+                                    <td class="col-4">{{ operation.getEvnTrsId.getTrsLibelle }}</td>
                                     <td class="text-end col-2">
                                         <div>
-                                            {{ demande_type.DmMontant|number_format(0, '.', ' ') }} Ar
+                                            {{ operation.getEvnMontant|number_format(0, '.', ' ') }} Ar
                                         </div>
                                     </td>
-                                    <td class="col">
+                                    <td class="col-2">
                                         <div class="col-12 d-flex gap-2">
                                             <div class="col">
-                                                <a href="{{ path('comptable.comptabiliser', {'id': demande_type.Id}) }}"
-                                                   class="btn btn-label-success btn-sm">Comptabiliser</a>
+                                                <a href="{{ path('comptable.suivi_comptabilisation_detail', {'id': operation.Id}) }}"
+                                                   class="btn btn-secondary btn-sm">Voir detail</a>
                                             </div>
-                                            <div class="col-4">
-                                                <button style="width: 100%;height: 100%;border: none;background-color: transparent">
-                                                    <a href="{{ path('tresorier.detail_demande_en_attente', {'id': demande_type.Id}) }}">
-                                                        {{ ux_icon('heroicons:information-circle', {height: '70%', width:'70%',color:'#2a2f5b'}) }}
-                                                    </a>
-                                                </button>
-                                            </div>
-
                                         </div>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="4">aucun donnée inserer</td>
+                                    <td colspan="4">aucun opération directe inserer</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
