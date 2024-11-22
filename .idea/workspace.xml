@@ -5,13 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/CommisaireCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommisaireCompteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ApprovisionnementPieceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ApprovisionnementPieceRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A_execute.bat" beforeDir="false" afterPath="$PROJECT_DIR$/A_execute.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/approvisionnements/6713bbab491a0.pptx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/approvisionnements/6713caeae5cdd.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/approvisionnements/6713cb45dffa0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/sg/show.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/sg/show.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/tresorier/ajout_budget.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/tresorier/ajout_budget.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/tresorier/deblocker_fond.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/tresorier/deblocker_fond.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/scr/tresorier/demande_approvisionnement.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/scr/tresorier/demande_approvisionnement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementCreditCaisseSiegeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementCreditCaisseSiegeCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementDebitCaisseSiegeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementDebitCaisseSiegeCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/script.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/commisaire_compte/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commisaire_compte/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commisaire_compte/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commisaire_compte/show.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/graphe.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/comptable/validation_dep_direct.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/comptable/validation_dep_direct.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exercice/_ouverture_exercice.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/_ouverture_exercice.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/exercice/form_ajout.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/exercice/form_ajout.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/include/_budget_et_solde.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/include/_budget_et_solde.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/header.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/header.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/pages/option/_commissaire_sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/option/_commissaire_sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/option/_sg_sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/option/_sg_sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/pages/option/_tresorier_sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/option/_tresorier_sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/show.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sg/valider_demande.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/ajout_budget.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tresorier/demande_approvisionnement.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tresorier/demande_approvisionnement.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,6 +229,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.VSommeBudgetCompteCommand.php.executor&quot;: &quot;Debug&quot;,
     &quot;PHP Script.AdminController.php.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -220,11 +249,24 @@
     ]
   }
 }</component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\00ITU\STAGE\my_project_directory\templates\tableau_bord" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.VSommeBudgetCompteCommand.php">
+    <configuration name="VSommeBudgetCompteCommand.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/my_project_directory/Command/VSommeBudgetCompteCommand.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.VSommeBudgetCompteCommand.php" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -280,7 +322,22 @@
       <workItem from="1729171888184" duration="193000" />
       <workItem from="1729182809758" duration="13305000" />
       <workItem from="1729226024689" duration="31242000" />
-      <workItem from="1729342011380" duration="8709000" />
+      <workItem from="1729342011380" duration="27253000" />
+      <workItem from="1729487376173" duration="19174000" />
+      <workItem from="1729666911610" duration="2639000" />
+      <workItem from="1729752544475" duration="7621000" />
+      <workItem from="1729792555338" duration="6872000" />
+      <workItem from="1730116585870" duration="5886000" />
+      <workItem from="1730135976204" duration="9658000" />
+      <workItem from="1730263653275" duration="11037000" />
+      <workItem from="1730346073171" duration="5818000" />
+      <workItem from="1730357912132" duration="5423000" />
+      <workItem from="1730611291982" duration="1108000" />
+      <workItem from="1704263905963" duration="3102000" />
+      <workItem from="1730632763812" duration="12448000" />
+      <workItem from="1730953128007" duration="632000" />
+      <workItem from="1731044577796" duration="3557000" />
+      <workItem from="1731477602233" duration="168000" />
     </task>
     <servers />
   </component>

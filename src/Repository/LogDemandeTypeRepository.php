@@ -289,7 +289,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $dm_mode_paiement = $dm_type->getDmModePaiement();
             //if == 1 -> payement par chèque
             if ($dm_mode_paiement == 1) {
-                if ($banque_id === null) {
+                if ($banque_id == null) {
                     return new JsonResponse([
                         'success' => false,
                         'message' => 'Ajouter un choix de banque'
@@ -367,6 +367,12 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             // les données à utiliser
             $reference_demande = $dm_type->getRefDemande();
             $exercice_demande = $this->exercicerepository->getExerciceValide();
+            if (!$exercice_demande) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Exercice invalide.'
+                ]);
+            }
             $montant_demande = $dm_type->getDmMontant();
             $numero_compte_debit = $dm_type->getPlanCompte();
             $mode_paiement_demande = (int)($dm_type->getDmModePaiement());
@@ -391,6 +397,9 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             }
             $mv_credit = new Mouvement($evenement,$detail_transaction_credit->getPlanCompte(),$montant_demande,false);// CREDIT
             $entityManager->persist($mv_credit);
+
+            dump("numero de debit = " . $numero_compte_debit->getCptNumero() . " libelle" . $numero_compte_debit->getCptLibelle());
+            dump("numero de credit = " . $detail_transaction_credit->getPlanCompte()->getCptNumero() . " libelle" . $detail_transaction_credit->getPlanCompte()->getCptLibelle());
             
 
             $entityManager->flush();

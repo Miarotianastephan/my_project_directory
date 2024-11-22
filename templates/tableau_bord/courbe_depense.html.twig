@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+{% block page_title %}
+    Tableau de bord
+{% endblock %}
+
+{% block page_subtitle %}
+    Les dépenses effectuées par BFM.
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Tableau d'évolution des dépenses.</div>
+                </div>
+                <div class="card-body">
+                    <canvas id="myPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById('myPieChart').getContext('2d');
+            let myChart = null;
+            // Données initiales
+            const initialData = {
+                labels: {{ labels|json_encode|raw }},
+                donnes: {{ data|json_encode|raw }},
+                budgets: {{ budget|json_encode|raw }},
+            };
+
+            function createChart(data) {
+                if (myChart) {
+                    myChart.destroy();
+                }
+
+                // Création des couleurs du segment selon dépassement ou non
+                const segmentColors = [];
+
+                for (let i = 0; i < data.donnes.length; i++) {
+                    if (data.donnes[i] > data.budgets[i]) {
+                        // Dépassement : rouge
+                        segmentColors.push('rgba(207,157,8,0.93)');
+                    } else {
+                        // Pas de dépassement : bleu
+                        segmentColors.push('rgb(54, 162, 235)');
+                    }
+                }
+
+                myPieChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: "Budget",
+                                data: data.budgets,
+                                borderDash: [5, 5],
+                                borderWidth: 2,
+                                borderColor: 'rgb(14,96,124)',
+                                backgroundColor: 'rgba(75,192,192,0.37)',
+
+                                //borderColor: 'rgb(216,44,44)',
+                                //backgroundColor: 'rgba(237,126,126,0.48)',
+                                pointRadius: 1.5 // Supprime les points
+                            },
+                            {
+                                label: "Dépenses",
+                                data: data.donnes,
+                                borderWidth: 2,
+                                borderColor: 'rgb(216,44,44)',
+                                backgroundColor: 'rgba(237,126,126,0.48)',
+
+                                pointRadius: 1.5, // Supprime les points
+                            },
+
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const dataIndex = context.dataIndex;
+                                        const datasetIndex = context.datasetIndex;
+                                        const value = context.raw;
+
+                                        if (datasetIndex === 0) {  // Dataset des dépenses
+                                            const budget = data.budgets[dataIndex];
+                                            const difference = value - budget;
+                                            if (difference > 0) {
+                                                return `Dépenses: ${value} (Dépassement: ${difference.toFixed(2)})`;
+                                            }
+                                            return `Dépenses: ${value}`;
+                                        }
+                                        return `Budget: ${value}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Créer le graphique initial
+            createChart(initialData);
+        });
+    </script>
+{% endblock %}

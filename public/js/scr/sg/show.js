@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function handleRefuser(e) {
         e.preventDefault();
         //window.location.href = '/sg';
-        const cancelUrl = form.dataset.refuse;
+        const cancelUrl = form.dataset.refuser;
         if (cancelUrl) {
             window.location.href = cancelUrl; // Redirection vers l'URL d'annulation
         } else {

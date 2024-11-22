@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+{% block page_title %}
+    Tableau de bord
+{% endblock %}
+
+{% block page_subtitle %}
+    Les dépenses par chèques sont encouragées par BFM.
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Comparaison des dépenses entre chèques et espèces.
+                        <span id="monthYearDisplay"></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-12 d-flex flex-row">
+                        <div class="col-5">
+                            <div class="col px-1 d-flex flex-column gap-3">
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Budget:</label>
+                                    <div class="input-group col mb-3">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ budget|number_format(2, '.', ' ') }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg"> Somme des dépenses:</label>
+                                    <div class="input-group col mb-3">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ total_depense|number_format(2, '.', ' ') }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg"> Reste utilisable:</label>
+                                    <div class="input-group col mb-3">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ (budget - total_depense)|number_format(2, '.', ' ')  }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById('myPieChart').getContext('2d');
+            let myChart = null;
+
+            // Données initiales
+            const initialData = {
+                labels: {{ labels|json_encode|raw }},
+                donnes: {{ data|json_encode|raw }}
+            };
+
+            function createChart(data) {
+                if (myChart) {
+                    myChart.destroy();
+                }
+                myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: data.labels,  // Les noms des catégories
+                        datasets: [{
+                            data: data.donnes,    // Les valeurs correspondantes
+                            backgroundColor: [
+
+                                '#FFCE56', '#4BC0C0', '#36A2EB',
+                                '#9966FF', '#FF9F40', '#FF6384',
+
+                            ],
+                            hoverBackgroundColor: [
+                                'rgba(207,157,8,0.93)', '#19bfbf', '#36A2EB',
+                                '#9966FF', '#FF9F40', '#FF6384',
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                    }
+                });
+            }
+
+            // Créer le graphique initial
+            createChart(initialData);
+        });
+    </script>
+{% endblock %}

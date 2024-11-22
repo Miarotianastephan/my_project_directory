@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => {
                 if (!response.ok) {
+                    console.log(response);
                     throw new Error('Erreur réseau : ' + response.status);
                 }
                 return response.json();

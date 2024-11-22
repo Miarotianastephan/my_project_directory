@@ -68,7 +68,7 @@
                                             type="text"
                                             class="form-control"
                                             aria-label="caisse"
-                                            value="{{ situation_caisse|number_format(2, '.', ' ') }}" readonly
+                                            value="{{ (situation_caisse)|number_format(2, '.', ' ') }}" readonly
                                     />
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="dm_piece">Insérer une pièce jointe</label>
-                                    <input type="file" name="image" class="form-control" id="image"/>
+                                    <input type="file" name="image" class="form-control" id="image" accept="image/*,.xls,.xlsx,.txt,.pdf"/>
                                 </div>
                         </div>
                     </div>

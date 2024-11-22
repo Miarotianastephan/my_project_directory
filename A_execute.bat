@@ -13,3 +13,4 @@ php bin/console VMouvementCreditCaisse
 php bin/console VMouvementCreditBanque
 php bin/console VDebitCaisseMensuel
 php bin/console VDebitBanqueMensuel
+php bin/console VSommeBudgetCompte

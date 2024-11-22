@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+{% block page_title %}
+    Tableau de bord
+{% endblock %}
+
+{% block page_subtitle %}
+    Tableau de comparaison de budget entre 2 exercices.
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Comparaison de budget
+                        <span id="monthYearDisplay"></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-row col-12">
+                        <div class="col-3 d-flex flex-column gap-3">
+                            <div class="col d-flex flex-column gap-1">
+                                <h3>Exerice 1</h3>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Comptes tiers:</label>
+                                    <div class="input-group col">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ exercice1["Comptes tiers"] is defined ? exercice1["Comptes tiers"]|number_format(2, '.', ' ') : "indéfinie" }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Comptes financiers:</label>
+                                    <div class="input-group col">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ exercice1["Comptes financiers"] is defined ? exercice1["Comptes financiers"]|number_format(2, '.', ' ') : "indéfinie" }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Charges:</label>
+                                    <div class="input-group col">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ exercice1["Charges"] is defined ? exercice1["Charges"]|number_format(2, '.', ' ') : "indéfinie"  }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex flex-column gap-1">
+                                <h3>Exerice 2</h3>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Comptes tiers:</label>
+                                    <div class="input-group col">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ exercice2["Comptes tiers"] is defined ? exercice2["Comptes tiers"]|number_format(2, '.', ' ') : "indéfinie" }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Comptes financiers:</label>
+                                    <div class="input-group col">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ exercice2["Comptes financiers"] is defined ? exercice2["Comptes financiers"]|number_format(2, '.', ' ') : "indéfinie" }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex flex-column">
+                                    <label class="col form-control-lg">Charges:</label>
+                                    <div class="input-group col">
+                                        <span class="input-group-text">Ar</span>
+                                        <div class="form-control">{{ exercice2["Charges"] is defined ? exercice2["Charges"]|number_format(2, '.', ' ') : "indéfinie"  }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <form method="get" id="formulaire"
+                                  action="{{ path('app_tableau_budget') }}">
+                                <div class="col-12 d-md-flex justify-content-md-end mb-3">
+                                    <div class="form-group form-inline col-3">
+                                        <label for="exe1" class="mr-2">Exercice 1</label>
+                                        <select class="form-select" id="exe1" name="exe1">
+                                            {% for exercice in list_exercice %}
+                                                <option value="{{ exercice.Id }}">{{ exercice }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group form-inline col-4 ml-3">
+                                        <label for="exe2" class="mr-2">Exercice 2</label>
+                                        <select class="form-select" id="exe2" name="exe2">
+                                            {% for exercice in list_exercice %}
+                                                <option value="{{ exercice.Id }}">{{ exercice }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm ml-3">
+                                        Comparer
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="chart-container col-12" >
+                                <canvas id="comparisonBarChart" style="max-width: 55dvw"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById("comparisonBarChart").getContext("2d");
+            let myChart = null;
+
+            // Données initiales
+            const initialData = {
+                labels: {{ labels|json_encode|raw }},
+                exercice1: {{ exercice1|json_encode|raw }},
+                exercice2: {{ exercice2|json_encode|raw }}
+            };
+
+            function createChart(data) {
+                if (myChart) {
+                    myChart.destroy();
+                }
+
+                myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Exercice 1',
+                                data: data.exercice1,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Exercice 2',
+                                data: data.exercice2,
+                                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                borderColor: 'rgba(255, 159, 64, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Budget'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Classe de compte'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Comparaison des budgets par exercice'
+                            }
+                        },
+                    }
+                });
+            }
+
+            // Créer le graphique initial
+            createChart(initialData);
+
+            // Gestion du formulaire
+            document.getElementById('formulaire').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                window.location = this.action + '?' + new URLSearchParams(formData).toString()
+                /*fetch(`tableau_bord/budget/${exe1}/${exe2}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        createChart(data);
+                    })
+                    .catch(error => console.error('Error:', error));*/
+            });
+        });
+    </script>
+{% endblock %}

@@ -25,3 +25,30 @@
         </ul>
     </div>
 </li>
+
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#dash_board">
+        <i class="fas fa-th-list"></i>
+        <p>Liste des tableaux de bord</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="dash_board">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ path('app_tableau_budget') }}">
+                    <span class="sub-item">Comparaison de budget</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_tableau_depense') }}">
+                    <span class="sub-item">Situation de caisse</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_tableau_depense_annuelle') }}">
+                    <span class="sub-item">Graphe de dépense</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
