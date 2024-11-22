@@ -43,14 +43,23 @@ class TableauBordController extends AbstractController
         $categories_2 = [];
 
         // Remplir les catégories existantes avec les valeurs de la requête
-        foreach ($somme_exercice1 as $somme) {
-            $categories_1[$somme['categorie']] = $somme['total_budget'];
+        
+        if(isset($somme_exercice1)){
+            foreach ($somme_exercice1 as $somme) {
+                $categories_1[$somme['categorie']] = $somme['total_budget'];
+            }
+        }else{
+            $categories_1[] = 0;
+        }
+        if(isset($somme_exercice2)){
+            foreach ($somme_exercice2 as $somme) {
+                $categories_2[$somme['categorie']] = $somme['total_budget'];
+            }
+        }else{
+            $categories_2[] = 0;
         }
 
         // Remplir les catégories existantes avec les valeurs de la requête
-        foreach ($somme_exercice2 as $somme) {
-            $categories_2[$somme['categorie']] = $somme['total_budget'];
-        }
         return $this->render('tableau_bord/graphe_comparaison_budget.html.twig', [
             'labels' => $list_label,
             'exercice1' => $categories_1,
@@ -70,9 +79,9 @@ class TableauBordController extends AbstractController
         $cheques = $mouvementRepository->v_debit_banque_annuel($exercice);
         $budget = $detailBudgetRepository->findSommeParExerciceEtCompte($exercice, "6");
 
-        $espece = 70000 + 100000 + 30000 + 50000 + 90000 + 75000;
-        $cheques = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
-        $budget = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
+        // $espece = 70000 + 100000 + 30000 + 50000 + 90000 + 75000;
+        // $cheques = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
+        // $budget = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
 
         return $this->render('tableau_bord/diagramme_camembert_depense.html.twig', [
             'labels' => ["Espèces", "Chèques"],
@@ -97,27 +106,27 @@ class TableauBordController extends AbstractController
         $depense[0] = ($somme_debit_banque[0] ?? 0) + ($somme_debit_caisse[0] ?? 0);
         //ALANA ITO RANDY
 //        $budget[0] = $budgets;
-        $budget[0] = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
+        // $budget[0] = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
 
         for ($i = 1; $i < 12; $i++) {
             //ALANA ITO RANDY
             //$budget[$i] = $budgets;
-            $budget[$i] = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
+            // $budget[$i] = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
             $depense[$i] = $depense[$i - 1] + ($somme_debit_banque[$i] ?? 0) + ($somme_debit_caisse[$i] ?? 0);
         }
 
-        $depense[0] = 270000;
-        $depense[1] = $depense[0] + 200000;
-        $depense[2] = $depense[1] + 130000;
-        $depense[3] = $depense[2] + 300000;
-        $depense[4] = $depense[3] + 250000;
-        $depense[5] = $depense[4] + 140000;
-        $depense[6] = $depense[5] + 590000;
-        $depense[7] = $depense[6] + 225000;
-        $depense[8] = $depense[7] + 0;
-        $depense[9] = $depense[8] + 120000;
-        $depense[10] = $depense[9] + 0;
-        $depense[11] = $depense[10] + 0;
+        // $depense[0] = 270000;
+        // $depense[1] = $depense[0] + 200000;
+        // $depense[2] = $depense[1] + 130000;
+        // $depense[3] = $depense[2] + 300000;
+        // $depense[4] = $depense[3] + 250000;
+        // $depense[5] = $depense[4] + 140000;
+        // $depense[6] = $depense[5] + 590000;
+        // $depense[7] = $depense[6] + 225000;
+        // $depense[8] = $depense[7] + 0;
+        // $depense[9] = $depense[8] + 120000;
+        // $depense[10] = $depense[9] + 0;
+        // $depense[11] = $depense[10] + 0;
 
 
         return $this->render('tableau_bord/courbe_depense.html.twig', [
