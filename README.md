@@ -7,6 +7,8 @@ Symfony 6.4 ready to use webapp
 * php bin/console ux:icons:import flat-color-icons:print
 * php bin/console ux:icons:import heroicons:information-circle
 * php bin/console ux:icons:import heroicons:arrow-left-circle
+* php bin/console ux:icons:import flowbite:edit-outline
+* php bin/console ux:icons:import bi:info-circle
 
 **Scénario de test**:
 1. Ajout utilisateur admin (Data fixture)

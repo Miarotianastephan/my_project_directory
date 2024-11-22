@@ -51,23 +51,6 @@ class CompteMereRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-
-
-    //    /**
-    //     * @return CompteMere[] Returns an array of CompteMere objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
     public function findByCptNumero($compteNumero): ?CompteMere
     {
         return $this->createQueryBuilder('c')
@@ -102,7 +85,20 @@ class CompteMereRepository extends ServiceEntityRepository
         return false;
     }
 
-    public function findAllChargeCompte()
-    {
+    // Pour avoir une liste avec les comptes dont le prefixe est dans le tableau
+    public function findAllByPrefix(array $listComptePre)
+    {        
+        $queryBuilder = $this->createQueryBuilder('p');
+        // Pour gérer plusieurs conditions OR
+        $orX = $queryBuilder->expr()->orX();
+        foreach ($listComptePre as $index => $prefix) {
+            $paramName = 'prefix' . $index;
+            $orX->add($queryBuilder->expr()->like('p.cpt_numero', ':' . $paramName));
+            $queryBuilder->setParameter($paramName, $prefix);
+        }
+        // Ajout de la condition OR dans la requête
+        $queryBuilder->orWhere($orX);
+        // Exécution de la requête
+        return $queryBuilder->getQuery()->getResult();
     }
 }
