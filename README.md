@@ -51,6 +51,7 @@ END;
   -- IRETO DIA MI CONNECTE ADMIN @ LE APPLICATION ALOHA DIA MIDITRA
   -- PAGE INSERTION PLAN COMPTE DIA MI INSERT PLAN COMPTE 
 
+URL manuel d'utilisation : https://docs.google.com/document/d/1fBB5Yu-7P0M3fTB5aUJFBIoxshgfdLLw/edit#heading=h.4i7ojhp
   
 
 
