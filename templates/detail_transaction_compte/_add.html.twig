@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+
+{% block page_title %}
+    Section Admin
+{% endblock %}
+{% block page_subtitle %}
+    {# #}
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Ajout Code de transaction</h4>
+                </div>
+                <form id="formulaire" action="{{ path('app_detail_transaction_compte_add_transaction') }}" method="post"
+                      data-cancel="{{ path('app_detail_transaction_compte_index') }}">
+                    <div class="card-body col-12 d-flex flex-column gap-2">
+                        <div class="form-group">
+                            <label for="code_transaction">Code de transaction</label>
+                            <input type="text" class="form-control" id="code_transaction" name="code_transaction">
+                        </div>
+                        <div class="form-group">
+                            <label for="libelle">Libelle</label>
+                            <input class="form-control" type="text" id="libelle" name="libelle">
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="annuler" name="annuler" value="annuler" class="btn btn-danger">
+                            ANNULER
+                        </button>
+                        <button id="valider" name="valider" value="valider" class="btn btn-success">
+                            VALIDER
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{ include('include/_message_modal.html.twig') }}
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const SELECTORS = {
+                formulaire: '#formulaire', messageModal: '#messageModal', annuler: '#annuler', valider: '#valider'
+            };
+
+            const ELEMENTS = {
+                formulaire: document.querySelector(SELECTORS.formulaire),
+                messageModal: new bootstrap.Modal(document.querySelector(SELECTORS.messageModal)),
+            };
+
+            function setupEventListeners() {
+                //document.querySelector(SELECTORS.annuler).addEventListener('click', handleCancel);
+                document.querySelector('#annuler').addEventListener('click', handleCancel);
+                document.querySelector(SELECTORS.valider).addEventListener('click', handleSubmit);
+                document.querySelector(`${SELECTORS.messageModal} .btn-secondary`).addEventListener('click', closeModalAndRedirect);
+                document.querySelector(`${SELECTORS.messageModal} .btn-close`).addEventListener('click', closeModalAndRedirect);
+            }
+
+            function closeModalAndRedirect() {
+                ELEMENTS.messageModal.hide();
+            }
+
+            function handleCancel(e) {
+                e.preventDefault();
+                const cancelUrl = ELEMENTS.formulaire.dataset.cancel;
+                if (cancelUrl) {
+                    window.location.href = cancelUrl; // Redirection vers l'URL d'annulation
+                } else {
+                    console.error("Aucune URL d'annulation définie.");
+                }
+            }
+
+            function handleSubmit(e) {
+                e.preventDefault();
+                //sendRequest(ELEMENTS.formulaire.action, handleSubmitResponse);
+                fetch(ELEMENTS.formulaire.action, {
+                    method: 'POST', headers: {
+                        'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'
+                    }, body: JSON.stringify({
+                        code_transaction: document.getElementById('code_transaction').value,
+                        libelle: document.getElementById('libelle').value
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur réseau : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(handleSubmitResponse)
+                    .catch(handleError);
+            }
+
+            function handleSubmitResponse(data) {
+                if (!data.success) {
+                    showMessage(data.message);
+                } else if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert("URL introuvable");
+                }
+            }
+
+            function showMessage(message) {
+                const modalBody = document.querySelector(`${SELECTORS.messageModal} .modal-body`);
+                modalBody.textContent = message;
+                ELEMENTS.messageModal.show();
+            }
+
+            function handleError(error) {
+                console.error('Erreur:', error);
+                showMessage('Une erreur est survenue : ' + error.message);
+            }
+
+            setupEventListeners();
+        });
+    </script>
+{% endblock %}

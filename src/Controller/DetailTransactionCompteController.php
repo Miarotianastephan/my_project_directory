@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\DetailTransactionCompte;
+use App\Entity\TransactionType;
 use App\Form\DetailTransactionCompteType;
 use App\Repository\DetailTransactionCompteRepository;
+use App\Repository\TransactionTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,6 +22,30 @@ class DetailTransactionCompteController extends AbstractController
     {
         return $this->render('detail_transaction_compte/index.html.twig', [
             'detail_transaction_comptes' => $detailTransactionCompteRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/add', name: 'app_detail_transaction_compte_add', methods: ['GET'])]
+    public function add(Request $request, EntityManagerInterface $entityManager, TransactionTypeRepository $transactionTypeRepository  ): Response
+    {
+        return $this->render('detail_transaction_compte/_add.html.twig');
+    }
+
+    #[Route('/add_transaction', name: 'app_detail_transaction_compte_add_transaction', methods: ['POST'])]
+    public function add_transaction(Request $request, EntityManagerInterface $entityManager, TransactionTypeRepository $transactionTypeRepository  ): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $code_transaction = $data['code_transaction'] ?? null;
+        $libelle = $data['libelle'] ?? null;
+        $description = $data['description'] ?? null;
+        $reponse = $transactionTypeRepository->ajoutCodeTransaction($code_transaction, $libelle,$description);
+
+        $reponse = json_decode($reponse->getContent(), true);
+
+        return new JsonResponse([
+            'success' => $reponse['success'],
+            'message' => $reponse['message'],
+            'url' => $this->generateUrl('app_detail_transaction_compte_index')
         ]);
     }
 
