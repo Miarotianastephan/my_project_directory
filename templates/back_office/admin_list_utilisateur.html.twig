@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
-{% block page_title %}Informations des utilisateurs systèmes{% endblock %}
+{% block page_title %}Informations des utilisateurs du système{% endblock %}
 {% block page_subtitle %}Back-Office{% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -11,7 +11,7 @@
 
 {# Bouton d'action #}
 {% block page_options %}
-    <a href="{{ path("admin_add_user") }}" class="btn btn-secondary">Nouvelle utilisateur</a>
+    <a href="{{ path("admin_add_user") }}" class="btn btn-secondary">Nouvel utilisateur</a>
 {% endblock %}
 
 
@@ -52,11 +52,11 @@
                                 <tr id="{{usr.id}}">
                                     <td id="usr_matricule">{{usr.userMatricule}}</td>
                                     <td id="usr_grp_name">{{usr.groupUtilisateur.grpLibelle}}</td>
-                                    <td id="usr_dt_ajout">{{usr.dateAjout|date('Y/m/d')}}</td>
+                                    <td id="usr_dt_ajout">{{usr.dateAjout|date('d/m/Y')}}</td>
                                     {# <td id="usr_roles">{{ (usr.roles)|json_encode}}</td> #}
                                     <td>
-                                        <a href="" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
-                                        <a href="" class="btn btn-label-secondary btn-sm delete" data-bs-toggle="modal" data-bs-target="#myModalDelete">archiver</a>
+                                        <a href="" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">Détails</a>
+                                        <a href="" class="btn btn-label-secondary btn-sm delete" data-bs-toggle="modal" data-bs-target="#myModalDelete">Archiver</a>
                                     </td>
                                     <td id="usr_grp_id" style="display:none;">{{usr.groupUtilisateur.id}}</td>
                                 </tr>

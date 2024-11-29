@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comptable{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {% block page_title %}
-    Admin
+    Section Admin
 {% endblock %}
 
 {% block page_subtitle %}
@@ -19,7 +19,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Liste des banques disponible</h4>
+                    <h4 class="card-title">Liste des banques disponibles</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -27,8 +27,11 @@
                             <thead>
                             <tr id="cols">
                                 <th id="isCol" scope="col">Id</th>
-                                <th id="isCol" scope="col">Nom banque</th>
+                                <th id="isCol" scope="col">Nom de la banque</th>
+                                {#
                                 <th id="isCol" scope="col"></th>
+
+                                #}
                             </tr>
                             </thead>
                             <tbody id="bodyList">
@@ -36,10 +39,13 @@
                                 <tr>
                                     <td>{{ banque.id }}</td>
                                     <td>{{ banque.nomBanque }}</td>
+                                    {# Pour modifier et consulter les détails d'une banque
                                     <td class="d-flex flex-row gap-md-3">
                                         <a href="{{ path('app_banque_show', {'id': banque.id}) }}">{{ ux_icon('bi:info-circle',{height : "15px"}) }}</a>
                                         <a href="{{ path('app_banque_edit', {'id': banque.id}) }}">{{ ux_icon('flowbite:edit-outline',{height : "20px"}) }}</a>
                                     </td>
+                                    #}
+                                    
                                 </tr>
                             {% else %}
                                 <tr>

@@ -149,7 +149,7 @@ $(document).ready(function () {
                 </div>
                 <div class="row gy-4 mb-3">
                     <div class="col-md-12">
-                        <label for="selectOption" class="text-danger">Choix du nouveau groupe d'affecttation</label>
+                        <label for="selectOption" class="text-danger">Choix du nouveau groupe d'affectation</label>
                         <select name="${selectedCol['usr_grp_id'].id}" class="form-select" id="selectOption">
                             ${options_for_selected_row_html}
                         </select>

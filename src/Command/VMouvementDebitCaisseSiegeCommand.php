@@ -40,7 +40,7 @@ class VMouvementDebitCaisseSiegeCommand extends Command
     {
         $connection = $this->entityManager->getConnection();
 
-        $sql = 'CREATE VIEW ce_v_mouvement_debit_siege AS 
+        $sql = 'CREATE VIEW ce_v_somme_budget_compte AS 
                 SELECT 
                     m.mvn_id , 
                     m.mvt_evenement_id , 

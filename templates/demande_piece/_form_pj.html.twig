@@ -6,7 +6,7 @@
    Section Demandeur
 {% endblock %}
 {% block page_subtitle %}
-    Vérifier bien avant de valider : les pièces justificatifs et le montant réelle de la dépense
+    Bien vérifier avant de valider : les pièces justificatives et le montant réel de la dépense.
 {% endblock %}
 
 {% block page_main_content %}
@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Formulaire d'upload et saisie du montant exacte de dépense</h4>
+                    <h4 class="card-title">Formulaire d'ajout de PJ et de saisie du montant exacte d'une dépense</h4>
                 </div>
                 <form id="formulaire" action="{{ path('dm.image', {'id': demande_type.Id}) }}"
                       enctype="multipart/form-data"
@@ -26,7 +26,7 @@
                                 <div class="border border-dark form-control">{{ demande_type.RefDemande }}</div>
                             </div>
                             <div class="col-6">
-                                <label class="form-label"> Montant du déblocage: </label>
+                                <label class="form-label"> Montant de la demande: </label>
                                 <div class="border border-dark form-control form-control">
                                     {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                 </div>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="row col-12 d-flex flex-row">
                             <div class="col-12 d-flex flex-column">
-                                <label for="montantR" class="form-label fw-bold"> Montant dépensée </label>
+                                <label for="montantR" class="form-label fw-bold"> Montant dépensé </label>
                                 <div class="input-group mb-3">
                                     <input
                                             id="montantR"
@@ -66,14 +66,16 @@
                                 </div>
                             </div>
                             <div class="col-6">
-                                <label class="form-label">Choix de fichier:</label>
+                                <label class="form-label">
+                                    Choix du type de fichier: 
+                                </label>
                                 <div>
                                     <div class="col-12">
                                         <label class="selectgroup-item">
                                             <input class="selectgroup-input" type="radio" name="type" value="proformat"
                                                 checked="checked">
                                             <span class="selectgroup-button">
-                                            PJ Proformat
+                                            PJ Proforma
                                             </span>
                                         </label>
                                         {% if proformat_existe %}
@@ -83,7 +85,10 @@
                                                 <span class="selectgroup-button">PJ bon de livraison</span>
                                             </label>
                                         {% endif %}
+
                                     </div>
+                                    <span style="color: #939597;">(Importer le proforma avant le bon de livraison)</span>
+
                                 </div>
                             </div>
                         </div>

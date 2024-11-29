@@ -77,15 +77,17 @@
                         <div class="row col-12 d-flex flex-row">
                             <div class="col-12">
                                 <label class="form-label">Remarques:</label>
-                                <textarea readonly class="form-control">{{'Vous verez des remarques si il sont disponibles'}}</textarea>
+                                <textarea readonly class="form-control">
+                                    {{ demande_type.LogDemandeTypes|length > 0 ? demande_type.LogDemandeTypes[0].LogDmObservation : "Pas de remarque disponible" }}
+                                </textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 {% if demande_type.isAttenteModification() == true %}
                 <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('SG.refus_demande_en_attente', {'id': demande_type.Id}) }}"
-                       class="btn btn-warning btn">MODIFIER</a>
+                    <a href="{{ path('demandeur.liste_demande') }}"
+                       class="btn btn-warning btn">RETOUR</a>
                 </div>
                 {% endif %}
             </div>

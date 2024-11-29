@@ -34,12 +34,12 @@
                             <tbody>
                             {% for demande_type in liste_approvisio %}
                                 <tr class="col-12">
-                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/Y')|trans({}, 'fr') }}</td>
                                     <td class="col-1">{{ demande_type.RefDemande }}</td>
                                     <td class="col-3">{{ demande_type.Demande.Libelle }}</td>
                                     <td class="text-end col-2">
                                         <div>
-                                            {{ demande_type.DmMontant|number_format(0, '.', ' ') }} Ar
+                                            {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                         </div>
                                     </td>
 

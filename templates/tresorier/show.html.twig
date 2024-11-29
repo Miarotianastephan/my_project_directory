@@ -29,7 +29,7 @@
                         </div>
                         <div class="col px-3 d-flex flex-column gap-3">
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg"> Rérérence: </label>
+                                <label class="col-4 form-control-lg"> Référence: </label>
                                 <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -41,7 +41,7 @@
                             <div class="col-12 d-flex flex-row">
                                 <label class="col-4 form-control-lg">Date de la demande: </label>
                                 <div class="col form-control">
-                                    {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                                    {{ demande_type.DmDate|date('d/m/Y')|trans({}, 'fr') }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">

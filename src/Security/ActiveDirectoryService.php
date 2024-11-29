@@ -25,11 +25,7 @@ class ActiveDirectoryService
         ldap_set_option($ldapConn, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldapConn, LDAP_OPT_REFERRALS, 0);
 
-        // $ldapRdn = 'cn=read-only-admin,dc=example,dc=com';
-        $ldapRdn = 'uid='.$username.','.$this->baseDn;
-
-        dump($ldapRdn);
-
+        $ldapRdn = $username.'@bcm.int';
         $ldapBind = @ldap_bind($ldapConn, $ldapRdn, $password);
 
         if ($ldapBind) {

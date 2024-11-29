@@ -26,7 +26,7 @@ class CommisaireCompteController extends AbstractController
         $requestURI = $request->getRequestUri();
         $allFilters = [
             'initie' => false,
-            'attente_modif' => false,
+            'attente_modification' => false,
             'modifier' => false,
             'attente_fond' => false,
             'attente_versement' => false,
@@ -34,7 +34,8 @@ class CommisaireCompteController extends AbstractController
             'debloquer' => false,
             'refuser' => false,
             'reverser' => false,
-            'comptabiliser' => false
+            'comptabiliser' => false,
+            'justifier' =>false
         ];
         if ($requestURI == "/commisaire/") {
             $allFilters = array_fill_keys(array_keys($allFilters), true);

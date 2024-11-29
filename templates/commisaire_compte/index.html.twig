@@ -3,7 +3,7 @@
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {% block page_title %}
-    Section Commissaire en Compte
+    Section de suivie de demande de décaissement
 {% endblock %}
 
 {% block page_subtitle %}
@@ -41,7 +41,7 @@
                     <div class="table-responsive">
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
-                            <tr class="col-12 text-end">
+                            <tr id="cols" class="col-12 text-end">
                                 <th class="col-2">Date de demande</th>
                                 <th class="col-1">Référence</th>
                                 <th class="col-2">Type de demande</th>
@@ -50,10 +50,10 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="bodyList">
                             {% for demande_type in demande_types %}
                                 <tr class="col-12">
-                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-2">{{ demande_type.DmDate|date('d/m/Y')|trans({}, 'fr') }}</td>
                                     <td class="col-1">{{ demande_type.RefDemande }}</td>
                                     <td class="col-2">{{ demande_type.demande.libelle }}</td>
                                     <td class="text-end col-2">

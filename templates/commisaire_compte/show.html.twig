@@ -2,7 +2,7 @@
 
 {% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
-    Section Commissaire en compte
+    Section de l'information de l'ation.
 {% endblock %}
 {% block page_subtitle %}
     Information de la demande. Veuillez verifier chaque information.
@@ -28,7 +28,7 @@
                             <div class="col-12 d-flex flex-row">
                                 <label class="col-4 form-control-lg">Date de l'action: </label>
                                 <div class="col form-control">
-                                    {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                                    {{ demande_type.DmDate|date('d/m/Y')|trans({}, 'fr') }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg"> Rérérence: </label>
+                                <label class="col-4 form-control-lg"> Référence: </label>
                                 <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -62,7 +62,7 @@
                             <div class="col-12 d-flex flex-row">
                                 <label class="col-4 form-control-lg">Montant de la demande: </label>
                                 <div class="col form-control">
-                                    {{ demande_type.DmMontant|number_format(5, '.', ' ') }} Ar
+                                    {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -70,7 +70,7 @@
                                 <div class="col form-control">{{ demande_type.DmModePaiement == 1 ? 'Chèques':'Espèces' }}</div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg">Personne concernée:</label>
+                                <label class="col-4 form-control-lg">Entité concernée:</label>
                                 <div class="col form-control">{{ demande_type.EntityCode.CptLibelle }}</div>
                             </div>
 
@@ -90,9 +90,6 @@
                     </div>
                 </div>
 
-                <div class="card-header">
-                    <h4 class="card-title">Les pieces justificatives</h4>
-                </div>
 
                 <div class="card-header">
                     <h4 class="card-title">Historique de cette demande</h4>
@@ -121,11 +118,11 @@
                                 <div class="col-12 d-flex flex-row">
                                     <label class="col-4 form-control-lg"> Date de l'action: </label>
                                     <div class="col form-control">
-                                        {{ historique.LogDmDate|date('d/m/y')|trans({}, 'fr') }}
+                                        {{ historique.LogDmDate|date('d/m/Y')|trans({}, 'fr') }}
                                     </div>
                                 </div>
                                 <div class="col-12 d-flex flex-row">
-                                    <label class="col-4 form-control-lg"> Etat de la demande: </label>
+                                    <label class="col-4 form-control-lg"> Action effectué: </label>
                                     <div class="col form-control">
                                         {{ historique.EtatLogDemandeObj.EtatLibelle }}
                                     </div>
@@ -133,6 +130,7 @@
                             </div>
                         </div>
                     </div>
+                    <br><hr/>
                 {% endfor %}
 
                 <div class="card-header">
@@ -153,7 +151,7 @@
                                 <tbody>
                                 {% for observation in observations %}
                                     <tr class="col-12">
-                                        <td class="col-2">{{ observation.DateObservation|date('d/m/y') }}</td>
+                                        <td class="col-2">{{ observation.DateObservation|date('d/m/Y') }}</td>
                                         <td class="col-2">{{ observation.MatriculeObservateur }}</td>
                                         <td class="col-2">{{ observation.Observation }}</td>
                                     </tr>

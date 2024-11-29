@@ -50,7 +50,7 @@ class DemandeTypeRepository extends ServiceEntityRepository
             $conditions[] = 'd.dm_etat = :etat_initie';
             $parameters->add(['key' => 'etat_initie', 'value' => 100]);
         }
-        if ($les_filtres['attente_modif']) {
+        if ($les_filtres['attente_modification']) {
             $conditions[] = 'd.dm_etat = :etat_attente_modif';
             $parameters->add(['key' => 'etat_attente_modif', 'value' => 201]);
         }
@@ -77,6 +77,10 @@ class DemandeTypeRepository extends ServiceEntityRepository
         if ($les_filtres['comptabiliser']) {
             $conditions[] = 'd.dm_etat = :etat_comptabilise';
             $parameters->add(['key' => 'etat_comptabilise', 'value' => 300]);
+        }
+        if ($les_filtres['justifier']) {
+            $conditions[] = 'd.dm_etat = :etat_comptabilise';
+            $parameters->add(['key' => 'etat_comptabilise', 'value' => 400]);
         }
 
         if (!empty($conditions)) {

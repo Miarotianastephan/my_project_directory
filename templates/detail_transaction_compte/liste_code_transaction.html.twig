@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+{% block page_title %}
+    Section Admin
+{% endblock %}
+
+{% block page_subtitle %}
+    {#  #}
+{% endblock %}
+{% block page_options %}
+    <a href="{{ path('app_detail_transaction_compte_add') }}" class="btn btn-secondary">Ajouter</a>
+{% endblock %}
+
+{% block page_main_content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Liste des banques disponibles</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="display table table-striped table-hover">
+                            <thead>
+                            <tr id="cols">
+                                <th id="isCol" scope="col">Id</th>
+                                <th id="isCol" scope="col">Code de transaction</th>
+                                <th id="isCol" scope="col">Libellé</th>
+                                <th id="isCol" scope="col">Explication du code de transaction</th>
+                                {#<th id="isCol" scope="col">actions</th>#}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for transaction_type in transaction_types %}
+                                <tr>
+                                    <td>{{ transaction_type.id }}</td>
+                                    <td>{{ transaction_type.trsCode }}</td>
+                                    <td>{{ transaction_type.trsLibelle }}</td>
+                                    <td>{{ transaction_type.trsDefinition }}</td>
+                                    {#
+                                    <td>
+                                        <a href="{{ path('app_transaction_type_show', {'id': transaction_type.id}) }}">Afficher</a>
+                                        <a href="{{ path('app_transaction_type_edit', {'id': transaction_type.id}) }}">Modifier</a>
+                                    </td>
+                                    #}
+                                    
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">Données non accessibles</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {#
+                        <a href="{{ path('app_transaction_type_new') }}">Create new</a></div>
+                        #}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -34,6 +34,7 @@ class MouvementRepository extends ServiceEntityRepository
 
     }
 
+
     public function findByExercice(Exercice $exercice): ?array
     {
         $data = $this->createQueryBuilder('m')->join('m.mvt_evenement_id', 'ev')->where('ev.evn_exercice = :exercice')->setParameter('exercice', $exercice)->orderBy('ev.evn_date_operation', 'ASC')->getQuery()->getResult();
@@ -68,11 +69,12 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function soldeCreditParModePaiement(Exercice $exercice, string $mode_paiement) :?float
+    public function soldeCreditParModePaiement(Exercice $exercice, string $mode_paiement): ?float
     {
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
-        // 0 = paiement espèces 
+        // 0 = paiement espèces
+        // 1 = chèque
         $table = $mode_paiement == 0 ? "ce_v_mouvement_credit_siege" : "ce_v_mouvement_credit_banque";
 
         $script = "SELECT COALESCE(SUM(param.mvt_montant), 0) AS total, ev.evn_exercice_id FROM $table param LEFT JOIN ce_evenement ev ON param.mvt_evenement_id = ev.evn_id WHERE ev.evn_exercice_id = :exercice_id GROUP BY ev.evn_exercice_id";
@@ -111,12 +113,12 @@ class MouvementRepository extends ServiceEntityRepository
             // Si on obtient des résultats
             if (!empty($results)) {
                 // Initialisation du tableau des mois avec 0 comme valeur par défaut
-                $moisData = [ 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                $moisData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
                 // Parcourir les résultats pour affecter les valeurs aux mois correspondants
                 foreach ($results as $result) {
                     $mois = substr($result['MOIS_OPERATION'], 5, 2); // Récupère le mois (par exemple "09")
-                    $total = (float) $result['TOTAL']; // Convertit le total en float
+                    $total = (float)$result['TOTAL']; // Convertit le total en float
                     //dump("Mois=".$mois );
 
                     $moisData[(int)$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
@@ -134,6 +136,7 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
 
     }
+
     public function v_debit_banque_mensuel(Exercice $exercice): ?array
     {
         $entityManager = $this->getEntityManager();
@@ -158,12 +161,12 @@ class MouvementRepository extends ServiceEntityRepository
             // Si on obtient des résultats
             if (!empty($results)) {
                 // Initialisation du tableau des mois avec 0 comme valeur par défaut
-                $moisData = [ 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                $moisData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
                 // Parcourir les résultats pour affecter les valeurs aux mois correspondants
                 foreach ($results as $result) {
                     $mois = substr($result['MOIS_OPERATION'], 5, 2); // Récupère le mois (par exemple "09")
-                    $total = (float) $result['TOTAL']; // Convertit le total en float
+                    $total = (float)$result['TOTAL']; // Convertit le total en float
                     //dump("Mois=".$mois );
 
                     $moisData[(int)$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
@@ -181,38 +184,63 @@ class MouvementRepository extends ServiceEntityRepository
         return null;
     }
 
+    public function v_debit_banque_annuel(Exercice $exercice): ?float
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+        $script = "select SUM(total) as total from ce_v_debit_banque_mensuel where evn_exercice_id = :exercice";
+        try {
+            // Préparation et exécution de la requête
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+            $results = $resultSet->fetchAllAssociative();
+            if (!empty($results)) {
+                return (float)$results[0]['TOTAL'];
+            }
+        } catch (\Exception $e) {
+            // Gestion des erreurs et affichage du message d'erreur
+            dump($e->getMessage());
+        }
+        return null;
+    }
+
+    public function v_debit_caisse_annuel(Exercice $exercice): ?float
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+        $script = "select SUM(total) as total from ce_v_debit_caisse_mensuel where evn_exercice_id = :exercice";
+        try {
+            // Préparation et exécution de la requête
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+            $results = $resultSet->fetchAllAssociative();
+            if (!empty($results)) {
+                return (float)$results[0]['TOTAL'];
+            }
+        } catch (\Exception $e) {
+            // Gestion des erreurs et affichage du message d'erreur
+            dump($e->getMessage());
+        }
+        return null;
+    }
+
     /**
      * @return Mouvement[] Returns an array of Mouvement objects
      */
     public function findAllOrderedByEventDateAndId(): array
     {
         return $this->createQueryBuilder('m')->join('m.mvt_evenement_id', 'e')->orderBy('e.evn_date_operation', 'ASC')->addOrderBy('e.id', 'ASC')->getQuery()->getResult();
-    }
-
-    public function findAllMouvementById(): array
-    {      
-        $conn = $this->getEntityManager()->getConnection();
-
-        // Construction de la requête SQL
-        $sql = "SELECT 
-                m.mvn_id,m.mvt_evenement_id,m.mvt_compte_id,m.mvt_montant,m.is_mvt_debit,
-                ev.evn_date_operation,pc.cpt_numero,pc.cpt_libelle 
-                FROM ce_mouvement m
-                JOIN ce_plan_compte pc ON m.mvt_compte_id = pc.cpt_id
-                JOIN ce_evenement ev ON m.mvt_evenement_id = ev.evn_id
-                WHERE 1=1 ORDER BY m.mvn_id ASC";
-        $stmt = $conn->prepare($sql);
-        $resultSet = $stmt->executeQuery();
-        return $resultSet->fetchAllAssociative();
-    }
+    } 
 
     public function getTotalMouvementGroupedByCompteMere(): array
     {
         return $this->createQueryBuilder('m')->select('cm.cpt_numero, SUM(m.mvt_montant) as total_montant')
-        ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
-        ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
-        ->groupBy('cm.cpt_numero') // Groupement par le numéro de CompteMere
-        ->getQuery()->getResult();
+            ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+            ->join('pc.compte_mere', 'cm') // Jointure avec CompteMere
+            ->groupBy('cm.cpt_numero') // Groupement par le numéro de CompteMere
+            ->getQuery()->getResult();
     }
 
     // Fonction pour avoir la somme des montants

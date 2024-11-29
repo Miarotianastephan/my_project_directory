@@ -220,11 +220,14 @@ insert into ce_detail_transaction_compte(DET_TRS_CPT_ID, TRANSACTION_TYPE_ID, PL
 --      lire les comptes commentée avant insertion des données et bien comprendre
 
 -- DATA
--- delete from ce_mouvement;
--- delete from ce_evenement;
--- delete from ce_log_demande_type;
--- delete from ce_detail_demande_piece;
--- delete from ce_demande_type;
+delete from ce_mouvement;
+delete from ce_evenement;
+delete from ce_log_demande_type;
+delete from ce_detail_demande_piece;
+delete from ce_demande_type;
+delete from ce_approvisionnement_piece;
+delete from ce_detail_budget;
+delete from ce_exercice;
 
 -- INFORMATION
 -- delete from ce_detail_transaction_compte;

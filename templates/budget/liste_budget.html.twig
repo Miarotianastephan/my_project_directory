@@ -4,7 +4,7 @@
 
 {% block page_title %} Section Comptable {% endblock %}
 {% block page_subtitle %}
-    Les budgets qui ont été validés lors du dernier assemblé pour l'exercice suivant.
+    Les budgets qui ont été validés lors de la dernière assemblé pour l'exercice suivant.
 {% endblock %}
 
 {% block page_options %}
@@ -33,7 +33,7 @@
                             <tbody>
                             {% for budget in liste_budget %}
                                 <tr class="col-12">
-                                    <td class="col">{{ budget.BudgetDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col">{{ budget.BudgetDate|date('d/m/Y')|trans({}, 'fr') }}</td>
                                     <td class="col">{{ budget.CompteMere.CptNumero }}
                                         - {{ budget.CompteMere.CptLibelle }} </td>
                                     <td class="col text-end">{{ budget.BudgetMontant|number_format(0, '.', ' ') }} Ar

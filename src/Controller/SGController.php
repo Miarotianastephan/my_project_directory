@@ -119,14 +119,17 @@ class SGController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
+        $budget_reste =  $budget - $solde_debit;
 
         //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         return $this->render('sg/show.html.twig', [
             'demande_type' => $data,
             'images' => $list_img,
             'solde_reste' => $solde_reste,
-            'budget' => $budget,
-            'budget_reste' => $budget - $solde_debit,
+            'budget' => $budget ,
+            'budget_reste' => $budget_reste,
+            //ALANA ITO RANDY
+            //'budget_reste' => $budget - $solde_debit,
         ]);
     }
 
@@ -143,8 +146,9 @@ class SGController extends AbstractController
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
-        dump("Solde nivoka".$solde_debit);
-        dump("Solde niditra".$solde_CREDIT);
+
+        dump("Solde nivoka= ".$solde_debit);
+        dump("Solde niditra= ".$solde_CREDIT);
 
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
@@ -157,11 +161,14 @@ class SGController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
+       $budget_reste =  $budget - $solde_debit;
         return $this->render('sg/valider_demande.html.twig', [
             'demande_type' => $data,
             'solde_reste' => $solde_reste,
             'budget' => $budget,
-            'budget_reste' => $budget - $solde_debit,
+            //ALANA ITO RANDY
+            //'budget_reste' => $budget - $solde_debit,
+            'budget_reste' => $budget_reste,
         ]);
     }
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}app bfm{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 {% block page_title %}
     Section Admin
 {% endblock %}
@@ -30,7 +30,7 @@
                     <div class="col px-3 d-flex flex-column gap-3">
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg"> Date d'ajout </label>
-                            <div class="col form-control">{{ chequier.chequierDateArrivee|date('d/M/y') }}</div>
+                            <div class="col form-control">{{ chequier.chequierDateArrivee|date('d/m/Y') }}</div>
                         </div>
                         <div class="col-12 d-flex flex-row">
                             <label class="col-4 form-control-lg"> La banque associé </label>

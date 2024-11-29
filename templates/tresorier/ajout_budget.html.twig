@@ -10,7 +10,7 @@
     Section Comptable
 {% endblock %}
 {% block page_subtitle %}
-    Veuillez ajouter les budgets pour chaque plan de compte pour chaque exercice.
+    Veuillez ajouter un budget pour chaque plan de compte de l'exercice souhaité.
 {% endblock %}
 
 {% block page_main_content %}
@@ -99,8 +99,10 @@
                     <div class="modal-body col-12">
                         <!-- Message de mise à jour du montant sera inséré ici -->
                         <div class="col-10 d-flex flex-row">
+                            {#
                             <label class="col"> Exercice: </label>
                             <div class="col-6 form-control-sm" id="new-exercice"></div>
+                            #}
                             <input hidden="hidden" id="new-exercice-input" name="new-exercice" class=" form-control-sm">
                         </div>
                         <div class="col-10 d-flex flex-row">

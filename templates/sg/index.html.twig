@@ -25,9 +25,9 @@
                         <table id="basic-datatables" class="display table table-striped table-hover">
                             <thead>
                             <tr class="col-12 text-end">
-                                <th class="col-2">Date de demande</th>
+                                <th class="col-2">Date de la demande</th>
                                 <th class="col-1">Référence</th>
-                                <th class="col-2">Type de demande</th>
+                                <th class="col-2">Mode de paiement</th>
                                 <th class="col-2">Montant</th>
                                 <th class="col-4"></th>
                             </tr>
@@ -37,7 +37,7 @@
                                 <tr class="col-12">
                                     <td class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
                                     <td class="col-1">{{ demande_type.RefDemande }}</td>
-                                    <td class="col-2">{{ demande_type.demande.libelle }}</td>
+                                    <td class="col-2">{{ demande_type.DmModePaiement == 1 ? 'Chèque' : 'Espèce' }}</td>
                                     <td class="text-end col-2">
                                         <div>
                                             {{ demande_type.DmMontant|number_format(2, '.', ' ') }} Ar
@@ -65,7 +65,7 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="4">Aucun donné inséré</td>
+                                    <td colspan="4">Aucune donnée insérée</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

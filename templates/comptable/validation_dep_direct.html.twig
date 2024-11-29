@@ -23,7 +23,7 @@
                             <div class="col-12 d-flex flex-row">
                                 <label for="date" class="col-4 form-control-lg">Date: </label>
                                 <div class="col form-control">
-                                    {{ date|date('d/m/y')|trans({}, 'fr') }}
+                                    {{ date|date('d/m/Y')|trans({}, 'fr') }}
                                 </div>
                             </div>
                             <input type="hidden" id="entite" name="entite" value="{{ entite.CptNumero }}"/>
@@ -67,7 +67,7 @@
                     <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="{{ path('comptable.form_depense_directe') }}"
                            class="btn btn-danger btn">Annuler</a>
-                        <a
+                        <a href=""
                            class="btn btn-success btn" id="valider">Valider</a>
                     </div>
                 </div>

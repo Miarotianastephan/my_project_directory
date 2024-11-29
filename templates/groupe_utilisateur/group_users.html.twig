@@ -39,8 +39,8 @@
                                         <td id="grp_libelle">{{ groupe_utilisateur.grpLibelle }}</td>
                                         <td id="grp_niveau">{{ groupe_utilisateur.grpNiveau }}</td>
                                         <td>
-                                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">detail</a>
-                                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-secondary btn-sm delete" data-bs-toggle="modal" data-bs-target="#myModalDelete">supprimer</a>
+                                            <a href="{{ path('app_groupe_utilisateur_show', {'id': groupe_utilisateur.id}) }}" class="btn btn-dark btn-sm update" data-bs-toggle="modal" data-bs-target="#myModalUpdate">Détails</a>
+                                            <a href="{{ path('app_groupe_utilisateur_edit', {'id': groupe_utilisateur.id}) }}" class="btn btn-label-secondary btn-sm delete" data-bs-toggle="modal" data-bs-target="#myModalDelete">Supprimer</a>
                                         </td>
                                     </tr>
                                 {% else %}

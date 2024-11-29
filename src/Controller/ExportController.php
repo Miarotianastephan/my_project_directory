@@ -38,12 +38,22 @@ class ExportController extends AbstractController
 
     #[Route(path: '/etat/financier', name: 'export.etat', methods: ['GET'])]
     public function etat_fi(EtatFinancierService $etatService, CompteMereRepository $mereRepository){
-        $comptesMere = $mereRepository->findAll();
-        // $etatMontant = $this->mvtRepository->getTotalMouvementGroupedByPlanCompte();
         $etatMontant = $this->mvtRepository->getSoldeRestantByMouvement();
-        $dataEtatComplet = $etatService->findMontantByCompteMere2($etatMontant, $comptesMere, $mereRepository);
+        
+        // Prendre les comptes 6xxxxx, et 5xxxxx(reste_caisse)
+        $compteDecaiss = ['4%', '5%', '6%'];
+        $compteMereDecaiss = $mereRepository->findAllByPrefix($compteDecaiss);
+        $etatFiDecaiss = $etatService->findMontantByCompteMere2($etatMontant, $compteMereDecaiss, $mereRepository, 1);
+
+        // Prendre les comptes 7xxxxx
+        $compteEncaiss = ['7%'];
+        $compteMereEncaiss = $mereRepository->findAllByPrefix($compteEncaiss);
+        $etatFiEncaiss = $etatService->findMontantByCompteMere2($etatMontant, $compteMereEncaiss, $mereRepository, 0);
+       
+        dump($etatFiDecaiss);
         return $this->render('export/etat_financier.html.twig',[
-            'etatComplet' => $dataEtatComplet,
+            'etatFiDecaiss' => $etatFiDecaiss,
+            'etatFiEncaiss' => $etatFiEncaiss,
         ]);
     }
     

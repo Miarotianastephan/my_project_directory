@@ -58,7 +58,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header text-center title_pdf">
-                        <h2 class="title_font fw-bold mb-3">Etat financier du 2024</h2>
+                        <h2 class="title_font fw-bold mb-3">Etat financier</h2>
                     </div>
                 </div>
             </div>
@@ -72,30 +72,28 @@
                         <div class="table-responsive">
                             <table class="table table_perso">
                                 <tbody>
+                                {% for decaissement in etatFiDecaiss %}
                                     <tr class="fw-bold">
-                                        <td>60</td>
+                                        <td>{{decaissement.compteMereNumero}}</td>
                                         <td></td>
-                                        <td>Accessoire</td>
-                                        <td>122000.00</td>
+                                        <td>{{decaissement.compteMereLibelle}}</td>
+                                        <td>{{decaissement.montantCompte|number_format(2, '.', ' ')}}</td>
                                     </tr>
-                                    <tr class="fw-bold">
-                                        <td>61</td>
-                                        <td></td>
-                                        <td>Social Primes Diverses</td>
-                                        <td>3506000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>611</td>
-                                        <td>Social Primes Diverses</td>
-                                        <td>1500000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>612</td>
-                                        <td>Social Primes de réussites</td>
-                                        <td>700000.00</td>
-                                    </tr>
+                                    {% if decaissement.detailsMontant|length > 1 %}
+                                    {% set tablo = decaissement.detailsMontant %}
+                                        {% if decaissement.detailMontantTotal|length > 1 %}
+                                            {% set tablo = decaissement.detailMontantTotal %}
+                                        {% endif %}
+                                        {% for detailMontant in tablo %}
+                                        <tr>
+                                            <td></td>
+                                            <td>{{detailMontant.comptes}}</td>
+                                            <td>{{detailMontant.libelle}}</td>
+                                            <td>{{detailMontant.montants|number_format(2, '.', ' ')}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
                                     {# TOTAL #}
                                     <tr style="display:none" id="total_pdf" class="fw-bold">
                                         <td class="total_journal_pdf">TOTAL</td>
@@ -120,18 +118,28 @@
                         <div class="table-responsive">
                             <table class="table table_perso">
                                 <tbody>
-                                    <tr class="fw-bold">
-                                        <td>701</td>
-                                        <td></td>
-                                        <td>Trésorier debut période</td>
-                                        <td>122000.00</td>
-                                    </tr>
-                                    <tr class="fw-bold">
-                                        <td>702</td>
-                                        <td></td>
-                                        <td>Virement DRH sur emprunts</td>
-                                        <td>99531.00</td>
-                                    </tr>
+                                    {% for encaissement in etatFiEncaiss %}
+                                        <tr class="fw-bold">
+                                            <td>{{encaissement.compteMereNumero}}</td>
+                                            <td></td>
+                                            <td>{{encaissement.compteMereLibelle}}</td>
+                                            <td>{{encaissement.montantCompte|number_format(2, '.', ' ')}}</td>
+                                        </tr>
+                                        {% if encaissement.detailsMontant|length > 1 %}
+                                        {% set tablo = encaissement.detailsMontant %}
+                                            {% if encaissement.detailMontantTotal|length > 1 %}
+                                                {% set tablo = encaissement.detailMontantTotal %}
+                                            {% endif %}
+                                            {% for detailMontant in tablo %}
+                                            <tr>
+                                                <td></td>
+                                                <td>{{detailMontant.comptes}}</td>
+                                                <td>{{detailMontant.libelle}}</td>
+                                                <td>{{detailMontant.montants|number_format(2, '.', ' ')}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
                                     {# TOTAL #}
                                     <tr style="display:none" id="total_pdf" class="fw-bold">
                                         <td class="total_journal_pdf">TOTAL</td>
@@ -158,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const contentTb = document.getElementById('contentTb');
         const options = {
             margin: [15, 10, 25, 10], // Augmentation des marges supérieure et inférieure
-            filename: 'testPDF.pdf',
+            filename: 'etat financier.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },

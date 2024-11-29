@@ -39,38 +39,33 @@ class VMouvementCreditCaisseSiegeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connection = $this->entityManager->getConnection();
-
         $sql = 'CREATE VIEW ce_v_mouvement_credit_siege AS 
                 SELECT 
                     m.mvn_id , 
                     m.mvt_evenement_id , 
                     m.mvt_compte_id ,
                     m.mvt_montant , 
-                    m.is_mvt_debit
+                    m.is_mvt_debit , 
+                    p.cpt_libelle
                 FROM ce_mouvement m
                 LEFT JOIN ce_plan_compte p
                 ON m.mvt_compte_id = p.cpt_id 
                 WHERE 
                     LOWER(p.cpt_libelle) like \'caisse si%\'  
                     AND m.is_mvt_debit = 0';
-
+        $connection->beginTransaction();
         try {
             $stmt = $connection->prepare($sql);
-            //$stmt->bindValue('libelle_compte', 'banque',\PDO::PARAM_STR);
-
             // Afficher un message d'information avant l'exécution
             $output->writeln('<info>Création de la vue VMouvementCreditCaisseSiege en cours...</info>');
-
-            // Afficher la requête et le paramètre avant exécution (pour debug)
-            //$output->writeln($stmt->getSQL());
-
             // Exécuter la requête SQL
             $stmt->executeStatement();
-            //$connection->commit();
+            $connection->commit();
             $output->writeln('<info>La vue VMouvementCreditCaisseSiege a été créée avec succès !</info>');
             return Command::SUCCESS;
         }catch (\Exception $e){
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $connection->rollback();
             return Command::FAILURE;
         }
     }

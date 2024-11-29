@@ -51,7 +51,7 @@
                             <tbody id="bodyList">
                             {% for demande_type in logs_demandes %}
                                 <tr class="col-12" id="{{demande_type.id}}">
-                                    <td id="demande_date" class="col-2">{{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td id="demande_date" class="col-2">{{ demande_type.DmDate|date('d/m/Y')|trans({}, 'fr') }}</td>
                                     <td id="demande_ref" class="col-1">{{ demande_type.RefDemande }}</td>
                                     <td id="demande_libelle" class="col-2">{{ demande_type.getPlanCompte.getCptLibelle }}</td>
                                     <td id="demande_montant" class="text-end col-2">

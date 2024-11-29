@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\TransactionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @extends ServiceEntityRepository<TransactionType>
@@ -15,6 +16,33 @@ class TransactionTypeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, TransactionType::class);
     }
+
+
+    public function ajoutCodeTransaction(string $code, string $libelle, ?string $definition): JsonResponse
+    {
+        $entityManager = $this->getEntityManager();
+        $transactionType = new TransactionType();
+        $transactionType->setTrsCode($code);
+        $transactionType->setTrsLibelle($libelle);
+        $transactionType->setTrsDefinition($definition);
+        $entityManager->beginTransaction();
+        try {
+            $entityManager->persist($transactionType);
+            $entityManager->flush();
+            $entityManager->commit();
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Le code de transaction a été bien ajouté'
+            ]);
+        } catch (\Exception $e) {
+            $entityManager->rollback();
+            return new JsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
 
     public function findTransactionByCode(string $trs_code): ?TransactionType
     {

@@ -41,7 +41,7 @@
                                     <td>{{ chequier.banque.nomBanque }}</td>
                                     <td>{{ chequier.chequierNumeroDebut }}</td>
                                     <td>{{ chequier.chequierNumeroFin }}</td>
-                                    <td>{{ chequier.chequierDateArrivee|date('d/m/y')  }}</td>
+                                    <td>{{ chequier.chequierDateArrivee|date('d/m/Y')  }}</td>
                                     <td class="d-flex flex-row gap-md-3">
                                         <a title="Afficher les informations" href="{{ path('app_chequier_show', {'id': chequier.id}) }}">{{ ux_icon('bi:info-circle',{height : "15px"}) }}</a>
                                         <a title="Modifier le chequier" href="{{ path('app_chequier_edit', {'id': chequier.id}) }}">{{ ux_icon('flowbite:edit-outline',{height : "20px"}) }}</a>

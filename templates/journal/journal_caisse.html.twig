@@ -40,7 +40,7 @@
                             <tbody id="bodyList">
                                 {% for mouvement in mouvements %}
                                     <tr>
-                                        <td id="date">{{mouvement.MvtEvenementId.EvnDateOperation|date('d/m/y')}}</td>
+                                        <td id="date">{{mouvement.MvtEvenementId.EvnDateOperation|date('d/m/Y')}}</td>
                                         <td id="compte">{{mouvement.MvtCompteId.CptNumero}}</td>
                                         <td id="libelle">{{mouvement.MvtCompteId.CptLibelle}}</td>
                                         <td id="debit" class="text-end">{{ mouvement.IsMvtDebit ? mouvement.MvtMontant|number_format(2, '.', ' ') : 0 }}</td>

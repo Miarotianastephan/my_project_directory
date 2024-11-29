@@ -161,6 +161,94 @@ class DetailBudgetRepository extends ServiceEntityRepository
         }
     }
 
+    function findSommeParExerciceEtCompte(Exercice $exercice, string $compte): ?float
+    {
+
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+        // Requête ajustée avec les colonnes correctes
+        $script = "SELECT total_budget
+                FROM ce_v_somme_budget_compte 
+                WHERE exercice_id = :exercice_id 
+                AND premier_chiffre = :plan_compte";
+        try {
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice_id', $exercice->getId());
+            $statement->bindValue('plan_compte', $compte);
+            $resultSet = $statement->executeQuery();
+            $result = $resultSet->fetchAllAssociative();
+            dump($result);
+            if ($result) {
+                return (float)$result[0]['TOTAL_BUDGET'];
+            }
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+        }
+        return null;
+    }
+
+    function findSommeParCompte(Exercice $exercice)
+    {
+        $entityManager = $this->getEntityManager();
+        $connection = $entityManager->getConnection();
+
+        // Requête ajustée avec les colonnes correctes
+        $script = "SELECT total_budget, exercice_id, premier_chiffre 
+               FROM ce_v_somme_budget_compte 
+               WHERE exercice_id = :exercice_id"; // Ajustement du nom de la colonne
+
+        try {
+            $statement = $connection->prepare($script);
+            $statement->bindValue('exercice_id', $exercice->getId());
+            $resultSet = $statement->executeQuery();
+
+            // FetchAll pour récupérer plusieurs lignes
+            $results = $resultSet->fetchAllAssociative();
+            $sommeParCompte = [];
+
+            // Si des résultats sont trouvés, les traiter
+            if ($results) {
+                foreach ($results as $result) {
+                    $sommeParCompte[] = [
+                        'total_budget' => (float)$result['TOTAL_BUDGET'],  // Nom correct
+                        'exercice_id' => $result['EXERCICE_ID'],          // Nom correct
+                        'categorie' => $this->determinerCategorie($result['PREMIER_CHIFFRE']),         // Nom correct
+                    ];
+                }
+                return $sommeParCompte;
+            }
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+        }
+        return null;
+    }
+
+
+    function determinerCategorie(string $numero): string
+    {
+        $premierChiffre = substr($numero, 0, 1);
+        switch ($premierChiffre) {
+            case '1':
+                return 'Comptes de capitaux';
+            case '2':
+                return 'Comptes d\'immobilisations';
+            case '3':
+                return 'Comptes de stocks';
+            case '4':
+                return 'Comptes de tiers';
+            case '5':
+                return 'Comptes financiers';
+            case '6':
+                return 'Charges';
+            case '7':
+                return 'Produits';
+            case '8':
+                return 'Comptes spéciaux';
+            default:
+                return 'Autres';
+        }
+    }
+
     //    /**
     //     * @return DetailBudget[] Returns an array of DetailBudget objects
     //     */

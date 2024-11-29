@@ -28,11 +28,11 @@
                             <div class="col-12 d-flex flex-row">
                                 <label class="col-4 form-control-lg">Date de l'action: </label>
                                 <div class="col form-control">
-                                    {{ demande_type.DmDate|date('d/m/y')|trans({}, 'fr') }}
+                                    {{ demande_type.DmDate|date('d/m/Y')|trans({}, 'fr') }}
                                 </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
-                                <label class="col-4 form-control-lg"> Rérérence: </label>
+                                <label class="col-4 form-control-lg"> Référence: </label>
                                 <div class="col form-control"> {{ demande_type.RefDemande }} </div>
                             </div>
                             <div class="col-12 d-flex flex-row">
@@ -98,7 +98,7 @@
                                 <tbody>
                                 {% for observation in observations %}
                                     <tr class="col-12">
-                                        <td class="col-2">{{ observation.DateObservation|date('d/m/y') }}</td>
+                                        <td class="col-2">{{ observation.DateObservation|date('d/m/Y') }}</td>
                                         <td class="col-2">{{ observation.MatriculeObservateur }}</td>
                                         <td class="col-2">{{ observation.Observation }}</td>
                                     </tr>

@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des rôles: listes{% endblock %}
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
 
 {# {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/gestion_utilisateur.css') }}">
 {% endblock %} #}
 
 {% block page_title %}
-    Comptable
+    Section Comptable
 {% endblock %}
 {% block page_subtitle %}
     {# Liste des demandes en attente de validation #}
@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Liste des opérations directes pour suivi de comptabilisation</h4>
+                    <h4 class="card-title">Liste des opérations pour suivi de comptabilisation</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -37,7 +37,7 @@
                             <tbody>
                             {% for operation in list_operation_directe %}
                                 <tr class="col-12">
-                                    <td class="col-2">{{ operation.getEvnDateOperation|date('d/m/y')|trans({}, 'fr') }}</td>
+                                    <td class="col-2">{{ operation.getEvnDateOperation|date('d/m/Y')|trans({}, 'fr') }}</td>
                                     <td class="col-1">{{ operation.getEvnReference }}</td>
                                     <td class="col-4">{{ operation.getEvnTrsId.getTrsLibelle }}</td>
                                     <td class="text-end col-2">
@@ -49,7 +49,7 @@
                                         <div class="col-12 d-flex gap-2">
                                             <div class="col">
                                                 <a href="{{ path('comptable.suivi_comptabilisation_detail', {'id': operation.Id}) }}"
-                                                   class="btn btn-secondary btn-sm">Voir detail</a>
+                                                   class="btn btn-secondary btn-sm">Voir les détails</a>
                                             </div>
                                         </div>
                                     </td>
