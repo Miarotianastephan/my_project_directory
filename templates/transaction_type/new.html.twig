@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TransactionType{% endblock %}
+
+{% block body %}
+    <h1>Create new TransactionType</h1>
+
+    {{ include('transaction_type/_form.html.twig') }}
+
+    <a href="{{ path('app_transaction_type_index') }}">back to list</a>
+{% endblock %}

@@ -10,7 +10,7 @@
     {#  #}
 {% endblock %}
 {% block page_options %}
-    <a href="{{ path('app_banque_new') }}" class="btn btn-secondary">Ajouter</a>
+    <a href="{{ path('app_transaction_type_new') }}" class="btn btn-secondary">Ajouter</a>
 {% endblock %}
 
 {% block page_main_content %}
@@ -27,18 +27,22 @@
                             <thead>
                             <tr id="cols">
                                 <th id="isCol" scope="col">Id</th>
-                                <th id="isCol" scope="col">Nom banque</th>
-                                <th id="isCol" scope="col"></th>
+                                <th id="isCol" scope="col">Code de transaction</th>
+                                <th id="isCol" scope="col">Libellé</th>
+                                <th id="isCol" scope="col">Explication du code de transaction</th>
+                                <th id="isCol" scope="col">actions</th>
                             </tr>
                             </thead>
-                            <tbody id="bodyList">
-                            {% for banque in banques %}
+                            <tbody>
+                            {% for transaction_type in transaction_types %}
                                 <tr>
-                                    <td>{{ banque.id }}</td>
-                                    <td>{{ banque.nomBanque }}</td>
-                                    <td class="d-flex flex-row gap-md-3">
-                                        <a href="{{ path('app_banque_show', {'id': banque.id}) }}">{{ ux_icon('bi:info-circle',{height : "15px"}) }}</a>
-                                        <a href="{{ path('app_banque_edit', {'id': banque.id}) }}">{{ ux_icon('flowbite:edit-outline',{height : "20px"}) }}</a>
+                                    <td>{{ transaction_type.id }}</td>
+                                    <td>{{ transaction_type.trsCode }}</td>
+                                    <td>{{ transaction_type.trsLibelle }}</td>
+                                    <td>{{ transaction_type.trsDefinition }}</td>
+                                    <td>
+                                        <a href="{{ path('app_transaction_type_show', {'id': transaction_type.id}) }}">Afficher</a>
+                                        <a href="{{ path('app_transaction_type_edit', {'id': transaction_type.id}) }}">Modifier</a>
                                     </td>
                                 </tr>
                             {% else %}
@@ -48,13 +52,13 @@
                             {% endfor %}
                             </tbody>
                         </table>
+
+                        {#
+                        <a href="{{ path('app_transaction_type_new') }}">Create new</a></div>
+                        #}
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
-    {# <a href="{{ path('app_banque_new') }}">Create new</a> #}
-
 {% endblock %}
