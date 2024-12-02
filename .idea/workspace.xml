@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="Commit ajout de code de transaction">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/banque/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/banque/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TransactionTypeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TransactionTypeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/plan_compte/plan_compte_add.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/plan_compte/plan_compte_add.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,12 +34,12 @@
     &quot;assignee&quot;: &quot;randy201&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Miarotianastephan/my_project_directory.git",
-    "accountId": "a232fbfa-71ba-4abe-b365-a2d407712397"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Miarotianastephan/my_project_directory.git&quot;,
+    &quot;accountId&quot;: &quot;a232fbfa-71ba-4abe-b365-a2d407712397&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -322,7 +323,8 @@
       <workItem from="1730953128007" duration="632000" />
       <workItem from="1731044577796" duration="3557000" />
       <workItem from="1731477602233" duration="168000" />
-      <workItem from="1732855271704" duration="1731000" />
+      <workItem from="1732855271704" duration="3994000" />
+      <workItem from="1733124326930" duration="43000" />
     </task>
     <servers />
   </component>

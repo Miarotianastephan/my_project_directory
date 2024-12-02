@@ -50,22 +50,11 @@ final class TransactionTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_transaction_type_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_transaction_type_edit', methods: ['GET'])]
     public function edit(Request $request, TransactionType $transactionType, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(TransactionTypeType::class, $transactionType);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_transaction_type_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('transaction_type/edit.html.twig', [
-            'transaction_type' => $transactionType,
-            'form' => $form,
-        ]);
+        return $this->render('detail_transaction_compte/modifier_code_transaction.html.twig');
     }
 
     #[Route('/{id}', name: 'app_transaction_type_delete', methods: ['POST'])]

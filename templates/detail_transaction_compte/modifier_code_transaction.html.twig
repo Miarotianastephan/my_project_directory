@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BFM Application de comptabilité en intranet{% endblock %}
+
+
+
+{% block page_title %}
+    Section Admin
+{% endblock %}
+{% block page_subtitle %}
+    Consulter les informations avant de les modifier.
+{% endblock %}
+
+{% block page_main_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Modifier le code de transaction</h4>
+                </div>
+
+                <form id="formulaire" action="{{ path('tresorier.ajout_budget') }}" method="post"
+                      data-cancel="{{ path('tresorier.liste_budget') }}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="trs_code">Code de transaction</label>
+                                    <input type="text" name="trs_code" class="form-control" id="trs_code"
+                                           value="{{ "test" }}"/>
+                                    <label for="trs_libelle">Libellé du code</label>
+                                    <input type="text" name="trs_libelle" class="form-control" id="trs_libelle"
+                                           value="{{ "test" }}"/>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6 mb-3">
+                                    <label for="trs_definition">Explication du code de transaction</label>
+                                    <input type="text" name="trs_definition" class="form-control" id="trs_definition"
+                                           value="{{ "test" }}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer py-3 px-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="annuler" name="annuler" value="annuler" class="btn btn-danger">
+                            ANNULER
+                        </button>
+                        <button id="valider" name="valider" value="valider" class="btn btn-success">
+                            VALIDER
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
