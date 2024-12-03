@@ -16,6 +16,11 @@ class BudgetTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, BudgetType::class);
     }
 
+    /**
+     * Fonction de recherche type de budget par libelle
+     * @param string $libelle
+     * @return BudgetType|null
+     */
     public function findOneByLibelle(string $libelle): ?BudgetType
     {
         return $this->createQueryBuilder('b')

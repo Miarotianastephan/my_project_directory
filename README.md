@@ -19,3 +19,7 @@ Symfony 6.4 ready to use webapp
 5. Ajout DETAIL_TRANSACTION_COMPTE (script)
 6. Ajout transaction_type (script)
 7. ajout detail_transaction_compte (script)
+
+**Accès SSH pour le code**:
+1. Ajouter l'extension remote SSH sur visual studio code
+2. ouvrir la ligne de commande et executer 

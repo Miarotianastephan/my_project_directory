@@ -9,9 +9,10 @@ use App\Entity\DemandeType;
 use App\Entity\Exercice;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @extends ServiceEntityRepository<DemandeType>
  */
@@ -22,7 +23,13 @@ class DemandeTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, DemandeType::class);
     }
 
-    public function findByExerciceAndCode(Exercice $exercice,Demande $demande): ?array
+    /**
+     * Liste des demandes de décaissement de fonds à partir du type
+     * @param Exercice $exercice
+     * @param Demande $demande
+     * @return array|null
+     */
+    public function findByExerciceAndCode(Exercice $exercice, Demande $demande): ?array
     {
         return $this->createQueryBuilder('d')
             ->where('d.exercice = :exercice')
@@ -34,8 +41,14 @@ class DemandeTypeRepository extends ServiceEntityRepository
     }
 
 
-
-    public function findActiveByExercice(Exercice $exercice, array $les_filtres,Demande $demande): array
+    /**
+     * Liste de demandes selon les filtres actifs et le type de la demande
+     * @param Exercice $exercice
+     * @param array $les_filtres
+     * @param Demande $demande
+     * @return array
+     */
+    public function findActiveByExercice(Exercice $exercice, array $les_filtres, Demande $demande): array
     {
         $queryBuilder = $this->createQueryBuilder('d')
             ->where('d.exercice = :exercice')
@@ -94,20 +107,30 @@ class DemandeTypeRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-
-    public function findByEtat(Utilisateur $utilisateur = null,array $etats): array
+    /**
+     * Liste des demandes pour un utilisateur selon les états
+     * @param Utilisateur|null $utilisateur
+     * @param array $etats
+     * @return array
+     */
+    public function findByEtat(Utilisateur $utilisateur = null, array $etats): array
     {
         $queryBuilder = $this->createQueryBuilder('d');
-            $queryBuilder->andWhere('d.dm_etat IN (:etats)')
+        $queryBuilder->andWhere('d.dm_etat IN (:etats)')
             ->setParameter('etats', $etats);
-            if($utilisateur != null){
-                $queryBuilder->innerJoin('d.logDemandeTypes', 'log')
+        if ($utilisateur != null) {
+            $queryBuilder->innerJoin('d.logDemandeTypes', 'log')
                 ->andWhere('log.user_matricule = :user_matricule')
                 ->setParameter('user_matricule', $utilisateur->getUserMatricule());
-            }
+        }
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     *
+     * @param string $reference
+     * @return array|null
+     */
     public function findByReference(string $reference): ?array
     {
         return $this->createQueryBuilder('d')
@@ -117,37 +140,11 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function ajout_approvisionnement(int                $entite_id,
-                                            int                $banque_id,
-                                            int                $chequier_numero,
-                                            float              $montant,
-                                            ChequierRepository $chequierRepository): JsonResponse
-
-    {
-        $entityManager = $this->getEntityManager();
-        $compte_mere = $entityManager->find(CompteMere::class, $entite_id);
-        if (!$compte_mere) {
-            return new JsonResponse(
-                ['success' => false, 'message' => "L'entité choisi n'éxiste pas"]
-            );
-        }
-        $banque = $entityManager->find(Banque::class, $banque_id);
-        if (!$banque) {
-            return new JsonResponse(
-                ['success' => false, 'message' => "La banque associée n'existe pas"]
-            );
-        }
-        $isExiste = $chequierRepository->isExiste($chequier_numero, $banque);
-        if (!$isExiste) {
-            return new JsonResponse(
-                ['success' => false, 'message' => "Le chequier n'existe pas"]
-            );
-        }
-        return new JsonResponse(
-            ['success' => true, 'message' => "Insertion réussi", 'isExiste' => false]
-        );
-    }
-
+    /**
+     * Ajout décaissement de fonds
+     * @param DemandeType $demandeType
+     * @return array
+     */
     public function insertDecaissement(DemandeType $demandeType)
     {
         try {
@@ -156,7 +153,7 @@ class DemandeTypeRepository extends ServiceEntityRepository
             $em->flush();
             return [
                 "status" => true,
-                "message" => 'Demande insérer avec succes',
+                "message" => 'Demande insérer avec succès',
             ];
         } catch (\Throwable $th) {
             return [
@@ -185,18 +182,27 @@ class DemandeTypeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();    // Renvoie null si aucun résultat
     }
 
-    // Pour avoir les demandes en atttentes de validation par le Secretaire Generale
+    /**
+     * Pour avoir les demandes en attentes de validation par le Secrétaire Generale :
+     * * état 100 = état initié
+     * * état 101 = état modifié -> après modification, une demande doit être validée par le Secrétaire Générale.
+     * @return array
+     */
     public function findDemandeAttentes(): array
     {
         return $this->createQueryBuilder('d')
             ->where('d.dm_etat = :etat100')
             ->orwhere('d.dm_etat = :etat101')
-            ->setParameter('etat100', 100)
-            ->setParameter('etat101', 101)
+            ->setParameter('etat100', 100) // état initié
+            ->setParameter('etat101', 101) // état modifié
             ->getQuery()
             ->getResult();
     }
 
+    /**
+     * Liste des approvisionnements : les demandes avec code 20 sont des approvisionnements.
+     * @return array
+     */
     public function findAllAppro(): array
     {
         return $this->createQueryBuilder('d')

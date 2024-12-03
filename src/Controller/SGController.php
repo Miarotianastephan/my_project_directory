@@ -8,7 +8,6 @@ use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Repository\LogDemandeTypeRepository;
 use App\Repository\MouvementRepository;
-use App\Repository\ObservationDemandeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +26,12 @@ class SGController extends AbstractController
         $this->user = $security->getUser();
     }
 
+    /**
+     * Page de list de toutes les demandes de décaissement de fonds avec l'état en attente de validation.
+     *
+     * @param DemandeTypeRepository $dm_Repository
+     * @return Response
+     */
     #[Route(path: '/', name: 'SG.liste_demande_en_attente', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
@@ -37,7 +42,17 @@ class SGController extends AbstractController
         ]);
     }
 
-
+    /**
+     * Page de modification d'une demande.
+     *
+     * @param $id
+     * @param DemandeTypeRepository $dm_Repository
+     * @param DetailDemandePieceRepository $demandePieceRepository
+     * @param MouvementRepository $mouvementRepository
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @param CompteMereRepository $compteMereRepository
+     * @return Response
+     */
     #[Route('/demande/modifier/{id}', name: 'SG.modifier_en_attente', methods: ['GET'])]
     public function modifier($id, DemandeTypeRepository $dm_Repository, DetailDemandePieceRepository $demandePieceRepository, MouvementRepository $mouvementRepository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
     {
@@ -47,9 +62,9 @@ class SGController extends AbstractController
         //debit = Mivoka
         //credit = Miditra
 
-        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
-        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
-        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
+        $exercice = $data->getExercice();                   // Avoir l'exercice lié a la demande
+        $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());  // Avoir la somme des dépenses effectuées selon le mode de paiement et l'exercice
+        $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());    //Avoir la somme des encaissements selon le mode de paiement. Si paiment par chèque => des opérations directes. Si paiement par espèce d'encaissement dans la caisse
 
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
@@ -74,6 +89,14 @@ class SGController extends AbstractController
         ]);
     }
 
+    /**
+     * Sauvegarde des observations pour une demande de modification.
+     *
+     * @param $id
+     * @param Request $request
+     * @param LogDemandeTypeRepository $logDemandeTypeRepository
+     * @return JsonResponse
+     */
     #[Route(path: '/modifier/{id}', name: 'sg.modifier', methods: ['POST'])]
     public function modifier_post($id, Request $request, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
@@ -93,6 +116,16 @@ class SGController extends AbstractController
         }
     }
 
+    /**
+     * Page de détails de demande de décaissement de fonds.
+     *
+     * @param $id
+     * @param MouvementRepository $mouvementRepository
+     * @param DemandeTypeRepository $dm_Repository
+     * @param DetailDemandePieceRepository $demandePieceRepository
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @return Response
+     */
     #[Route('/{id}', name: 'SG.detail_demande_en_attente', methods: ['GET'])]
     public function show($id,
                          MouvementRepository $mouvementRepository,
@@ -103,7 +136,7 @@ class SGController extends AbstractController
         $data = $dm_Repository->find($id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
-        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $exercice = $data->getExercice();                   // Avoir l'exercice lié a une demande
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
         $compte_mere = $data->getPlanCompte()->getCompteMere();
@@ -119,20 +152,28 @@ class SGController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-        $budget_reste =  $budget - $solde_debit;
+        $budget_reste = $budget - $solde_debit;
 
         //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         return $this->render('sg/show.html.twig', [
             'demande_type' => $data,
             'images' => $list_img,
             'solde_reste' => $solde_reste,
-            'budget' => $budget ,
+            'budget' => $budget,
             'budget_reste' => $budget_reste,
-            //ALANA ITO RANDY
-            //'budget_reste' => $budget - $solde_debit,
         ]);
     }
 
+    /**
+     * Redirection vers la page de validation avant de valider une demande
+     *
+     * @param $id
+     * @param MouvementRepository $mouvementRepository
+     * @param DemandeTypeRepository $dm_Repository
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @param CompteMereRepository $compteMereRepository
+     * @return Response
+     */
     #[Route('/demande/valider/{id}', name: 'SG.valider_en_attente', methods: ['GET'])]
     public function valider($id, MouvementRepository $mouvementRepository, DemandeTypeRepository $dm_Repository, DetailBudgetRepository $detailBudgetRepository, CompteMereRepository $compteMereRepository): Response
     {
@@ -140,15 +181,15 @@ class SGController extends AbstractController
         if (!$data) {
             return new JsonResponse(['success' => false, 'message' => 'Demande introuvable',]);
         }
-        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $exercice = $data->getExercice();                   // Avoir l'exercice lié a une demande
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
 
-        dump("Solde nivoka= ".$solde_debit);
-        dump("Solde niditra= ".$solde_CREDIT);
+        dump("Solde nivoka= " . $solde_debit);
+        dump("Solde niditra= " . $solde_CREDIT);
 
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
@@ -161,17 +202,22 @@ class SGController extends AbstractController
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
-       $budget_reste =  $budget - $solde_debit;
+        $budget_reste = $budget - $solde_debit;
         return $this->render('sg/valider_demande.html.twig', [
             'demande_type' => $data,
             'solde_reste' => $solde_reste,
             'budget' => $budget,
-            //ALANA ITO RANDY
-            //'budget_reste' => $budget - $solde_debit,
             'budget_reste' => $budget_reste,
         ]);
     }
 
+    /**
+     * Redirection vers une page de validation avant de refuser une demande.
+     *
+     * @param $id
+     * @param DemandeTypeRepository $dm_Repository
+     * @return Response
+     */
     #[Route('/demande/refuser/{id}', name: 'SG.refus_demande_en_attente', methods: ['GET'])]
     public function refuser($id, DemandeTypeRepository $dm_Repository): Response
     {
@@ -179,9 +225,14 @@ class SGController extends AbstractController
         return $this->render('sg/refuser_demande.html.twig', ['demande_type' => $data]);
     }
 
-
+    /**
+     * Validation d'une demande de décaissement de fonds
+     *
+     * @param $id
+     * @param LogDemandeTypeRepository $logDemandeTypeRepository
+     * @return JsonResponse
+     */
     #[Route('/valider_demande/{id}', name: 'valider_demande', methods: ['POST'])]
-    
     public function valider_demande($id, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {
         $id_user_sg = $this->user->getId(); // mandeha io 
@@ -194,6 +245,14 @@ class SGController extends AbstractController
         }
     }
 
+    /**
+     * Refus de demande de décaissement de fonds.
+     *
+     * @param $id
+     * @param Request $request
+     * @param LogDemandeTypeRepository $logDemandeTypeRepository
+     * @return JsonResponse
+     */
     #[Route('/refuser_demande/{id}', name: 'refuser_demande', methods: ['POST', 'GET'])]
     public function refuser_demande($id, Request $request, LogDemandeTypeRepository $logDemandeTypeRepository): JsonResponse
     {

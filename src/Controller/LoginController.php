@@ -12,27 +12,43 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class LoginController extends AbstractController
 {
     private $security;
-    
+
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
-    
+
+    /**
+     * Page de connexion
+     *
+     * @param Request $request
+     * @param AuthenticationUtils $authUtils
+     * @return Response
+     */
     #[Route(path: '/', name: 'user_login')]
-    public function loginUser(Request $request,AuthenticationUtils $authUtils): Response{
-        if($this->security->getUser()){
+    public function loginUser(Request $request, AuthenticationUtils $authUtils): Response
+    {
+        if ($this->security->getUser()) {
             return $this->redirectToRoute('admin_users');
         }
         $error = $authUtils->getLastAuthenticationError();
         $lastUsername = $authUtils->getLastUsername();
         $message = $request->query->get('message');
 
-        return $this->render('back_office/index.html.twig',[
+        return $this->render('back_office/index.html.twig', [
             'error' => $error,
             'lastUsername' => $lastUsername,
             'message' => $message
         ]);
     }
-    #[Route(path: '/logout', name: 'user_logout', methods: ['GET'])]    
-    public function logoutUser(){}
+
+    /**
+     * Déconnexion
+     *
+     * @return void
+     */
+    #[Route(path: '/logout', name: 'user_logout', methods: ['GET'])]
+    public function logoutUser()
+    {
+    }
 }

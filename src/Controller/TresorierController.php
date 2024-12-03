@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Entity\DemandeType;
 use App\Repository\ApprovisionnementPieceRepository;
 use App\Repository\BanqueRepository;
-use App\Repository\ChequierRepository;
-use App\Repository\DemandeRepository;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailBudgetRepository;
 use App\Repository\DetailDemandePieceRepository;
@@ -22,7 +20,6 @@ use App\Service\DemandeTypeService;
 use App\Service\OperationInverseService;
 use App\Service\VersementService;
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Proxies\__CG__\App\Entity\Evenement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,38 +40,56 @@ class TresorierController extends AbstractController
         $this->user = $security->getUser();
     }
 
+    /**
+     * Page de liste des demandes de décaissement de fonds avec l'état à comptabiliser.
+     *
+     * @param DemandeTypeRepository $dm_Repository
+     * @return Response
+     */
     #[Route('/', name: 'tresorier.liste_demande_en_attente', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_Repository): Response
     {
         return $this->render('tresorier/index.html.twig', [
-            'demande_types' => $dm_Repository->findByEtat(null,[200,202])
+            'demande_types' => $dm_Repository->findByEtat(null, [200, 202])
         ]);
 
     }
 
+    /**
+     *Page de détails de demande de décaissement de fonds.
+     *
+     * @param $id
+     * @param ObservationDemandeRepository $observationDemandeRepository
+     * @param MouvementRepository $mouvementRepository
+     * @param EntityManagerInterface $entityManager
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @param DetailDemandePieceRepository $demandePieceRepository
+     * @return Response
+     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     #[Route('/demande/{id}', name: 'tresorier.detail_demande_en_attente', methods: ['GET'])]
     public function show($id,
                          ObservationDemandeRepository $observationDemandeRepository,
-                         MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager,DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
+                         MouvementRepository $mouvementRepository, EntityManagerInterface $entityManager, DetailBudgetRepository $detailBudgetRepository, DetailDemandePieceRepository $demandePieceRepository): Response
     {
         $data = $entityManager->find(DemandeType::class, $id);
         $list_img = $demandePieceRepository->findByDemandeType($data);
 
-        $exercice = $data->getExercice();                   // Avoir l'exercice liée au demande
+        $exercice = $data->getExercice();                   // Avoir l'exercice lié a une demande
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, $data->getDmModePaiement());
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, $data->getDmModePaiement());
 
         $compte_mere = $data->getPlanCompte()->getCompteMere();
         $budget = $detailBudgetRepository->findByExerciceEtCpt($exercice, $compte_mere);
-        if($budget!=null){
+        if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }
-        if ($solde_debit == null ) {
+        if ($solde_debit == null) {
             $solde_reste = 0;
-        } else if($solde_CREDIT == null){
+        } else if ($solde_CREDIT == null) {
             $solde_reste = $solde_debit;
-        }
-        else {
+        } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
 
@@ -86,17 +101,27 @@ class TresorierController extends AbstractController
             'demande_type' => $data,
             'images' => $list_img,
             'solde_reste' => $solde_reste,
-            'budget'=>$budget,
-            'budget_reste' => $budget-$solde_debit,
-            'observations' =>$observations
+            'budget' => $budget,
+            'budget_reste' => $budget - $solde_debit,
+            'observations' => $observations
         ]);
     }
 
+    /**
+     * Redirection vers une page de validation avant comptabilisation.
+     *
+     * @param $id
+     * @param MouvementRepository $mouvementRepository
+     * @param BanqueRepository $banqueRepository
+     * @param DemandeTypeRepository $dm_type
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @return Response
+     */
     #[Route('/demande/valider/{id}', name: 'tresorier.valider_fond', methods: ['GET'])]
     public function valider_fond($id,
                                  MouvementRepository $mouvementRepository,
                                  BanqueRepository $banqueRepository,
-                                 DemandeTypeRepository $dm_type,DetailBudgetRepository $detailBudgetRepository): Response
+                                 DemandeTypeRepository $dm_type, DetailBudgetRepository $detailBudgetRepository): Response
     {
         $data = $dm_type->find($id);
 
@@ -109,16 +134,14 @@ class TresorierController extends AbstractController
         if ($budget != null) {
             $budget = $budget->getBudgetMontant();
         }
-        if ($solde_debit == null ) {
+        if ($solde_debit == null) {
             $solde_reste = 0;
-        } else if($solde_CREDIT == null){
+        } else if ($solde_CREDIT == null) {
             $solde_reste = $solde_debit;
-        }
-        else {
+        } else {
             $solde_reste = $solde_debit - $solde_CREDIT;
         }
         $liste_banque = $banqueRepository->findAll();
-        //dump($solde_debit ."debit".$solde_CREDIT."credit".$solde_reste."reste".$exercice);
         $budget_reste = $budget - $solde_debit;
         return $this->render('tresorier/deblocker_fond.html.twig',
             [
@@ -127,12 +150,18 @@ class TresorierController extends AbstractController
                 'banques' => $liste_banque,
                 'budget' => $budget,
                 'budget_reste' => $budget_reste
-                //ALANA ITO RANDY
-                //'budget_reste' => $budget-$solde_debit,
             ]
         );
     }
 
+    /**
+     * Comptabilisation d'une demande de décaissement de fonds.
+     *
+     * @param Request $request
+     * @param $id
+     * @param LogDemandeTypeRepository $logDemandeTypeRepository
+     * @return JsonResponse
+     */
     #[Route('/remettre_fond/{id}', name: 'tresorier.remettre_fond', methods: ['POST'])]
     public function remettre_fond(Request                  $request,
                                                            $id,
@@ -146,10 +175,9 @@ class TresorierController extends AbstractController
         $remettant = $data['remettant'] ?? null;
         $id_user_tresorier = $this->user->getId();
         // PARAMETRES
-        // $id => ID du demande à débloqué de fonds 
-        // $id_user_tresorier = ID qui devrait être un tresorier A VERIFIER APRES
-        dump($data);
-        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier,$banque_id,$numero_cheque,$remettant,$beneficiaire); // Déblocage du fonds demandée
+        // $id => ID de la demande à débloquer de fonds
+        // $id_user_tresorier = ID qui devrait être un trésorier A VERIFIER APRES
+        $rep = $logDemandeTypeRepository->ajoutDeblockageFond($id, $id_user_tresorier, $banque_id, $numero_cheque, $remettant, $beneficiaire); // Déblocage du fonds de la demande
 
         $data = json_decode($rep->getContent(), true);
 
@@ -167,21 +195,31 @@ class TresorierController extends AbstractController
         }
     }
 
-
+    /**
+     * Formulaire d'approvisionnement.
+     *
+     * @param PlanCompteRepository $planCompteRepository
+     * @param MouvementRepository $mouvementRepository
+     * @param ExerciceRepository $exerciceRepository
+     * @param BanqueRepository $banqueRepository
+     * @return Response
+     */
     #[Route('/demande_approvisionnement', name: 'tresorier.form_approvisionnement', methods: ['GET'])]
     public function form_approvisionnement(PlanCompteRepository $planCompteRepository,
                                            MouvementRepository  $mouvementRepository,
-                                           ExerciceRepository $exerciceRepository,
-                                           BanqueRepository $banqueRepository): Response
+                                           ExerciceRepository   $exerciceRepository,
+                                           BanqueRepository     $banqueRepository): Response
     {
         $liste_entite = $planCompteRepository->findCompteCaisse();
 
         $exercice = $exerciceRepository->getExerciceValide();
+
+        // Mode de paiement par chèque = 1
+        // Mode de paiement par espèce = 0
         $solde_debit = $mouvementRepository->soldeDebitParModePaiement($exercice, "0");
         $solde_CREDIT = $mouvementRepository->soldeCreditParModePaiement($exercice, "0");
 
         $liste_banque = $banqueRepository->findAll();
-        $solde_reste = 70000;
         return $this->render('tresorier/demande_approvisionnement.html.twig', [
             'entites' => $liste_entite,
             'banques' => $liste_banque,
@@ -189,11 +227,20 @@ class TresorierController extends AbstractController
         ]);
     }
 
+    /**
+     * Ajout d'approvisionnement
+     *
+     * @param Request $request
+     * @param ExerciceRepository $exoRepository
+     * @param DemandeTypeService $dmService
+     * @param ApprovisionnementPieceRepository $approvisionnementPieceRepository
+     * @return JsonResponse
+     */
     #[Route('/save_approvisionnement', name: 'tresorier.save_approvisionnement', methods: ['POST'])]
-    public function save_approvisionnement(Request            $request,
-                                           ExerciceRepository $exoRepository,
-                                           DemandeTypeService $dmService,
-                                            ApprovisionnementPieceRepository $approvisionnementPieceRepository) : JsonResponse
+    public function save_approvisionnement(Request                          $request,
+                                           ExerciceRepository               $exoRepository,
+                                           DemandeTypeService               $dmService,
+                                           ApprovisionnementPieceRepository $approvisionnementPieceRepository): JsonResponse
     {
 
 
@@ -217,7 +264,7 @@ class TresorierController extends AbstractController
 
         $response_data = json_decode($response_data->getContent(), true);
 
-        if (!$response_data['success']){
+        if (!$response_data['success']) {
             return new JsonResponse([
                 'success' => $response_data['success'],
                 'message' => $response_data['message'],
@@ -225,26 +272,16 @@ class TresorierController extends AbstractController
             ]);
         }
 
-        //dump($response_data);
         $image = $request->files->get('image') ?? null;
 
         $is_image = empty($image);
 
-        //dump($is_image);
-        if (!$is_image){
-            dump(0);
+        if (!$is_image) {
 
             $ref_approvisionnement = $response_data['ref_approvisionnement'];
-            $ajout_image = $dmService->uploadImage($image,$this->getParameter('uploads_approvisionnement'));
-            dump(1);
-            dump($ajout_image);
-            $upload_file = $approvisionnementPieceRepository->AjoutPiece($ref_approvisionnement,$ajout_image);
-            dump(2);
-            dump($upload_file);
+            $ajout_image = $dmService->uploadImage($image, $this->getParameter('uploads_approvisionnement'));
+            $upload_file = $approvisionnementPieceRepository->AjoutPiece($ref_approvisionnement, $ajout_image);
             $response_data = json_decode($upload_file->getContent(), true);
-            dump(3);
-            dump($response_data['message']);
-
         }
         return new JsonResponse([
             'success' => $response_data['success'],
@@ -254,6 +291,12 @@ class TresorierController extends AbstractController
         //return $this->redirectToRoute('tresorier.form_approvisionnement');
     }
 
+    /**
+     * Page de liste des approvisionnements effectués
+     *
+     * @param DemandeTypeRepository $demandeRepository
+     * @return Response
+     */
     #[Route('/liste_approvisionnement', name: 'tresorier.liste_approvisionnement', methods: ['GET'])]
     public function liste_approvisionnement(DemandeTypeRepository $demandeRepository): Response
     {
@@ -271,7 +314,6 @@ class TresorierController extends AbstractController
         $ref_demande = $data->getRefDemande();
         $evenement = $evnRepository->findByEvnReference($ref_demande);
         $listMouvement = $mvtRepository->findAllMvtByEvenement($evenement);
-        // $listMouvement = $mvtRepository->findAllMvtByEvenement($evenement);
         return $this->render('tresorier/versement_fond.html.twig', [
             'info_demande' => $data,
             'info_mouvement' => $listMouvement
@@ -288,7 +330,7 @@ class TresorierController extends AbstractController
         $entityManager->beginTransaction();
         try {
             $montant_verser = $data['dm_montant_verser'];
-            $vrsm = $versementRepository->persistVersement($entityManager, $data['nom_remettant'],new DateTime($data['date_operation']),$data['adresse'],$montant_verser,$demande,$utilisateur,$data['motif_versement']);
+            $vrsm = $versementRepository->persistVersement($entityManager, $data['nom_remettant'], new DateTime($data['date_operation']), $data['adresse'], $montant_verser, $demande, $utilisateur, $data['motif_versement']);
             $vrsm_reference = $vrsmService->createReferenceForVersementId($vrsm->getId());
             $vrsm->setVrsmReference($vrsm_reference); //creation reference
             $entityManager->flush();
@@ -297,13 +339,13 @@ class TresorierController extends AbstractController
             dump("FIND VERSEMENT");
             $ref_demande = $demande->getRefDemande();
             $evenement = $evnRepository->findByEvnReference($ref_demande);
-            $vrsm_evenement = $evnRepository->persistEvenement($entityManager,$evenement->getEvnTrsId(),$utilisateur,$evenement->getEvnExercice(),$evenement->getEvnCodeEntity(),$montant_verser,$vrsm->getVrsmReference(),new DateTime());
+            $vrsm_evenement = $evnRepository->persistEvenement($entityManager, $evenement->getEvnTrsId(), $utilisateur, $evenement->getEvnExercice(), $evenement->getEvnCodeEntity(), $montant_verser, $vrsm->getVrsmReference(), new DateTime());
 
             $listMouvement = $mvtRepository->findAllMvtByEvenement($evenement);
             // création des mouvements inverse
-            $operationInvService->inverseTransaction($vrsm_evenement,$entityManager,$listMouvement,$montant_verser);
-            
-            // mis à jour du demandes en etat versée
+            $operationInvService->inverseTransaction($vrsm_evenement, $entityManager, $listMouvement, $montant_verser);
+
+            // mis à jour de la demande en état versée
             $demande->setDmEtat($etatDemandeRepository, 401);
             $entityManager->flush();
             $entityManager->commit();
@@ -317,6 +359,6 @@ class TresorierController extends AbstractController
         }
         return $this->redirectToRoute('tresorier.liste_demande_en_attente');
     }
-    
+
 
 }

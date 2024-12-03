@@ -29,6 +29,13 @@ class ObservationController extends AbstractController
         ]);
     }
 
+    /**
+     * Sauvegarde d'observation d'une demande.
+     *
+     * @param Request $request
+     * @param ObservationDemandeRepository $observationDemandeRepository
+     * @return JsonResponse
+     */
     #[Route('/ajout', name: 'app_ajout_observation', methods: ['POST'])]
     public function ajout(Request $request, ObservationDemandeRepository $observationDemandeRepository): JsonResponse
     {

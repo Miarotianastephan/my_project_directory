@@ -21,21 +21,26 @@ class TableauBordController extends AbstractController
         ]);
     }
 
+    /**
+     * Tableau comparatif de budget
+     *
+     * @param Request $request
+     * @param ExerciceRepository $exerciceRepository
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @return Response
+     */
     #[Route('/budget', name: 'app_tableau_budget', methods: ['GET', "POST"])]
     public function budget(Request $request, ExerciceRepository $exerciceRepository, DetailBudgetRepository $detailBudgetRepository): Response
     {
         $exe1 = $exerciceRepository->getExerciceValide()->getId();
-        //$exe2 = $exerciceRepository->getExerciceNext(new \DateTime())[0]->getId();
-        //dump($exe2);
         $exe2 = $exerciceRepository->getExerciceValide()->getId();
-        $exe1 = $request->query->get('exe1', $exe1);
+        $exe1 = $request->query->get('exe1', $exe1); //prendre la valeur de l'exercice 1 sélectionné ou par défaut la valeur de l'exercice actuellement actif
         $exe2 = $request->query->get('exe2', $exe2);
         $labels = ["4", "5", "6"];
         $list_label = [];
         foreach ($labels as $label) {
             $list_label[] = $detailBudgetRepository->determinerCategorie($label);
         }
-        //dump($exe1 ." ". $exe2);
         $somme_exercice1 = $detailBudgetRepository->findSommeParCompte($exerciceRepository->find($exe1));
         $categories_1 = [];
 
@@ -43,19 +48,19 @@ class TableauBordController extends AbstractController
         $categories_2 = [];
 
         // Remplir les catégories existantes avec les valeurs de la requête
-        
-        if(isset($somme_exercice1)){
+
+        if (isset($somme_exercice1)) {
             foreach ($somme_exercice1 as $somme) {
                 $categories_1[$somme['categorie']] = $somme['total_budget'];
             }
-        }else{
+        } else {
             $categories_1[] = 0;
         }
-        if(isset($somme_exercice2)){
+        if (isset($somme_exercice2)) {
             foreach ($somme_exercice2 as $somme) {
                 $categories_2[$somme['categorie']] = $somme['total_budget'];
             }
-        }else{
+        } else {
             $categories_2[] = 0;
         }
 
@@ -68,6 +73,15 @@ class TableauBordController extends AbstractController
         ]);
     }
 
+    /**
+     * Graphe des dépenses effectuées. Graphe en diagramme de camembert.
+     *
+     * @param Request $request
+     * @param ExerciceRepository $exerciceRepository
+     * @param MouvementRepository $mouvementRepository
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @return Response
+     */
     #[Route('/depense', name: 'app_tableau_depense', methods: ['GET', "POST"])]
     public function depense(Request                $request,
                             ExerciceRepository     $exerciceRepository,
@@ -79,10 +93,6 @@ class TableauBordController extends AbstractController
         $cheques = $mouvementRepository->v_debit_banque_annuel($exercice);
         $budget = $detailBudgetRepository->findSommeParExerciceEtCompte($exercice, "6");
 
-        // $espece = 70000 + 100000 + 30000 + 50000 + 90000 + 75000;
-        // $cheques = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
-        // $budget = 200000 + 100000 + 100000 + 200000 + 90000 + 500000 + 150000;
-
         return $this->render('tableau_bord/diagramme_camembert_depense.html.twig', [
             'labels' => ["Espèces", "Chèques"],
             'budget' => $budget,
@@ -91,6 +101,14 @@ class TableauBordController extends AbstractController
         ]);
     }
 
+    /**
+     * Graphe des dépenses effectué pour le compte de dépenses.
+     *
+     * @param ExerciceRepository $exerciceRepository
+     * @param MouvementRepository $mouvementRepository
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @return Response
+     */
     #[Route('/depense/annuelle', name: 'app_tableau_depense_annuelle', methods: ['GET', "POST"])]
     public function depense_annuelle(ExerciceRepository     $exerciceRepository,
                                      MouvementRepository    $mouvementRepository,
@@ -110,7 +128,6 @@ class TableauBordController extends AbstractController
             $budget[$i] = $budgets;
             $depense[$i] = $depense[$i - 1] + ($somme_debit_banque[$i] ?? 0) + ($somme_debit_caisse[$i] ?? 0);
         }
-
 
 
         return $this->render('tableau_bord/courbe_depense.html.twig', [

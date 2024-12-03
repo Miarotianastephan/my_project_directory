@@ -16,13 +16,15 @@ class DemandeRepository extends ServiceEntityRepository
         parent::__construct($registry, Demande::class);
     }
 
-
+    /**
+     * Fonction pour avoir toutes les demandes
+     * @return array
+     */
 
     public function findAll(): array
     {
         return $this->createQueryBuilder('d')
              ->orderBy('d.id', 'ASC')
-             ->setMaxResults(10)
              ->getQuery()
               ->getResult();
     }

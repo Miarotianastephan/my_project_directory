@@ -20,6 +20,11 @@ class JournalController extends AbstractController
         ]);
     }
 
+    /**
+     * @param MouvementRepository $mouvementRepository
+     * @param ExerciceRepository $exerciceRepository
+     * @return Response
+     */
     #[Route('/livre_journal', name: 'livre-journal')]
     public function livre_journal(MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -28,11 +33,15 @@ class JournalController extends AbstractController
             return new Response("Aucun exercice ouvert");
 
         }
-        //$list_evenement = $mouvementRepository->findAll();
         $list_evenement = $mouvementRepository->findByExercice($exercice);
         return $this->render('journal/journal_caisse.html.twig', ['mouvements' => $list_evenement]);
     }
 
+    /**
+     * @param MouvementRepository $mouvementRepository
+     * @param ExerciceRepository $exerciceRepository
+     * @return JsonResponse
+     */
     #[Route('/exercice/journal', name: 'exercice-journal')]
     public function livre_journal_exercice(MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): JsonResponse
     {

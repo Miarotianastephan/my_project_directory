@@ -31,6 +31,11 @@ class DetailBudgetRepository extends ServiceEntityRepository
         parent::__construct($registry, DetailBudget::class);
     }
 
+    /**
+     * Liste des budgets selon l'exercice
+     * @param Exercice $exercice
+     * @return array
+     */
     public function findByExercice(Exercice $exercice): array
     {
         $data = $this->createQueryBuilder('d')
@@ -41,11 +46,17 @@ class DetailBudgetRepository extends ServiceEntityRepository
         return $data;
     }
 
+    /**
+     * @param int $exercice_id
+     * @param int $compteMere_id
+     * @param float $montant
+     * @param int $budgetType_id
+     * @return JsonResponse
+     */
     public function ajoutDetailBudget(int                    $exercice_id,
                                       int                    $compteMere_id,
                                       float                  $montant,
-                                      int                    $budgetType_id,
-                                      DetailBudgetRepository $detailBudgetRepository): JsonResponse
+                                      int                    $budgetType_id): JsonResponse
 
     {
         $entityManager = $this->getEntityManager();
@@ -66,6 +77,10 @@ class DetailBudgetRepository extends ServiceEntityRepository
             return new JsonResponse(['success' => false, 'message' => "Le budget type mere est introuvable"]);
         }*/
 
+        /**
+         * Si le budget existe alors redirection vers une page de MAJ de budget
+         *  * Sinon ajout de budget
+         */
         $budget = $this->findByExerciceEtCpt($exercice, $compteMere);
         if ($budget) {
             return new JsonResponse(
@@ -104,6 +119,12 @@ class DetailBudgetRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * Liste des budgets selon l'exercice
+     * @param Exercice $exercice
+     * @param CompteMere $compteMere
+     * @return DetailBudget|null
+     */
     public function findByExerciceEtCpt(Exercice $exercice, CompteMere $compteMere): ?DetailBudget
     {
         $data = null;
@@ -177,7 +198,6 @@ class DetailBudgetRepository extends ServiceEntityRepository
             $statement->bindValue('plan_compte', $compte);
             $resultSet = $statement->executeQuery();
             $result = $resultSet->fetchAllAssociative();
-            dump($result);
             if ($result) {
                 return (float)$result[0]['TOTAL_BUDGET'];
             }

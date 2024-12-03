@@ -12,11 +12,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CompteMereRepository extends ServiceEntityRepository
 {
+    public static $listCompteDep = ['60', '61', '62', '63', '64', '65', '66', '67', '68'];
+    public static $listCompteDepPrefixe = ['4%', '51%', '68%', '7%'];
+    public $listCptDep = ['60', '61', '62', '63', '64', '65', '66', '67', '68'];
+    public $listCptDepPrefixe = ['4%', '51%', '68%', '7%'];
     private PlanCompteRepository $planCompteRepository;
-    public static $listCompteDep = ['60','61', '62', '63', '64', '65', '66', '67', '68'];
-    public $listCptDep = ['60','61', '62', '63', '64', '65', '66', '67', '68'];
-    public static $listCompteDepPrefixe = ['4%','51%','68%', '7%'];
-    public  $listCptDepPrefixe = ['4%','51%','68%', '7%'];
 
     public function __construct(ManagerRegistry $registry, PlanCompteRepository $planCptRepo)
     {
@@ -24,16 +24,17 @@ class CompteMereRepository extends ServiceEntityRepository
         $this->planCompteRepository = $planCptRepo;
     }
 
+    /**
+     * @return array|null
+     */
     public function findByCompteBudget(): ?array
     {
-
-
         $queryBuilder = $this->createQueryBuilder('p');
 
         // Utilisation de 'IN' pour la liste des comptes avec un numéro exact
         $queryBuilder
             ->where($queryBuilder->expr()->in('p.cpt_numero', ':listCompteDep'))
-            ->setParameter('listCompteDep',$this->listCptDep);
+            ->setParameter('listCompteDep', $this->listCptDep);
 
         // Construction des clauses 'LIKE' pour chaque préfixe
         $orX = $queryBuilder->expr()->orX(); // Pour gérer plusieurs conditions OR
@@ -51,6 +52,11 @@ class CompteMereRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * Fonction pour avoir la liste des plans de compte mère pour un plan de compte
+     * @param string $compteNumero
+     * @return CompteMere|null
+     */
     public function findByCptNumero($compteNumero): ?CompteMere
     {
         return $this->createQueryBuilder('c')
@@ -60,6 +66,11 @@ class CompteMereRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     *  Fonction pour avoir la liste des plans de compte mère pour un plan de compte
+     * @param PlanCompte $planCompte
+     * @return CompteMere|null
+     */
     public function findByPlanCompte(PlanCompte $planCompte): ?CompteMere
     {
         return $this->createQueryBuilder('c')
@@ -69,6 +80,11 @@ class CompteMereRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * Fonction récursive pour avoir la source d'un numéro de compte
+     * @param CompteMere $cptMere
+     * @return bool
+     */
     public function isMainCptMere(CompteMere $cptMere)
     {
         $temp_numero_compte = $cptMere->getCptNumero();
@@ -85,9 +101,13 @@ class CompteMereRepository extends ServiceEntityRepository
         return false;
     }
 
-    // Pour avoir une liste avec les comptes dont le prefixe est dans le tableau
+    /**
+     * Pour avoir une liste avec les comptes dont le prefixe est dans le tableau
+     * @param array $listComptePre
+     * @return mixed
+     */
     public function findAllByPrefix(array $listComptePre)
-    {        
+    {
         $queryBuilder = $this->createQueryBuilder('p');
         // Pour gérer plusieurs conditions OR
         $orX = $queryBuilder->expr()->orX();

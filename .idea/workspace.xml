@@ -6,18 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AdminController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/BanqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BanqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/BudgetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BudgetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ChequierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChequierController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/CommisaireCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommisaireCompteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ComptableController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ComptableController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DemandePieceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/DemandeurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DemandeurController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/DetailTransactionCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DetailTransactionCompteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ExerciceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ExerciceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ExportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ExportController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/GroupeUtilisateurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GroupeUtilisateurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/JournalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/JournalController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ObservationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ObservationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/PlanCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PlanCompteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TableauBordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TableauBordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TransactionTypeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TransactionTypeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/BudgetTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/BudgetTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ChequierRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ChequierRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -330,7 +333,7 @@
       <workItem from="1731477602233" duration="168000" />
       <workItem from="1733124593739" duration="16427000" />
       <workItem from="1733208263703" duration="383000" />
-      <workItem from="1733215619643" duration="1965000" />
+      <workItem from="1733215619643" duration="9965000" />
     </task>
     <servers />
   </component>
