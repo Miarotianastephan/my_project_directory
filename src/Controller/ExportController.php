@@ -23,8 +23,10 @@ class ExportController extends AbstractController
         $this->mvtRepository = $mvtRepo;
         $this->exoRepository = $exoRepo;        
     }
-    
 
+    /**
+     * @return Response
+     */
     #[Route('/journal', name: 'export.journal')]
     public function index(): Response
     {
@@ -36,6 +38,11 @@ class ExportController extends AbstractController
         ]);
     }
 
+    /**
+     * @param EtatFinancierService $etatService
+     * @param CompteMereRepository $mereRepository
+     * @return Response
+     */
     #[Route(path: '/etat/financier', name: 'export.etat', methods: ['GET'])]
     public function etat_fi(EtatFinancierService $etatService, CompteMereRepository $mereRepository){
         $etatMontant = $this->mvtRepository->getSoldeRestantByMouvement();
@@ -56,17 +63,20 @@ class ExportController extends AbstractController
             'etatFiEncaiss' => $etatFiEncaiss,
         ]);
     }
-    
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     #[Route('/journal/search', name: 'export.journal.search', methods: ['POST'])]
     public function searchInJournal(Request $request)
     {
-        // $dataHttpForm = json_decode($request->getPara(), true);
         $request_status = ['message' => 'TEST', 'status' => true] ;
         $rech_numero = (strlen(trim($request->get('rech_numero')))>0) ? $request->get('rech_numero') : null;
         $rech_libelle = (strlen(trim($request->get('rech_libelle')))>0) ? $request->get('rech_libelle') : null;
         $date_inf = $request->get('date_inf');
         $date_sup = $request->get('date_sup');
-        // Appel du fonction pour la recherche
+        // Appel de la fonction pour la recherche
         $search_result = $this->mvtRepository->searchDataMouvement($rech_numero,$rech_libelle,$date_inf,$date_sup);
         $request_status['search_result'] = $search_result;
         return new JsonResponse($request_status);

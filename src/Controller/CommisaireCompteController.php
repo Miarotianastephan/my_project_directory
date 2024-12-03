@@ -17,11 +17,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/commisaire')]
 class CommisaireCompteController extends AbstractController
 {
+    /**
+     * Page de liste de toutes les demandes de décaissement de fonds pour l'exercice actuellement ouvert/actif.
+     * * $allFilters = liste de tous les filtres accessible à partir de la table ce_etat_demande
+     * * si url = /commisaire -> tous les filtres sont actives
+     * * sinon les filtres actives sont écrit dans l'URL.
+     **/
     #[Route('/', name: 'app_commisaire_compte')]
     public function index(Request               $request,
                           ExerciceRepository    $exerciceRepository,
                           DemandeTypeRepository $demandeTypeRepository,
-                          DemandeRepository $demandeRepository): Response
+                          DemandeRepository     $demandeRepository): Response
     {
         $requestURI = $request->getRequestUri();
         $allFilters = [
@@ -35,7 +41,7 @@ class CommisaireCompteController extends AbstractController
             'refuser' => false,
             'reverser' => false,
             'comptabiliser' => false,
-            'justifier' =>false
+            'justifier' => false
         ];
         if ($requestURI == "/commisaire/") {
             $allFilters = array_fill_keys(array_keys($allFilters), true);
@@ -48,12 +54,15 @@ class CommisaireCompteController extends AbstractController
         }
         $exercice_valide = $exerciceRepository->getExerciceValide();
         $code_demande = $demandeRepository->findDemandeByCode(10);
-        if (!$exercice_valide){
+        if (!$exercice_valide) {
             return new Response("Veuillez choisir l'exercice à verifier");
-        }else if (!$code_demande){
+        } else if (!$code_demande) {
             return new Response("Code de demande non valide, verifier le code dans la base de donné");
         }
-        $demande_types = $demandeTypeRepository->findActiveByExercice($exercice_valide, $allFilters,$code_demande);
+        /**
+         * Récupération des demandes de décaissement de fonds selon les filtres actives.
+         **/
+        $demande_types = $demandeTypeRepository->findActiveByExercice($exercice_valide, $allFilters, $code_demande);
         return $this->render('commisaire_compte/index.html.twig', [
             'exercice' => $exercice_valide,
             'demande_types' => $demande_types,
@@ -61,33 +70,40 @@ class CommisaireCompteController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de liste d'approvisionnement pour l'exercice ouvert/actif.
+     **/
+
     #[Route('/approvisionnement', name: 'app_commisaire_approvisionnement')]
     public function list_approvisionnement(Request               $request,
                                            ExerciceRepository    $exerciceRepository,
                                            DemandeTypeRepository $demandeTypeRepository,
-                                           DemandeRepository $demandeRepository): Response
+                                           DemandeRepository     $demandeRepository): Response
     {
         $exercice_valide = $exerciceRepository->getExerciceValide();
         $code_demande = $demandeRepository->findDemandeByCode(20);
-        if (!$exercice_valide){
+        if (!$exercice_valide) {
             return new Response("Veuillez choisir l'exercice à verifier");
-        }else if (!$code_demande){
+        } else if (!$code_demande) {
             return new Response("Code de demande non valide, verifier le code dans la base de donné");
         }
-        $demande_types = $demandeTypeRepository->findByExerciceAndCode($exercice_valide,$code_demande);
+        $demande_types = $demandeTypeRepository->findByExerciceAndCode($exercice_valide, $code_demande);
         return $this->render('commisaire_compte/approvisionnement.html.twig', [
             'exercice' => $exercice_valide,
             'liste_approvisio' => $demande_types,
         ]);
     }
 
+    /**
+     * Page de détails d'approvisionnement.
+     **/
 
     #[Route('/approvisionnement/{id}', name: 'app_commisaire_show_approvisionnement')]
     public function showApprovisionnement($id,
-                         DemandeTypeRepository $demandeTypeRepository,
-                         ApprovisionnementPieceRepository $approvisionnementPieceRepository,
-                         ObservationDemandeRepository $observationDemandeRepository,
-                         LogDemandeTypeRepository $logDemandeTypeRepository): Response
+                                          DemandeTypeRepository $demandeTypeRepository,
+                                          ApprovisionnementPieceRepository $approvisionnementPieceRepository,
+                                          ObservationDemandeRepository $observationDemandeRepository,
+                                          LogDemandeTypeRepository $logDemandeTypeRepository): Response
     {
         $demande_type = $demandeTypeRepository->find($id);
         $list_img = $approvisionnementPieceRepository->findByRef($demande_type->getRefDemande());
@@ -100,6 +116,11 @@ class CommisaireCompteController extends AbstractController
             'historiques' => $historique,
         ]);
     }
+
+    /**
+     * Page de détails de demande de décaissement de fond.
+     **/
+
     #[Route('/demande/{id}', name: 'app_commisaire_show')]
     public function show($id,
                          DemandeTypeRepository $demandeTypeRepository,

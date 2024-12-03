@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/chequier')]
 class ChequierController extends AbstractController
 {
+    /**
+     * Page de liste de tous les chéquiers.
+     **/
     #[Route(name: 'app_chequier_index', methods: ['GET'])]
     public function index(ChequierRepository $chequierRepository): Response
     {
@@ -22,6 +25,10 @@ class ChequierController extends AbstractController
         ]);
     }
 
+    /**
+     * Gestion d'ajout de chéquier (string $chequier_numero_debut, string $chequier_numero_fin, DateTimeInterface $chequier_date_arrivee, Banque $banque):
+     *
+     **/
     #[Route('/new', name: 'app_chequier_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,6 +49,9 @@ class ChequierController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de détails d'un chéquier
+     **/
     #[Route('/{id}', name: 'app_chequier_show', methods: ['GET'])]
     public function show(Chequier $chequier): Response
     {
@@ -50,6 +60,10 @@ class ChequierController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Gestion de modification de chéquier (string $chequier_numero_debut, string $chequier_numero_fin, DateTimeInterface $chequier_date_arrivee, Banque $banque):
+     **/
     #[Route('/{id}/edit', name: 'app_chequier_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Chequier $chequier, EntityManagerInterface $entityManager): Response
     {
@@ -68,10 +82,13 @@ class ChequierController extends AbstractController
         ]);
     }
 
+    /**
+     * Suppression d'un chéquier : à partir d'état
+     **/
     #[Route('/{id}', name: 'app_chequier_delete', methods: ['POST'])]
     public function delete(Request $request, Chequier $chequier, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$chequier->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $chequier->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($chequier);
             $entityManager->flush();
         }
@@ -79,6 +96,10 @@ class ChequierController extends AbstractController
         return $this->redirectToRoute('app_chequier_index', [], Response::HTTP_SEE_OTHER);
     }
 
+
+    /**
+     * Liste du chéquier utilisé
+    **/
     #[Route('/utiliser/cheque', name: 'app_chequier_use', methods: ['GET'])]
     public function utilisation_cheque(): Response
     {

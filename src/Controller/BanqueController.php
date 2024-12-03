@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/banque')]
 class BanqueController extends AbstractController
 {
+    /**
+     * Page de liste de toutes les banques
+     **/
     #[Route(name: 'app_banque_index', methods: ['GET'])]
     public function index(BanqueRepository $banqueRepository): Response
     {
@@ -22,6 +25,10 @@ class BanqueController extends AbstractController
         ]);
     }
 
+    /**
+     * Ajout de banque ($string nom_banque) :
+     * * Le nom de banque doit être unique
+     **/
     #[Route('/new', name: 'app_banque_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,6 +49,9 @@ class BanqueController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de détails d'une banque.
+     **/
     #[Route('/{id}', name: 'app_banque_show', methods: ['GET'])]
     public function show(Banque $banque): Response
     {
@@ -50,6 +60,9 @@ class BanqueController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de modification de banque : le nom de banque doit être unique.
+     **/
     #[Route('/{id}/edit', name: 'app_banque_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Banque $banque, EntityManagerInterface $entityManager): Response
     {
@@ -71,7 +84,7 @@ class BanqueController extends AbstractController
     #[Route('/{id}', name: 'app_banque_delete', methods: ['POST'])]
     public function delete(Request $request, Banque $banque, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$banque->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $banque->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($banque);
             $entityManager->flush();
         }

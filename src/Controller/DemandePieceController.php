@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailDemandePieceRepository;
 use App\Service\DemandeTypeService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/demande_piece')]
 class DemandePieceController extends AbstractController
 {
+    // user connecté
     private $user;
+    //taille maximale des fichiers à importer
     private $megaByte = 1048576;
 
     public function __construct(Security $security)
@@ -24,14 +27,25 @@ class DemandePieceController extends AbstractController
         $this->user = $security->getUser();
     }
 
+    /**
+     * Formulaire d'ajout de pièce justificatif
+     */
     #[Route(path: '/', name: 'dm_piece.liste_demande', methods: ['GET'])]
     public function index(DemandeTypeRepository $dm_rep): Response
     {
-        $data = $dm_rep->findByEtat($this->user,[300]); // A vérifier pour avoir les demandes d'une personnes
+        $data = $dm_rep->findByEtat($this->user, [300]); // A vérifier pour avoir les demandes d'une personnes
         return $this->render('demande_piece/ajout_piece_justificative.html.twig', [
             'demande_types' => $data
         ]);
     }
+
+    /**
+     * Page de détails demande de décaissement.
+     * @param $id
+     * @param DemandeTypeRepository $dm_rep
+     * @param DetailDemandePieceRepository $demandePieceRepository
+     * @return Response
+     */
 
     #[Route(path: '/dm/{id}', name: 'dm_piece.show', methods: ['GET'])]
     public function dm_piece($id, DemandeTypeRepository $dm_rep, DetailDemandePieceRepository $demandePieceRepository): Response
@@ -55,6 +69,15 @@ class DemandePieceController extends AbstractController
         return $this->render("exercice/index.html.twig");
     }
 
+    /**
+     * Formulaire d'upload de piece justificatif
+     *
+     * @param $id
+     * @param Request $request
+     * @param DetailDemandePieceRepository $dt_dm_rep
+     * @param DemandeTypeService $dm_type_service
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     #[Route('/upload_file/{id}', name: 'dm.image')]
     public function uploadImage($id, Request $request,
                                 DetailDemandePieceRepository $dt_dm_rep,
@@ -104,7 +127,7 @@ class DemandePieceController extends AbstractController
                 } else {
                     $errors[] = $data['message'];
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $errors[] = 'Erreur lors du téléchargement du fichier ' . $file->getClientOriginalName() . ' : ' . $e->getMessage();
             }
         }

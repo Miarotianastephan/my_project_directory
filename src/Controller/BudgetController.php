@@ -26,6 +26,10 @@ class BudgetController extends AbstractController
         $this->user = $security->getUser();
     }
 
+    /**
+     * Page de liste de budget
+     **/
+
     #[Route('/', name: 'tresorier.liste_budget', methods: ['GET'])]
     public function liste_budget(DetailBudgetRepository $detailBudgetRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -37,6 +41,10 @@ class BudgetController extends AbstractController
         return $this->render('budget/liste_budget.html.twig', ['liste_budget' => $liste_budget]);
     }
 
+    /**
+     * Page de liste de budget pour l'exercice actuellement ouvert/actif.
+     *  * Récupération de l'exercice valide getExerciceValide().
+     **/
     #[Route('/liste/actuelle', name: 'tresorier.liste_budget_actuelle', methods: ['GET'])]
     public function liste_budget_actuelle(DetailBudgetRepository $detailBudgetRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -48,6 +56,10 @@ class BudgetController extends AbstractController
         return $this->render('budget/liste_budget.html.twig', ['liste_budget' => $liste_budget]);
     }
 
+    /**
+     * Formulaire d'ajout de budget pour les exercices à venir.
+     *  * Récupération des exercices à venir getExerciceNext( DateTime $date)
+     **/
     #[Route('/ajout_budget', name: 'tresorier.form_budget', methods: ['GET'])]
     public function form_budget(ExerciceRepository $exerciceRepository, CompteMereRepository $compteMereRepository): Response
     {
@@ -58,6 +70,11 @@ class BudgetController extends AbstractController
         ]);
     }
 
+    /**
+     * Enregistrement du nouveau budget (int $exercice_id, int $compteMere_id, float $montant, int budgetType_id, DetailBudgetRepository $detailBudgetRepository)
+     *  * Si le plan de compte possède un budget : demande de modification du budget
+     *  * Sinon ajout du budget.
+     **/
     #[Route('/ajout/budget', name: 'tresorier.ajout_budget', methods: ['POST'])]
     public function ajout_budget(Request $request, DetailBudgetRepository $detailBudgetRepository, BudgetTypeRepository $budgetTypeRepository): JsonResponse
     {
@@ -67,7 +84,6 @@ class BudgetController extends AbstractController
         $plan_cpt = $data['plan_cpt'] ?? null;
         $budgetType_id = $budgetTypeRepository->findOneByLibelle("investissement");
 
-        //$budgetType_id = 1;
         if (!$montant) {
             return new JsonResponse(['success' => false, 'message' => "Le montant est obligatoire"]);
         }
@@ -92,7 +108,9 @@ class BudgetController extends AbstractController
         }
     }
 
-
+    /**
+     * Modification du budget (int $detailBudget_id, float $montant)
+     **/
     #[Route('/modifier/budget', name: 'tresorier.modifier_budget', methods: ['POST'])]
     public function modifier_budget(Request $request, DetailBudgetRepository $detailBudgetRepository): JsonResponse
     {

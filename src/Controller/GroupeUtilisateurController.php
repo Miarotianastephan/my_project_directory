@@ -14,6 +14,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/groupe/utilisateur')]
 class GroupeUtilisateurController extends AbstractController
 {
+    /**
+     * Page de liste de tous les roles des utilisateurs
+     *
+     * @param GroupeUtilisateurRepository $groupeUtilisateurRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_groupe_utilisateur_index', methods: ['GET'])]
     public function index(GroupeUtilisateurRepository $groupeUtilisateurRepository): Response
     {
@@ -21,6 +27,14 @@ class GroupeUtilisateurController extends AbstractController
             'groupe_utilisateurs' => $groupeUtilisateurRepository->findAll(),
         ]);
     }
+
+    /**
+     * Page d'ajout de role. Dans la base de donnée, le role d'un utilisateur est au format ['ROLE_0']
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
 
     #[Route('/new', name: 'app_groupe_utilisateur_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -42,6 +56,12 @@ class GroupeUtilisateurController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de détails de role d'utilisateur.
+     *
+     * @param GroupeUtilisateur $groupeUtilisateur
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_groupe_utilisateur_show', methods: ['GET'])]
     public function show(GroupeUtilisateur $groupeUtilisateur): Response
     {
@@ -50,6 +70,14 @@ class GroupeUtilisateurController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de modification et de sauvegarde de role d'utilisateur.
+     *
+     * @param Request $request
+     * @param GroupeUtilisateur $groupeUtilisateur
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_groupe_utilisateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, GroupeUtilisateur $groupeUtilisateur, EntityManagerInterface $entityManager): Response
     {
@@ -68,10 +96,19 @@ class GroupeUtilisateurController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Suppression de role d'utilisateur.
+     *
+     * @param Request $request
+     * @param GroupeUtilisateur $groupeUtilisateur
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_groupe_utilisateur_delete', methods: ['POST'])]
     public function delete(Request $request, GroupeUtilisateur $groupeUtilisateur, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$groupeUtilisateur->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $groupeUtilisateur->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($groupeUtilisateur);
             $entityManager->flush();
         }

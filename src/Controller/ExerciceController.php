@@ -12,18 +12,36 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/exercice')]
 class ExerciceController extends AbstractController
 {
+    /**
+     * Page de liste des exercices
+     * @param ExerciceRepository $exerciceRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_exercice')]
     public function index(ExerciceRepository $exerciceRepository): Response
     {
         return $this->render('exercice/index.html.twig', ['exercices' => $exerciceRepository->findAll()]);
     }
 
+    /**
+     * Page d'ajout d'exercice :
+     *
+     * @param ExerciceRepository $exerciceRepository
+     * @return Response
+     */
     #[Route('/ajout', name: 'app_form_ajout')]
-    public function form_ajout(ExerciceRepository $exerciceRepository): Response
+    public function form_ajout(): Response
     {
         return $this->render('exercice/form_ajout.html.twig');
     }
 
+    /**
+     * Détails d'exercice
+     *
+     * @param $id
+     * @param ExerciceRepository $exerciceRepository
+     * @return JsonResponse
+     */
     #[Route('/{id}', name: 'app_find_exercie', methods: ['GET'])]
     public function findExercice($id, ExerciceRepository $exerciceRepository): JsonResponse
     {
@@ -40,6 +58,13 @@ class ExerciceController extends AbstractController
         ]);
     }
 
+    /**
+     * Enregistrement d'exercice au niveau de la base de donnée
+     *
+     * @param Request $request
+     * @param ExerciceRepository $exerciceRepository
+     * @return JsonResponse
+     */
     #[Route('/ajout_exercice', name: 'app_ajout', methods: ['POST'])]
     public function ajout(Request $request, ExerciceRepository $exerciceRepository): JsonResponse
     {
@@ -65,6 +90,15 @@ class ExerciceController extends AbstractController
 
     }
 
+    /**
+     * Cloture d'un exercice à partir de la page de list des exercices.
+     * Il est impossible de cloturé un exercice qui n'est pas ouvert.
+     *
+     * @param $id
+     * @param Request $request
+     * @param ExerciceRepository $exerciceRepository
+     * @return JsonResponse
+     */
     #[Route('/cloturer/{id}', name: 'app_cloturer_exercie', methods: ['POST'])]
     public function cloturerExercice($id, Request $request, ExerciceRepository $exerciceRepository): JsonResponse
     {
@@ -81,6 +115,16 @@ class ExerciceController extends AbstractController
         ]);
     }
 
+    /**
+     * Enregistrement d'une ouverture d'exercice.
+     * S'il y a déja un exercice en cours, il sera impossible d'ouvrir un autre exercice.
+     * Alors la controlleur retournera un message d'erreur.
+     *
+     * @param $id
+     * @param Request $request
+     * @param ExerciceRepository $exerciceRepository
+     * @return JsonResponse
+     */
     #[Route('/ouverture/{id}', name: 'app_ouverture_exercie', methods: ['POST'])]
     public function ouvertureExercice($id, Request $request, ExerciceRepository $exerciceRepository): JsonResponse
     {

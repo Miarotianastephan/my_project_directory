@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\DetailTransactionCompte;
-use App\Entity\TransactionType;
 use App\Form\DetailTransactionCompteType;
 use App\Repository\DetailTransactionCompteRepository;
 use App\Repository\TransactionTypeRepository;
@@ -17,6 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/detail/transaction/compte')]
 class DetailTransactionCompteController extends AbstractController
 {
+    /**
+     * Page de liste de tous les codes de transaction
+     *
+     * @param DetailTransactionCompteRepository $detailTransactionCompteRepository
+     * @return Response
+     */
     #[Route(name: 'app_detail_transaction_compte_index', methods: ['GET'])]
     public function index(DetailTransactionCompteRepository $detailTransactionCompteRepository): Response
     {
@@ -25,20 +30,36 @@ class DetailTransactionCompteController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de liaison entre code de transaction et plan de compte avec le type : crédit/débit.
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param TransactionTypeRepository $transactionTypeRepository
+     * @return Response
+     */
     #[Route('/add', name: 'app_detail_transaction_compte_add', methods: ['GET'])]
-    public function add(Request $request, EntityManagerInterface $entityManager, TransactionTypeRepository $transactionTypeRepository  ): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, TransactionTypeRepository $transactionTypeRepository): Response
     {
         return $this->render('detail_transaction_compte/_add.html.twig');
     }
 
+    /**
+     * Ajout de liaison entre code de transaction et plan de compte avec le type dans la base de donnée.
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param TransactionTypeRepository $transactionTypeRepository
+     * @return Response
+     */
     #[Route('/add_transaction', name: 'app_detail_transaction_compte_add_transaction', methods: ['POST'])]
-    public function add_transaction(Request $request, EntityManagerInterface $entityManager, TransactionTypeRepository $transactionTypeRepository  ): Response
+    public function add_transaction(Request $request, EntityManagerInterface $entityManager, TransactionTypeRepository $transactionTypeRepository): Response
     {
         $data = json_decode($request->getContent(), true);
         $code_transaction = $data['code_transaction'] ?? null;
         $libelle = $data['libelle'] ?? null;
         $description = $data['description'] ?? null;
-        $reponse = $transactionTypeRepository->ajoutCodeTransaction($code_transaction, $libelle,$description);
+        $reponse = $transactionTypeRepository->ajoutCodeTransaction($code_transaction, $libelle, $description);
 
         $reponse = json_decode($reponse->getContent(), true);
 
@@ -49,6 +70,14 @@ class DetailTransactionCompteController extends AbstractController
         ]);
     }
 
+    /**
+     * Ajout et sauvegarde de liaison entre code de transaction et plan de compte avec le type
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param DetailTransactionCompteRepository $detailTransactionCompteRepository
+     * @return Response
+     */
     #[Route('/new', name: 'app_detail_transaction_compte_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, DetailTransactionCompteRepository $detailTransactionCompteRepository): Response
     {
@@ -83,6 +112,12 @@ class DetailTransactionCompteController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de détails de code de transaction.
+     *
+     * @param DetailTransactionCompte $detailTransactionCompte
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_detail_transaction_compte_show', methods: ['GET'])]
     public function show(DetailTransactionCompte $detailTransactionCompte): Response
     {
@@ -90,6 +125,15 @@ class DetailTransactionCompteController extends AbstractController
             'detail_transaction_compte' => $detailTransactionCompte,
         ]);
     }
+
+    /**
+     * Page de modification et sauvegarde de modification de liaison entre code de transaction et plan de compte avec le type
+     *
+     * @param Request $request
+     * @param DetailTransactionCompte $detailTransactionCompte
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
 
     #[Route('/{id}/edit', name: 'app_detail_transaction_compte_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, DetailTransactionCompte $detailTransactionCompte, EntityManagerInterface $entityManager): Response
@@ -109,6 +153,14 @@ class DetailTransactionCompteController extends AbstractController
         ]);
     }
 
+    /**
+     * Suppression de liaison entre code de transaction et plan de compte
+     *
+     * @param Request $request
+     * @param DetailTransactionCompte $detailTransactionCompte
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_detail_transaction_compte_delete', methods: ['POST'])]
     public function delete(Request $request, DetailTransactionCompte $detailTransactionCompte, EntityManagerInterface $entityManager): Response
     {

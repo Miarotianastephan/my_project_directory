@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\DemandeTypeRepository;
 use App\Repository\DetailTransactionCompteRepository;
 use App\Repository\EvenementRepository;
 use App\Repository\ExerciceRepository;
@@ -20,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ComptableController extends AbstractController
 {
     private $user;
-    
+
 
     public function __construct(Security $security)
     {
@@ -84,6 +83,11 @@ class ComptableController extends AbstractController
         ]);
     }
 
+    /**
+     * Formulaire d'ajout de dépense directe :
+     *  * findCompteCaisse() = Les plans de compte pour la caisse sont défini par longueur de numéro de compte = 6 et commencent par 51.
+     *  * findTransactionDepenseDirecte() = Les codes de transaction pour les opérations directes sont : ['CE-001','CE-007', 'CE-010','CE-011'].
+     **/
     #[Route('/form/depense', name: 'comptable.form_depense_directe', methods: ['GET'])]
     public function form_depense_directe(
         PlanCompteRepository      $planCompteRepository,
@@ -100,6 +104,9 @@ class ComptableController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de détail de code de transaction pour avoir la liste de tous les plans de comptes associé à un plan de compte.
+     **/
     #[Route('/get-transaction-details', name: 'get_transaction_details', methods: ['GET'])]
     public function getTransactionDetails(
         Request                           $request,
@@ -113,7 +120,7 @@ class ComptableController extends AbstractController
         if (!$transaction) {
             return new JsonResponse(['error' => 'Transaction not found'], 404);
         }
-        //$transaction = $transactionTypeRepository->findTransactionByCode("CE-007");
+
         $details = $detailTransactionCompteRepository->findAllByTransaction($transaction);
         $formattedDetails = array_map(function ($detail) {
             return [
@@ -125,6 +132,10 @@ class ComptableController extends AbstractController
         return new JsonResponse($formattedDetails);
     }
 
+    /**
+     * Page de validation d'ajout de dépense directe avec detection automatique du plan de compte de credit :
+     *  * findPlanCompte_CreditByTransaction() =fonction de detection du compte de credit.
+     **/
 
     #[Route('/valider/depense', name: 'comptable.validation_depense_directe', methods: ['POST'])]
     public function validation_depense_directe(Request                           $request,
@@ -259,6 +270,9 @@ class ComptableController extends AbstractController
             ]);
     }
 
+    /**
+     * Ajout de dépense directe dans la base de donnée.
+     **/
     #[Route('/comptabilisation_directe', name: 'comptable.comptabilisation_directe', methods: ['post'])]
     public function comptabilisation_directe(Request             $request,
                                              MouvementRepository $mouvementRepository): JsonResponse
@@ -294,6 +308,9 @@ class ComptableController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de liste des opérations directe.
+     */
     #[Route('/comptabilisation', name: 'comptable.suivi_comptabilisation', methods: ['GET'])]
     public function suivi_comptabilisation(EvenementRepository $evn_repo): Response
     {
@@ -301,16 +318,19 @@ class ComptableController extends AbstractController
         return $this->render('comptable/suivi_comptabilisation.html.twig', ['list_operation_directe' => $list_operation_directe]);
     }
 
+    /**
+     * Page de détails d'une opération directe.
+     */
     #[Route('/comptabilisation/{id}', name: 'comptable.suivi_comptabilisation_detail', methods: ['GET'])]
     public function compatbilisation(int $id, EvenementRepository $evn_repo, MouvementRepository $mv_repo): Response
     {
         $evenement = $evn_repo->find($id);
         $list_mouvement = $mv_repo->findAllMvtByEvenement($evenement);
         return $this->render(
-            'comptable/show_comptabilisation.html.twig', 
+            'comptable/show_comptabilisation.html.twig',
             ['evenement' => $evenement,
-            'list_mouvement' => $list_mouvement
-        ]);
+                'list_mouvement' => $list_mouvement
+            ]);
     }
 
 
