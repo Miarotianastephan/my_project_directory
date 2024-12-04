@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\CompteMere;
 use App\Entity\Evenement;
 use App\Entity\Exercice;
 use App\Entity\Mouvement;
@@ -20,6 +19,7 @@ class MouvementRepository extends ServiceEntityRepository
     private UtilisateurRepository $utilisateurRepository;
     private ExerciceRepository $exerciceRepository;
     private PlanCompteRepository $planCompteRepository;
+
     public function __construct(ManagerRegistry           $registry,
                                 TransactionTypeRepository $trsTypeRepo,
                                 UtilisateurRepository     $utilisateurRepo,
@@ -142,10 +142,6 @@ class MouvementRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        // Conversion de la date en chaîne (format 'Y-m-d')
-        //$date = $exercice->getExerciceDateDebut()->format('Y-m-d');
-        //dump($date);
-
         // Script SQL
         $script = "select total,mois_operation,EVN_EXERCICE_ID from ce_v_debit_banque_mensuel where evn_exercice_id = :exercice";
 
@@ -171,7 +167,6 @@ class MouvementRepository extends ServiceEntityRepository
 
                     $moisData[(int)$mois] = $total; // Remplace la valeur 0 par la vraie valeur si trouvée
                 }
-                dump($moisData);
                 return $moisData; // Retourne le tableau des totaux par mois
             }
 
@@ -232,7 +227,7 @@ class MouvementRepository extends ServiceEntityRepository
     public function findAllOrderedByEventDateAndId(): array
     {
         return $this->createQueryBuilder('m')->join('m.mvt_evenement_id', 'e')->orderBy('e.evn_date_operation', 'ASC')->addOrderBy('e.id', 'ASC')->getQuery()->getResult();
-    } 
+    }
 
     public function getTotalMouvementGroupedByCompteMere(): array
     {
@@ -247,12 +242,13 @@ class MouvementRepository extends ServiceEntityRepository
     public function getTotalMouvementGroupedByPlanCompte(): array
     {
         return $this->createQueryBuilder('m')
-        ->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')
-        ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
-        ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
-        ->getQuery()->getResult();
+            ->select('pc.cpt_numero, SUM(m.mvt_montant) as total_montant')
+            ->join('m.mvt_compte_id', 'pc') // Jointure avec PlanCompte
+            ->groupBy('pc.cpt_numero') // Groupement par le numéro de CompteMere
+            ->getQuery()->getResult();
     }
-    // Ajustment de la fonction 
+
+    // Ajustment de la fonction
     public function getSoldeRestantByMouvement(): array
     {
         return $this->createQueryBuilder('m')
@@ -315,7 +311,6 @@ class MouvementRepository extends ServiceEntityRepository
         }
 
         // Préparation et exécution de la requête
-        dump($sql);
         $sql .= " ORDER BY ev.evn_date_operation ASC";
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery($params);
@@ -324,17 +319,18 @@ class MouvementRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function findAllMvtByEvenement(Evenement $evn): ?array{
+    public function findAllMvtByEvenement(Evenement $evn): ?array
+    {
         return $this->createQueryBuilder('mvt')
-        ->where('mvt.mvt_evenement_id = :evenement')
-        ->setParameter('evenement', $evn)
-        ->getQuery()
-        ->getResult();
+            ->where('mvt.mvt_evenement_id = :evenement')
+            ->setParameter('evenement', $evn)
+            ->getQuery()
+            ->getResult();
     }
 
     public function comptabilisation_directe(string $date, string $entite,
-        string $transaction, string $compte_debit_numero,
-        string $compte_credit_numero, string $montant, int $user_responsable): JsonResponse
+                                             string $transaction, string $compte_debit_numero,
+                                             string $compte_credit_numero, string $montant, int $user_responsable): JsonResponse
     {
 
         $transaction_a_faire = $this->transactionTypeRepository->findTransactionByCode($transaction);
@@ -343,51 +339,35 @@ class MouvementRepository extends ServiceEntityRepository
         $compte_debit = $this->planCompteRepository->findByNumero($compte_debit_numero);
         $compte_credit = $this->planCompteRepository->findByNumero($compte_credit_numero);
         if (!$transaction_a_faire) {
-        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de transaction"]);
+            return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de transaction"]);
         } elseif (!$responsable) {
-        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le responsable"]);
+            return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le responsable"]);
         } elseif (!$exercice) {
-        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier l'exercice"]);
+            return new JsonResponse(['success' => false, 'message' => "Veuillez verifier l'exercice"]);
         } elseif (!$compte_debit) {
-        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de debit"]);
+            return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de debit"]);
         } elseif (!$compte_credit) {
-        return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de credit"]);
+            return new JsonResponse(['success' => false, 'message' => "Veuillez verifier le code de credit"]);
         }
 
 
         $entityManager = $this->getEntityManager();
         $entityManager->beginTransaction();
         try {
-        //création de l'evenement
-        $evenement = new Evenement($transaction_a_faire,$responsable,$exercice,$entite,(float)$montant,"default",new DateTime());
-        // $evenement->setEvnTrsId($transaction_a_faire);
-        // $evenement->setEvnResponsable($responsable);
-        // $evenement->setEvnExercice($exercice);
-        // $evenement->setEvnCodeEntity($entite);
-        // $evenement->setEvnMontant((float)$montant);
-        // $evenement->setEvnReference("DIR/2024/01");
-        // $evenement->setEvnDateOperation(new DateTime());
-        $entityManager->persist($evenement);
-        $ref_evn = "DIR/" . date('Y') . "/" . $evenement->getId();
-        $evenement->setEvnReference($ref_evn);
+            //création de l'evenement
+            $evenement = new Evenement($transaction_a_faire, $responsable, $exercice, $entite, (float)$montant, "default", new DateTime());
+            $entityManager->persist($evenement);
+            $ref_evn = "DIR/" . date('Y') . "/" . $evenement->getId();
+            $evenement->setEvnReference($ref_evn);
 
-        //CREATION DE MOUVEMENT
-        $mv_debit = new Mouvement($evenement,$compte_debit,(float)$montant,true);                        // DEBIT
-        // $mv_debit->setMvtEvenementId($evenement);
-        // $mv_debit->setMvtMontant((float)$montant);
-        // $mv_debit->setMvtDebit(true);
-        // $mv_debit->setMvtCompteId($compte_debit);
-        $entityManager->persist($mv_debit);
+            //CREATION DE MOUVEMENT
+            $mv_debit = new Mouvement($evenement, $compte_debit, (float)$montant, true);                        // DEBIT
+            $entityManager->persist($mv_debit);
 
-        $mv_credit = new Mouvement($evenement,$compte_credit,(float)$montant,false);                        // DEBIT
-        // $mv_credit->setMvtEvenementId($evenement);
-        // $mv_credit->setMvtMontant((float)$montant);
-        // $mv_credit->setMvtDebit(false);
-        // $mv_credit->setMvtCompteId($compte_credit);
-        $entityManager->persist($mv_credit);
-        dump("MAND");
-        $entityManager->flush();
-        $entityManager->commit();
+            $mv_credit = new Mouvement($evenement, $compte_credit, (float)$montant, false);                        // DEBIT
+            $entityManager->persist($mv_credit);
+            $entityManager->flush();
+            $entityManager->commit();
         } catch (\Exception $e) {
             dump($e->getMessage());
             $entityManager->rollback();

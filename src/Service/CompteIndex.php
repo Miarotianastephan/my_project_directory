@@ -18,7 +18,7 @@ class CompteIndex
         foreach ($rawData as $row) {
             $numero = $row['N° de compte'];
             $intitule = $row['Intitullé'];
-            
+
             $planCompte = new PlanCompte();
             $planCompte->setCptNumero($numero);
             $planCompte->setCptLibelle($intitule);
@@ -28,22 +28,23 @@ class CompteIndex
         // dump(['data'=> $this->compteIndexe]);
     }
 
-    private function findParent(){
+    private function findParent()
+    {
 
-        foreach($this->compteIndexe as $compte){
-            if($compte->getCompteMere() == null){
+        foreach ($this->compteIndexe as $compte) {
+            if ($compte->getCompteMere() == null) {
                 $numeroCompte = $compte->getCptNumero();
                 $length = strlen($numeroCompte);
-                for ($i = $length-1; $i > 1; $i--) {
+                for ($i = $length - 1; $i > 1; $i--) {
                     $parentNumero = substr($numeroCompte, 0, $i);
-                    if ( isset($this->compteIndexe[$parentNumero])  && $compte->getCompteMere() == null) {
-                        // Création du parent du mère trouvé avec son fils
+                    if (isset($this->compteIndexe[$parentNumero]) && $compte->getCompteMere() == null) {
+                        // Création du parent de la mère trouvé avec son fils
                         $this->addParentToCompte($numeroCompte, $parentNumero);
                         // dump($this->compteIndexe[$numeroCompte]);
                     }
                 }
-                if($compte->getCompteMere() == null && $length > 2){ // no_parent et que sa longueur est ing_égale à minimale
-                    // Création du parent du mère =  fils
+                if ($compte->getCompteMere() == null && $length > 2) { // no_parent et que sa longueur est ing_égale à minimale
+                    // Création du parent de la mère =  fils
                     $this->addParentToCompte($numeroCompte, $numeroCompte);
                 }
             }
@@ -52,13 +53,14 @@ class CompteIndex
 
     }
 
-    private function addParentToCompte($compte,$parentNumero){
-        // Création du parent du mère trouvé avec son fils
+    private function addParentToCompte($compte, $parentNumero)
+    {
+        // Création du parent de la mère trouvé avec son fils
         $compteMere = new CompteMere();
         $compteMere->setCptNumero($parentNumero);
         $intitule = $this->compteIndexe[$parentNumero]->getCptLibelle();
         $compteMere->setCptLibelle($intitule);
-        $this->compteIndexe[$compte]->setCompteMere($compteMere); // mère du comptes actuel
+        $this->compteIndexe[$compte]->setCompteMere($compteMere); // mère des comptes actuelle
     }
 
 }

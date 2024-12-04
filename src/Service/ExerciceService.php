@@ -13,7 +13,7 @@ class ExerciceService
         $this->exerciceRepository = $exoRepository;
     }
 
-    // fonction pour avoir la dernière exercice en cours et non archivé
+    // fonction pour avoir le dernier exercice en cours et non archivé
     public function getLastExercice() {
         return $this->exerciceRepository->findMostRecentOpenExercice();
     }

@@ -351,15 +351,15 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // Insérer Validé dans Historique des demandes
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
+            $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // Historisation de la demande OK_ETAT
             $log_dm->setUserMatricule($user_sg->getUserMatricule());
             $log_dm->setDemandeType($dm_type);
             $log_dm->setLogDmDate(new DateTime());
             $entityManager->persist($log_dm);
 
             // Update Validé => Débloqué dans les demandes
-            // $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Débloquage du demandes OK_ETAT
-            $dm_type->setDmEtat($this->etatDmRepository, 300);                                      // Débloquage du demandes OK_ETAT
+            // $dm_type->setDmEtat($this->etatDmRepository, 301);                                      // Déblocage de la demande OK_ETAT
+            $dm_type->setDmEtat($this->etatDmRepository, 300);                                      // Déblocage de la demande OK_ETAT
             $dm_type->setUtilisateur($user_tresorier);
             $dm_type->setDmDate($log_dm->getLogDmDate());                                           // MAJ de dm_type la base de données
 
@@ -380,7 +380,7 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
             // dump($detail_transaction);
             // Création evenement 
-            $evenement = new Evenement($transaction_a_faire,$user_tresorier,$exercice_demande,$dm_type->getEntityCode()->getCptLibelle(),$montant_demande,$reference_demande,new DateTime());
+            $evenement = new Evenement($transaction_a_faire, $user_tresorier, $exercice_demande, $dm_type->getEntityCode()->getCptLibelle(), $montant_demande, $reference_demande, new DateTime());
             $entityManager->persist($evenement);
             // Création des mouvements
 
@@ -388,19 +388,19 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
             $mv_debit = new Mouvement($evenement, $numero_compte_debit, $montant_demande, true);// DEBIT
             $entityManager->persist($mv_debit);
 
-            $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire,0);                // identifier le mouvement à réaliser
+            $detail_transaction_credit = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);                // identifier le mouvement à réaliser
             if ($detail_transaction_credit === null) {
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Compte à créditer introuvable pour ' . $transaction_a_faire->getTrsCode()
                 ]);
             }
-            $mv_credit = new Mouvement($evenement,$detail_transaction_credit->getPlanCompte(),$montant_demande,false);// CREDIT
+            $mv_credit = new Mouvement($evenement, $detail_transaction_credit->getPlanCompte(), $montant_demande, false);// CREDIT
             $entityManager->persist($mv_credit);
 
             dump("numero de debit = " . $numero_compte_debit->getCptNumero() . " libelle" . $numero_compte_debit->getCptLibelle());
             dump("numero de credit = " . $detail_transaction_credit->getPlanCompte()->getCptNumero() . " libelle" . $detail_transaction_credit->getPlanCompte()->getCptLibelle());
-            
+
 
             $entityManager->flush();
             $entityManager->commit();
@@ -420,9 +420,13 @@ class LogDemandeTypeRepository extends ServiceEntityRepository
 
     }
 
-    // Pour avoir la liste des log pour une utilisateur 
-    // Dia alaina avy ato ny demandeType niaviny 
-    // Dia alaina @ demandeType ny log Rehetra avy eo
+    /**
+     * Pour avoir la liste des log pour une utilisateur
+     * Dia alaina avy ato ny demandeType niaviny
+     * Dia alaina @ demandeType ny log Rehetra avy eo
+     * @param $userMatricule
+     * @return array
+     */
     public function findLogsForUserMatricule($userMatricule): array
     {
         return $this->createQueryBuilder('e')

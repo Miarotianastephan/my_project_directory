@@ -6,7 +6,6 @@ use App\Entity\PlanCompte;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 
 /**
  * @extends ServiceEntityRepository<PlanCompte>
@@ -29,7 +28,6 @@ class PlanCompteRepository extends ServiceEntityRepository
 
     public function findCompteCaisse(): array
     {
-        //$list_cpt_numero = ["510001", "510002", "510003", "510004", "510005", "510006", "510007", "510008", "510009", "510010", "510011"];
         return $this->createQueryBuilder('p')
             ->where('p.cpt_numero LIKE :numStart51')
             ->andWhere('LENGTH(p.cpt_numero) = 6')  // Vérification que le numéro fait bien 6 chiffres
@@ -57,6 +55,7 @@ class PlanCompteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function findEntityCode(): array
     {
         return $this->createQueryBuilder('p')
@@ -67,7 +66,8 @@ class PlanCompteRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function updatePlanCompte(PlanCompte $pl){
+    public function updatePlanCompte(PlanCompte $pl)
+    {
         try {
             $em = $this->getEntityManager();
             $em->persist($pl);
@@ -75,7 +75,7 @@ class PlanCompteRepository extends ServiceEntityRepository
             return [
                 "status" => true,
                 "update" => true,
-                "message" => sprintf('%s modifié avec succès',$pl->getCptLibelle()),
+                "message" => sprintf('%s modifié avec succès', $pl->getCptLibelle()),
             ];
         } catch (UniqueConstraintViolationException $exc_unique) { // En cas d'erreur
             return $reponse_data = [

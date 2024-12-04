@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\CompteMere;
 use App\Entity\Evenement;
 use App\Entity\Exercice;
 use App\Entity\TransactionType;
@@ -31,24 +30,25 @@ class EvenementRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function persistEvenement(
-    EntityManager $em,
-    TransactionType $trsType,
-    Utilisateur $utilisateur,
-    Exercice $exercice,
-    $codeEntite,
-    $montant,
-    $reference,
-    $dateOperation
-    ){
-        $evn = new Evenement($trsType, $utilisateur, $exercice, $codeEntite,$montant,$reference,$dateOperation);
+    public function persistEvenement(EntityManager   $em,
+                                     TransactionType $trsType,
+                                     Utilisateur     $utilisateur,
+                                     Exercice        $exercice,
+                                                     $codeEntite,
+                                                     $montant,
+                                                     $reference,
+                                                     $dateOperation
+    )
+    {
+        $evn = new Evenement($trsType, $utilisateur, $exercice, $codeEntite, $montant, $reference, $dateOperation);
         $em->persist($evn);
         $em->flush();
         return $evn;
     }
 
-    // Pour avoir un liste d'Evenement par utilisateur qui l'as effectué
-    public function findEvnByResponsable(Utilisateur $responsable){
+    // Pour avoir une liste d'Evenement par utilisateur qui l'a effectué
+    public function findEvnByResponsable(Utilisateur $responsable)
+    {
         return $this->createQueryBuilder('e')
             ->andWhere('e.evn_responsable = :val')
             ->setParameter('val', $responsable)

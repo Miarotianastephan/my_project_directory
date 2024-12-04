@@ -7,20 +7,43 @@
     <list default="true" id="b69be9d3-9779-4fef-82ae-85f1694b34a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/JournalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/JournalController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ObservationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ObservationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/PlanCompteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PlanCompteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SGController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SGController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TableauBordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TableauBordController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TransactionTypeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TransactionTypeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TresorierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TresorierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/ScriptAddEtatDemandeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/ScriptAddEtatDemandeCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VDebitBanqueMensuelCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VDebitBanqueMensuelCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VDebitCaisseMensuelCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VDebitCaisseMensuelCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementCreditBanqueCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementCreditBanqueCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementDebitBanqueCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementDebitBanqueCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/VMouvementDebitCaisseSiegeCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/VMouvementDebitCaisseSiegeCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ApprovisionnementPieceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ApprovisionnementPieceRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/BanqueRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/BanqueRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/BudgetTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/BudgetTypeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/ChequierRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ChequierRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CompteMereRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/DemandeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DemandeTypeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailBudgetRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DetailDemandePieceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailDemandePieceRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/DetailTransactionCompteRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/EtatDemandeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/EtatDemandeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/EvenementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/EvenementRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ExerciceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ExerciceRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/GroupeUtilisateurRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/GroupeUtilisateurRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LogDemandeTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MouvementRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ObservationDemandeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ObservationDemandeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/PlanCompteRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PlanCompteRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionTypeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UsageChequeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UsageChequeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UtilisateurRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UtilisateurRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/VersementsRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/VersementsRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Security/ActiveDirectoryAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/ActiveDirectoryAuthenticator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/CompteIndex.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/CompteIndex.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/DemandeTypeService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/EtatFinancierService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/EtatFinancierService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/ExerciceService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/ExerciceService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/OperationInverseService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/OperationInverseService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/PlanCompteService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/PlanCompteService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/UtilisateurService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/UtilisateurService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/VersementService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/VersementService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -333,7 +356,8 @@
       <workItem from="1731477602233" duration="168000" />
       <workItem from="1733124593739" duration="16427000" />
       <workItem from="1733208263703" duration="383000" />
-      <workItem from="1733215619643" duration="9965000" />
+      <workItem from="1733215619643" duration="10127000" />
+      <workItem from="1733290747001" duration="4137000" />
     </task>
     <servers />
   </component>
@@ -345,7 +369,24 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/ssh-v1" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

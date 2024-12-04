@@ -17,32 +17,17 @@ class UtilisateurRepository extends ServiceEntityRepository
         parent::__construct($registry, Utilisateur::class);
     }
 
-    //    /**
-    //     * @return Utilisateur[] Returns an array of Utilisateur objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
     public function findOneByUserMatricule($value): ?Utilisateur
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.user_matricule = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
-    public function findUserByMatricule(string $user_matricule): array{
+    public function findUserByMatricule(string $user_matricule): array
+    {
         $entity_manager = $this->getEntityManager();
         $query = $entity_manager->createQuery(
             'select u.user_matricule
@@ -75,14 +60,15 @@ class UtilisateurRepository extends ServiceEntityRepository
         }
     }
 
-    public function updateUtilisateur(Utilisateur $u){
+    public function updateUtilisateur(Utilisateur $u)
+    {
         try {
             $em = $this->getEntityManager();
             $em->persist($u);
             $em->flush();
             return [
                 "status" => true,
-                "message" => sprintf('Utilisateur %s créer avec succès',$u->getUserMatricule()),
+                "message" => sprintf('Utilisateur %s créer avec succès', $u->getUserMatricule()),
             ];
         } catch (\Exception $except) {
             return [

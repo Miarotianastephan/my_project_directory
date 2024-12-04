@@ -1,14 +1,12 @@
 Symfony 6.4 ready to use webapp
 
 
-* téléchargé icon : composer require symfony/ux-icons
-* télécharger de façon permanent :php bin/console ux:icons import [heroicons:information-circle]
-* téléchargé composer upload file : composer require vich/uploader-bundle 
-* php bin/console ux:icons:import flat-color-icons:print
-* php bin/console ux:icons:import heroicons:information-circle
-* php bin/console ux:icons:import heroicons:arrow-left-circle
-* php bin/console ux:icons:import flowbite:edit-outline
-* php bin/console ux:icons:import bi:info-circle
+**Scénario de déploiement**:
+1. Importer le dossier zippé dans le serveur
+2. Décompresser le dossier dans /var/www/html
+3. Allouer les droits nécessaires
+4. Changer le owner en tant qu'apache
+5. Lire et executer A_execute.bat (à renomer A_executer.sh sur serveur linux)
 
 **Scénario de test**:
 1. Ajout utilisateur admin (Data fixture)
@@ -22,4 +20,6 @@ Symfony 6.4 ready to use webapp
 
 **Accès SSH pour le code**:
 1. Ajouter l'extension remote SSH sur visual studio code
-2. ouvrir la ligne de commande et executer 
+2. ouvrir la ligne de commande et executé : code --remote ssh-remote+[nom_user]@[0.0.0.0] /var/www/html
+3. Pour modification en tant que root ajouter l'extension : Save as Root in remote - ssh
+

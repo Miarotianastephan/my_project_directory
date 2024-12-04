@@ -5,11 +5,8 @@ namespace App\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'VMouvementDebitBanque',
@@ -17,7 +14,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class VMouvementDebitBanqueCommand extends Command
 {
-    private EntityManagerInterface  $entityManager;
+    private EntityManagerInterface $entityManager;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct();
@@ -56,7 +54,6 @@ class VMouvementDebitBanqueCommand extends Command
 
         try {
             $stmt = $connection->prepare($sql);
-            //$stmt->bindValue('libelle_compte', 'banque',\PDO::PARAM_STR);
 
             // Afficher un message d'information avant l'exécution
             $output->writeln('<info>Création de la vue VMouvementDebitBanque en cours...</info>');
@@ -69,7 +66,7 @@ class VMouvementDebitBanqueCommand extends Command
             //$connection->commit();
             $output->writeln('<info>La vue VMouvementDebitBanque a été créée avec succès !</info>');
             return Command::SUCCESS;
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Command::FAILURE;
         }

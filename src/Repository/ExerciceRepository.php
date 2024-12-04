@@ -50,7 +50,7 @@ class ExerciceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')->where('e.exercice_date_debut > :date')->andWhere('e.exercice_date_fin IS NULL')->setParameter('date', $date, 'customdate')->getQuery()->getResult();
     }
 
-    public function cloturerExercice(int $id_exercie,string $date_cloture): JsonResponse
+    public function cloturerExercice(int $id_exercie, string $date_cloture): JsonResponse
     {
         $exercice_valide = $this->getExerciceValide();
         $entityManager = $this->getEntityManager();
@@ -59,7 +59,7 @@ class ExerciceRepository extends ServiceEntityRepository
             return new JsonResponse(['success' => false, 'message' => 'Aucun exercice ouvert']);
         }
         $exercice = $this->find($id_exercie);
-        if (!$exercice || $exercice!= $exercice_valide){
+        if (!$exercice || $exercice != $exercice_valide) {
             return new JsonResponse(['success' => false, 'message' => 'Exercice invalide']);
         }
 
@@ -85,6 +85,15 @@ class ExerciceRepository extends ServiceEntityRepository
         }
     }
 
+    public function getExerciceValide(): ?Exercice
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.is_valid = true')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+    }
+
     public function ouvertureExercice(int $id_exercie): JsonResponse
     {
         $exercice_valide = $this->getExerciceValide();
@@ -94,7 +103,7 @@ class ExerciceRepository extends ServiceEntityRepository
         }
 
         $exercice = $this->find($id_exercie);
-        if (!$exercice ){
+        if (!$exercice) {
             return new JsonResponse(['success' => false, 'message' => 'Exercice invalide']);
         }
 
@@ -116,18 +125,6 @@ class ExerciceRepository extends ServiceEntityRepository
             $entityManager->rollback();
             return new JsonResponse(['success' => false, 'message' => $e->getMessage()]);
         }
-    }
-
-
-
-
-    public function getExerciceValide(): ?Exercice
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.is_valid = true')
-            ->getQuery()
-            ->getOneOrNullResult();
-
     }
 
     public function findMostRecentOpenExercice(): ?Exercice

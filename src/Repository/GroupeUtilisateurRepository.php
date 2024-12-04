@@ -16,33 +16,18 @@ class GroupeUtilisateurRepository extends ServiceEntityRepository
         parent::__construct($registry, GroupeUtilisateur::class);
     }
 
-    //    /**
-    //     * @return GroupeUtilisateur[] Returns an array of GroupeUtilisateur objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('g.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-       public function findByLibelle($libelle): ?GroupeUtilisateur
-       {
-           return $this->createQueryBuilder('g')
-               ->andWhere('g.grp_libelle = :val')
-               ->setParameter('val', $libelle)
-               ->getQuery()
-               ->getOneOrNullResult()
-           ;
-       }
-    
-        /**
-     * Récupère la liste des groupes où l'utilisateur n'est pas concerné.
+    public function findByLibelle($libelle): ?GroupeUtilisateur
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.grp_libelle = :val')
+            ->setParameter('val', $libelle)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Récupère la liste des groupes ou l'utilisateur n'est pas concerné.
      *
      * @param int $currentGroupId L'ID du groupe actuel de l'utilisateur
      * @return GroupeUtilisateur[] Retourne un tableau d'entités GroupeUtilisateur

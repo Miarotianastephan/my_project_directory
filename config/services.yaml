@@ -8,6 +8,7 @@ parameters:
     uploads_directory: '%kernel.project_dir%/public/images/pieces'
     uploads_approvisionnement: '%kernel.project_dir%/public/images/approvisionnements'
     # Enregistrement de l'extension Twig
+    # Gestion de role des utilisateurs
     App\Twig\AppExtension:
         tags: ['twig.extension']
     app.roles.admin: 'ROLE_0'

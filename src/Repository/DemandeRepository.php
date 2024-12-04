@@ -24,33 +24,17 @@ class DemandeRepository extends ServiceEntityRepository
     public function findAll(): array
     {
         return $this->createQueryBuilder('d')
-             ->orderBy('d.id', 'ASC')
-             ->getQuery()
-              ->getResult();
+            ->orderBy('d.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
-    //    /**
-    //     * @return Demande[] Returns an array of Demande objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-       public function findDemandeByCode($code_value): ?Demande
-       {
-           return $this->createQueryBuilder('d')
-               ->andWhere('d.dm_code = :val')
-               ->setParameter('val', $code_value)
-               ->getQuery()
-               ->getOneOrNullResult()
-           ;
-       }
+    public function findDemandeByCode($code_value): ?Demande
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.dm_code = :val')
+            ->setParameter('val', $code_value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

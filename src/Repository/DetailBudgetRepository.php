@@ -53,10 +53,10 @@ class DetailBudgetRepository extends ServiceEntityRepository
      * @param int $budgetType_id
      * @return JsonResponse
      */
-    public function ajoutDetailBudget(int                    $exercice_id,
-                                      int                    $compteMere_id,
-                                      float                  $montant,
-                                      int                    $budgetType_id): JsonResponse
+    public function ajoutDetailBudget(int   $exercice_id,
+                                      int   $compteMere_id,
+                                      float $montant,
+                                      int   $budgetType_id): JsonResponse
 
     {
         $entityManager = $this->getEntityManager();
@@ -72,10 +72,6 @@ class DetailBudgetRepository extends ServiceEntityRepository
         if (!$budgetType) {
             return new JsonResponse(['success' => false, 'message' => "Le type de budget est introuvable", 'isExiste' => false]);
         }
-        /*$budgetType = $this->budgetTypeRepository->find($budgetType_id);
-        if (!$budgetType) {
-            return new JsonResponse(['success' => false, 'message' => "Le budget type mere est introuvable"]);
-        }*/
 
         /**
          * Si le budget existe alors redirection vers une page de MAJ de budget
@@ -150,7 +146,6 @@ class DetailBudgetRepository extends ServiceEntityRepository
                 if (str_starts_with($cpt_numero, $prefixe)) {
                     $compteMere = $this->compteMereRepository->findByCptNumero($prefixe);
                     if ($compteMere) {
-                        //dump('Correspond à un préfixe dans listCompteDepPrefixe'.$compteMere->getCptNumero());
                         $data = $this->createQueryBuilder('d')
                             ->andWhere('d.exercice = :ex')
                             ->andWhere('d.compte_mere = :cpt')
@@ -171,7 +166,6 @@ class DetailBudgetRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $detail_budget = $entityManager->find(DetailBudget::class, $detail_budget_id);
-        //$budget = $detailBudgetRepository->findByExerciceEtCpt($detail_budget->getExercice(), $detail_budget->getCompteMere());
         $detail_budget->setBudgetMontant($montant);
         try {
             $entityManager->persist($detail_budget);
@@ -268,29 +262,4 @@ class DetailBudgetRepository extends ServiceEntityRepository
                 return 'Autres';
         }
     }
-
-    //    /**
-    //     * @return DetailBudget[] Returns an array of DetailBudget objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?DetailBudget
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

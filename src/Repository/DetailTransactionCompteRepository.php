@@ -55,7 +55,6 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
 
     public function findPlanCompte_CreditByTransaction(TransactionType $transactionType,): ?PlanCompte
     {
-        //dump("transaction == " . $transactionType->getTrsLibelle());
         $data = $this->createQueryBuilder('d')
             ->Where('d.transaction_type = :val')
             ->andWhere('d.isTrsDebit = 0')
@@ -78,32 +77,7 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
             ->setParameter('plc', $planCompte)
             ->getQuery()
             ->getResult();
-         dump($data);
         return $data;
     }
 
-    //    /**
-    //     * @return DetailTransactionCompte[] Returns an array of DetailTransactionCompte objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?DetailTransactionCompte
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

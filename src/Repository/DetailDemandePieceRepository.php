@@ -72,9 +72,9 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             //MAJ demande_type
             //MAJ demande_type => mère sy fille avec demande réelle
 
-            if ($type == "proformat"){
+            if ($type == "proformat") {
                 $dm_type->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT : 300 ihany ny 300 eto
-            }else{
+            } else {
                 // Insérer Validé dans Historique des demandes
                 $log_dm = new LogDemandeType();
                 $log_dm->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat());                     // HIstorisation du demandes OK_ETAT
@@ -82,14 +82,14 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
                 $log_dm->setDemandeType($dm_type);
                 $log_dm->setLogDmDate(new DateTime());
                 $entityManager->persist($log_dm);
-                // Vérification du montant réel insérer lors de l'ajout du pièce justificatif
+                // Vérification du montant réel inséré lors de l'ajout de la pièce justificatif
                 $dm_type->setMontantReel($montant_reel);
                 $dm_type->setUtilisateur($user_demande);
-                $montant_deblocage = $dm_type->getDmMontant(); 
+                $montant_deblocage = $dm_type->getDmMontant();
 
-                if($montant_reel == $montant_deblocage){
+                if ($montant_reel == $montant_deblocage) {
                     $dm_type->setDmEtat($this->etatDmRepository, 400);  // de 300 -> 400(Justifié)
-                }else if($montant_reel < $montant_deblocage){
+                } else if ($montant_reel < $montant_deblocage) {
                     // Ajoutena anaty Log vaovao hoe nandalo état 400 foana 
                     $log_dm_vrsm = new LogDemandeType();
                     $log_dm_vrsm->setDmEtat($this->etatDmRepository, 400);   // trace état 400(directe dans LOG)
@@ -101,7 +101,7 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
                     // Atao état attente de veresement de fonds
                     $dm_type->setDmEtat($this->etatDmRepository, 202);  // de 300 -> 202(Attente)
                     dump("REVERSEMENT EN COURS !!");
-                }else if($montant_reel > $montant_deblocage){
+                } else if ($montant_reel > $montant_deblocage) {
                     // Nouveau demande
                     // Updatena ny champ an'ilay demande
                 }
@@ -139,29 +139,4 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
-    //    /**
-    //     * @return DetailDemandePiece[] Returns an array of DetailDemandePiece objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?DetailDemandePiece
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

@@ -35,17 +35,16 @@ class DemandeTypeService
     private $trsTypeRepo;
     private $detailTrsRepo;
 
-    public function __construct(
-        CompteMereRepository              $compteMereRepo,
-        PlanCompteRepository              $plan_compte_repo,
-        DemandeRepository                 $demande_repo,
-        DemandeTypeRepository             $dm_typeRepo,
-        EtatDemandeRepository             $etatDemandeRepo,
-        Security                          $security,
-        ExerciceRepository                $exercicerepository,
-        LogDemandeTypeRepository          $logDemandeType,
-        TransactionTypeRepository         $trsTypeRepo,
-        DetailTransactionCompteRepository $detailTrsRepo)
+    public function __construct(CompteMereRepository              $compteMereRepo,
+                                PlanCompteRepository              $plan_compte_repo,
+                                DemandeRepository                 $demande_repo,
+                                DemandeTypeRepository             $dm_typeRepo,
+                                EtatDemandeRepository             $etatDemandeRepo,
+                                Security                          $security,
+                                ExerciceRepository                $exercicerepository,
+                                LogDemandeTypeRepository          $logDemandeType,
+                                TransactionTypeRepository         $trsTypeRepo,
+                                DetailTransactionCompteRepository $detailTrsRepo)
     {
         $this->cptMereRepo = $compteMereRepo;
         $this->demandeTypeRepository = $dm_typeRepo;
@@ -187,7 +186,6 @@ class DemandeTypeService
             $entity_code_and_plan_compte_motif = $this->planCompteRepo->find($planCptEntityId);     // getPlanCompte ENTITE by ID
             $demande_type->setEntityCode($entity_code_and_plan_compte_motif);
             $demande_type->setDmModePaiement($modePaiement);
-            // $demande_type->setDmEtat($this->etatDmRepo, 500);                                     // 500 Comptabilisation OK_ETAT
             $demande_type->setDmEtat($this->etatDmRepo, 300);                                     // 500 Comptabilisation OK_ETAT
             $demande_type->setUtilisateur($this->user);
             $demande_type->setPlanCompte($entity_code_and_plan_compte_motif);
@@ -210,19 +208,18 @@ class DemandeTypeService
             $exercice_demande = $this->exercicerepository->getExerciceValide();
             $montant_demande = $demande_type->getDmMontant();
             $numero_compte_debit = $demande_type->getPlanCompte();
-            // $mode_paiement_demande = (int)($demande_type->getDmModePaiement());
             $transaction_a_faire = $this->trsTypeRepo->findTransactionForApprovision();                                         // identifier le type de transaction à faire
             $detail_transaction = $this->detailTrsRepo->findByTransactionWithTypeOperation($transaction_a_faire, 0);            // identifier le mouvement à créditer
-            
+
             // Création evenement
-            $evenement = new Evenement($transaction_a_faire,$user_tresorier,$exercice_demande,$demande_type->getEntityCode()->getCptLibelle(),$montant_demande,$reference_demande,new DateTime());
+            $evenement = new Evenement($transaction_a_faire, $user_tresorier, $exercice_demande, $demande_type->getEntityCode()->getCptLibelle(), $montant_demande, $reference_demande, new DateTime());
             $entityManager->persist($evenement);
             // Création des mouvements
 
-            $mv_debit = new Mouvement($evenement,$numero_compte_debit,$montant_demande,true);                        // DEBIT
+            $mv_debit = new Mouvement($evenement, $numero_compte_debit, $montant_demande, true);                        // DEBIT
             $entityManager->persist($mv_debit);
 
-            $mv_credit = new Mouvement($evenement,$detail_transaction->getPlanCompte(),$montant_demande,false);      // CREDIT
+            $mv_credit = new Mouvement($evenement, $detail_transaction->getPlanCompte(), $montant_demande, false);      // CREDIT
             $entityManager->persist($mv_credit);
 
             $entityManager->flush();
@@ -283,7 +280,7 @@ class DemandeTypeService
             $log_dm->setLogDmDate(new DateTime());
             $em->persist($log_dm);
 
-            // update du demande
+            // update de la demande
             $demande_fonds->setDmEtat($this->etatDmRepo, 101);                                  // Modication de létat du demandes
             $demande_fonds->setUtilisateur($this->user);                                        // ajout de l'utilisateur 
             $demande_fonds->setDmDate($log_dm->getLogDmDate());                                       // MAJ de dm_type la base de données

@@ -17,16 +17,16 @@ class VersementsRepository extends ServiceEntityRepository
         parent::__construct($registry, Versements::class);
     }
 
-    public function persistVersement(EntityManager $em, 
-                                    $nom_remettant, 
-                                    $vrsm_date,
-                                    $adresse,
-                                    $vrsm_montant,
-                                    $demande_obj,
-                                    $utilisateur_obj,
-                                    $vrsm_motif)
+    public function persistVersement(EntityManager $em,
+                                                   $nom_remettant,
+                                                   $vrsm_date,
+                                                   $adresse,
+                                                   $vrsm_montant,
+                                                   $demande_obj,
+                                                   $utilisateur_obj,
+                                                   $vrsm_motif)
     {
-        $vrsm = new Versements($nom_remettant,$vrsm_date,$adresse,$vrsm_montant,$demande_obj,$utilisateur_obj,$vrsm_motif);
+        $vrsm = new Versements($nom_remettant, $vrsm_date, $adresse, $vrsm_montant, $demande_obj, $utilisateur_obj, $vrsm_motif);
         $em->persist($vrsm);
         $em->flush();
         return $vrsm;

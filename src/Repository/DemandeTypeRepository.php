@@ -2,8 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Banque;
-use App\Entity\CompteMere;
 use App\Entity\Demande;
 use App\Entity\DemandeType;
 use App\Entity\Exercice;
@@ -11,7 +9,6 @@ use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @extends ServiceEntityRepository<DemandeType>

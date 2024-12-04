@@ -82,6 +82,5 @@ class ScriptAddEtatDemandeCommand extends Command
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Command::FAILURE;
         }
-        return Command::SUCCESS;
     }
 }

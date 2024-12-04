@@ -55,7 +55,6 @@ class VDebitCaisseMensuelCommand extends Command
                     mois_operation';
         try {
             $stmt = $connection->prepare($sql);
-            //$stmt->bindValue('libelle_compte', 'banque',\PDO::PARAM_STR);
 
             // Afficher un message d'information avant l'exécution
             $output->writeln('<info>Création de la vue VDebitBanqueMensuel en cours...</info>');

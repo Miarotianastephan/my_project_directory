@@ -43,6 +43,16 @@ class TransactionTypeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findTransactionByModePaiement($mode)
+    {
+        if ($mode == 0) {        // especes
+            return $this->findTransactionByCode('CE-005');
+        } elseif ($mode == 1) { // cheques
+            return $this->findTransactionByCode('CE-004');
+        } elseif ($mode == 2) { // subvention BFM
+            return $this->findTransactionByCode('CE-006');
+        }
+    }
 
     public function findTransactionByCode(string $trs_code): ?TransactionType
     {
@@ -53,58 +63,26 @@ class TransactionTypeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findTransactionByModePaiement($mode){
-        if($mode == 0){        // especes
-            return $this->findTransactionByCode('CE-005');
-        }elseif ($mode == 1) { // cheques
-            return $this->findTransactionByCode('CE-004');
-        }elseif ($mode == 2) { // subvention BFM
-            return $this->findTransactionByCode('CE-006');
-        }
-    }
-
-    public function findTransactionForApprovision(){
+    public function findTransactionForApprovision()
+    {
         return $this->findTransactionByCode('CE-002');
     }
-    
 
-    public function findTransactionDepenseDirecte():array{
-        $list_transaction_code = ['CE-001','CE-007', 'CE-010','CE-011'];
+
+    public function findTransactionDepenseDirecte(): array
+    {
+        $list_transaction_code = ['CE-001', 'CE-007', 'CE-010', 'CE-011'];
         return $this->createQueryBuilder('t')
             ->Where('t.trs_code = :cencaissement_subvention')
             ->orWhere('t.trs_code = :dep_directe_paye_bfm')
             ->OrWhere('t.trs_code = :encaiseement_interet_operation')
             ->OrWhere('t.trs_code = :comptabilisation_frais_bancaire')
-            ->setParameter('cencaissement_subvention',$list_transaction_code[0])
-            ->setParameter('dep_directe_paye_bfm',$list_transaction_code[1])
-            ->setParameter('encaiseement_interet_operation',$list_transaction_code[2])
-            ->setParameter('comptabilisation_frais_bancaire',$list_transaction_code[3])
+            ->setParameter('cencaissement_subvention', $list_transaction_code[0])
+            ->setParameter('dep_directe_paye_bfm', $list_transaction_code[1])
+            ->setParameter('encaiseement_interet_operation', $list_transaction_code[2])
+            ->setParameter('comptabilisation_frais_bancaire', $list_transaction_code[3])
             ->getQuery()
             ->getResult();
     }
 
-    //    /**
-    //     * @return TransactionType[] Returns an array of TransactionType objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findTransactionByModePaiement($value): ?TransactionType
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

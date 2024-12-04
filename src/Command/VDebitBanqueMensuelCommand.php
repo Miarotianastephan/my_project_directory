@@ -56,41 +56,10 @@ class VDebitBanqueMensuelCommand extends Command
                     mois_operation';
 
 
-        /* réccuppération par mois
-        $sql = 'CREATE VIEW v_debit_banque_mensuel AS
-                WITH calendrier AS (
-                    SELECT
-                        ADD_MONTHS(TRUNC(ex.exercice_date_debut, \'YYYY\'), LEVEL - 1) AS mois,
-                        ex.exercice_id
-                    FROM exercice ex
-                    CONNECT BY LEVEL <= MONTHS_BETWEEN(
-                        TRUNC(ADD_MONTHS(ex.exercice_date_debut, 12), \'YYYY\') - 1,
-                        TRUNC(ex.exercice_date_debut, \'YYYY\')
-                    ) + 1
-                        AND ADD_MONTHS(TRUNC(ex.exercice_date_debut, \'YYYY\'), LEVEL - 1) < TRUNC(ADD_MONTHS(ex.exercice_date_debut, 12), \'YYYY\')
-                )
-                SELECT
-                    c.mois,
-                    TO_CHAR(c.mois, \'YYYY-MM\') AS mois_operation,
-                    COALESCE(SUM(vmdb.MVT_MONTANT), 0) AS total,
-                    c.exercice_id
-                FROM
-                    calendrier c
-                LEFT JOIN
-                    evenement e ON TRUNC(e.evn_date_operation, \'MM\') = c.mois
-                    AND e.evn_exercice_id = c.exercice_id
-                LEFT JOIN
-                    v_mouvement_debit_banque vmdb ON vmdb.mvt_evenement_id = e.evn_id
-                GROUP BY
-                    c.mois,
-                    c.exercice_id
-                ORDER BY
-                    c.mois';
-        */
+
 
         try {
             $stmt = $connection->prepare($sql);
-            //$stmt->bindValue('libelle_compte', 'banque',\PDO::PARAM_STR);
 
             // Afficher un message d'information avant l'exécution
             $output->writeln('<info>Création de la vue VDebitBanqueMensuel en cours...</info>');
