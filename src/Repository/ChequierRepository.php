@@ -18,10 +18,17 @@ class ChequierRepository extends ServiceEntityRepository
     }
 
     /**
-     * Fonction pour savoir si le numéro de chèque est valide
-     * @param string $numero
-     * @param Banque $banque
-     * @return bool
+     * Vérifie si un numéro de chèque existe dans la plage des numéros d'un chéquier pour une banque donnée.
+     *
+     * Cette méthode permet de vérifier si un numéro de chèque donné se trouve dans une plage de numéros de chèque
+     * (entre le numéro de début et le numéro de fin) pour une banque spécifique. Elle renvoie un booléen indiquant
+     * si un tel numéro existe déjà dans la base de données.
+     *
+     * @param string $numero Le numéro de chèque à vérifier.
+     * @param Banque $banque L'objet `Banque` représentant la banque à laquelle appartient le chéquier.
+     *
+     * @return bool 'true' si le numéro de chèque existe dans la plage des numéros du chéquier pour la banque spécifiée,
+     *              sinon 'false'.
      */
     public function isExiste(string $numero, Banque $banque): bool
     {

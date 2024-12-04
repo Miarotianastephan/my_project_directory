@@ -25,6 +25,20 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
         parent::__construct($registry, DetailDemandePiece::class);
     }
 
+    /**
+     * Ajoute une pièce justificative à une demande en fonction de son type et met à jour son état.
+     *
+     * Cette méthode permet d'ajouter une pièce justificative à une demande, d'ajuster l'état de la demande en fonction
+     * du montant réel associé à la demande, et d'enregistrer les informations pertinentes dans la base de données.
+     * Elle gère également les transactions et assure la mise à jour des états de la demande et de son historique.
+     *
+     * @param int $dm_type_id L'ID du type de la demande.
+     * @param int $demande_user_id L'ID de l'utilisateur associé à la demande.
+     * @param string $type Le type de la pièce justificative (par exemple, "proformat").
+     * @param string $newFilename Le nom du fichier de la pièce justificative.
+     * @param float $montant_reel Le montant réel associé à la demande.
+     * @return JsonResponse Une réponse JSON indiquant si l'ajout de la pièce justificative a réussi ou non.
+     */
     public function ajoutPieceJustificatif(int    $dm_type_id,
                                            int    $demande_user_id,
                                            string $type,
@@ -56,12 +70,14 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
         }
 
         $connection = $entityManager->getConnection();
-        $connection->beginTransaction();
+        $connection->beginTransaction(); // Démarrer la transaction
         try {
+            // Création d'un nouvel objet pour enregistrer la pièce justificative
             $detail_dm = new DetailDemandePiece();
             $detail_dm->setDemandeType($dm_type);
             $detail_dm->setDetDmTypeUrl($type);
             $detail_dm->setDetDmPieceUrl($newFilename);
+            // Requête SQL d'insertion de la pièce justificative dans la base de données
             $script = "INSERT INTO ce_detail_demande_piece (DETAIL_DM_TYPE_ID, DEMANDE_TYPE_ID,DET_DM_PIECE_URL, DET_DM_TYPE_URL, DET_DM_DATE) VALUES (detail_dm_type_seq.NEXTVAL,:dm_type_id,:det_dm_piece_url,:det_dm_type_url,SYSDATE)";
 
             $statement = $connection->prepare($script);
@@ -71,7 +87,7 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
 
             //MAJ demande_type
             //MAJ demande_type => mère sy fille avec demande réelle
-
+            // Requête SQL d'insertion de la pièce justificative dans la base de données
             if ($type == "proformat") {
                 $dm_type->setDmEtat($this->etatDmRepository, $dm_type->getDmEtat()); // OK_ETAT : 300 ihany ny 300 eto
             } else {
@@ -100,7 +116,6 @@ class DetailDemandePieceRepository extends ServiceEntityRepository
                     $entityManager->flush();
                     // Atao état attente de veresement de fonds
                     $dm_type->setDmEtat($this->etatDmRepository, 202);  // de 300 -> 202(Attente)
-                    dump("REVERSEMENT EN COURS !!");
                 } else if ($montant_reel > $montant_deblocage) {
                     // Nouveau demande
                     // Updatena ny champ an'ilay demande
