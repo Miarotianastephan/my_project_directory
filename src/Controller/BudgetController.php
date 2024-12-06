@@ -27,9 +27,16 @@ class BudgetController extends AbstractController
     }
 
     /**
-     * Page de liste de budget
-     **/
-
+     * Page pour afficher la liste des budgets pour l'exercice suivant.
+     * Cette route récupère l'exercice suivant à partir de la date actuelle et affiche la liste des budgets correspondants.
+     *
+     * @Route("/", name="tresorier.liste_budget", methods={"GET"})
+     *
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @param ExerciceRepository $exerciceRepository
+     *
+     * @return Response
+     */
     #[Route('/', name: 'tresorier.liste_budget', methods: ['GET'])]
     public function liste_budget(DetailBudgetRepository $detailBudgetRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -42,9 +49,16 @@ class BudgetController extends AbstractController
     }
 
     /**
-     * Page de liste de budget pour l'exercice actuellement ouvert/actif.
-     *  * Récupération de l'exercice valide getExerciceValide().
-     **/
+     * Page pour afficher la liste des budgets pour l'exercice actuellement ouvert.
+     * Cette route récupère l'exercice valide actuellement ouvert et affiche la liste des budgets associés.
+     *
+     * @Route("/liste/actuelle", name="tresorier.liste_budget_actuelle", methods={"GET"})
+     *
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @param ExerciceRepository $exerciceRepository
+     *
+     * @return Response
+     */
     #[Route('/liste/actuelle', name: 'tresorier.liste_budget_actuelle', methods: ['GET'])]
     public function liste_budget_actuelle(DetailBudgetRepository $detailBudgetRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -57,9 +71,16 @@ class BudgetController extends AbstractController
     }
 
     /**
-     * Formulaire d'ajout de budget pour les exercices à venir.
-     *  * Récupération des exercices à venir getExerciceNext( DateTime $date)
-     **/
+     * Page pour afficher le formulaire pour ajouter un budget pour un exercice à venir.
+     * Cette route récupère les exercices futurs et le plan de comptes pour permettre à l'utilisateur de créer un nouveau budget.
+     *
+     * @Route("/ajout_budget", name="tresorier.form_budget", methods={"GET"})
+     *
+     * @param ExerciceRepository $exerciceRepository
+     * @param CompteMereRepository $compteMereRepository
+     *
+     * @return Response
+     */
     #[Route('/ajout_budget', name: 'tresorier.form_budget', methods: ['GET'])]
     public function form_budget(ExerciceRepository $exerciceRepository, CompteMereRepository $compteMereRepository): Response
     {
@@ -75,6 +96,20 @@ class BudgetController extends AbstractController
      *  * Si le plan de compte possède un budget : demande de modification du budget
      *  * Sinon ajout du budget.
      **/
+
+    /**
+     * Enregistre un nouveau budget pour un exercice donné.
+     * Cette route ajoute un budget pour un exercice en vérifiant les paramètres nécessaires : exercice, montant, plan de comptes, et type de budget.
+     *  * Si le plan de compte possède un budget : demande de modification du budget
+     *  * Sinon ajout du budget.
+     * @Route("/ajout/budget", name="tresorier.ajout_budget", methods={"POST"})
+     *
+     * @param Request $request
+     * @param DetailBudgetRepository $detailBudgetRepository
+     * @param BudgetTypeRepository $budgetTypeRepository
+     *
+     * @return JsonResponse
+     */
     #[Route('/ajout/budget', name: 'tresorier.ajout_budget', methods: ['POST'])]
     public function ajout_budget(Request $request, DetailBudgetRepository $detailBudgetRepository, BudgetTypeRepository $budgetTypeRepository): JsonResponse
     {
@@ -109,8 +144,16 @@ class BudgetController extends AbstractController
     }
 
     /**
-     * Modification du budget (int $detailBudget_id, float $montant)
-     **/
+     * Modifie un budget existant.
+     * Cette route permet de modifier le montant d'un budget déjà existant.
+     *
+     * @Route("/modifier/budget", name="tresorier.modifier_budget", methods={"POST"})
+     *
+     * @param Request $request
+     * @param DetailBudgetRepository $detailBudgetRepository
+     *
+     * @return JsonResponse
+     */
     #[Route('/modifier/budget', name: 'tresorier.modifier_budget', methods: ['POST'])]
     public function modifier_budget(Request $request, DetailBudgetRepository $detailBudgetRepository): JsonResponse
     {
@@ -134,6 +177,18 @@ class BudgetController extends AbstractController
 
 
     //test controller suivi budgétaire
+    /**
+     * Affiche le suivi budgétaire pour un mode de paiement donné.
+     * Cette route récupère les soldes débit et crédit pour un mode de paiement spécifique et l'exercice valide.
+     *
+     * @Route("/suivi_budgetaire", name="tresorier.suivi_budgetaire", methods={"GET"})
+     *
+     * @param Request $request
+     * @param ExerciceRepository $exerciceRepository
+     * @param MouvementRepository $mouvementRepository
+     *
+     * @return JsonResponse
+     */
     #[Route('/suivi_budgetaire', name: 'tresorier.suivi_budgetaire', methods: ['GET'])]
     public function suivi_budgetaire(Request $request, ExerciceRepository $exerciceRepository, MouvementRepository $mouvementRepository): JsonResponse
     {

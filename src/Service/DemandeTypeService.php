@@ -58,6 +58,14 @@ class DemandeTypeService
         $this->detailTrsRepo = $detailTrsRepo;
     }
 
+    /**
+     * Gère le téléchargement d'un fichier image.
+     * Génère un nom de fichier unique et déplace le fichier dans le répertoire de destination.
+     *
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file Le fichier à télécharger.
+     * @param string $destination Le répertoire de destination.
+     * @return string Le nouveau nom du fichier téléchargé.
+     */
     public function uploadImage($file, string $destination): string
     {
         try {
@@ -76,6 +84,19 @@ class DemandeTypeService
         }
     }
 
+    /**
+     * Ajoute une demande de fonds dans le système.
+     * Cela inclut la création d'une nouvelle demande et son enregistrement dans la base de données.
+     *
+     * @param string $exercice L'exercice fiscal.
+     * @param int $planCptEntityId L'ID de l'entité du plan comptable.
+     * @param int $planCptMotifId L'ID du motif du plan comptable.
+     * @param float $montantDemande Le montant demandé.
+     * @param string $modePaiement Le mode de paiement.
+     * @param string $dateSaisie La date à laquelle la demande a été créée.
+     * @param string $dateOperation La date de l'opération.
+     * @return array Le statut et le message de la demande.
+     */
     public function addDemandeFonds($exercice, $planCptEntityId, $planCptMotifId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation)
     {
 
@@ -88,6 +109,7 @@ class DemandeTypeService
             $demande_type = new DemandeType();
             $demande_type->setDmMontant($montantDemande);
 
+            // Définit l'entité et le motif de la demande
             $entity_code = $this->planCompteRepo->find($planCptEntityId);       // getPlanCompte ENTITE by ID
             $plan_compte_motif = $this->planCompteRepo->find($planCptMotifId);  // getPlanCompteMotif by ID
 
@@ -101,6 +123,7 @@ class DemandeTypeService
             $demande_type->setDmDate(new \DateTime($dateSaisie));
             $demande_type->setDmDateOperation(new \DateTime($dateOperation));
 
+            // Persiste la demande et met à jour avec une référence
             $entityManager->persist($demande_type);                             // Ajout de demandes de fonds
             $entityManager->flush();
 
@@ -123,6 +146,13 @@ class DemandeTypeService
         ];
     }
 
+    /**
+     * Génère une référence pour une demande en fonction du type et de l'ID.
+     *
+     * @param int $typeReference Le type de la demande.
+     * @param int $Id L'ID de la demande.
+     * @return string La référence générée.
+     */
     public function createReferenceForId($typeReference, $Id)
     {
         switch ($typeReference) {
@@ -135,12 +165,22 @@ class DemandeTypeService
         }
     }
 
+    /**
+     * Récupère toutes les demandes de types initiées par l'utilisateur actuel.
+     *
+     * @return array Liste des demandes de types de l'utilisateur actuel.
+     */
     public function findAllMyDemandeTypesInit()
     {
         $data = $this->demandeTypeRepository->findByUtilisateur($this->user);
         return $data;
     }
 
+    /**
+     * Récupère les logs de toutes les demandes effectuées par l'utilisateur actuel.
+     *
+     * @return array Liste des logs pour les demandes de l'utilisateur actuel.
+     */
     public function findAllMyDemandeWithLog()
     {
         $temp_user = new Utilisateur($this->user);
@@ -151,6 +191,11 @@ class DemandeTypeService
 
     // Insertion d'approvisionnement
 
+    /**
+     * Récupère toutes les demandes effectuées par l'utilisateur actuel, y compris celles avec des logs.
+     *
+     * @return array Liste de toutes les demandes de l'utilisateur actuel, y compris celles avec des logs.
+     */
     public function findAllMyDemande()
     {
         $all_demande = $this->demandeTypeRepository->findAll(); // toute les demandes
@@ -173,6 +218,19 @@ class DemandeTypeService
         return $my_demande;
     }
 
+    /**
+     * Ajoute une demande d'approvisionnement.
+     * Utilise une logique similaire à celle de la méthode addDemandeFonds.
+     *
+     * @param string $exercice L'exercice fiscal.
+     * @param int $planCptEntityId L'ID de l'entité du plan comptable.
+     * @param int $planCptMotifId L'ID du motif du plan comptable.
+     * @param float $montantDemande Le montant demandé.
+     * @param string $modePaiement Le mode de paiement.
+     * @param string $dateSaisie La date à laquelle la demande a été créée.
+     * @param string $dateOperation La date de l'opération.
+     * @return array Le statut de l'opération.
+     */
     public function insertDemandeTypeAppro($exercice, $planCptEntityId, $montantDemande, $modePaiement, $dateSaisie, $dateOperation, int $tresorier_user_id): JsonResponse
     {
         $demande = $this->demandeRepository->findDemandeByCode(20);                                 // Code demande 20 => Approvisionnement
@@ -242,13 +300,34 @@ class DemandeTypeService
 
     // Mis à jour de l'état d'une demande 
 
+    /**
+     * Met à jour une demande de fonds existante.
+     *
+     * Cette méthode permet de mettre à jour le montant et/ou le compte de dépense associés à une demande de fonds existante.
+     * Si aucune modification n'est effectuée, un message indiquant qu'aucun changement n'a été effectué sera retourné.
+     * En cas de modification, un historique des modifications (log) est créé et l'état de la demande est mis à jour.
+     * Si une erreur se produit lors de la mise à jour, une exception sera levée et la transaction sera annulée.
+     *
+     * @param int $id_demande_fonds L'ID de la demande de fonds à mettre à jour.
+     * @param float|string $demande_montant_nouveau Le nouveau montant de la demande de fonds. Si la valeur est "non", aucune modification n'est effectuée sur le montant.
+     * @param int $id_compte_depense L'ID du nouveau compte de dépense à associer à la demande de fonds. Si la valeur est -1, aucun changement de compte de dépense n'est effectué.
+     *
+     * @return array Tableau associatif contenant :
+     *      - 'status' (bool) : Indique si l'opération a été réussie.
+     *      - 'update' (bool) : Indique si une mise à jour a été effectuée.
+     *      - 'message' (string) : Message expliquant le résultat de l'opération.
+     *
+     * @throws InvalidArgumentException Si une erreur se produit lors de la mise à jour ou si un argument est invalide.
+     */
     public function updateDemandeFonds($id_demande_fonds, $demande_montant_nouveau, $id_compte_depense)
     {
+        // Récupération de l'Entity Manager et début de la transaction
         $em = $this->demandeTypeRepository->getEntityManager();
         $em->beginTransaction();
         try {
             $status_update_compte = false;
 
+            // Récupération de la demande de fonds existante
             $demande_fonds = $this->demandeTypeRepository->find($id_demande_fonds);             // trouver le demande actuel
             if ($demande_montant_nouveau != "non") {
                 $demande_montant_nouveau = (float)$demande_montant_nouveau; // pour avoir un montant zéro ou null
@@ -258,12 +337,14 @@ class DemandeTypeService
             }
             $status_update_montant = $demande_fonds->setDmMontant($demande_montant_nouveau);    // update nouveau montant
 
+            // Si un nouveau compte de dépense est spécifié (id différent de -1), mettre à jour le compte de dépense
             if ((int)($id_compte_depense) != -1) {                                                // si on change
                 $compte_depense_nouveau = $this->planCompteRepo->find($id_compte_depense);      // nouveau compte dépense 
                 $demande_fonds->setPlanCompte($compte_depense_nouveau);
                 $status_update_compte = true;
             }
 
+            // Si aucune modification n'a été effectuée, retourner un message indiquant qu'il n'y a pas de changement
             if ($status_update_montant == false && $status_update_compte == false) {
                 return [
                     "status" => true,
@@ -271,19 +352,22 @@ class DemandeTypeService
                     "message" => "Aucun changement effectué !",
                 ];
             }
+
+            // Enregistrement d'un log pour l'historique de la demande
             $user_sg = $demande_fonds->getUtilisateur();
+
             // Insérer Attente modification dans Historique des demandes
             $log_dm = new LogDemandeType();
-            $log_dm->setDmEtat($this->etatDmRepo, $demande_fonds->getDmEtat());                  // HIstorisation du demandes OK_ETAT
+            $log_dm->setDmEtat($this->etatDmRepo, $demande_fonds->getDmEtat()); // Historisation de la demande OK_ETAT
             $log_dm->setUserMatricule($user_sg->getUserMatricule());
             $log_dm->setDemandeType($demande_fonds);
             $log_dm->setLogDmDate(new DateTime());
             $em->persist($log_dm);
 
-            // update de la demande
-            $demande_fonds->setDmEtat($this->etatDmRepo, 101);                                  // Modication de létat du demandes
-            $demande_fonds->setUtilisateur($this->user);                                        // ajout de l'utilisateur 
-            $demande_fonds->setDmDate($log_dm->getLogDmDate());                                       // MAJ de dm_type la base de données
+            // Mise à jour de l'état de la demande de fonds (état de modification)
+            $demande_fonds->setDmEtat($this->etatDmRepo, 101); // Modification de l'état de la demande
+            $demande_fonds->setUtilisateur($this->user);  // ajout de l'utilisateur
+            $demande_fonds->setDmDate($log_dm->getLogDmDate()); // MAJ de dm_type la base de données
 
             $em->flush();
             $em->commit();
@@ -295,7 +379,8 @@ class DemandeTypeService
                 "update" => true,
                 "message" => sprintf('Modification réussi'),
             ];
-        } catch (InvalidArgumentException $th) { // En cas d'erreur
+        } catch (InvalidArgumentException $th) {
+            // En cas d'erreur, annulation de la transaction
             $em->rollback();
             return [
                 'status' => false,

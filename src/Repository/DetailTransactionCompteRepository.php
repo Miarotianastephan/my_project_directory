@@ -124,6 +124,18 @@ class DetailTransactionCompteRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Recherche les entités correspondant à un type de transaction et un plan de compte donnés.
+     *
+     * Cette méthode permet de récupérer les enregistrements d'une entité en fonction du type de transaction
+     * et du plan de compte associés. Elle utilise Doctrine QueryBuilder pour construire une requête personnalisée.
+     *
+     * @param TransactionType $transactionType L'objet représentant le type de transaction à filtrer.
+     * @param PlanCompte $planCompte L'objet représentant le plan de compte à filtrer.
+     *
+     * @return array|null Un tableau contenant les résultats correspondant aux critères spécifiés,
+     *                    ou null si aucun résultat n'est trouvé.
+     */
     public function findByTransactionAndPlanCompte(TransactionType $transactionType, PlanCompte $planCompte): ?array
     {
         $data = $this->createQueryBuilder('d')

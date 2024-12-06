@@ -16,7 +16,17 @@ class GroupeUtilisateurRepository extends ServiceEntityRepository
         parent::__construct($registry, GroupeUtilisateur::class);
     }
 
-
+    /**
+     * Recherche un groupe d'utilisateurs par son libellé.
+     *
+     * Cette méthode permet de rechercher un groupe d'utilisateurs dans la base de données en fonction de son libellé (`grp_libelle`).
+     * Elle effectue une requête qui compare le champ `grp_libelle` à la valeur passée en paramètre (`$libelle`).
+     * La méthode retourne un seul groupe d'utilisateurs correspondant au libellé spécifié, ou `null` si aucun groupe n'est trouvé.
+     *
+     * @param string $libelle Le libellé du groupe à rechercher.
+     *
+     * @return GroupeUtilisateur|null Le groupe d'utilisateurs correspondant au libellé, ou `null` si aucun groupe n'est trouvé.
+     */
     public function findByLibelle($libelle): ?GroupeUtilisateur
     {
         return $this->createQueryBuilder('g')
@@ -26,11 +36,18 @@ class GroupeUtilisateurRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+
     /**
-     * Récupère la liste des groupes ou l'utilisateur n'est pas concerné.
+     * Récupère la liste des groupes auxquels l'utilisateur n'est pas assigné, à l'exception du groupe actuel.
      *
-     * @param int $currentGroupId L'ID du groupe actuel de l'utilisateur
-     * @return GroupeUtilisateur[] Retourne un tableau d'entités GroupeUtilisateur
+     * Cette méthode permet de récupérer tous les groupes dans lesquels un utilisateur **n'est pas** affecté,
+     * à l'exception de celui auquel l'utilisateur appartient actuellement. Cela permet de filtrer les groupes
+     * en excluant le groupe d'appartenance de l'utilisateur passé en paramètre.
+     *
+     * @param int $currentGroupId L'ID du groupe actuel de l'utilisateur. Ce groupe sera exclu des résultats.
+     *
+     * @return GroupeUtilisateur[] Un tableau d'entités `GroupeUtilisateur` représentant les groupes
+     *         dans lesquels l'utilisateur n'est pas assigné, à l'exception du groupe d'ID donné en paramètre.
      */
     public function findGroupsNotAssignedToUser(int $currentGroupId): array
     {

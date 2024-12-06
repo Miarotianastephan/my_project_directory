@@ -9,18 +9,32 @@ use App\Repository\MouvementRepository;
 use Doctrine\ORM\EntityManager;
 
 class OperationInverseService{
-    
+
     // Pour réaliser une opération inverse
     // $mvtRepository: pour persister le nouveau evenement
+    /**
+     * Réalise l'opération inverse d'une transaction existante.
+     *
+     * Cette méthode crée des mouvements inverses basés sur la liste des mouvements existants.
+     * Si un mouvement est un débit, il crée un mouvement de crédit pour le même compte et vice versa.
+     *
+     * @param Evenement $evenement L'événement associé à la transaction à inverser.
+     * @param EntityManager $em Le gestionnaire d'entités pour persister les nouveaux mouvements.
+     * @param array $listMouvement La liste des mouvements à inverser.
+     * @param float $montant Le montant de l'opération inverse.
+     *
+     * @return void
+     */
     public function inverseTransaction(Evenement $evenement, EntityManager $em, array $listMouvement, $montant){
+        // Parcours de la liste des mouvements existants
         foreach ($listMouvement as $mvtActuelle) {
             if($mvtActuelle->isMvtDebit() == true){
-                // Creer un mouvement même compte, mais en debit
-                $mv_credit = new Mouvement($evenement,$mvtActuelle->getMvtCompteId(),$montant,false);// siDEBIT => crédité
+                // Si c'est un mouvement de débit, créer un mouvement de crédit
+                $mv_credit = new Mouvement($evenement,$mvtActuelle->getMvtCompteId(),$montant,false);// si DEBIT => crédité
                 $em->persist($mv_credit);
             }else if($mvtActuelle->isMvtDebit() == false){
-                // créer un mouvement même compte, mais en credit
-                $mv_debit = new Mouvement($evenement,$mvtActuelle->getMvtCompteId(),$montant,true);// siCREDIT => débit
+                // Si c'est un mouvement de crédit, créer un mouvement de débit
+                $mv_debit = new Mouvement($evenement,$mvtActuelle->getMvtCompteId(),$montant,true);// si CREDIT => débit
                 $em->persist($mv_debit);
             }
         }

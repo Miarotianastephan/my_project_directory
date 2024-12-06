@@ -20,13 +20,27 @@ class ComptableController extends AbstractController
 {
     private $user;
 
-
+    /**
+     * Constructeur du contrôleur ComptableController.
+     * Initialise l'utilisateur connecté pour pouvoir l'utiliser dans les autres méthodes.
+     *
+     * @param Security $security Le service de sécurité pour récupérer l'utilisateur connecté.
+     */
     public function __construct(Security $security)
     {
         // $this->security = $security;
         $this->user = $security->getUser();
     }
 
+    /**
+     * Affiche le graphique des mouvements comptables pour une année et un semestre donnés.
+     *
+     * @param Request $request La requête HTTP pour obtenir les paramètres de l'année et du semestre.
+     * @param MouvementRepository $mouvementRepository Le repository pour récupérer les mouvements bancaires et de caisse.
+     * @param ExerciceRepository $exerciceRepository Le repository pour récupérer l'exercice fiscal valide.
+     *
+     * @return Response La réponse HTTP avec les données de graphique pour l'affichage.
+     */
     #[Route('/', name: 'comptable.graphe', methods: ['GET', 'POST'])]
     public function index(Request $request, MouvementRepository $mouvementRepository, ExerciceRepository $exerciceRepository): Response
     {
@@ -42,7 +56,7 @@ class ComptableController extends AbstractController
         }
 
         // Ici, vous devriez récupérer les vraies données en fonction de $annee et $mois
-        /*if ($semestre == 1) {
+        if ($semestre == 1) {
             $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
             $fond = [100, 150, 200, 250, 300, 350];
             $caisse = [$somme_debit_banque[0] ?? 0, $somme_debit_banque[1] ?? 0, $somme_debit_banque[3] ?? 0, $somme_debit_banque[4] ?? 0, $somme_debit_banque[5] ?? 0];
@@ -53,13 +67,7 @@ class ComptableController extends AbstractController
             $fond = [];
             $caisse = [$somme_debit_banque[6] ?? 0, $somme_debit_banque[7] ?? 0, $somme_debit_banque[8] ?? 0, $somme_debit_banque[9] ?? 0, $somme_debit_banque[10] ?? 0, $somme_debit_banque[11] ?? 0];
             $sold = [$somme_debit_caisse[6] ?? 0, $somme_debit_caisse[7] ?? 0, $somme_debit_caisse[8] ?? 0, $somme_debit_caisse[9] ?? 0, $somme_debit_caisse[10] ?? 0, $somme_debit_caisse[11] ?? 0];
-        }*/
-
-        $labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
-        $fond = [5000000, 4200000, 3500000, 3000000, 2500000, 2000000, 1000000];
-        $caisse = [500000, 200000, 150000, 80000, 50000, 6000];
-        $sold = [300000, 150000, 100000, 100000, 40000, 300000];
-
+        }
 
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse([
@@ -84,10 +92,13 @@ class ComptableController extends AbstractController
     }
 
     /**
-     * Formulaire d'ajout de dépense directe :
-     *  * findCompteCaisse() = Les plans de compte pour la caisse sont défini par longueur de numéro de compte = 6 et commencent par 51.
-     *  * findTransactionDepenseDirecte() = Les codes de transaction pour les opérations directes sont : ['CE-001','CE-007', 'CE-010','CE-011'].
-     **/
+     * Affiche le formulaire pour ajouter une dépense directe.
+     *
+     * @param PlanCompteRepository $planCompteRepository Le repository pour récupérer les plans de compte pour la caisse.
+     * @param TransactionTypeRepository $transactionTypeRepository Le repository pour récupérer les types de transactions pour les dépenses directes.
+     *
+     * @return Response La réponse HTTP avec le formulaire d'ajout de dépense directe.
+     */
     #[Route('/form/depense', name: 'comptable.form_depense_directe', methods: ['GET'])]
     public function form_depense_directe(
         PlanCompteRepository      $planCompteRepository,
@@ -105,8 +116,14 @@ class ComptableController extends AbstractController
     }
 
     /**
-     * Page de détail de code de transaction pour avoir la liste de tous les plans de comptes associé à un plan de compte.
-     **/
+     * Retourne les détails des transactions pour un type de transaction donné.
+     *
+     * @param Request $request La requête HTTP contenant l'ID de la transaction.
+     * @param TransactionTypeRepository $transactionTypeRepository Le repository pour récupérer le type de transaction.
+     * @param DetailTransactionCompteRepository $detailTransactionCompteRepository Le repository pour récupérer les détails associés à la transaction.
+     *
+     * @return JsonResponse La réponse JSON contenant les détails des transactions.
+     */
     #[Route('/get-transaction-details', name: 'get_transaction_details', methods: ['GET'])]
     public function getTransactionDetails(
         Request                           $request,
@@ -133,10 +150,15 @@ class ComptableController extends AbstractController
     }
 
     /**
-     * Page de validation d'ajout de dépense directe avec detection automatique du plan de compte de credit :
-     *  * findPlanCompte_CreditByTransaction() =fonction de detection du compte de credit.
-     **/
-
+     * Valide l'ajout d'une dépense directe et effectue les vérifications nécessaires.
+     *
+     * @param Request $request La requête HTTP contenant les données du formulaire.
+     * @param PlanCompteRepository $planCompteRepository Le repository pour récupérer les plans de compte.
+     * @param TransactionTypeRepository $transactionTypeRepository Le repository pour récupérer les types de transaction.
+     * @param DetailTransactionCompteRepository $detailTransactionCompteRepository Le repository pour récupérer les détails de transaction.
+     *
+     * @return Response La réponse HTTP après validation de la dépense directe.
+     */
     #[Route('/valider/depense', name: 'comptable.validation_depense_directe', methods: ['POST'])]
     public function validation_depense_directe(Request                           $request,
                                                PlanCompteRepository              $planCompteRepository,
@@ -144,7 +166,6 @@ class ComptableController extends AbstractController
                                                DetailTransactionCompteRepository $detailTransactionCompteRepository)
     {
         // Récupère les données du formulaire
-        //$data = json_decode($request->getContent(), true);
         $data = $request->request->all();
         $entite_id = $data['entite'] ?? null;
         $transaction_id = $data['transaction'] ?? null;
@@ -271,8 +292,18 @@ class ComptableController extends AbstractController
     }
 
     /**
-     * Ajout de dépense directe dans la base de donnée.
-     **/
+     * Ajoute une dépense directe dans la base de données.
+     *
+     * Cette méthode valide les données envoyées dans le corps de la requête,
+     * puis appelle la méthode `comptabilisation_directe` du repository pour enregistrer l'opération dans la base de données.
+     *
+     * @Route("/comptabilisation_directe", name="comptable.comptabilisation_directe", methods={"POST"})
+     *
+     * @param Request $request La requête HTTP contenant les données de la dépense directe.
+     * @param MouvementRepository $mouvementRepository Le repository pour gérer les mouvements comptables.
+     *
+     * @return JsonResponse La réponse JSON avec le statut de l'opération et un message de confirmation ou d'erreur.
+     */
     #[Route('/comptabilisation_directe', name: 'comptable.comptabilisation_directe', methods: ['post'])]
     public function comptabilisation_directe(Request             $request,
                                              MouvementRepository $mouvementRepository): JsonResponse

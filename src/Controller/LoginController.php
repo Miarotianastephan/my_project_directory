@@ -19,11 +19,16 @@ class LoginController extends AbstractController
     }
 
     /**
-     * Page de connexion
+     * Action de connexion de l'utilisateur.
      *
-     * @param Request $request
-     * @param AuthenticationUtils $authUtils
-     * @return Response
+     * Cette méthode gère l'affichage de la page de connexion. Si un utilisateur est déjà connecté,
+     * il est redirigé vers la page d'administration. Si une tentative de connexion a échoué,
+     * un message d'erreur est affiché.
+     *
+     * @param Request $request La requête HTTP contenant les informations de la session actuelle.
+     * @param AuthenticationUtils $authUtils Utilitaire de sécurité permettant d'obtenir les erreurs d'authentification et le dernier nom d'utilisateur.
+     *
+     * @return Response La réponse HTTP qui contient la vue de la page de connexion.
      */
     #[Route(path: '/', name: 'user_login')]
     public function loginUser(Request $request, AuthenticationUtils $authUtils): Response
@@ -43,7 +48,10 @@ class LoginController extends AbstractController
     }
 
     /**
-     * Déconnexion
+     * Action de déconnexion de l'utilisateur.
+     *
+     * Cette méthode est appelée lors de la déconnexion de l'utilisateur.
+     * Symfony gère automatiquement la logique de déconnexion lorsque cette méthode est exécutée.
      *
      * @return void
      */
